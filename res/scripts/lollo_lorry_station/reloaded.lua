@@ -20,6 +20,10 @@ function lollo.debugGetInfo()
     end
     return results
 end
+function lollo.showState(state)
+    print('LOLLO state = ')
+    luadump(true)(state)
+end
 function lollo.tryGlobalVariables()
     -- -USEALLAVAILABLECORES
     -- gnome-terminal -- %command%
