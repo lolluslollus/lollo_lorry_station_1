@@ -1,0 +1,129 @@
+local vec3 = require "vec3"
+local transf = require "transf"
+local constructionutil = require "constructionutil"
+local paramsutil = require "paramsutil"
+local colliderutil = require "colliderutil"
+local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+
+function data()
+	return {
+		type = "STREET_STATION_CARGO",
+		-- type = "STREET_STATION",
+		-- type = 'STREET_CONSTRUCTION',
+		description = {
+			name = _("Lollo lorry station construction"),
+			description = _("Lollo lorry station construction."),
+		},
+		availability = {
+			yearFrom = 0,
+			yearTo = 0
+		},
+		params = {
+			{
+				key = 'lockLayoutCentre',
+				name = _('Lock curve'),
+				tooltip = _('Lock a curve to keep its shape pretty and prevent other roads merging in. Unlock it to treat it like ordinary roads. You cannot relock an unlocked curve.'),
+				values = {
+					_('No'),
+					_('Yes')
+				},
+				defaultIndex = 0
+			},
+		},
+		-- constructionTemplates = makeConstructionTemplates(),
+		order = 5005,
+		-- createTemplateFn = function(params)
+		-- 	local result = {}
+		-- 	-- local cargo = params.type == 1
+		-- 	local cargo = params.templateIndex >= 3
+		
+		-- 	local length = params.year < 1950 and params.length or params.length2
+		
+		-- 	local MangleId = function(coords)
+		-- 		return 200000 * (coords[2] + 100) + 100 * (coords[1] + 100) + coords[3]
+		-- 	end
+		-- 	local module = cargo and "station/street/cargo_platform.module" or "station/street/passenger_platform.module"
+			
+		-- 	for i = -1, 0 - params.platL, -1 do
+		-- 		for j = 0, length do
+		-- 			result[MangleId({i, j - math.floor(length / 2), cargo and 1 or 0})] = module
+		-- 		end
+		-- 	end
+		-- 	for i = 0, params.platR - 1 do
+		-- 		for j = 0, length do
+		-- 			result[MangleId({i, j - math.floor(length / 2), cargo and 1 or 0})] = module
+		-- 		end
+		-- 	end
+		-- 	result[MangleId({55, 0, 3})] = "station/street/entrance_exit.module"
+			
+		-- 	return result
+		-- end,
+		skipCollision = true,
+		updateFn = function(params)
+			local result = { cost = 1000 }
+			
+			result.groundFaces = {}
+			-- result.colliders = {}
+
+			local cargoSpacing = {5, 5, 5, 5}
+			local passengerSpacing = {2.5, 2.5, 5, 5}
+			
+			local maxWidth = 10
+			local maxHeight = 10
+			
+			local centerSize = 20
+			local trackSize = 5
+			local passengerPlatformSize = 5
+			local cargoPlatformSize = 10
+			
+			-- result.slots = {}
+			result.models = {
+				{
+					id = 'station/road/lollo_small_cargo.mdl',
+					skipCollision = true,
+					transf = _idTransf
+				}
+			}
+			result.edgeLists = {}
+			-- result.slotConfig = {
+			-- 	street_terminal_entrance_exit = {
+			-- 		maxModules = -1,
+			-- 		message = "",
+			-- 		skipCollisionCheck = true,
+			-- 	},
+			-- 	street_terminal_exit = {
+			-- 		maxModules = -1,
+			-- 		message = "",
+			-- 		skipCollisionCheck = true,
+			-- 	},
+			-- 	street_terminal_entrance = {
+			-- 		maxModules = -1,
+			-- 		message = "",
+			-- 		skipCollisionCheck = true,
+			-- 	},
+			-- }
+
+			result.MangleId = function(coords)
+				return 200000 * (coords[2] + 100) + 100 * (coords[1] + 100) + coords[3]
+			end
+			
+			result.DemangleId = function(slotId)
+				local rem = slotId % 100
+				local variant = rem
+				slotId = (slotId - rem) / 100
+				rem = slotId % 2000
+				local coordI = rem - 100
+				slotId = (slotId - rem) / 2000
+				return coordI, slotId - 100, variant
+			end
+			
+			return result
+		end,
+		upgradeFn = function(params)
+			-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
+			-- If you leave it out, adding and removing tram tracks won't work.
+			-- (Bus lanes don't work anyway.)
+			return {}
+		end,
+	}
+end
