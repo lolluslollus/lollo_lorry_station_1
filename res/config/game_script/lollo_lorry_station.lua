@@ -1,6 +1,10 @@
-local dump = require('luadump')
-local stringUtils = require('stringUtils')
--- local dbg = require('debugger')
+local luadump = require('lollo_lorry_station/luadump')
+local stringUtils = require('lollo_lorry_station/stringUtils')
+local debugger = require('debugger')
+
+local state = {
+    isShowAllEvents = false
+}
 
 local function myErrorHandler(err)
     print('ERROR: ', err)
@@ -14,17 +18,19 @@ function data()
             end
 
             print("__lolloLorryStationEvent__ caught")
---[[             package.loaded["reloaded"] = nil
-            local reloaded = require("reloaded")
+            state.isShowAllEvents = true
+--[[             package.loaded["lollo_lorry_station/reloaded"] = nil
+            local reloaded = require("lollo_lorry_station/reloaded")
             reloaded.trySocket() ]]
 
---[[             package.loaded["reloaded"] = nil
-            local reloaded = require("reloaded")
+--[[             package.loaded["lollo_lorry_station/reloaded"] = nil
+            local reloaded = require("lollo_lorry_station/reloaded")
             reloaded.tryDebugger()
  ]]
-            package.loaded["reloaded"] = nil
-            local reloaded = require("reloaded")
-            reloaded.tryGlobalVariables()
+ 
+            -- package.loaded["lollo_lorry_station/reloaded"] = nil
+            -- local reloaded = require("lollo_lorry_station/reloaded")
+            -- reloaded.tryGlobalVariables()
 
             --gui = {
             --    buttoncallbacks = {  },
@@ -161,17 +167,40 @@ function data()
             -- if id ~= 'constructionBuilder' then
             --     return
             -- end
-            if name ~= 'builder.apply' then
-                return
-            end
+            -- if name ~= 'builder.apply' then
+            --     return
+            -- end
             -- if name == "builder.proposalCreate" then return end
+
+            -- xpcall(
+            --     function()
+            --         print('LOLLO id = ', id)
+            --         print('LOLLO name = ', name)
+            --     end,
+            --     myErrorHandler
+            -- )
+            -- LOLLO NOTE when U try to add a streetside bus or lorry stop, the streetBuilder fires this event.
+            -- Then, the proposal contains no new objects and no old objects: it's not empty, but it's only filled with objects
+            -- that are in turn filled with empty objects.
+            -- Once the user has hovered on a suitable spot (ie streetside), the proposal is not empty anymore,
+            -- and it is actually rather complex.
+            if (id ~= 'constructionBuilder' and name ~= "builder.proposalCreate") and not state.isShowAllEvents then return end
+            -- if not stringUtils.stringContains(name, 'builder') then return end
+            -- debugger()
+
+            -- print('LOLLO api in UI thread = ')
+            -- luadump(true)(api)
+
+            -- if true then return end
 
             print('{\n-- guiHandleEvent --')
             print('\n - id = ', id)
             print('\n - name = ', name)
 
-            print('- io = ')
-            dump(true)(io)
+            -- print('- io = ')
+            -- luadump(true)(io)
+
+            if name ~= 'builder.apply' then return end
 
             game.interface.sendScriptEvent(
                 '__lolloLorryStationEvent__',
@@ -186,8 +215,8 @@ function data()
                     print("one")
                     local out = io.popen('find /v "" > con', 'w')
                     print("out = ")
-                    dump(true)(out)
-                    dump(true)(table.unpack(out))
+                    luadump(true)(out)
+                    luadump(true)(table.unpack(out))
                     print("two")
                     out:write("three" .. '\r\n') --\r because windows
                     print("four")
@@ -200,37 +229,37 @@ function data()
 
             --[[ xpcall(
                 function()
-                    print("dbg = ")
-                    dump(true)(dbg)
-                    print('about to start dbg')
-                    dbg()
-                    print('dbg called')
+                    print("debugger = ")
+                    luadump(true)(debugger)
+                    print('about to start debugger')
+                    debugger()
+                    print('debugger called')
                 end,
                 myErrorHandler
             ) ]]
 
             --[[ print('- io = ')
-            dump(true)(io)
+            luadump(true)(io)
 
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
                 -- if key ~= "package" and key ~= "_G" then
-                --     dump(true)(value)
+                --     luadump(true)(value)
                 -- else
-                --     print("dump too long, skipped")
+                --     print("luadump too long, skipped")
                 -- end
             end ]]
             -- print('-- sol = ')
-            -- dump(true)(sol)
+            -- luadump(true)(sol)
             -- print('-- ug = ')
-            -- dump(true)(ug)
+            -- luadump(true)(ug)
 
             --[[ xpcall(
                 function()
                     print(' -- begin')
                     local one = ug.BaseEdge.new()
-                    dump(true)(one)
+                    luadump(true)(one)
                     print(' -- end')
                 end,
                 myErrorHandler
@@ -239,7 +268,7 @@ function data()
             --[[ xpcall(
                 function()
                     print(' -- _ =')
-                    dump(true)(_G._)
+                    luadump(true)(_G._)
                 end,
                 myErrorHandler
             ) ]]
@@ -248,7 +277,7 @@ function data()
                 function()
                     print(' -- begin')
                     local one = ug.BaseEdge:new()
-                    dump(true)(one)
+                    luadump(true)(one)
                     print(' -- end')
                 end,
                 myErrorHandler
@@ -273,14 +302,14 @@ function data()
             ) ]]
 
             -- -- print("-- package = ")
-            -- -- dump(true)(package) --this hangs
+            -- -- luadump(true)(package) --this hangs
             -- print('-- getmetatable = ')
-            -- dump(true)(getmetatable(''))
+            -- luadump(true)(getmetatable(''))
             -- print('-- io = ')
-            -- dump(true)(io)
+            -- luadump(true)(io)
 
             -- print('-- game = ')
-            -- dump(true)(game)
+            -- luadump(true)(game)
 
             -- _G.lollo = true
 
@@ -379,10 +408,10 @@ function data()
         end,
         guiUpdate = function()
         end,
-        save = function()
-            return allState
-        end,
-        load = function(allState)
-        end
+        -- save = function()
+        --     return allState
+        -- end,
+        -- load = function(allState)
+        -- end
     }
 end

@@ -4,8 +4,23 @@ local constructionutil = require "constructionutil"
 local paramsutil = require "paramsutil"
 local colliderutil = require "colliderutil"
 local debugger = require('debugger')
-local luadump = require('luadump')
+local luadump = require('lollo_lorry_station/luadump')
 local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+
+local _constants = {
+	cargoSpacing = {5, 5, 5, 5},
+	idBases = { -- LOLLO NOTE keep this sorted descending
+		pathSlotIdBase = 120000,
+		stationSlotIdBase = 110000,
+	},
+	idFactorY = 100,
+	maxX = 20,
+	maxY = 20,
+	minX = 0,
+	minY = 0,
+	transfFactorX = 10,
+	transfFactorY = 10,
+}
 
 function data()
 	return {
@@ -32,6 +47,10 @@ function data()
 				defaultIndex = 0
 			},
 		},
+		-- hasCargoPlatform = true, -- useless
+		-- streetTerminal = { -- useless
+		-- 	cargo = true,
+		-- },
 		-- constructionTemplates = makeConstructionTemplates(),
 		order = 5005,
 		-- createTemplateFn = function(params)
@@ -65,9 +84,11 @@ function data()
 			local result = { cost = 1000 }
 			print('LOLLO params = ')
 			luadump(true)(params)
-			debugger()
+			-- debugger()
+			
+			result.colliders = {}
 			result.groundFaces = {}
-			-- result.colliders = {}
+			result.terrainAlignmentLists = {}
 
 			local cargoSpacing = {5, 5, 5, 5}
 			local passengerSpacing = {2.5, 2.5, 5, 5}
@@ -107,27 +128,92 @@ function data()
 			-- 	},
 			-- }
 
-			result.MangleId = function(coords)
-				return 200000 * (coords[2] + 100) + 100 * (coords[1] + 100) + coords[3]
+			-- result.MangleId = function(coords)
+			-- 	return 200000 * (coords[2] + 100) + 100 * (coords[1] + 100) + coords[3]
+			-- end
+
+			result.MangleId = function(x, y, baseId)
+				return baseId + _constants.idFactorY * y + x
 			end
-			
+
+			-- result.DemangleId = function(slotId)
+			-- 	local rem = slotId % 100
+			-- 	local variant = rem
+			-- 	slotId = (slotId - rem) / 100
+			-- 	rem = slotId % 2000
+			-- 	local coordI = rem - 100
+			-- 	slotId = (slotId - rem) / 2000
+			-- 	return coordI, slotId - 100, variant
+			-- end
+
 			result.DemangleId = function(slotId)
-				local rem = slotId % 100
-				local variant = rem
-				slotId = (slotId - rem) / 100
-				rem = slotId % 2000
-				local coordI = rem - 100
-				slotId = (slotId - rem) / 2000
-				return coordI, slotId - 100, variant
+				-- debugger()
+				local function _getIdBase(slotId)
+					local baseId = 0
+					for k, v in pairs(_constants.idBases) do
+						if slotId >= v then
+							baseId = v
+							break
+						end
+					end
+
+					return baseId > 0 and baseId or false
+				end
+
+				local baseId = _getIdBase(slotId)
+				if not baseId then return false, false, false end
+
+				local y = math.floor((slotId - baseId) / _constants.idFactorY)
+				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+
+				return x, y, baseId
+			end
+
+			result.slots = {}
+			result.terminalGroups = {}
+			result.stations = {}
+
+			local addModel = function(name, transf, tag)
+				table.insert(result.models, {
+					id = name,
+					transf = transf,
+					tag = tag
+				})
+			end
+
+			-- local addSlot = function()
+			-- 	table.insert(result.slots, {
+			-- 		id = result.MangleId({coordI, coordJ, 0}),
+			-- 		transf = transf.transl(vec3.new(passXPos, coordJ * 10, .0)),
+			-- 		-- type = "street_terminal_passenger",
+			-- 		type = "lollo_street_terminal_cargo",
+			-- 		spacing = passengerSpacing
+			-- 	})
+			-- end
+
+			local addSlot = function(x, y, baseId)
+				table.insert(result.slots, {
+					id = result.MangleId(x, y, baseId),
+					transf = transf.transl(vec3.new(x * _constants.transfFactorX, y * _constants.transfFactorY, 0.0)),
+					-- type = "street_terminal_passenger",
+					type = "lollo_street_terminal_cargo",
+					spacing = _constants.cargoSpacing
+				})
+			end
+
+			for x = _constants.minX, _constants.maxX do
+				for y = _constants.minY, _constants.maxY do
+					addSlot(x, y, _constants.idBases.pathSlotIdBase)
+				end
 			end
 			
 			return result
 		end,
-		upgradeFn = function(params)
-			-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
-			-- If you leave it out, adding and removing tram tracks won't work.
-			-- (Bus lanes don't work anyway.)
-			return {}
-		end,
+		-- upgradeFn = function(params)
+		-- 	-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
+		-- 	-- If you leave it out, adding and removing tram tracks won't work.
+		-- 	-- (Bus lanes don't work anyway.)
+		-- 	return {}
+		-- end,
 	}
 end

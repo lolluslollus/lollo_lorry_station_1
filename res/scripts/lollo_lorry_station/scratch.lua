@@ -1,6 +1,7 @@
 package.path = package.path .. ';res/scripts/?.lua'
 
 local dump = require('res/scripts/luadump')
+local stringUtils = require('lollo_lorry_station/stringUtils')
 
 local function isBuildingStreetSplitter(param)
     print('\n - param.proposal.toAdd = ')

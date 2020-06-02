@@ -1,8 +1,8 @@
 local lollo = {}
-local dump = require('luadump')
-local inspect = require('inspect')
-local stringUtils = require('stringUtils')
--- local dbg = require('debugger')
+local luadump = require('lollo_lorry_station/luadump')
+local inspect = require('lollo_lorry_station/inspect')
+local stringUtils = require('lollo_lorry_station/stringUtils')
+-- local debugger = require('debugger')
 
 local function myErrorHandler(err)
     print('ERROR: ', err)
@@ -26,30 +26,48 @@ function lollo.tryGlobalVariables()
     -- xfce4-terminal -- %command%
     -- print('about to try global variables')
     -- print('---')
-    -- dump(true)(game)
+    -- luadump(true)(game)
+
+    -- if true then return end
+print('LOLLO game.interface.buildConstruction = ')
+luadump(true)(game.interface.buildConstruction)
+print('LOLLO game.interface.bulldoze = ')
+luadump(true)(game.interface.bulldoze)
+print('LOLLO game.interface.findPath = ')
+luadump(true)(game.interface.findPath)
+print('LOLLO game.interface.setZone = ')
+luadump(true)(game.interface.setZone)
+print('LOLLO game.interface.startEvent = ')
+luadump(true)(game.interface.startEvent)
+print('LOLLO game.interface.upgradeConstruction = ')
+luadump(true)(game.interface.upgradeConstruction)
+
+local debugger = require('debugger')
+    debugger()
+    
     xpcall(
         function()
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
                 -- if key ~= "package" and key ~= "_G" then
-                --     dump(true)(value)
+                --     luadump(true)(value)
                 -- else
-                --     print("dump too long, skipped")
+                --     print("luadump too long, skipped")
                 -- end
             end
 
             --  print('---')
             -- print('LOLLO getmetatable("") = ')
-            -- dump(true)(getmetatable(''))
+            -- luadump(true)(getmetatable(''))
             -- print('---')
             -- print('LOLLO getmetatable(_G) = ')
-            -- dump(true)(getmetatable(_G))
+            -- luadump(true)(getmetatable(_G))
 
             -- local filefilterutil = require('filefilterutil')
             -- print('filefilterutil.package.mod')
-            -- dump(true)(filefilterutil.package.mod)
-            -- dump(true)(filefilterutil.package.mod('vehicle/train/etr500_gen2_locomotive_f_eurostar_italy.mdl', {}))
+            -- luadump(true)(filefilterutil.package.mod)
+            -- luadump(true)(filefilterutil.package.mod('vehicle/train/etr500_gen2_locomotive_f_eurostar_italy.mdl', {}))
 
             print('---')
             -- print(inspect(package.loaded['lollo_cement']))
@@ -64,23 +82,23 @@ function lollo.tryGlobalVariables()
             --print('LOLLO path = ', package.path) -- workshop mods do not appear here, only local mods
 
             -- local getMods = print('LOLLO getMods = ', package.loadlib('loadall.dll', 'getMods')) -- LOLLO TODO look into this, it may help with remote debugging
-            -- dump(true)(getMods)
+            -- luadump(true)(getMods)
             -- local getActiveMods = print('LOLLO getMods = ', package.loadlib('loadall.dll', 'getActiveMods')) -- LOLLO TODO look into this, it may help with remote debugging
-            -- dump(true)(getActiveMods)
+            -- luadump(true)(getActiveMods)
             
             print('---')
 
 --[[             print('game.interface.getLog() = ')
-            dump(true)(game.interface.getLog) -- this needs 3 params
-            --dump(true)(game.interface.getLog()) -- this needs 3 params
+            luadump(true)(game.interface.getLog) -- this needs 3 params
+            --luadump(true)(game.interface.getLog()) -- this needs 3 params
             print('game.interface.getName() = ')
-            dump(true)(game.interface.getName) -- this needs 1 param
-            --dump(true)(game.interface.getName()) -- this needs 1 param
+            luadump(true)(game.interface.getName) -- this needs 1 param
+            --luadump(true)(game.interface.getName()) -- this needs 1 param
             print('game.interface.getPlayer() = ')
-            dump(true)(game.interface.getPlayer())
+            luadump(true)(game.interface.getPlayer())
             print('game.interface.getPlayerJournal() = ')
-            dump(true)(game.interface.getPlayerJournal) -- this needs 2 to 3 params
-            --dump(true)(game.interface.getPlayerJournal()) -- this needs 2 to 3 params
+            luadump(true)(game.interface.getPlayerJournal) -- this needs 2 to 3 params
+            --luadump(true)(game.interface.getPlayerJournal()) -- this needs 2 to 3 params
  ]]        end,
         myErrorHandler
     )
@@ -94,7 +112,7 @@ function lollo.tryDebugger()
     --require("debugger")()
 
     print('---')
-    --dump(true)(package)
+    --luadump(true)(package)
     print('---')
     print(inspect(package.loaded['lollo_cement']))
     print(inspect(package.loaded['lollo_cement.lua']))
@@ -132,7 +150,7 @@ function lollo.trySocket()
             print('about to start mobdebug')
             local mdbg = require('mobdebug')
             print('mobdebug required')
-            dump(true)(mdbg)
+            luadump(true)(mdbg)
             mdbg.listen('*', 8172) -- same as listen("*", 8172)
             print('mobdebug listening')
             --require('mobdebug').start()
@@ -144,7 +162,7 @@ function lollo.trySocket()
             print('about to start mobdebug')
             local mdbg = require('mobdebug')
             print('mobdebug required')
-            dump(true)(mdbg)
+            luadump(true)(mdbg)
             mdbg.start()
             print('mobdebug listening')
             --require('mobdebug').start()
@@ -173,7 +191,7 @@ The trouble is, I might need a lua52.dll compiled against msvcrt140
 I have found the lua-5.2.4_Win64_dll14_lib and lua-5.2.4_Win64_dll15_lib on lua binaries, but now it dumps:
 The thread tried to read from or write to a virtual address for which it does not have the appropriate access
 
-Maybe I call the socket from the game.interface thread? Nope, the dump still shows the same message, even tho it might behave a bit differently
+Maybe I call the socket from the game.interface thread? Nope, the luadump still shows the same message, even tho it might behave a bit differently
 Even starting the game as an admin won't help.
 ]]
 
