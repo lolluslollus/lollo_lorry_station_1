@@ -209,11 +209,12 @@ function data()
 			
 			return result
 		end,
-		-- upgradeFn = function(params)
+		upgradeFn = function(_)
+			debugger() -- it does not get here when I call it with game.interface.upgradeConstruction()
 		-- 	-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
 		-- 	-- If you leave it out, adding and removing tram tracks won't work.
 		-- 	-- (Bus lanes don't work anyway.)
 		-- 	return {}
-		-- end,
+		end,
 	}
 end

@@ -333,13 +333,13 @@ LOLLO api =
       getConstructionEntityForDepot = {
         __doc__ = "(Entity depotEntity) -> Entity"
       },
-      getConstructionEntityForEdge = {
+      getConstructionEntityForEdge = { -- LOLLO check this
         __doc__ = "(Entity edgeEntity) -> Entity"
       },
       getConstructionEntityForSimBuilding = {
         __doc__ = "(Entity townBuildingEntity) -> Entity"
       },
-      getConstructionEntityForStation = {
+      getConstructionEntityForStation = { -- LOLLO check this
         __doc__ = "(Entity stationEntity) -> Entity"
       },
       getConstructionEntityForTownBuilding = {
@@ -351,12 +351,12 @@ LOLLO api =
       getStation2ConstructionMap = {
         __doc__ = "() -> Table[Entity,Entity]"
       },
-      getStreetConnectorEntity = {
+      getStreetConnectorEntity = { -- LOLLO check this
         __doc__ = "(Entity nodeEntity) -> Entity"
       }
     },
     streetSystem = {
-      getEdgeForEdgeObject = {
+      getEdgeForEdgeObject = { -- LOLLO check this
         __doc__ = "(Entity edgeEntity) -> Entity"
       },
       getEdgeObject2EdgeMap = {
@@ -365,7 +365,7 @@ LOLLO api =
       getNode2SegmentMap = {
         __doc__ = "() -> Table[Entity,Vector[Entity]]"
       },
-      getNode2StreetEdgeMap = {
+      getNode2StreetEdgeMap = { -- LOLLO check this
         __doc__ = "() -> Table[Entity,Vector[Entity]]"
       },
       getNode2TrackEdgeMap = {
@@ -586,10 +586,10 @@ LOLLO api =
       find = {
         __doc__ = "(String name) -> Number"
       },
-      get = {
+      get = {-- LOLLO check this
         __doc__ = "(Number index) -> Unknown-type"
       },
-      getAll = {
+      getAll = {-- LOLLO check this
         __doc__ = "() -> Vector[String]"
       },
       getFileName = {

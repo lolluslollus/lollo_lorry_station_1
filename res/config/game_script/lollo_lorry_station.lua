@@ -1,10 +1,20 @@
 local luadump = require('lollo_lorry_station/luadump')
+local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
 
 local state = {
     isShowAllEvents = false
 }
+
+local _constants = {
+    constructionFileName = 'station/street/lollo_lorry_station.con',
+    edgeSearchRadius = 200
+}
+
+local function _getCloneWoutModulesAndSeed(obj)
+    return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
+end
 
 local function _myErrorHandler(err)
     print('ERROR: ', err)
@@ -14,13 +24,13 @@ local function _getNearbyStreetEdges(position)
     if type(position) ~= 'table' then return {} end
     
     -- local nearbyNodes = game.interface.getEntities(
-    --     {pos = entity.position, radius = 200},
+    --     {pos = entity.position, radius = _constants.edgeSearchRadius},
     --     {type = "BASE_NODE", includeData = true}
-    --     -- {type = "CONSTRUCTION", includeData = true, fileName = "station/street/lollo_lorry_station.con"}
+    --     -- {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
     -- )
 
     local nearbyEdges = game.interface.getEntities(
-        {pos = position, radius = 200},
+        {pos = position, radius = _constants.edgeSearchRadius},
         {type = "BASE_EDGE", includeData = true}
     )
 
@@ -36,7 +46,7 @@ end
 
 function data()
     return {
-        handleEvent = function(src, id, name, param)
+        handleEvent = function(src, id, name, parameters)
             if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
             if state.isShowAllEvents then
                 print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
@@ -44,13 +54,22 @@ function data()
             if (id == '__lolloLorryStationEvent__') then
                 print("__lolloLorryStationEvent__ caught")
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
-                luadump(true)(param)
+                luadump(true)(parameters)
+
+                debugger()
+                parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
+                parameters.params.id = parameters.id
+                parameters.params.nearbyStreetEdges = _getCloneWoutModulesAndSeed(parameters.nearbyStreetEdges)
+                parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
+                parameters.params.transf = _getCloneWoutModulesAndSeed(parameters.transf)
+                local newId = game.interface.upgradeConstruction(
+                    parameters.id,
+                    _constants.constructionFileName,
+                    parameters.params
+                )
             end
 
             state.isShowAllEvents = true
---[[             package.loaded["lollo_lorry_station/reloaded"] = nil
-            local reloaded = require("lollo_lorry_station/reloaded")
-            reloaded.trySocket() ]]
 
 --[[             package.loaded["lollo_lorry_station/reloaded"] = nil
             local reloaded = require("lollo_lorry_station/reloaded")
@@ -61,22 +80,6 @@ function data()
             -- local reloaded = require("lollo_lorry_station/reloaded")
             -- reloaded.tryGlobalVariables()
 
-            --gui = {
-            --    buttoncallbacks = {  },
-            --    windowcallbacks = {  }  absoluteLayout_get = (id),
-            --    boxLayout_create = (id, orientation),
-            --    boxLayout_get = (id, orientation),
-            --    button_create = (id, content),
-            --    button_get = (id, content),
-            --    component_create = (id, name),
-            --    component_get = (id),
-            --    imageView_create = (id, path),
-            --    imageView_get = (id, path),
-            --    textView_create = (id, text, width),
-            --    textView_get = (id),
-            --    window_create = (id, title, child),
-            --    window_get = (id)
-            --}
         end,
         guiHandleEvent = function(id, name, param)
             -- LOLLO NOTE when U try to add a streetside bus or lorry stop, the streetBuilder fires this event.
@@ -99,11 +102,12 @@ function data()
                         if type(entity) ~= 'table' or entity.type ~= 'STATION_GROUP' or type(entity.position) ~= 'table' then return end
 
                         local constructionId = false
+                        local constructionParams = {}
                         local constructionPosition = {}
                         local constructionTransf = {}
                         local allLorryStationConstructions = game.interface.getEntities(
                             {pos = entity.position, radius = 999},
-                            {type = "CONSTRUCTION", includeData = true, fileName = "station/street/lollo_lorry_station.con"}
+                            {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
                         )
                         -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
                         -- the game distinguishes constructions, stations and station groups.
@@ -113,7 +117,9 @@ function data()
                             for _, con in pairs(allLorryStationConstructions) do
                                 if stringUtils.arrayHasValue(con.stations, staId) then
                                     if not constructionId then
+                                        debugger()
                                         constructionId = con.id
+                                        constructionParams = con.params
                                         constructionPosition = con.position
                                         constructionTransf = con.transf
                                     end
@@ -129,6 +135,7 @@ function data()
                                 {
                                     id = constructionId,
                                     nearbyStreetEdges = _getNearbyStreetEdges(constructionPosition),
+                                    params = constructionParams,
                                     position = constructionPosition,
                                     transf = constructionTransf
                                 }
@@ -143,10 +150,10 @@ function data()
                 -- you cannot check the types coz they contain userdata, so use xpcall
                 -- if type(param) == 'table' and type(param.proposal) == 'table'
                 --     and type(param.proposal.toAdd) == 'table' and type(param.proposal.toAdd[1]) == 'table'
-                --     and param.proposal.toAdd[1].fileName == 'station/street/lollo_lorry_station.con' then
+                --     and param.proposal.toAdd[1].fileName == _constants.constructionFileName then
                 xpcall(
                     function()
-                        if not param.proposal.toAdd or not param.proposal.toAdd[1] or param.proposal.toAdd[1].fileName ~= 'station/street/lollo_lorry_station.con' then return end
+                        if not param.proposal.toAdd or not param.proposal.toAdd[1] or param.proposal.toAdd[1].fileName ~= _constants.constructionFileName then return end
                         if not param.result[1] then return end
 
                         local entity = game.interface.getEntity(param.result[1]) -- the newly built station
@@ -159,6 +166,7 @@ function data()
                             {
                                 id = param.result[1],
                                 nearbyStreetEdges = _getNearbyStreetEdges(entity.position),
+                                params = entity.params,
                                 position = entity.position,
                                 -- proposal = param.proposal,
                                 -- result = param.result
@@ -250,7 +258,7 @@ function data()
                       toRemove = {  },
                       toAdd = {
                         {
-                          fileName = "station/street/lollo_lorry_station.con",
+                          fileName = _constants.constructionFileName,
                           params = { busLane = 0, lockLayoutCentre = 0, paramX = 0, paramY = 0, seed = 0, tramTrack = 0, year = 1950 },
                           hasCargoPlatform = false,
                           transf = ((1 / 0 / 0 / 0)/(-0 / 1 / 0 / 0)/(0 / 0 / 1 / 0)/(-3547.22 / 3206.46 / 54.534 / 1)),
