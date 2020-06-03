@@ -39,8 +39,13 @@ helper.getStreetEdgesSquareBySquare = function(position)
     -- )
 
     local results = {}
-    -- LOLLO TODO 0.7071 looks until the edges (circle outside the square), 0.5 neglects them (circle inside the square): check this
-    local searchRadius = math.max(_constants.xTransfFactor, _constants.yTransfFactor) * 0.7071
+    -- LOLLO NOTE 0.7071 looks until the edges (circle outside the square), 0.5 neglects them (circle inside the square):
+    -- it turns out this is not critical, coz we can only find the base edges and those are rectangles with the road inside.
+    -- They can extend quite a bit outside the road.
+    -- As a consequence, instead of following the road closely, we have rectangles that start and end
+    -- at lane switchers (ie edge ends).
+    -- To mitigate this, we use a finer mesh. Best would be to use some different tech here.
+    local searchRadius = math.max(_constants.xTransfFactor, _constants.yTransfFactor) * 0.7071 * 0.5
     -- searchRadius = 0.0
     print('LOLLO searchRadius =', searchRadius)
     for x = _constants.xMin, _constants.xMax do
