@@ -1,7 +1,7 @@
 local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
-local _modConstants = require('lollo_lorry_station/constants')
+-- local _modConstants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
 
@@ -12,8 +12,7 @@ local state = {
 local _constants = arrayUtils.addProps(
     {
         constructionFileName = 'station/street/lollo_lorry_station.con',
-    },
-    _modConstants
+    }
 )
 
 local function _getCloneWoutModulesAndSeed(obj)

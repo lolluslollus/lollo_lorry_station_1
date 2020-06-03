@@ -5,8 +5,8 @@ local constants = {
     yMin = -10,
     xPrefix = 'x_',
     yPrefix = 'y_',
-	xTransfFactor = 20,
-	yTransfFactor = 20,
+	xTransfFactor = 10,
+	yTransfFactor = 10,
 }
 
 return constants

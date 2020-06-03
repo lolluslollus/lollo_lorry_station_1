@@ -88,7 +88,7 @@ function data()
 		updateFn = function(params)
 			local result = { cost = 1000 }
 			print('LOLLO params = ')
-			luadump(true)(params)
+			-- luadump(true)(params)
 			-- debugger()
 			
 			result.colliders = {}
@@ -227,9 +227,9 @@ function data()
 			-- no access to api or interface, I must work with the params.
 
 			if type(params.position) == 'table' then
-				print('LOLLO params.position = ')
-				luadump(true)(params.position)
-				print(inspect(params.position))
+				-- print('LOLLO params.position = ')
+				-- luadump(true)(params.position)
+				-- print(inspect(params.position))
 
 				for x = _constants.xMin, _constants.xMax do
 					for y = _constants.yMin, _constants.yMax do

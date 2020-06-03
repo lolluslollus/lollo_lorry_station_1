@@ -1,5 +1,5 @@
 local vec3 = require "vec3"
-local _modConstants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station/constants')
 local debugger = require('debugger')
 local luadump = require('lollo_lorry_station/luadump')
 
@@ -40,19 +40,28 @@ helper.getStreetEdgesSquareBySquare = function(position)
 
     local results = {}
     -- LOLLO TODO 0.7071 looks until the edges (circle outside the square), 0.5 neglects them (circle inside the square): check this
-    local searchRadius = math.max(_modConstants.xTransfFactor, _modConstants.yTransfFactor) * 0.7071
-    for x = _modConstants.xMin, _modConstants.xMax do
-        for y = _modConstants.yMin, _modConstants.yMax do
+    local searchRadius = math.max(_constants.xTransfFactor, _constants.yTransfFactor) * 0.7071
+    -- searchRadius = 0.0
+    print('LOLLO searchRadius =', searchRadius)
+    for x = _constants.xMin, _constants.xMax do
+        for y = _constants.yMin, _constants.yMax do
             -- LOLLO TODO maybe also consider z?
             local squarePosition = {
-                position[1] + x * _modConstants.xTransfFactor,
-                position[2] + y * _modConstants.yTransfFactor,
-                position[3]
-            }
+                position[1] + x * _constants.xTransfFactor,
+                position[2] + y * _constants.yTransfFactor,
+                -- position[3]
+           }
+            squarePosition[3] = game.interface.getHeight({squarePosition[1], squarePosition[2]}) or position[3]
+            print('LOLLO squarePosition[3] = ', squarePosition[3])
             local nearbyStreetEdges = game.interface.getEntities(
                 {pos = squarePosition, radius = searchRadius},
                 {type = "BASE_EDGE", includeData = true}
             )
+            print('LOLLO x = ', x, ' y = ', y)
+            print('LOLLO squarePosition =')
+            luadump(true)(squarePosition)
+            print('LOLLO nearbyStreetEdges =')
+            luadump(true)(nearbyStreetEdges)
             -- LOLLO NOTE #nearbyStreetEdges always returns 0 coz the table is not numbered, so I must iterate.
             -- This is a major caveat of lua's.
             for _, v in pairs(nearbyStreetEdges) do
@@ -72,11 +81,11 @@ helper.getStreetEdgesSquareBySquare = function(position)
 end
 
 helper.getXKey = function(x)
-    return _modConstants.xPrefix .. tostring(x)
+    return _constants.xPrefix .. tostring(x)
 end
 
 helper.getYKey = function(y)
-    return _modConstants.yPrefix .. tostring(y)
+    return _constants.yPrefix .. tostring(y)
 end
 
 return helper
