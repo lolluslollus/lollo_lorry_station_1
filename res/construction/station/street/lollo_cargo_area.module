@@ -13,7 +13,7 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Lollo cargo path"),
+		name = _("Lollo cargo area"),
 		description = _("Lollo platform for waiting cargo."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	}, 
@@ -21,7 +21,7 @@ return {
 		yearFrom = 0,
 		yearTo = 0
 	},
-	type = "lollo_street_terminal_cargo_path",
+	type = "lollo_street_terminal_cargo_area",
 	order = {
 		value = 6,
 	},
@@ -38,9 +38,9 @@ return {
 		local right = x >= 0
 
 		if right then 
-			addModelFn("station/road/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
+			addModelFn("station/road/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		else 
-			addModelFn("station/road/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
+			addModelFn("station/road/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		end
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then
@@ -61,7 +61,7 @@ return {
 		
 		local result = {
 			{ 
-				id = "station/road/lollo_cargo_path.mdl",
+				id = "station/road/lollo_cargo_area.mdl",
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

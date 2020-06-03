@@ -29,16 +29,9 @@ function data()
             bbMax = { 3.840000629425, 2.1260833740234, 3.2567188739777, },
             bbMin = { -3.4699983596802, -1.5046007633209, -0.29989165067673, },
         },
-        -- collider = {
-        --     params = {
-        --         halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
-        --     },
-        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-        --     type = "BOX",
-        -- },
         collider = {
             params = {
-                halfExtents = { 0.0, 0.0, 0.0, },
+                halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             type = "BOX",
@@ -47,12 +40,12 @@ function data()
             {
                 node = {
                     children = {
-                        {
-                            materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
-                            mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
-                            name = "small_street_platform",
-                            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-                        },
+                        -- {
+                        --     materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
+                        --     mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
+                        --     name = "small_street_platform",
+                        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                        -- },
                         {
                             materials = { "station/rail/cargo/cargo_assets_1.mtl", },
                             mesh = "station/rail/asset/cargo_pallet_jack/pallet_jack_lod0.msh",
@@ -71,7 +64,7 @@ function data()
                 },
                 static = false,
                 visibleFrom = 0,
-                visibleTo = 1085.5139160156,
+                visibleTo = 1000,
             },
         },
         metadata = {
@@ -83,8 +76,8 @@ function data()
                 price = 1200,
             },
             description = {
-                description = _("Lollo cargo path, to be placed near a road."),
-                name = _("Lollo cargo path"),
+                description = _("Lollo cargo waiting area."),
+                name = _("Lollo cargo waiting area"),
             },
             streetTerminal = {
                 cargo = true,

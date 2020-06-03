@@ -56,7 +56,7 @@ function data()
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 luadump(true)(parameters)
 
-                debugger()
+                -- debugger()
                 parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
                 parameters.params.id = parameters.id
                 parameters.params.nearbyStreetEdges = _getCloneWoutModulesAndSeed(parameters.nearbyStreetEdges)
@@ -117,7 +117,7 @@ function data()
                             for _, con in pairs(allLorryStationConstructions) do
                                 if stringUtils.arrayHasValue(con.stations, staId) then
                                     if not constructionId then
-                                        debugger()
+                                        -- debugger()
                                         constructionId = con.id
                                         constructionParams = con.params
                                         constructionPosition = con.position
@@ -127,7 +127,7 @@ function data()
                             end
                         end
 
-                        debugger()
+                        -- debugger()
                         if constructionId then
                             game.interface.sendScriptEvent(
                                 "__lolloLorryStationEvent__",
@@ -159,7 +159,7 @@ function data()
                         local entity = game.interface.getEntity(param.result[1]) -- the newly built station
                         if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
 
-                        debugger()
+                        -- debugger()
                         game.interface.sendScriptEvent(
                             '__lolloLorryStationEvent__',
                             'built',
