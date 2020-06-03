@@ -91,4 +91,14 @@ arrayUtils.findIndex = function(tab, fieldName, fieldValueNonNil)
     end
 end
 
+arrayUtils.addProps = function(baseTab, addedTab)
+    if type(baseTab) ~= 'table' or type(addedTab) ~= 'table' then return baseTab end
+
+    for k, v in pairs(addedTab) do
+        baseTab[k] = v
+    end
+
+    return baseTab
+end
+
 return arrayUtils

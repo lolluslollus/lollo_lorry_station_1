@@ -3,28 +3,29 @@ local transf = require "transf"
 local constructionutil = require "constructionutil"
 local paramsutil = require "paramsutil"
 local colliderutil = require "colliderutil"
+local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local _modConstants = require('lollo_lorry_station/constants')
+local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local debugger = require('debugger')
+local inspect = require('lollo_lorry_station/inspect')
 local luadump = require('lollo_lorry_station/luadump')
 local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
-local _constants = {
-	cargoAreaSpacing = {5, 5, 5, 5},
-	-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
-	-- negative values don't matter, the api takes up the abs value
-	-- cargoPathSpacing = {0.1, 0.1, 0.1, 0.1},
-	cargoPathSpacing = {0.0, 0.0, 0.0, 0.0},
-	idBases = { -- LOLLO NOTE keep this sorted descending
-		areaSlotIdBase = 120000,
-		pathSlotIdBase = 110000,
+local _constants = arrayUtils.addProps(
+	{
+		cargoAreaSpacing = {5, 5, 5, 5},
+		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
+		-- negative values don't matter, the api takes up the abs value
+		-- cargoPathSpacing = {0.1, 0.1, 0.1, 0.1},
+		cargoPathSpacing = {0.0, 0.0, 0.0, 0.0},
+		idBases = { -- LOLLO NOTE keep this sorted descending
+			areaSlotIdBase = 120000,
+			pathSlotIdBase = 110000,
+		},
+		idFactorY = 100
 	},
-	idFactorY = 100,
-	maxX = 10,
-	maxY = 10,
-	minX = -10,
-	minY = -10,
-	transfFactorX = 20,
-	transfFactorY = 20,
-}
+	_modConstants
+)
 
 function data()
 	return {
@@ -197,8 +198,8 @@ function data()
 
 			local addCargoAreaSlot = function(x, y, baseId)
 				table.insert(result.slots, {
-					id = result.MangleId(x - _constants.minX, y - _constants.minY, baseId),
-					transf = transf.transl(vec3.new(x * _constants.transfFactorX, y * _constants.transfFactorY, 0.0)),
+					id = result.MangleId(x - _constants.xMin, y - _constants.yMin, baseId),
+					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = "lollo_street_terminal_cargo_area",
 					spacing = _constants.cargoAreaSpacing
@@ -207,8 +208,8 @@ function data()
 
 			local addCargoPathSlot = function(x, y, baseId)
 				table.insert(result.slots, {
-					id = result.MangleId(x - _constants.minX, y - _constants.minY, baseId),
-					transf = transf.transl(vec3.new(x * _constants.transfFactorX, y * _constants.transfFactorY, 0.0)),
+					id = result.MangleId(x - _constants.xMin, y - _constants.yMin, baseId),
+					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = "lollo_street_terminal_cargo_path",
 					spacing = _constants.cargoPathSpacing
@@ -216,16 +217,28 @@ function data()
 			end
 
 			-- add cargo area slots
-			for x = _constants.minX, _constants.maxX do
-				for y = _constants.minY, _constants.maxY do
+			for x = _constants.xMin, _constants.xMax do
+				for y = _constants.yMin, _constants.yMax do
 					addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
 				end
 			end
 
 			-- add cargo path slots
-			for x = _constants.minX, _constants.maxX do
-				for y = _constants.minY, _constants.maxY do
-					addCargoPathSlot(x, y, _constants.idBases.pathSlotIdBase)
+			-- no access to api or interface, I must work with the params.
+
+			if type(params.position) == 'table' then
+				print('LOLLO params.position = ')
+				luadump(true)(params.position)
+				print(inspect(params.position))
+
+				for x = _constants.xMin, _constants.xMax do
+					for y = _constants.yMin, _constants.yMax do
+						if params.streetEdges
+						and params.streetEdges[edgeUtils.getXKey(x)]
+						and params.streetEdges[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then
+							addCargoPathSlot(x, y, _constants.idBases.pathSlotIdBase)
+						end
+					end
 				end
 			end
 

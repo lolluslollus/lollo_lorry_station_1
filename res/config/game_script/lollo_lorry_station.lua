@@ -1,5 +1,7 @@
 local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local _modConstants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
 
@@ -7,10 +9,12 @@ local state = {
     isShowAllEvents = false
 }
 
-local _constants = {
-    constructionFileName = 'station/street/lollo_lorry_station.con',
-    edgeSearchRadius = 200
-}
+local _constants = arrayUtils.addProps(
+    {
+        constructionFileName = 'station/street/lollo_lorry_station.con',
+    },
+    _modConstants
+)
 
 local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
@@ -18,30 +22,6 @@ end
 
 local function _myErrorHandler(err)
     print('ERROR: ', err)
-end
-
-local function _getNearbyStreetEdges(position)
-    if type(position) ~= 'table' then return {} end
-    
-    -- local nearbyNodes = game.interface.getEntities(
-    --     {pos = entity.position, radius = _constants.edgeSearchRadius},
-    --     {type = "BASE_NODE", includeData = true}
-    --     -- {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
-    -- )
-
-    local nearbyEdges = game.interface.getEntities(
-        {pos = position, radius = _constants.edgeSearchRadius},
-        {type = "BASE_EDGE", includeData = true}
-    )
-
-    local results = {}
-    for i, v in pairs(nearbyEdges) do
-        if not v.track and v.streetType then
-            table.insert(results, v)
-        end
-    end
-
-    return results
 end
 
 function data()
@@ -56,10 +36,11 @@ function data()
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 luadump(true)(parameters)
 
-                -- debugger()
                 parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
                 parameters.params.id = parameters.id
-                parameters.params.nearbyStreetEdges = _getCloneWoutModulesAndSeed(parameters.nearbyStreetEdges)
+                parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
+                    parameters.position
+                )
                 parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
                 parameters.params.transf = _getCloneWoutModulesAndSeed(parameters.transf)
                 local newId = game.interface.upgradeConstruction(
@@ -134,7 +115,6 @@ function data()
                                 "select",
                                 {
                                     id = constructionId,
-                                    nearbyStreetEdges = _getNearbyStreetEdges(constructionPosition),
                                     params = constructionParams,
                                     position = constructionPosition,
                                     transf = constructionTransf
@@ -165,7 +145,6 @@ function data()
                             'built',
                             {
                                 id = param.result[1],
-                                nearbyStreetEdges = _getNearbyStreetEdges(entity.position),
                                 params = entity.params,
                                 position = entity.position,
                                 -- proposal = param.proposal,
