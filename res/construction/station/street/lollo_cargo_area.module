@@ -38,9 +38,9 @@ return {
 		local right = x >= 0
 
 		if right then 
-			addModelFn("station/road/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
+			addModelFn("lollo_models/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		else 
-			addModelFn("station/road/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
+			addModelFn("lollo_models/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		end
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then
@@ -61,7 +61,7 @@ return {
 		
 		local result = {
 			{ 
-				id = "station/road/lollo_cargo_area.mdl",
+				id = "lollo_models/lollo_cargo_area.mdl",
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

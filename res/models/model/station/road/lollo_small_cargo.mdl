@@ -29,16 +29,9 @@ function data()
             bbMax = { 3.840000629425, 2.1260833740234, 3.2567188739777, },
             bbMin = { -3.4699983596802, -1.5046007633209, -0.29989165067673, },
         },
-        -- collider = {
-        --     params = {
-        --         halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
-        --     },
-        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-        --     type = "BOX",
-        -- },
         collider = {
             params = {
-                halfExtents = { 0.0, 0.0, 0.0, },
+                halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             type = "BOX",
@@ -83,15 +76,18 @@ function data()
                 price = 1200,
             },
             description = {
-                description = _("Lollo cargo path, to be placed near a road."),
-                name = _("Lollo cargo path"),
+                description = _("Lollo small truck stop to unload cargo, to be placed on the sidewalk. Does not allow loading of cargo."),
+                name = _("Lollo truck unload stop"),
             },
+            -- lollo = { -- useless
+            --     true
+            -- },
             streetTerminal = {
                 cargo = true,
             },
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
-            transportNetworkProvider = {
+            transportNetworkProvider = { -- useless
                 laneLists = {
                     laneutil.createLanes(generatedData["lanes_road"], { "BUS", "TRUCK", "TRAM" }, 20, 3, false),
                     laneutil.createLanes(generatedData["lanes_terminal"], { "CARGO" }, 20, 4, false),

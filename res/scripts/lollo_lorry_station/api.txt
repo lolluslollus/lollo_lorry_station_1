@@ -538,7 +538,7 @@ LOLLO api =
       contains = {
         __doc__ = "(Number id) -> Bool"
       },
-      find = {
+      find = { -- LOLLO check this
         __doc__ = "(String name) -> Number"
       },
       get = {

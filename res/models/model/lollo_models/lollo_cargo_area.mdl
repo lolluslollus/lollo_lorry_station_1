@@ -40,12 +40,12 @@ function data()
             {
                 node = {
                     children = {
-                        {
-                            materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
-                            mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
-                            name = "small_street_platform",
-                            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-                        },
+                        -- {
+                        --     materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
+                        --     mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
+                        --     name = "small_street_platform",
+                        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                        -- },
                         {
                             materials = { "station/rail/cargo/cargo_assets_1.mtl", },
                             mesh = "station/rail/asset/cargo_pallet_jack/pallet_jack_lod0.msh",
@@ -64,20 +64,20 @@ function data()
                 },
                 static = false,
                 visibleFrom = 0,
-                visibleTo = 1085.5139160156,
+                visibleTo = 1000,
             },
         },
         metadata = {
             availability = {
-                yearFrom = 0,
-                yearTo = 0,
+                yearFrom = -1,
+                yearTo = -1,
             },
             cost = {
                 price = 1200,
             },
             description = {
-                description = _("Lollo small truck stop to unload cargo, to be placed on the sidewalk. Does not allow loading of cargo."),
-                name = _("Lollo truck unload stop"),
+                description = _("Lollo cargo waiting area."),
+                name = _("Lollo cargo waiting area"),
             },
             streetTerminal = {
                 cargo = true,

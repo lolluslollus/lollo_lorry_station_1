@@ -16,8 +16,11 @@ helper.getNearbyStreetEdges = function(position, edgeSearchRadius)
 
     local nearbyEdges = game.interface.getEntities(
         {pos = position, radius = edgeSearchRadius},
-        {type = "BASE_EDGE", includeData = true}
+        -- {type = "BASE_EDGE", includeData = true}
+        {includeData = true}
     )
+
+    debugger()
 
     local results = {}
     for i, v in pairs(nearbyEdges) do
@@ -76,6 +79,11 @@ helper.getStreetEdgesSquareBySquare = function(position)
                     results[xKey] = {}
                 end
                 results[xKey][yKey] = v
+
+                -- -- returns -1 for a normal chunk of road in the countryside
+                -- local con = api.engine.streetConnectorSystem.getConstructionEntityForEdge(v.id)
+                -- -- returns -1 for a normal chunk of road in the countryside
+                -- local edge = api.engine.streetSystem.getEdgeForEdgeObject(v.id)
             end
         end
     end

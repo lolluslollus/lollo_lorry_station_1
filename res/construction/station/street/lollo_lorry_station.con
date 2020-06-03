@@ -109,7 +109,7 @@ function data()
 			-- result.slots = {}
 			result.models = {
 				{
-					id = 'station/road/lollo_mark.mdl',
+					id = 'lollo_models/lollo_mark.mdl',
 					skipCollision = true,
 					transf = _idTransf
 				}

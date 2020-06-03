@@ -63,8 +63,8 @@ function data()
         },
         metadata = {
             availability = {
-                yearFrom = 0,
-                yearTo = 0
+                yearFrom = -1,
+                yearTo = -1,
             },
             cost = {
                 price = 0
