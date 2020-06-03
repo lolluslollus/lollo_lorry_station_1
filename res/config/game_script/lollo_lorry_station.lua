@@ -85,6 +85,7 @@ function data()
                         local constructionParams = {}
                         local constructionPosition = {}
                         local constructionTransf = {}
+                        -- LOLLO TODO try getConstructionEntity() instead of this mess
                         local allLorryStationConstructions = game.interface.getEntities(
                             {pos = entity.position, radius = 999},
                             {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
@@ -346,52 +347,6 @@ function data()
             -- luadump(true)(game)
 
             -- _G.lollo = true
-
-            --[[ game.gui = {
-                absoluteLayout_addItem = (),
-                absoluteLayout_deleteAll = (),
-                absoluteLayout_setPosition = (),
-                addTask = (),
-                boxLayout_addItem = (),
-                boxLayout_create = (),
-                button_create = (),
-                calcMinimumSize = (),
-                component_create = (),
-                component_setLayout = (),
-                component_setStyleClassList = (),
-                component_setToolTip = (),
-                component_setTransparent = (),
-                getCamera = (),
-                getContentRect = (),
-                getMousePos = (),
-                getTerrainPos = (),
-                imageView_create = (),
-                imageView_setImage = (),
-                isEditor = (),
-                isGuideSystemActive = (),
-                openWindow = (),
-                playCutscene = (),
-                playSoundEffect = (),
-                playTrack = (),
-                setAutoCamera = (),
-                setCamera = (),
-                setConstructionAngle = (),
-                setEnabled = (),
-                setHighlighted = (),
-                setMedalsCompletion = (),
-                setMissionComplete = (),
-                setTaskProgress = (),
-                setVisible = (),
-                showTask = (),
-                stopAction = (),
-                textView_create = (),
-                textView_setText = (),
-                window_close = (),
-                window_create = (),
-                window_setIcon = (),
-                window_setPosition = (),
-                window_setTitle = ()
-              }, ]]
         end,
         update = function()
         end,
