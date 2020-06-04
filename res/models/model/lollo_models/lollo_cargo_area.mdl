@@ -99,13 +99,13 @@ function data()
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
                 laneLists = {
-                    laneutil.createLanes(
-                        generatedData["lanes_road"],
-                        { "BUS", "TRUCK", "TRAM" },
-                        100,
-                        3,
-                        false
-                    ),
+                    -- laneutil.createLanes(
+                    --     generatedData["lanes_road"],
+                    --     { "BUS", "TRUCK", "TRAM" },
+                    --     100,
+                    --     3,
+                    --     false
+                    -- ),
                     laneutil.createLanes(
                         generatedData["lanes_terminal"], -- curves
                         { "CARGO" }, -- transport means
@@ -124,9 +124,9 @@ function data()
                         -- personEdges = { 2, 3 },
                         -- personNodes = { 4, 5, 6, 7 },
                         -- vehicleNode = 1, -- 0,
-                        personEdges = { 2, 3, 4 },
-                        personNodes = { 4, 5, 6, 7, 8, 9 },
-                        vehicleNode = 0, -- 0,
+                        personEdges = { 0, 1, 2 },
+                        personNodes = { 0, 1, 2, 3, 4, 5 },
+                        -- vehicleNode = -1, -- 0,
                     },
                 },
             },

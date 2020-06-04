@@ -91,8 +91,8 @@ function data()
                 price = 0
             },
             -- autoRemovable = true,
-            skipCollision = true,
-            skipCollisionCheck = true,
+            -- skipCollision = true,
+            -- skipCollisionCheck = true,
             -- streetTerminal = {
             --     cargo = true,
             -- },
@@ -132,7 +132,7 @@ function data()
                 },
             },
         },
-        skipCollision = true,
+        -- skipCollision = true,
         -- skipCollisionCheck = true,
         version = 1
     }
