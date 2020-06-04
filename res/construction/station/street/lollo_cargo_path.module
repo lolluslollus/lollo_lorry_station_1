@@ -37,9 +37,9 @@ return {
 		
 		local right = x >= 0
 
-		if right then 
+		if right then
 			addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
-		else 
+		else
 			addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		end
 		
@@ -60,7 +60,7 @@ return {
 	getModelsFn = function()
 		
 		local result = {
-			{ 
+			{
 				id = "lollo_models/lollo_cargo_path.mdl",
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},

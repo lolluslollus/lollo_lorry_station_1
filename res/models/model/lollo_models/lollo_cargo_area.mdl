@@ -5,8 +5,8 @@ local generatedData = {
 	["lanes_road"] = {
 		curves = {
 			["cargo_path_rep_road"] = {
-				{ { 0.00000, -5.00000, 0.00000 }, { 0.00000, 0.00000, 0.00000 }, },
-				{ { 0.00000, 0.00000, 0.00000 }, { 0.00000, 5.00000, 0.00000 }, },
+				{ { -5.00000, 0.00000, 0.00000 }, { 0.00000, 0.00000, 0.00000 }, },
+				{ { 0.00000, 0.00000, 0.00000 }, { 5.00000, 0.00000, 0.00000 }, },
 			},
 		},
 	},
@@ -17,12 +17,15 @@ local generatedData = {
 			-- },
 			-- ["cargo_path_rep_cargo2"] = {
 			-- 	{ { 5.00000, -5.00000, 0.34450 }, { 5.00000, 5.00000, 0.34450 }, },
-			-- },
-			["cargo_path_rep_cargo3"] = {
-				{ { 0.00000, -5.00000, 0.34450 }, { 0.00000, 0.00000, 0.34450 }, { 0.00000, 5.00000, 0.34450 }, },
+            -- },
+            ["cargo_path_rep_cargo3"] = {
+				{ { -4.00000, -5.00000, 0.34450 }, { -4.00000, 5.00000, 0.34450 }, },
 			},
 			["cargo_path_rep_cargo4"] = {
-				{ { -5.00000, 0.00000, 0.34450 }, { 0.00000, 0.00000, 0.34450 }, { 5.00000, 0.00000, 0.34450 }, },
+				{ { 0.00000, -5.00000, 0.34450 }, { 0.00000, 5.00000, 0.34450 }, },
+			},
+			["cargo_path_rep_cargo5"] = {
+				{ { 4.00000, -5.00000, 0.34450 }, { 4.00000, 5.00000, 0.34450 }, },
 			},
 		},
 	},
@@ -37,7 +40,9 @@ function data()
         },
         collider = {
             params = {
-                halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
+                -- halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
+                -- halfExtents = { 0.1, 0.1, 0.1, },
+                halfExtents = { 0.0, 0.0, 0.0, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             type = "BOX",
@@ -85,14 +90,22 @@ function data()
                 description = _("Lollo cargo waiting area."),
                 name = _("Lollo cargo waiting area"),
             },
-            streetTerminal = {
-                cargo = true,
-            },
+            -- skipCollision = true,
+            -- skipCollisionCheck = true,
+            -- streetTerminal = {
+            --     cargo = true,
+            -- },
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
                 laneLists = {
-                    -- laneutil.createLanes(generatedData["lanes_road"], { "BUS", "TRUCK", "TRAM" }, 20, 3, false),
+                    laneutil.createLanes(
+                        generatedData["lanes_road"],
+                        { "BUS", "TRUCK", "TRAM" },
+                        100,
+                        3,
+                        false
+                    ),
                     laneutil.createLanes(
                         generatedData["lanes_terminal"], -- curves
                         { "CARGO" }, -- transport means
@@ -108,14 +121,19 @@ function data()
                         -- personEdges = { 2, 3, },
                         -- personNodes = { 4, 5, },
                         -- vehicleNode = 2,
-                        personEdges = { 0, 1 },
-                        personNodes = { 0, 1, 2, 3 },
-                        vehicleNode = 0,
+                        -- personEdges = { 2, 3 },
+                        -- personNodes = { 4, 5, 6, 7 },
+                        -- vehicleNode = 1, -- 0,
+                        personEdges = { 2, 3, 4 },
+                        personNodes = { 4, 5, 6, 7, 8, 9 },
+                        vehicleNode = 0, -- 0,
                     },
                 },
             },
         },
-        version = 1,
+        -- skipCollision = true,
+        -- skipCollisionCheck = true,
+        version = 1
     }
     end
     

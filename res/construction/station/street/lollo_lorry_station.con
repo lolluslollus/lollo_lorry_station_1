@@ -13,7 +13,7 @@ local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
 local _constants = arrayUtils.addProps(
 	{
-		cargoAreaSpacing = {5, 5, 5, 5},
+		cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 		-- negative values don't matter, the api takes up the abs value
 		-- cargoPathSpacing = {0.1, 0.1, 0.1, 0.1},
@@ -265,7 +265,7 @@ function data()
 			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
 
-			if type(params.position) == 'table' then
+--[[ 			if type(params.position) == 'table' then
 				-- print('LOLLO params.position = ')
 				-- luadump(true)(params.position)
 				-- print(inspect(params.position))
@@ -279,7 +279,7 @@ function data()
 						end
 					end
 				end
-			end
+			end ]]
 
 			return result
 		end,

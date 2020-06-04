@@ -86,9 +86,9 @@ function data()
                 description = _("Lollo cargo path, to be placed near a road."),
                 name = _("Lollo cargo path"),
             },
-            streetTerminal = {
-                cargo = true,
-            },
+            -- streetTerminal = {
+            --     cargo = true,
+            -- },
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
