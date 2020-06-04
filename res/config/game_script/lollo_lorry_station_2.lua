@@ -37,28 +37,30 @@ function data()
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 luadump(true)(parameters)
 
-                print('LOLLO game.interface.buildConstruction = ')
-                luadump(true)(game.interface.buildConstruction)
-                print(inspect(game.interface.buildConstruction))
+                if name == 'built' then
+                  print('LOLLO game.interface.buildConstruction = ')
+                  luadump(true)(game.interface.buildConstruction)
+                  print(inspect(game.interface.buildConstruction))
 
-                -- local allModels = api.res.modelRep.getAll()
-                debugger()
+                  -- local allModels = api.res.modelRep.getAll()
+                  debugger()
 
-                -- from here on, I need to reverse the parameters.transf string somehow.
-                -- It looks like:
-                -- "transf" = "((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))"
-                parameters.params = {}
-                -- parameters.params.id = parameters.id
-                parameters.params.streetEdges = edgeUtils.getNearbyStreetEdges(
-                    parameters.position,
-                    10
-                )
-                parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
-                -- local newId = game.interface.upgradeConstruction(
-                --     parameters.id,
-                --     _constants.constructionFileName,
-                --     parameters.params
-                -- )
+                  -- from here on, I need to reverse the parameters.transf string somehow.
+                  -- It looks like:
+                  -- "transf" = "((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))"
+                  parameters.params = {}
+                  -- parameters.params.id = parameters.id
+                  parameters.params.streetEdges = edgeUtils.getNearbyStreetEdges(
+                      parameters.position,
+                      10
+                  )
+                  parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
+                  -- local newId = game.interface.upgradeConstruction(
+                  --     parameters.id,
+                  --     _constants.constructionFileName,
+                  --     parameters.params
+                  -- )
+                end
             end
 
             state.isShowAllEvents = true

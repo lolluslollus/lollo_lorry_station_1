@@ -34,19 +34,21 @@ function data()
                 print("__lolloLorryStationEvent__ caught")
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 luadump(true)(parameters)
+                if name == 'built' then
 
-                parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
-                parameters.params.id = parameters.id
-                parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
-                    parameters.position
-                )
-                parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
-                parameters.params.transf = _getCloneWoutModulesAndSeed(parameters.transf)
-                local newId = game.interface.upgradeConstruction(
-                    parameters.id,
-                    _constants.constructionFileName,
-                    parameters.params
-                )
+                    parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
+                    parameters.params.id = parameters.id
+                    parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
+                        parameters.position
+                    )
+                    parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
+                    parameters.params.transf = _getCloneWoutModulesAndSeed(parameters.transf)
+                    local newId = game.interface.upgradeConstruction(
+                        parameters.id,
+                        _constants.constructionFileName,
+                        parameters.params
+                    )
+                end
             end
 
             state.isShowAllEvents = true

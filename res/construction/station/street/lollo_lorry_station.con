@@ -114,7 +114,44 @@ function data()
 					transf = _idTransf
 				}
 			}
-			result.edgeLists = {}
+			result.edgeLists = {
+				{
+					type = 'STREET',
+					params = {
+						busLaneType = 'YES', -- does not pull, neither do hasBusLane and busLane, with true or false
+						busLane = 'YES',
+						hasBusType = 'YES',
+						hasBus = true,
+						skipCollision = true,
+						--skipCollisionCheck = true,
+						type = 'standard/country_medium_new.lua',
+						tramTrackType = 'NO' -- tramTrackType
+					},
+					edges = {
+						{ { -10, -10, 0 }, { 0, 1, 0 } },
+						{ { -10, -1, 0 }, { 0, 1, 0 } },
+					},
+					freeNodes = {0},
+					snapNodes = {0}
+					--					tag2nodes = {},
+				},
+				{
+					type = 'STREET',
+					params = {
+						skipCollision = true,
+						--skipCollisionCheck = true,
+						type = 'standard/country_medium_new.lua',
+						tramTrackType = 'NO' -- tramTrackType
+					},
+					edges = {
+						{ { -10, 1, 0 }, { 0, 1, 0 } },
+						{ { -10, 10, 0 }, { 0, 1, 0 } },
+					},
+					freeNodes = {1},
+					snapNodes = {1}
+					--					tag2nodes = {},
+				},
+			}
 			-- result.slotConfig = {
 			-- 	street_terminal_entrance_exit = {
 			-- 		maxModules = -1,
