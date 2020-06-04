@@ -146,7 +146,7 @@ function data()
 					},
 					edges = {
 						{ { -10, 1, 0 }, { 0, 1, 0 } },
-						-- { { -10, 0, 0 }, { 0, 1, 0 } },
+						-- { { -10, 0, 0 }, { 0, 1, 0 } }, -- LOLLO TODO if the edges touch the vehicle node, it dumps
 						{ { -10, 10, 0 }, { 0, 1, 0 } },
 					},
 					freeNodes = {1},
