@@ -87,7 +87,7 @@ function data()
 		skipCollision = true,
 		updateFn = function(params)
 			local result = { cost = 1000 }
-			print('LOLLO params = ')
+			-- print('LOLLO params = ')
 			-- luadump(true)(params)
 			-- debugger()
 			
@@ -258,7 +258,7 @@ function data()
 
 			-- add cargo area slots
 			for x = _constants.xMin, _constants.xMax do
-				result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+				-- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
 				for y = _constants.yMin, _constants.yMax do
 					addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
 				end
@@ -283,30 +283,30 @@ function data()
 				end
 			end ]]
 
-			result.terminateConstructionHook = function()
-				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
-				for x = _constants.xMin, _constants.xMax do
-					local xGroup = { terminals = {}, tag = x }
-					for y = _constants.yMin, _constants.yMax do
-						local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
-						if terminalInfo ~= nil then
-							print('LOLLO terminalInfo = ')
-							luadump(true)(terminalInfo)
-							table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
-						end
-					end
-					if #xGroup.terminals > 0 then
-						table.insert(result.terminalGroups, xGroup)
-						table.insert(station.terminals, #result.terminalGroups - 1)
-					end
-				end
+			-- result.terminateConstructionHook = function()
+			-- 	local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
+			-- 	for x = _constants.xMin, _constants.xMax do
+			-- 		local xGroup = { terminals = {}, tag = x }
+			-- 		for y = _constants.yMin, _constants.yMax do
+			-- 			local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
+			-- 			if terminalInfo ~= nil then
+			-- 				print('LOLLO terminalInfo = ')
+			-- 				luadump(true)(terminalInfo)
+			-- 				table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
+			-- 			end
+			-- 		end
+			-- 		if #xGroup.terminals > 0 then
+			-- 			table.insert(result.terminalGroups, xGroup)
+			-- 			table.insert(station.terminals, #result.terminalGroups - 1)
+			-- 		end
+			-- 	end
 
-				if #station.terminals > 0 then table.insert(result.stations, station) end
-				print('LOLLO result.stations = ')
-				luadump(true)(result.stations)
-				print('LOLLO result.terminalGroups = ')
-				luadump(true)(result.terminalGroups)
-			end
+			-- 	if #station.terminals > 0 then table.insert(result.stations, station) end
+			-- 	print('LOLLO result.stations = ')
+			-- 	luadump(true)(result.stations)
+			-- 	print('LOLLO result.terminalGroups = ')
+			-- 	luadump(true)(result.terminalGroups)
+			-- end
 
 			return result
 		end,
