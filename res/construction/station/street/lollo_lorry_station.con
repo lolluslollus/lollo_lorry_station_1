@@ -91,6 +91,7 @@ function data()
 		-- end,
 		skipCollision = true,
 		updateFn = function(params)
+			local occupiedSlots = {}
 			local result = { cost = 1000 }
 			print('LOLLO params = ')
 			luadump(true)(params)
@@ -242,6 +243,9 @@ function data()
 			-- end
 
 			local addCargoAreaSlot = function(x, y, baseId)
+				if occupiedSlots[edgeUtils.getXKey(x)] == edgeUtils.getYKey(y) then return end
+
+				occupiedSlots[edgeUtils.getXKey(x)] = edgeUtils.getYKey(y)
 				table.insert(result.slots, {
 					id = result.MangleId(x, y, baseId),
 					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
@@ -252,6 +256,9 @@ function data()
 			end
 
 			local addCargoPathSlot = function(x, y, baseId)
+				if occupiedSlots[edgeUtils.getXKey(x)] == edgeUtils.getYKey(y) then return end
+
+				occupiedSlots[edgeUtils.getXKey(x)] = edgeUtils.getYKey(y)
 				table.insert(result.slots, {
 					id = result.MangleId(x, y, baseId),
 					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
@@ -268,22 +275,18 @@ function data()
 			-- 	end
 			-- end
 
-			-- add cargo area slots
-			-- for x = _constants.xMin, _constants.xMax do
-			-- -- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
-			-- 	for y = _constants.yMin, _constants.yMax do
-			-- 		addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
-			-- 	end
-			-- end
+			
+			-- add cargo path slot
+			addCargoPathSlot(0, 0, _constants.idBases.areaSlotIdBase)
 
-			-- add cargo path slots
+			-- add cargo area slots
 			for x = _constants.xMin, _constants.xMax do
-				-- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
 				for y = _constants.yMin, _constants.yMax do
-					addCargoPathSlot(x, y, _constants.idBases.areaSlotIdBase)
+					addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
 				end
 			end
 
+			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
 --[[ 			if type(params.position) == 'table' then
 				-- print('LOLLO params.position = ')
