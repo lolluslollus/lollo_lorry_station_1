@@ -212,8 +212,10 @@ function data()
 				local baseId = _getIdBase(slotId)
 				if not baseId then return false, false, false end
 
-				local y = math.floor((slotId - baseId) / _constants.idFactorY) + _constants.yMin
+				local y = math.floor((slotId - baseId) / _constants.idFactorY)
 				local x = math.floor((slotId - baseId - y * _constants.idFactorY)) + _constants.xMin
+
+				y = y + _constants.yMin
 
 				return x, y, baseId
 			end
