@@ -63,6 +63,7 @@ return {
 		-- }
 
 		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then result.coord2terminalInfo[edgeUtils.getXKey(x)] = {} end
+		print('LOLLO setting coord2TerminalInfo in module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
 		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
 			model = #result.models,
 			terminal = 0

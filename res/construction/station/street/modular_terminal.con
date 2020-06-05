@@ -1416,6 +1416,8 @@ return {
 		return result
 	end,
 	updateFn = function(params)
+		print('LOLLO stock params = ')
+		luadump(true)(params)
 		local result = { }
 		
 		local cargoSpacing = {5, 5, 5, 5}
@@ -2946,6 +2948,11 @@ return {
 			
 			if #passengerStation.terminals > 0 then table.insert(result.stations, passengerStation) end
 			if #cargoStation.terminals > 0 then table.insert(result.stations, cargoStation) end
+
+			print('LOLLO stock result.stations = ')
+			luadump(true)(result.stations)
+			print('LOLLO stock result.terminalGroups = ')
+			luadump(true)(result.terminalGroups)
 			
 			local era = "era_a_"
 			-- local cargo = "cargo_" -- change this

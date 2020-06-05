@@ -182,7 +182,7 @@ function data()
 			-- end
 
 			result.MangleId = function(x, y, baseId)
-				return baseId + _constants.idFactorY * y + x
+				return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
 			end
 
 			-- result.DemangleId = function(slotId)
@@ -212,8 +212,8 @@ function data()
 				local baseId = _getIdBase(slotId)
 				if not baseId then return false, false, false end
 
-				local y = math.floor((slotId - baseId) / _constants.idFactorY)
-				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+				local y = math.floor((slotId - baseId) / _constants.idFactorY) + _constants.yMin
+				local x = math.floor((slotId - baseId - y * _constants.idFactorY)) + _constants.xMin
 
 				return x, y, baseId
 			end
@@ -243,7 +243,7 @@ function data()
 
 			local addCargoAreaSlot = function(x, y, baseId)
 				table.insert(result.slots, {
-					id = result.MangleId(x - _constants.xMin, y - _constants.yMin, baseId),
+					id = result.MangleId(x, y, baseId),
 					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = "lollo_street_terminal_cargo_area",
@@ -253,7 +253,7 @@ function data()
 
 			local addCargoPathSlot = function(x, y, baseId)
 				table.insert(result.slots, {
-					id = result.MangleId(x - _constants.xMin, y - _constants.yMin, baseId),
+					id = result.MangleId(x, y, baseId),
 					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = "lollo_street_terminal_cargo_path",
@@ -264,13 +264,13 @@ function data()
 			-- add models
 			-- for x = _constants.xMin, _constants.xMax do
 			-- 	for y = _constants.yMin, _constants.yMax do
-					addModel('lollo_models/lollo_cargo_area.mdl', {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1}, 'lollo_street_terminal_cargo_area')
+					-- addModel('lollo_models/lollo_cargo_area.mdl', {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1}, 'lollo_street_terminal_cargo_area')
 			-- 	end
 			-- end
 
 			-- add cargo area slots
 			for x = _constants.xMin, _constants.xMax do
-				-- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+				result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
 				for y = _constants.yMin, _constants.yMax do
 					addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
 				end
@@ -278,7 +278,6 @@ function data()
 
 			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
-
 --[[ 			if type(params.position) == 'table' then
 				-- print('LOLLO params.position = ')
 				-- luadump(true)(params.position)
@@ -295,30 +294,49 @@ function data()
 				end
 			end ]]
 
-			-- result.terminateConstructionHook = function()
-			-- 	local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
-			-- 	for x = _constants.xMin, _constants.xMax do
-			-- 		local xGroup = { terminals = {}, tag = x }
-			-- 		for y = _constants.yMin, _constants.yMax do
-			-- 			local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
-			-- 			if terminalInfo ~= nil then
-			-- 				print('LOLLO terminalInfo = ')
-			-- 				luadump(true)(terminalInfo)
-			-- 				table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
-			-- 			end
-			-- 		end
-			-- 		if #xGroup.terminals > 0 then
-			-- 			table.insert(result.terminalGroups, xGroup)
-			-- 			table.insert(station.terminals, #result.terminalGroups - 1)
-			-- 		end
-			-- 	end
+			result.terminateConstructionHook = function()
+				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
+				for x = _constants.xMin, _constants.xMax do
+					local xGroup = { terminals = {}, tag = x }
+					for y = _constants.yMin, _constants.yMax do
+						local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
+						if terminalInfo ~= nil then
+							print('LOLLO terminalInfo = ')
+							luadump(true)(terminalInfo)
+							table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
+						end
+					end
+					if #xGroup.terminals > 0 then
+						table.insert(result.terminalGroups, xGroup)
+						table.insert(station.terminals, #result.terminalGroups - 1)
+					end
+				end
 
-			-- 	if #station.terminals > 0 then table.insert(result.stations, station) end
-			-- 	print('LOLLO result.stations = ')
-			-- 	luadump(true)(result.stations)
-			-- 	print('LOLLO result.terminalGroups = ')
-			-- 	luadump(true)(result.terminalGroups)
-			-- end
+				-- it should output something like (this example has one terminal made of two adjacent bits)
+				-- LOLLO stock result.stations = 
+				-- 	{
+				-- 		{
+				-- 			tag = 0,
+				-- 			terminals = { 0 }
+				-- 		}
+				-- 	}
+				-- LOLLO stock result.terminalGroups = 
+				-- {
+				-- 	{
+				-- 		tag = -1,
+				-- 		terminals = {
+				-- 		{ 22, 0 },
+				-- 		{ 25, 0 }
+				-- 		}
+				-- 	}
+				-- }
+
+				if #station.terminals > 0 then table.insert(result.stations, station) end
+				print('LOLLO result.stations = ')
+				luadump(true)(result.stations)
+				print('LOLLO result.terminalGroups = ')
+				luadump(true)(result.terminalGroups)
+			end
 			print('LOLLO lollo_lorry_station result = ')
 			luadump(true)(result)
 
