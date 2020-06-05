@@ -23,9 +23,6 @@ local _constants = arrayUtils.addProps(
 			pathSlotIdBase = 110000,
 		},
 		idFactorY = 100,
-		cargoAreaModuleType = 'lollo_street_terminal_cargo_area',
-		lorryBayModelFileName = 'lollo_models/lollo_lorry_bay.mdl',
-		lorryBayModuleType = 'lollo_street_terminal_lorry_bay',
 	},
 	_modConstants
 )

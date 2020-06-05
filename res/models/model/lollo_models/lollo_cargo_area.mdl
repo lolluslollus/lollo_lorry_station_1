@@ -2,14 +2,6 @@ local laneutil = require "laneutil"
 
 --Begin Generated
 local generatedData = {
-	["lanes_road"] = {
-		curves = {
-			["cargo_path_rep_road"] = {
-				{ { -5.00000, 0.00000, 0.00000 }, { 0.00000, 0.00000, 0.00000 }, },
-				{ { 0.00000, 0.00000, 0.00000 }, { 5.00000, 0.00000, 0.00000 }, },
-			},
-		},
-	},
 	["lanes_terminal"] = {
 		curves = {
 			-- ["cargo_path_rep_cargo"] = {
@@ -76,55 +68,24 @@ function data()
             },
         },
         metadata = {
-            -- availability = {
-            --     yearFrom = -1,
-            --     yearTo = -1,
-            -- },
-            -- cost = {
-            --     price = 1200,
-            -- },
-            -- description = {
-            --     description = _("Lollo cargo waiting area."),
-            --     name = _("Lollo cargo waiting area"),
-            -- },
-            -- skipCollision = true,
-            -- skipCollisionCheck = true,
-            -- streetTerminal = {
-            --     cargo = true,
-            -- },
-            -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
-            -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
                 laneLists = {
-                    -- laneutil.createLanes(
-                    --     generatedData["lanes_road"],
-                    --     { "BUS", "TRUCK", "TRAM" },
-                    --     100,
-                    --     3,
-                    --     false
-                    -- ),
                     laneutil.createLanes(
                         generatedData["lanes_terminal"], -- curves
                         { "CARGO" }, -- transport means
                         20, -- max speed
                         4, -- lane width
-                        false -- linkable
+                        true -- linkable
                     ),
                 },
                 runways = { },
-                terminals = { -- LOLLO TODO this is trouble coz it adds a terminal without street connection
-                    -- {
-                    --     order = 0,
-                    --     -- personEdges = { 2, 3, },
-                    --     -- personNodes = { 4, 5, },
-                    --     -- vehicleNode = 2,
-                    --     -- personEdges = { 2, 3 },
-                    --     -- personNodes = { 4, 5, 6, 7 },
-                    --     -- vehicleNode = 1, -- 0,
-                    --     personEdges = { 0, 1 },
-                    --     personNodes = { 0, 1, 2, 3 },
-                    --     -- vehicleNode = -1, -- 0,
-                    -- },
+                terminals = {
+                    {
+                        order = 0,
+                        personEdges = { 0, 1 },
+                        personNodes = { 0, 1, 2, 3 },
+                        -- vehicleNode = -1, -- 0,
+                    },
                 },
             },
         },
