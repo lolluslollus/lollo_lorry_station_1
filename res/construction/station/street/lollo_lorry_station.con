@@ -259,22 +259,102 @@ function data()
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
 				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
-				for x = _constants.xMin, _constants.xMax do
-					local xGroup = { terminals = {}, tag = x }
-					for y = _constants.yMin, _constants.yMax do
-						if result.coord2terminalInfo[edgeUtils.getXKey(x)] then
-							local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
-							if terminalInfo ~= nil then
-								print('LOLLO terminalInfo = ')
-								luadump(true)(terminalInfo)
-								table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
+				local cargoAreas = {}
+				local lorryBays = {}
+				local base0ModelIndex = 0
+				-- LOLLO TODO in future, take only non-adjacent lorry bays
+				for _, v in pairs(result.models) do
+					if v.tag == _modConstants.lorryBayTag then
+						local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
+						local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
+						if lorryBays[x] == nil then lorryBays[x] = {} end
+						lorryBays[x][y] = base0ModelIndex
+							-- lorryBays[#lorryBays+1] = {
+							-- 	x = v.transf[13] / _modConstants.xTransfFactor,
+							-- 	y = v.transf[14] / _modConstants.yTransfFactor,
+							-- 	z = v.transf[15],
+							-- }
+					elseif v.tag == _modConstants.cargoAreaTag then
+						local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
+						local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
+						if cargoAreas[x] == nil then cargoAreas[x] = {} end
+						cargoAreas[x][y] = base0ModelIndex
+						-- cargoAreas[#cargoAreas+1] = {
+						-- 	x = v.transf[13] / _modConstants.xTransfFactor,
+						-- 	y = v.transf[14] / _modConstants.yTransfFactor,
+						-- 	z = v.transf[15],
+						-- }
+					end
+					base0ModelIndex = base0ModelIndex + 1
+				end
+
+				local tagCounterBase0 = 0
+				result.terminalGroups = {}
+				for _, bay in pairs(lorryBays) do
+					debugger()
+					table.insert(result.terminalGroups, {tag = tagCounterBase0, terminals = { bay }})
+
+					local x = bay.x
+					while x >= _modConstants.xMin do
+						local y = bay.y
+						while y >= _modConstants.yMin do
+							if cargoAreas[tostring(x)][tostring(y)] ~= nil then
+								table.insert(result.terminalGroups[#result.terminalGroups].terminals, {cargoAreas[tostring(x)][tostring(y)], 0})
+							else
+								break -- LOLLO TODO check if this works
+							end
+							y = y - 1
+						end
+
+						y = bay.y
+						while y <= _modConstants.yMax do
+							y = y + 1
+							if cargoAreas[tostring(x)][tostring(y)] ~= nil then
+								table.insert(result.terminalGroups[#result.terminalGroups].terminals, {cargoAreas[tostring(x)][tostring(y)], 0})
+							else
+								break -- LOLLO TODO check if this works
+							end
+						end
+
+						x = x - 1
+					end
+
+					x = bay.x
+					while x <= _modConstants.xMax do
+						x = x + 1
+
+						local y = bay.y
+						while y >= _modConstants.yMin do
+							if cargoAreas[tostring(x)][tostring(y)] ~= nil then
+								table.insert(result.terminalGroups[#result.terminalGroups].terminals, {cargoAreas[tostring(x)][tostring(y)], 0})
+							else
+								break -- LOLLO TODO check if this works
+							end
+							y = y - 1
+						end
+
+						y = bay.y
+						while y <= _modConstants.yMax do
+							y = y + 1
+							if cargoAreas[tostring(x)][tostring(y)] ~= nil then
+								table.insert(result.terminalGroups[#result.terminalGroups].terminals, {cargoAreas[tostring(x)][tostring(y)], 0})
+							else
+								break -- LOLLO TODO check if this works
 							end
 						end
 					end
-					if #xGroup.terminals > 0 then
-						table.insert(result.terminalGroups, xGroup)
-						table.insert(station.terminals, #result.terminalGroups - 1)
-					end
+
+					tagCounterBase0 = tagCounterBase0 + 1
+				end
+
+				result.stations = {
+					{
+						tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
+						terminals = { } -- 0 is the position of the linked terminal group, in base 0
+					}
+				}
+				for lorryBayCounter = 1, tagCounterBase0 do
+					table.insert(result.stations[1].terminals, lorryBayCounter - 1)
 				end
 
 				-- it should output something like (this example has one terminal made of two adjacent bits)
