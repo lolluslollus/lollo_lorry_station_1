@@ -213,11 +213,9 @@ function data()
 				if not baseId then return false, false, false end
 
 				local y = math.floor((slotId - baseId) / _constants.idFactorY)
-				local x = math.floor((slotId - baseId - y * _constants.idFactorY)) + _constants.xMin
+				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
 
-				y = y + _constants.yMin
-
-				return x, y, baseId
+				return x + _constants.xMin, y + _constants.yMin, baseId
 			end
 
 			result.coord2terminalInfo = {}
@@ -271,14 +269,21 @@ function data()
 			-- end
 
 			-- add cargo area slots
+			-- for x = _constants.xMin, _constants.xMax do
+			-- -- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+			-- 	for y = _constants.yMin, _constants.yMax do
+			-- 		addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
+			-- 	end
+			-- end
+
+			-- add cargo path slots
 			for x = _constants.xMin, _constants.xMax do
-				result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+				-- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
 				for y = _constants.yMin, _constants.yMax do
-					addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
+					addCargoPathSlot(x, y, _constants.idBases.areaSlotIdBase)
 				end
 			end
 
-			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
 --[[ 			if type(params.position) == 'table' then
 				-- print('LOLLO params.position = ')
@@ -301,11 +306,13 @@ function data()
 				for x = _constants.xMin, _constants.xMax do
 					local xGroup = { terminals = {}, tag = x }
 					for y = _constants.yMin, _constants.yMax do
-						local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
-						if terminalInfo ~= nil then
-							print('LOLLO terminalInfo = ')
-							luadump(true)(terminalInfo)
-							table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
+						if result.coord2terminalInfo[edgeUtils.getXKey(x)] then
+							local terminalInfo = result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)]
+							if terminalInfo ~= nil then
+								print('LOLLO terminalInfo = ')
+								luadump(true)(terminalInfo)
+								table.insert(xGroup.terminals, { terminalInfo.model, terminalInfo.terminal })
+							end
 						end
 					end
 					if #xGroup.terminals > 0 then

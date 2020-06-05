@@ -61,11 +61,10 @@ return {
 		-- 	model = #result.models - 1,
 		-- 	terminal = 0,
 		-- }
-
 		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then result.coord2terminalInfo[edgeUtils.getXKey(x)] = {} end
-		print('LOLLO setting coord2TerminalInfo in module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
+		print('LOLLO setting coord2TerminalInfo in cargo area module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
 		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
-			model = #result.models,
+			model = #result.models - 1,
 			terminal = 0
 		}
 	end,

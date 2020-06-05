@@ -61,11 +61,9 @@ local DemangleId = function(slotId)
 	if not baseId then return false, false, false end
 
 	local y = math.floor((slotId - baseId) / _constants.idFactorY)
-	local x = math.floor((slotId - baseId - y * _constants.idFactorY)) + _constants.xMin
+	local x = math.floor((slotId - baseId - y * _constants.idFactorY))
 
-	y = y + _constants.yMin
-
-	return x, y, baseId
+	return x + _constants.xMin, y + _constants.yMin, baseId
 end
 
 local mangledIds = {}

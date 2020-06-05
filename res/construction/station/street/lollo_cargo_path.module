@@ -32,14 +32,13 @@ return {
 	
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)
         local x, y, baseId = result.DemangleId(slotId)
-        print('LOLLO x, y, baseId = ', x, y, baseId)
-
-        if not x or not y or not baseId then return end
+		if not x or not y or not baseId then return end
 		
-		local right = x >= 0
+		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
+		-- local right = x >= 0
 
 		-- if right then
-		-- 	addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
+			addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		-- else
 		-- 	addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		-- end
@@ -52,14 +51,14 @@ return {
 		-- end
 		
 		-- addModelFn("station/road/streetstation/" .. result.erastr .. "cargo_path_rep" .. result.cat .. ".mdl", transf.rotZTransl(right and 0 or math.pi, vec3.new(right and -7.5 or 7.5, .0, .0)))
-		addModelFn("lollo_models/lollo_cargo_path.mdl", transf.rotZTransl(right and 0 or math.pi, vec3.new(right and -7.5 or 7.5, .0, .0)))
 		-- result.coord2terminalInfo[x][y] = {
 		-- 	model = #result.models - 1,
 		-- 	terminal = 0,
 		-- }
 		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then result.coord2terminalInfo[edgeUtils.getXKey(x)] = {} end
+		print('LOLLO setting coord2TerminalInfo in cargo path module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
 		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
-			model = #result.models,
+			model = #result.models - 1,
 			terminal = 0
 		}
 	end,
