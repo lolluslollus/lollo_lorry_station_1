@@ -3,6 +3,7 @@ local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local _constants = require('lollo_lorry_station/constants')
 
 function data()
 
@@ -22,7 +23,7 @@ return {
 		yearFrom = 0,
 		yearTo = 0
 	},
-	type = "lollo_street_terminal_cargo_path",
+	type = "lollo_street_terminal_lorry_bay",
 	order = {
 		value = 6,
 	},
@@ -33,15 +34,10 @@ return {
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
-		
-		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
-		-- local right = x >= 0
 
-		-- if right then
-			addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
-		-- else
-		-- 	addModelFn("lollo_models/lollo_cargo_path.mdl", transf.transl(vec3.new(.0, .0, .0)))
-		-- end
+		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
+
+		addModelFn("lollo_models/lollo_lorry_bay.mdl", transf.transl(vec3.new(.0, .0, .0)), _constants.lorryBayTag)
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then
 		-- 	addModelFn("station/road/streetstation/" .. result.erastr .. "cargo_pltfrm_r_top.mdl", transf.rotZTransl(right and 0 or math.pi, vec3.new(.0, .0, .0)))
@@ -67,7 +63,7 @@ return {
 		
 		local result = {
 			{
-				id = "lollo_models/lollo_cargo_path.mdl",
+				id = "lollo_models/lollo_lorry_bay.mdl",
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

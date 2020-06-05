@@ -11,8 +11,8 @@ local _constants = arrayUtils.addProps(
 		cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 		-- negative values don't matter, the api takes up the abs value
-		-- cargoPathSpacing = {0.1, 0.1, 0.1, 0.1},
-		cargoPathSpacing = {0.0, 0.0, 0.0, 0.0},
+		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
+		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
 		idBases = { -- LOLLO NOTE keep this sorted descending
 			areaSlotIdBase = 120000,
             pathSlotIdBase = 110000,

@@ -7,6 +7,8 @@ local constants = {
     yPrefix = 'y_',
 	xTransfFactor = 10,
 	yTransfFactor = 10,
+	cargoAreaTag = 'lollo_cargo_area',
+	lorryBayTag = 'lollo_lorry_bay',
 }
 
 return constants

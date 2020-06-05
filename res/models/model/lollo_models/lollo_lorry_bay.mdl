@@ -89,24 +89,10 @@ function data()
                 },
                 static = false,
                 visibleFrom = 0,
-                visibleTo = 1085.5139160156,
+                visibleTo = 1000,
             },
         },
         metadata = {
-            -- availability = {
-            --     yearFrom = -1,
-            --     yearTo = -1,
-            -- },
-            -- cost = {
-            --     price = 1200,
-            -- },
-            -- description = {
-            --     description = _("Lollo cargo path, to be placed near a road."),
-            --     name = _("Lollo cargo path"),
-            -- },
-            -- streetTerminal = {
-            --     cargo = true,
-            -- },
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
@@ -123,26 +109,22 @@ function data()
                         { "CARGO" }, -- transport means
                         20, -- max speed
                         4, -- lane width
-                        false -- linkable
+                        true -- linkable -- LOLLO NOTE this makes the station white when U click it, if there are no other paths defined
                     ),
                 },
                 runways = { },
                 terminals = {
                     {
                         order = 0,
-                        -- personEdges = { 2, 3, },
-                        -- personNodes = { 4, 5, },
-                        -- vehicleNode = 2,
-                        -- personEdges = { 2, 3 },
-                        -- personNodes = { 4, 5, 6, 7 },
-                        -- vehicleNode = 1, -- 0,
                         personEdges = { 4, 5 },
                         personNodes = { 8, 9, 10, 11 },
-                        vehicleNode = 1, -- 0,
+                        vehicleNode = 0, -- 0,
                     },
                 },
             },
         },
+        -- skipCollision = true,
+        -- skipCollisionCheck = true,
         version = 1,
     }
     end

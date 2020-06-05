@@ -2949,6 +2949,8 @@ return {
 			if #passengerStation.terminals > 0 then table.insert(result.stations, passengerStation) end
 			if #cargoStation.terminals > 0 then table.insert(result.stations, cargoStation) end
 
+			print('LOLLO stock result.models = ')
+			luadump(true)(result.models)
 			print('LOLLO stock result.stations = ')
 			luadump(true)(result.stations)
 			print('LOLLO stock result.terminalGroups = ')
