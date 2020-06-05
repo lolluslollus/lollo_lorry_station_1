@@ -26,6 +26,11 @@ local _constants = arrayUtils.addProps(
 	},
 	_modConstants
 )
+local _idBasesSortedDesc = {}
+for k, v in pairs(_constants.idBases) do
+    table.insert(_idBasesSortedDesc, {id = v, name = k})
+end
+arrayUtils.sort(_idBasesSortedDesc, 'id', false)
 
 function data()
 	return {
@@ -87,8 +92,8 @@ function data()
 		skipCollision = true,
 		updateFn = function(params)
 			local result = { cost = 1000 }
-			-- print('LOLLO params = ')
-			-- luadump(true)(params)
+			print('LOLLO params = ')
+			luadump(true)(params)
 			-- debugger()
 			
 			result.colliders = {}
@@ -194,9 +199,9 @@ function data()
 				-- debugger()
 				local function _getIdBase(slotId)
 					local baseId = 0
-					for k, v in pairs(_constants.idBases) do
-						if slotId >= v then
-							baseId = v
+					for _, v in pairs(_idBasesSortedDesc) do
+						if slotId >= v.id then
+							baseId = v.id
 							break
 						end
 					end
@@ -256,6 +261,13 @@ function data()
 				})
 			end
 
+			-- add models
+			-- for x = _constants.xMin, _constants.xMax do
+			-- 	for y = _constants.yMin, _constants.yMax do
+					addModel('lollo_models/lollo_cargo_area.mdl', {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1}, 'lollo_street_terminal_cargo_area')
+			-- 	end
+			-- end
+
 			-- add cargo area slots
 			for x = _constants.xMin, _constants.xMax do
 				-- result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
@@ -307,6 +319,8 @@ function data()
 			-- 	print('LOLLO result.terminalGroups = ')
 			-- 	luadump(true)(result.terminalGroups)
 			-- end
+			print('LOLLO lollo_lorry_station result = ')
+			luadump(true)(result)
 
 			return result
 		end,

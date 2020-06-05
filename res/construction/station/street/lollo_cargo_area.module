@@ -3,6 +3,8 @@ local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local inspect = require('lollo_lorry_station/inspect')
+local luadump = require('lollo_lorry_station/luadump')
 
 function data()
 
@@ -32,13 +34,16 @@ return {
 	
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)
         local x, y, baseId = result.DemangleId(slotId)
-        print('LOLLO x, y, baseId = ', x, y, baseId)
-
-        if not x or not y or not baseId then return end
+		if not x or not y or not baseId then return end
 		
+		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- local right = x >= 0
 
 		-- if right then
+		-- addModelFn = function(name, transf, tag), God knows where it is defined
+		-- print('LOLLO addModelFn = ')
+		-- luadump(true)(addModelFn)
+		-- print(inspect(addModelFn))
 			addModelFn("lollo_models/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))
 		-- else
 			-- addModelFn("lollo_models/lollo_cargo_area.mdl", transf.transl(vec3.new(.0, .0, .0)))

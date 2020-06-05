@@ -112,7 +112,7 @@ function data()
                     ),
                 },
                 runways = { },
-                terminals = {
+                terminals = { -- LOLLO TODO this is trouble coz it adds a terminal without street connection
                     {
                         order = 0,
                         -- personEdges = { 2, 3, },

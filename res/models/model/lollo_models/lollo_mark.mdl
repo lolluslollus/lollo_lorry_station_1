@@ -109,7 +109,7 @@ function data()
                         { "CARGO" }, -- transport means
                         20, -- max speed
                         4, -- lane width
-                        true -- linkable
+                        false -- linkable
                     ),
                 },
                 runways = { },
