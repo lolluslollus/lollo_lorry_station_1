@@ -14,7 +14,8 @@ local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
 local _constants = arrayUtils.addProps(
 	{
-		cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
+		-- cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- LOLLO NOTE 0 will make a module unselectable when the user wants to delete it
+		cargoAreaSpacing = {.5, .5, .5, .5},
 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 		-- negative values don't matter, the api takes up the abs value
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
@@ -78,7 +79,7 @@ function data()
 				terminalGroups = {},
 				terrainAlignmentLists = {}
 			}
-			print('LOLLO params = ')
+			print('LOLLO starting updateFn, params = ')
 			luadump(true)(params)
 			-- debugger()
 
@@ -107,9 +108,9 @@ function data()
 				_setSlotOccupied(x, y)
 				table.insert(result.slots, {
 					id = result.MangleId(x, y, baseId),
-					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
+					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
-					type = _constants.cargoAreaModuleType,
+					type = _modConstants.cargoAreaModuleType,
 					spacing = _constants.cargoAreaSpacing
 				})
 			end
@@ -120,15 +121,15 @@ function data()
 				_setSlotOccupied(x, y)
 				table.insert(result.slots, {
 					id = result.MangleId(x, y, baseId),
-					transf = transf.transl(vec3.new(x * _constants.xTransfFactor, y * _constants.yTransfFactor, 0.0)),
+					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
-					type = _constants.lorryBayModuleType,
+					type = _modConstants.lorryBayModuleType,
 					spacing = _constants.lorryBaySpacing
 				})
 			end
 
 			-- add the lorry bay at 0, 0
-			_addModel(_constants.lorryBayModelFileName, _idTransf, _constants.lorryBayTag)
+			_addModel(_modConstants.lorryBayModelFileName, _idTransf, _modConstants.lorryBayTag)
 			result.coord2terminalInfo[edgeUtils.getXKey(0)] = {}
 			result.coord2terminalInfo[edgeUtils.getXKey(0)][edgeUtils.getYKey(0)] = {
 				model = #result.models - 1, -- position with base 0
@@ -179,7 +180,7 @@ function data()
 			}
 
 			result.MangleId = function(x, y, baseId)
-				return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
+				return baseId + _constants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
 			end
 
 			result.DemangleId = function(slotId)
@@ -201,7 +202,7 @@ function data()
 				local y = math.floor((slotId - baseId) / _constants.idFactorY)
 				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
 
-				return x + _constants.xMin, y + _constants.yMin, baseId
+				return x + _modConstants.xMin, y + _modConstants.yMin, baseId
 			end
 
 			-- add cargo area slots
@@ -231,13 +232,12 @@ function data()
 				end
 			end
 			local adjacentXYs = slotUtils.getFlatTable(slotXYs)
-			print('LOLLO adjacentXYs = ')
-			luadump(true)(adjacentXYs)
+			-- print('LOLLO adjacentXYs = ')
+			-- luadump(true)(adjacentXYs)
 
 			for _, v in pairs(adjacentXYs) do
 				_addCargoAreaSlot(v.x, v.y, _constants.idBases.areaSlotIdBase)
 			end
--- LOLLO TODO you can add models but not remove them, the UI won't let you
 			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
 --[[ 			if type(params.position) == 'table' then
@@ -245,8 +245,8 @@ function data()
 				-- luadump(true)(params.position)
 				-- print(inspect(params.position))
 
-				for x = _constants.xMin, _constants.xMax do
-					for y = _constants.yMin, _constants.yMax do
+				for x = _modConstants.xMin, _modConstants.xMax do
+					for y = _modConstants.yMin, _modConstants.yMax do
 						if params.streetEdges
 						and params.streetEdges[edgeUtils.getXKey(x)]
 						and params.streetEdges[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then
@@ -256,7 +256,10 @@ function data()
 				end
 			end ]]
 
-			result.terminateConstructionHook = function()
+			result.terminateConstructionHook = function(one, two)
+				print('LOLLO starting terminateConstructionHook')
+				luadump(true)(one)
+				luadump(true)(two)
 				-- this fires after the user has added a module
 				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
 				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
@@ -307,6 +310,7 @@ luadump(true)(adjacentCargoAreas)
 				-- 	}
 				-- }
 
+				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				if #station.terminals > 0 then table.insert(result.stations, station) end
 				print('LOLLO result.models = ')
 				luadump(true)(result.models)
