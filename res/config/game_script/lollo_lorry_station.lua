@@ -1,19 +1,13 @@
 local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
--- local _modConstants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
 
 local state = {
     isShowAllEvents = false
 }
-
-local _constants = arrayUtils.addProps(
-    {
-        constructionFileName = 'station/street/lollo_lorry_station.con',
-    }
-)
 
 local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
@@ -33,9 +27,10 @@ function data()
             if (id == '__lolloLorryStationEvent__') then
                 print("__lolloLorryStationEvent__ caught")
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
+                -- src =	lollo_lorry_station.lua	 id =	__lolloLorryStationEvent__	 name =	select
                 luadump(true)(parameters)
-                if name == 'built' then
-
+                -- we upgrade the construction to inject the street edges
+                if name == 'select' then
                     parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
                     parameters.params.id = parameters.id
                     parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
@@ -73,8 +68,8 @@ function data()
             -- local reloaded = require("lollo_lorry_station/reloaded")
             -- reloaded.showState(state)
             if name == 'select' then
-                -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
-                -- luadump(true)(param)
+                print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
+                luadump(true)(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(
                     function()
@@ -82,22 +77,25 @@ function data()
                         local entity = game.interface.getEntity(param)
 
                         if type(entity) ~= 'table' or entity.type ~= 'STATION_GROUP' or type(entity.position) ~= 'table' then return end
+                        -- print('LOLLO selected entity = ')
+                        -- luadump(true)(entity)
 
+                        -- now I know the user has selected a station group, but we need to know more
                         local constructionId = false
                         local constructionParams = {}
                         local constructionPosition = {}
                         local constructionTransf = {}
-                        -- LOLLO TODO try getConstructionEntity() instead of this mess
-                        local allLorryStationConstructions = game.interface.getEntities(
+                        local nearbyLorryStationConstructions = game.interface.getEntities(
                             {pos = entity.position, radius = 999},
                             {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
                         )
                         -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
                         -- the game distinguishes constructions, stations and station groups.
-                        -- Constructions and stations in a station group are not selected, only the station group itself, which does not contain a lot of data.
+                        -- Constructions and stations in a station group are not selected, only the station group itself, 
+                        -- which does not contain a lot of data.
                         -- This is why we need this loop.
                         for _, staId in ipairs(entity.stations) do
-                            for _, con in pairs(allLorryStationConstructions) do
+                            for _, con in pairs(nearbyLorryStationConstructions) do
                                 if stringUtils.arrayHasValue(con.stations, staId) then
                                     if not constructionId then
                                         -- debugger()
@@ -105,12 +103,15 @@ function data()
                                         constructionParams = con.params
                                         constructionPosition = con.position
                                         constructionTransf = con.transf
+                                    else
+                                        break
                                     end
                                 end
                             end
                         end
 
                         -- debugger()
+                        -- The user has selected one of my lorry stations: go ahead in the worker thread
                         if constructionId then
                             game.interface.sendScriptEvent(
                                 "__lolloLorryStationEvent__",
@@ -127,6 +128,7 @@ function data()
                     _myErrorHandler
                 )
             elseif name == 'builder.apply' then
+                if true then return end
                 -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
                 -- luadump(true)(param)
                 -- you cannot check the types coz they contain userdata, so use xpcall

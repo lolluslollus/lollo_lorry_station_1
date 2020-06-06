@@ -82,33 +82,33 @@ function data()
         metadata = {
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
-            transportNetworkProvider = {
-                laneLists = {
-                    laneutil.createLanes(
-                        generatedData["lanes_road"],
-                        { "BUS", "ELECTRIC_TRAM", "TRAM", "TRUCK" },
-                        100,
-                        3,
-                        false
-                    ),
-                    laneutil.createLanes(
-                        generatedData["lanes_terminal"], -- curves
-                        { "CARGO" }, -- transport means
-                        20, -- max speed
-                        4, -- lane width
-                        true -- linkable -- LOLLO NOTE this makes the station white when U click it, if there are no other paths defined
-                    ),
-                },
-                runways = { },
-                terminals = {
-                    {
-                        order = 0,
-                        personEdges = { 4, 5 },
-                        personNodes = { 8, 9, 10, 11 },
-                        vehicleNode = 1, -- 0,
-                    },
-                },
-            },
+            -- transportNetworkProvider = {
+            --     laneLists = {
+            --         laneutil.createLanes(
+            --             generatedData["lanes_road"],
+            --             { "BUS", "ELECTRIC_TRAM", "TRAM", "TRUCK" },
+            --             100,
+            --             3,
+            --             false
+            --         ),
+            --         laneutil.createLanes(
+            --             generatedData["lanes_terminal"], -- curves
+            --             { "CARGO" }, -- transport means
+            --             20, -- max speed
+            --             4, -- lane width
+            --             true -- linkable -- LOLLO NOTE this makes the station white when U click it, if there are no other paths defined
+            --         ),
+            --     },
+            --     runways = { },
+            --     terminals = {
+            --         {
+            --             order = 0,
+            --             personEdges = { 4, 5 },
+            --             personNodes = { 8, 9, 10, 11 },
+            --             vehicleNode = 1, -- 0,
+            --         },
+            --     },
+            -- },
         },
         -- skipCollision = true,
         -- skipCollisionCheck = true,
