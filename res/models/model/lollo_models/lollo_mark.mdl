@@ -86,7 +86,7 @@ function data()
                 laneLists = {
                     laneutil.createLanes(
                         generatedData["lanes_road"],
-                        { "BUS", "TRUCK", "TRAM" },
+                        { "BUS", "ELECTRIC_TRAM", "TRAM", "TRUCK" },
                         100,
                         3,
                         false
