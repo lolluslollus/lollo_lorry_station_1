@@ -66,6 +66,7 @@ helper.getStreetEdgesSquareBySquare = function(transf)
                 {pos = squarePosition, radius = searchRadius},
                 {type = "BASE_EDGE", includeData = true}
             )
+            -- LOLLO TODO make it discard paths and other unsuitable street types
             print('LOLLO x = ', x, ' y = ', y)
             print('LOLLO squarePosition =')
             luadump(true)(squarePosition)

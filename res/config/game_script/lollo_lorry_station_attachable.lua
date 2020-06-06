@@ -44,6 +44,9 @@ function data()
 
                   -- local allModels = api.res.modelRep.getAll()
                   debugger()
+                  -- I arrive here from built with a funny transf looking like
+                  -- "transf" = "((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))"
+                  -- which I stringified coz it is userData
 
                   -- from here on, I need to reverse the parameters.transf string somehow.
                   -- It looks like:
@@ -60,6 +63,8 @@ function data()
                   --     _constants.constructionFileName,
                   --     parameters.params
                   -- )
+                elseif name == 'select' then
+                    debugger()
                 end
             end
 
@@ -85,10 +90,9 @@ function data()
             -- local reloaded = require("lollo_lorry_station/reloaded")
             -- reloaded.showState(state)
             if name == 'select' then
-                if true then return end
                 -- there is no way to know that I have selected one of my streetside stations
-                -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
-                -- luadump(true)(param)
+                print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
+                luadump(true)(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(
                     function()
@@ -99,6 +103,13 @@ function data()
 
                         local stationId = false
                         local stationPosition = {}
+
+                        local allnearbyEntities = game.interface.getEntities(
+                            {pos = stationGroup.position, radius = 10},
+                            {includeData = true}
+                        )
+                        print('LOLLO allnearbyEntities = ')
+                        luadump(true)(allnearbyEntities)
 
                         local allStations = game.interface.getEntities(
                             {pos = stationGroup.position, radius = 0},
