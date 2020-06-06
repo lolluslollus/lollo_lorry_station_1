@@ -15,8 +15,8 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Lollo cargo path"),
-		description = _("Lollo platform for waiting cargo."),
+		name = _("Lollo lorry bay"),
+		description = _("Lollo lorry bay."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	}, 
 	availability = {
