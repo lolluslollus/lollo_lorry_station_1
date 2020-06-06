@@ -22,7 +22,7 @@ end
 
 function data()
     return {
-        handleEvent = function(src, id, name, parameters)
+        handleEvent = function(src, id, name, args)
             if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
             if state.isShowAllEvents then
                 print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
@@ -31,20 +31,20 @@ function data()
                 print("__lolloLorryStationEvent__ caught")
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 -- src =	lollo_lorry_station.lua	 id =	__lolloLorryStationEvent__	 name =	select
-                luadump(true)(parameters)
+                luadump(true)(args)
                 -- we upgrade the construction to inject the street edges
                 if name == 'select' then
-                    parameters.params = _getCloneWoutSeed(parameters.params)
-                    parameters.params.id = parameters.id
-                    parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
-                        parameters.position
+                    args.params = _getCloneWoutSeed(args.params)
+                    args.params.id = args.id
+                    args.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
+                        args.transf
                     )
-                    parameters.params.position = _getCloneWoutSeed(parameters.position)
-                    parameters.params.transf = _getCloneWoutSeed(parameters.transf)
+                    args.params.position = _getCloneWoutSeed(args.position)
+                    args.params.transf = _getCloneWoutSeed(args.transf)
                     local newId = game.interface.upgradeConstruction(
-                        parameters.id,
+                        args.id,
                         _constants.constructionFileName,
-                        parameters.params
+                        args.params
                     )
                 end
             end

@@ -1,4 +1,4 @@
-local matrixUtils = require('matrix')
+local matrixUtils = require('lollo_lorry_station/matrix')
 
 local results = {}
 
@@ -114,11 +114,19 @@ end
 -- end
 
 -- what coor does, and it makes more sense
-results.getVecTransformed = function(vec, transf)
+results.getVecTransformed = function(vecXYZ, transf)
     return {
-        x = vec.x * transf[1] + vec.y * transf[5] + vec.z * transf[9] + transf[13],
-        y = vec.x * transf[2] + vec.y * transf[6] + vec.z * transf[10] + transf[14],
-        z = vec.x * transf[3] + vec.y * transf[7] + vec.z * transf[11] + transf[15]
+        x = vecXYZ.x * transf[1] + vecXYZ.y * transf[5] + vecXYZ.z * transf[9] + transf[13],
+        y = vecXYZ.x * transf[2] + vecXYZ.y * transf[6] + vecXYZ.z * transf[10] + transf[14],
+        z = vecXYZ.x * transf[3] + vecXYZ.y * transf[7] + vecXYZ.z * transf[11] + transf[15]
+    }
+end
+
+results.getVec123Transformed = function(vec123, transf)
+    return {
+        vec123[1] * transf[1] + vec123[2] * transf[5] + vec123[3] * transf[9] + transf[13],
+        vec123[1] * transf[2] + vec123[2] * transf[6] + vec123[3] * transf[10] + transf[14],
+        vec123[1] * transf[3] + vec123[2] * transf[7] + vec123[3] * transf[11] + transf[15]
     }
 end
 
