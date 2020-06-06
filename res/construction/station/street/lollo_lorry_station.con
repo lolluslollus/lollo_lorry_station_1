@@ -264,15 +264,10 @@ function data()
 			end
 			-- add lorry bay slots
 			-- no access to api or interface, I must work with the params.
-			if type(params.position) == 'table' then
-				-- print('LOLLO params.position = ')
-				-- luadump(true)(params.position)
-				-- print(inspect(params.position))
-
+			if type(params.streetEdges) == 'table' then
 				for x = _modConstants.xMin, _modConstants.xMax do
 					for y = _modConstants.yMin, _modConstants.yMax do
-						if params.streetEdges
-						and params.streetEdges[edgeUtils.getXKey(x)]
+						if params.streetEdges[edgeUtils.getXKey(x)]
 						and params.streetEdges[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then
 							_addLorryBaySlot(x, y, _constants.idBases.baySlotIdBase)
 						end
@@ -335,7 +330,8 @@ luadump(true)(adjacentCargoAreas)
 				-- }
 
 				-- test: add road connections to lorry bays
-				-- LOLLO TODO add road connections to lorry bays, with the appropriate transf
+				-- LOLLO TODO add road connections to lorry bays, with the appropriate transf,
+				-- basing on params.streetEdges
 				_addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
