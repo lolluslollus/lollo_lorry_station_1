@@ -331,7 +331,7 @@ luadump(true)(adjacentCargoAreas)
 
 				-- test: add road connections to lorry bays
 				-- LOLLO TODO add road connections to lorry bays, with the appropriate transf,
-				-- basing on params.streetEdges
+				-- basing on params.streetEdges and result.models with lorry bay tag
 				_addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
