@@ -94,11 +94,13 @@ helper.getStreetEdgesSquareBySquare = function(position)
 end
 
 helper.getXKey = function(x)
-    return _constants.xPrefix .. tostring(x)
+    return tostring(x)
+    -- return _constants.xPrefix .. tostring(x)
 end
 
 helper.getYKey = function(y)
-    return _constants.yPrefix .. tostring(y)
+    return tostring(y)
+    -- return _constants.yPrefix .. tostring(y)
 end
 
 return helper

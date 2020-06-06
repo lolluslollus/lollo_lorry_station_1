@@ -21,7 +21,7 @@ local _constants = arrayUtils.addProps(
 		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
 		idBases = { -- LOLLO NOTE keep this sorted descending
 			areaSlotIdBase = 120000,
-			pathSlotIdBase = 110000,
+			baySlotIdBase = 110000,
 		},
 		idFactorY = 100,
 	},
@@ -66,7 +66,7 @@ function data()
 
 		skipCollision = true,
 		updateFn = function(params)
-			local result = { 
+			local result = {
 				colliders = {},
 				coord2terminalInfo = {},
 				cost = 1000,
@@ -205,14 +205,39 @@ function data()
 			end
 
 			-- add cargo area slots
-			for x = _constants.xMin, _constants.xMax do
-				for y = _constants.yMin, _constants.yMax do
-					-- LOLLO TODO I only want to add slots adjacent to a lorry bay or to another cargo area.
-					-- to do this, shall I check the models or the params.modules? Check!
-					_addCargoAreaSlot(x, y, _constants.idBases.areaSlotIdBase)
+			local slotXYs = { -- default lorry bay
+				['-1'] = {
+					['0'] = true,
+				},
+				['0'] = {
+					['-1'] = true,
+					-- ['0'] = true,
+					['1'] = true
+				},
+				['1'] = {
+					['0'] = true,
+				}
+			}
+			if type(params.modules) == 'table' then
+				for moduId, _ in pairs(params.modules) do
+					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
+					if moduleBaseId == _constants.idBases.areaSlotIdBase or moduleBaseId == _constants.idBases.baySlotIdBase then
+						-- slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY + 1)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY - 1)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX - 1, moduleY)
+					end
 				end
 			end
+			local adjacentXYs = slotUtils.getFlatTable(slotXYs)
+			print('LOLLO adjacentXYs = ')
+			luadump(true)(adjacentXYs)
 
+			for _, v in pairs(adjacentXYs) do
+				_addCargoAreaSlot(v.x, v.y, _constants.idBases.areaSlotIdBase)
+			end
+-- LOLLO TODO you can add models but not remove them, the UI won't let you
 			-- add cargo path slots
 			-- no access to api or interface, I must work with the params.
 --[[ 			if type(params.position) == 'table' then
@@ -225,7 +250,7 @@ function data()
 						if params.streetEdges
 						and params.streetEdges[edgeUtils.getXKey(x)]
 						and params.streetEdges[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then
-							addLorryBaySlot(x, y, _constants.idBases.pathSlotIdBase)
+							addLorryBaySlot(x, y, _constants.idBases.baySlotIdBase)
 						end
 					end
 				end
@@ -234,43 +259,16 @@ function data()
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
 				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
-				local cargoAreas = {}
-				local lorryBays = {}
-				local base0ModelIndex = 0
+				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				-- LOLLO TODO in future, take only non-adjacent lorry bays
-				for _, v in pairs(result.models) do
-					if v.tag == _modConstants.lorryBayTag then
-						-- local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
-						-- local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
-						-- if lorryBays[x] == nil then lorryBays[x] = {} end
-						-- lorryBays[x][y] = base0ModelIndex
-
-						lorryBays[#lorryBays+1] = {
-								x = v.transf[13] / _modConstants.xTransfFactor,
-								y = v.transf[14] / _modConstants.yTransfFactor,
-								z = v.transf[15],
-								base0ModelIndex = base0ModelIndex
-							}
-					elseif v.tag == _modConstants.cargoAreaTag then
-						local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
-						local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
-						if cargoAreas[x] == nil then cargoAreas[x] = {} end
-						cargoAreas[x][y] = base0ModelIndex
-						-- cargoAreas[#cargoAreas+1] = {
-						-- 	x = v.transf[13] / _modConstants.xTransfFactor,
-						-- 	y = v.transf[14] / _modConstants.yTransfFactor,
-						-- 	z = v.transf[15],
-						-- }
-					end
-					base0ModelIndex = base0ModelIndex + 1
-				end
+				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 
 				local tagCounterBase0 = 0
 				result.terminalGroups = {}
-				for _, bay in pairs(lorryBays) do
+				for _, bay in pairs(lorryBayModelIndexesBase0) do
 					table.insert(result.terminalGroups, {tag = tagCounterBase0, terminals = { { bay.base0ModelIndex, 0 }}})
 
-					local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreas, bay.x, bay.y)
+					local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
 print('LOLLO adjacentCargoAreas = ')
 luadump(true)(adjacentCargoAreas)
 					for _, v in pairs(adjacentCargoAreas) do
@@ -318,7 +316,7 @@ luadump(true)(adjacentCargoAreas)
 				luadump(true)(result.terminalGroups)
 			end
 			print('LOLLO lollo_lorry_station leaving updateFn, result = ')
-			-- luadump(true)(result)
+			luadump(true)(result)
 
 			return result
 		end,

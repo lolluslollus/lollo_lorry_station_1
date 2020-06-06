@@ -40,6 +40,12 @@ function data()
             {
                 node = {
                     children = {
+                        {
+                            materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
+                            mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
+                            name = "small_street_platform",
+                            transf = { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                        },
                         -- {
                         --     materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
                         --     mesh = "station/road/small_cargo/small_street_platform_lod0.msh",

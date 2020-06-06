@@ -5,6 +5,7 @@ local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 
 local _modConstants = require('lollo_lorry_station/constants')
+local slotUtils = require('lollo_lorry_station/slotHelpers')
 
 local _constants = arrayUtils.addProps(
 	{
@@ -15,7 +16,7 @@ local _constants = arrayUtils.addProps(
 		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
 		idBases = { -- LOLLO NOTE keep this sorted descending
 			areaSlotIdBase = 120000,
-            pathSlotIdBase = 110000,
+            baySlotIdBase = 110000,
             lollo = 1333,
             lalla = 999999999999
 		},
@@ -78,5 +79,13 @@ for i = 1, #mangledIds do
 	local x, y, baseId = DemangleId(mangledIds[i])
 	demangledIds[#demangledIds + 1] = {x, y, baseId}
 end
+
+local nested1 = {}
+slotUtils.setValueInNestedTable(nested1, 'A', 2, 2)
+slotUtils.setValueInNestedTable(nested1, 'A', 4, 2)
+slotUtils.setValueInNestedTable(nested1, 'A', 4, 3)
+slotUtils.setValueInNestedTable(nested1, 'A', -4, 3)
+slotUtils.setValueInNestedTable(nested1, 'A', -4, -3)
+local flat = slotUtils.getFlatTable(nested1)
 
 local par = { lollo = true }
