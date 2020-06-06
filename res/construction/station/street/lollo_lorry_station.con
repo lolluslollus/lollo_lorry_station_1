@@ -15,7 +15,7 @@ local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 local _constants = arrayUtils.addProps(
 	{
 		-- cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0},
-		cargoAreaSpacing = {.5, .5, .5, .5},
+		cargoAreaSpacing = {0.5, 0.5, 0.5, 0.5},
 		-- LOLLO NOTE spacing:
 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 		-- negative values don't matter, the api takes up the abs value
@@ -23,7 +23,7 @@ local _constants = arrayUtils.addProps(
 		-- the 3rd and 4th params may have to do with Y and the 1st and 2nd with X,
 		-- probably 1 = x before, 2 = x after, 3 = y before, 4 = y after
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
-		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
+		lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
 		idBases = {
 			areaSlotIdBase = 120000,
 			baySlotIdBase = 110000,
@@ -90,7 +90,7 @@ function data()
 
 			local _occupiedSlots = {}
 			local _isSlotOccupied = function(x, y)
-				return slotUtils.getValueFromNestedTable(_occupiedSlots, x, y) and true or false
+				return slotUtils.getValueFromNestedTable(_occupiedSlots, x, y) == true
 				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then return false end
 				-- if _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then return true end
 				-- return false
@@ -110,7 +110,7 @@ function data()
 			end
 
 			local _addCargoAreaSlot = function(x, y, baseId)
-				if _isSlotOccupied(x, y) then return end
+				-- if _isSlotOccupied(x, y) then return end
 
 				_setSlotOccupied(x, y)
 				table.insert(result.slots, {
@@ -125,7 +125,7 @@ function data()
 			end
 
 			local _addLorryBaySlot = function(x, y, baseId)
-				if _isSlotOccupied(x, y) then return end
+				-- if _isSlotOccupied(x, y) then return end
 
 				_setSlotOccupied(x, y)
 				table.insert(result.slots, {
@@ -141,11 +141,15 @@ function data()
 
 			-- add the lorry bay at 0, 0
 			_addModel(_modConstants.lorryBayModelFileName, _idTransf, _modConstants.lorryBayTag)
-			result.coord2terminalInfo[edgeUtils.getXKey(0)] = {}
-			result.coord2terminalInfo[edgeUtils.getXKey(0)][edgeUtils.getYKey(0)] = {
-				model = #result.models - 1, -- position with base 0
-				terminal = 0 -- always 0, it seems
-			}
+			slotUtils.setValueInNestedTable(
+				result.coord2terminalInfo,
+				{
+					model = #result.models - 1, -- position with base 0
+					terminal = 0 -- always 0, it seems
+				},
+				0,
+				0
+			)
 			_setSlotOccupied(0, 0)
 
 			-- add the default model at 0, 0
@@ -252,7 +256,7 @@ function data()
 			for _, v in pairs(adjacentXYs) do
 				_addCargoAreaSlot(v.x, v.y, _constants.idBases.areaSlotIdBase)
 			end
-			-- add cargo path slots
+			-- add lorry bay slots
 			-- no access to api or interface, I must work with the params.
 			if type(params.position) == 'table' then
 				-- print('LOLLO params.position = ')

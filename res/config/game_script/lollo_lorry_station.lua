@@ -9,8 +9,11 @@ local state = {
     isShowAllEvents = false
 }
 
-local function _getCloneWoutModulesAndSeed(obj)
-    return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
+-- local function _getCloneWoutModulesAndSeed(obj)
+--     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
+-- end
+local function _getCloneWoutSeed(obj)
+    return arrayUtils.cloneOmittingFields(obj, {'seed'})
 end
 
 local function _myErrorHandler(err)
@@ -31,13 +34,13 @@ function data()
                 luadump(true)(parameters)
                 -- we upgrade the construction to inject the street edges
                 if name == 'select' then
-                    parameters.params = _getCloneWoutModulesAndSeed(parameters.params)
+                    parameters.params = _getCloneWoutSeed(parameters.params)
                     parameters.params.id = parameters.id
                     parameters.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
                         parameters.position
                     )
-                    parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
-                    parameters.params.transf = _getCloneWoutModulesAndSeed(parameters.transf)
+                    parameters.params.position = _getCloneWoutSeed(parameters.position)
+                    parameters.params.transf = _getCloneWoutSeed(parameters.transf)
                     local newId = game.interface.upgradeConstruction(
                         parameters.id,
                         _constants.constructionFileName,
