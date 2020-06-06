@@ -67,11 +67,11 @@ helper.getStreetEdgesSquareBySquare = function(transf)
                 {type = "BASE_EDGE", includeData = true}
             )
             -- LOLLO TODO make it discard paths and other unsuitable street types
-            print('LOLLO x = ', x, ' y = ', y)
-            print('LOLLO squarePosition =')
-            luadump(true)(squarePosition)
-            print('LOLLO nearbyStreetEdges =')
-            luadump(true)(nearbyStreetEdges)
+            -- print('LOLLO x = ', x, ' y = ', y)
+            -- print('LOLLO squarePosition =')
+            -- luadump(true)(squarePosition)
+            -- print('LOLLO nearbyStreetEdges =')
+            -- luadump(true)(nearbyStreetEdges)
             -- LOLLO NOTE #nearbyStreetEdges always returns 0 coz the table is not numbered, so I must iterate.
             -- This is a major caveat of lua's.
             for _, v in pairs(nearbyStreetEdges) do

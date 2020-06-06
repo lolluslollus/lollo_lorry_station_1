@@ -71,7 +71,7 @@ function data()
             -- local reloaded = require("lollo_lorry_station/reloaded")
             -- reloaded.showState(state)
             if name == 'select' then
-                print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
+                print('LOLLO lorry station caught gui select, id = ', id, ' name = ', name, ' param = ')
                 luadump(true)(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(

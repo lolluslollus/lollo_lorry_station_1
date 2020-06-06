@@ -17,6 +17,8 @@ local _constants = arrayUtils.addProps(
     }
 )
 
+-- The idea here is, the user plops a streetside lorry station and then selects it.
+-- The trouble is, there is no way to tell what I really selected.
 local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
 end
@@ -27,56 +29,58 @@ end
 
 function data()
     return {
-        handleEvent = function(src, id, name, parameters)
+        handleEvent = function(src, id, name, args)
             if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
             if state.isShowAllEvents then
                 print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
             end
             if (id == '__lolloLorryStation2Event__') then
-                print("__lolloLorryStation2Event__ caught")
+                print('__lolloLorryStation2Event__ caught')
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
-                luadump(true)(parameters)
+                luadump(true)(args)
 
                 if name == 'built' then
-                  print('LOLLO game.interface.buildConstruction = ')
-                  luadump(true)(game.interface.buildConstruction)
-                  print(inspect(game.interface.buildConstruction))
+                    print('LOLLO game.interface.buildConstruction = ')
+                    luadump(true)(game.interface.buildConstruction)
 
-                  -- local allModels = api.res.modelRep.getAll()
-                  debugger()
-                  -- I arrive here from built with a funny transf looking like
-                  -- "transf" = "((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))"
-                  -- which I stringified coz it is userData
+                    -- local allModels = api.res.modelRep.getAll()
+                    -- debugger()
+                    -- I arrive here from built with a funny transf looking like
+                    -- 'transf' = '((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))'
+                    -- which I stringified coz it is userData
 
-                  -- from here on, I need to reverse the parameters.transf string somehow.
-                  -- It looks like:
-                  -- "transf" = "((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))"
-                  parameters.params = {}
-                  -- parameters.params.id = parameters.id
-                  parameters.params.streetEdges = edgeUtils.getNearbyStreetEdges(
-                      parameters.position,
-                      10
-                  )
-                  parameters.params.position = _getCloneWoutModulesAndSeed(parameters.position)
-                  -- local newId = game.interface.upgradeConstruction(
-                  --     parameters.id,
-                  --     _constants.constructionFileName,
-                  --     parameters.params
-                  -- )
+                    -- from here on, I need to reverse the parameters.transf string somehow.
+                    -- It looks like:
+                    -- 'transf' = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
+                    args.params = {}
+                    -- parameters.params.id = parameters.id
+                    args.params.streetEdges = edgeUtils.getNearbyStreetEdges(
+                        args.position,
+                        10
+                    )
+                    args.params.position = _getCloneWoutModulesAndSeed(args.position)
                 elseif name == 'select' then
-                    debugger()
+                    print('LOLLO game.interface.buildConstruction = ')
+                    luadump(true)(game.interface.buildConstruction)
+
+                    -- debugger()
+                    -- local newId = game.interface.upgradeConstruction(
+                    --     parameters.id,
+                    --     _constants.constructionFileName,
+                    --     parameters.params
+                    -- )
                 end
             end
 
             state.isShowAllEvents = true
 
---[[             package.loaded["lollo_lorry_station/reloaded"] = nil
-            local reloaded = require("lollo_lorry_station/reloaded")
+--[[             package.loaded['lollo_lorry_station/reloaded'] = nil
+            local reloaded = require('lollo_lorry_station/reloaded')
             reloaded.tryDebugger()
  ]]
 
-            -- package.loaded["lollo_lorry_station/reloaded"] = nil
-            -- local reloaded = require("lollo_lorry_station/reloaded")
+            -- package.loaded['lollo_lorry_station/reloaded'] = nil
+            -- local reloaded = require('lollo_lorry_station/reloaded')
             -- reloaded.tryGlobalVariables()
 
         end,
@@ -86,65 +90,47 @@ function data()
             -- that are in turn filled with empty objects.
             -- Once the user has hovered on a suitable spot (ie streetside), the proposal is not empty anymore,
             -- and it is actually rather complex.
-            -- package.loaded["lollo_lorry_station/reloaded"] = nil
-            -- local reloaded = require("lollo_lorry_station/reloaded")
+            -- package.loaded['lollo_lorry_station/reloaded'] = nil
+            -- local reloaded = require('lollo_lorry_station/reloaded')
             -- reloaded.showState(state)
             if name == 'select' then
                 -- there is no way to know that I have selected one of my streetside stations
-                print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
+                print('LOLLO lorry station attachable caught gui select, id = ', id, ' name = ', name, ' param = ')
                 luadump(true)(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(
                     function()
                         -- with this event, param is the selected item id
                         local stationGroup = game.interface.getEntity(param)
-
                         if type(stationGroup) ~= 'table' or stationGroup.type ~= 'STATION_GROUP' or type(stationGroup.position) ~= 'table' then return end
 
                         local stationId = false
                         local stationPosition = {}
-
-                        local allnearbyEntities = game.interface.getEntities(
-                            {pos = stationGroup.position, radius = 10},
-                            {includeData = true}
-                        )
-                        print('LOLLO allnearbyEntities = ')
-                        luadump(true)(allnearbyEntities)
-
                         local allStations = game.interface.getEntities(
                             {pos = stationGroup.position, radius = 0},
-                            {type = "STATION", includeData = true}
+                            {type = 'STATION', includeData = true}
                         )
-                        print('LOLLO allStations = ')
-                        luadump(true)(allStations)
-                        
+                        -- print('LOLLO allStations = ')
+                        -- luadump(true)(allStations)
+                        -- local sampleAllStations = {
+                        --   [27353] = {
+                        --     cargo = true,
+                        --     carriers = { ROAD = true },
+                        --     id = 27353,
+                        --     name = 'Park Road',
+                        --     position = { 569.74090576172, -3373.41796875, 15.128763198853 },
+                        --     stationGroup = 27364,
+                        --     town = 18738,
+                        --     type = 'STATION'
+                        --   }
+                        -- }
+
                         -- neither the station nor the edge contain any useful information
                         -- to find out if I am dealing with my own station or not.
-                        local allEdges = game.interface.getEntities(
-                            {pos = stationGroup.position, radius = 0},
-                            {type = "BASE_EDGE", includeData = true}
-                        )
-                        print('LOLLO allEdges = ')
-                        luadump(true)(allEdges)
-                        debugger()
+                        -- However, I can find out if I am dealing with a lorry road station.
 
-                        for k, v in pairs(allEdges) do
-                            -- this returns -1
-                            local con1 = api.engine.streetConnectorSystem.getConstructionEntityForEdge(v.id)
-                            print('LOLLO con1 = ')
-                            luadump(true)(con1)
-                            -- this dumps even inside xpcall
-                            -- local con3 = api.engine.tpNetLinkSystem.getLinkEntities(v.id)
-                            -- print('LOLLO con3 = ')
-                            -- luadump(true)(con3)
-                        end
-                        for k, v in pairs(allStations) do
-                            -- this returns -1
-                            local con2 = api.engine.streetConnectorSystem.getConstructionEntityForStation(v.id)
-                            print('LOLLO con2 = ')
-                            luadump(true)(con2)
-                        end
-                        
+                        -- debugger()
+
                         -- getConstructionEntity() is not available in the ui thread, sadly.
                         -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
                         -- the game distinguishes constructions, stations and station groups.
@@ -153,22 +139,25 @@ function data()
                         for _, staId in pairs(stationGroup.stations) do
                             for _, sta in pairs(allStations) do
                                 if staId == sta.id then
-                                    if not stationId then
+                                    if not stationId and sta and sta.cargo and sta.carriers and sta.carriers['ROAD'] then
                                         stationId = sta.id
                                         stationPosition = sta.position
+                                    else
+                                      break
                                     end
                                 end
                             end
                         end
 
-                        debugger()
+                        -- debugger()
                         if stationId then
                             game.interface.sendScriptEvent(
-                                "__lolloLorryStation2Event__",
-                                "select",
+                                '__lolloLorryStation2Event__',
+                                'select',
                                 {
                                     id = stationId,
                                     position = stationPosition,
+                                    stationGroupId = stationGroup.id,
                                 }
                             )
                         end
@@ -179,7 +168,7 @@ function data()
                 -- when U add a streetside station, U don't get any ids. The streetside station is an edge object,
                 -- it has no id (for now at least), so the edge id seems more interesting.
                 -- U can try to figure it out here, but it's probably easier in the select handler
-                -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
+                -- print('LOLLO gui builder.apply caught, id = ', id, ' name = ', name, ' param = ')
                 -- luadump(true)(param)
                 -- you cannot check the types coz they contain userdata, so use xpcall
                 xpcall(
@@ -191,7 +180,7 @@ function data()
                         -- local allModels = api.res.modelRep.getAll()
                         -- print('LOLLO allModels = ')
                         -- luadump(true)(allModels)
-                        debugger()
+                        -- debugger()
                         local stationModelId = api.res.modelRep.find(_constants.stationFileName)
 
                         -- print('LOLLO model instance =')
@@ -214,7 +203,7 @@ function data()
                         -- local entity = game.interface.getEntity(param.result[1]) -- the newly built station
                         -- if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
 
-                        debugger()
+                        -- debugger()
                         game.interface.sendScriptEvent(
                             '__lolloLorryStation2Event__',
                             'built',
@@ -474,7 +463,7 @@ function data()
                           },
                           oneWay = false,
                           left = false,
-                          name = "High Street",
+                          name = 'High Street',
                           playerEntity = 18737
                         }
                       },
@@ -499,16 +488,16 @@ function data()
 
 --[[             xpcall(
                 function()
-                    print("one")
-                    local out = io.popen('find /v "" > con', 'w')
-                    print("out = ")
+                    print('one')
+                    local out = io.popen('find /v '' > con', 'w')
+                    print('out = ')
                     luadump(true)(out)
                     luadump(true)(table.unpack(out))
-                    print("two")
-                    out:write("three" .. '\r\n') --\r because windows
-                    print("four")
+                    print('two')
+                    out:write('three' .. '\r\n') --\r because windows
+                    print('four')
                     out:flush()
-                    print("five")
+                    print('five')
                 end,
                 _myErrorHandler
             ) ]]
@@ -516,7 +505,7 @@ function data()
 
             --[[ xpcall(
                 function()
-                    print("debugger = ")
+                    print('debugger = ')
                     luadump(true)(debugger)
                     print('about to start debugger')
                     debugger()
@@ -531,10 +520,10 @@ function data()
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
-                -- if key ~= "package" and key ~= "_G" then
+                -- if key ~= 'package' and key ~= '_G' then
                 --     luadump(true)(value)
                 -- else
-                --     print("luadump too long, skipped")
+                --     print('luadump too long, skipped')
                 -- end
             end ]]
             -- print('-- sol = ')
@@ -578,7 +567,7 @@ function data()
                 _myErrorHandler
             ) ]]
 
-            -- -- print("-- package = ")
+            -- -- print('-- package = ')
             -- -- luadump(true)(package) --this hangs
             -- print('-- getmetatable = ')
             -- luadump(true)(getmetatable(''))

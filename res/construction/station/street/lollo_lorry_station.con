@@ -316,14 +316,14 @@ luadump(true)(adjacentCargoAreas)
 				end
 
 				-- it should output something like (this example has one terminal made of two adjacent bits)
-				-- LOLLO stock result.stations = 
+				-- LOLLO stock result.stations =
 				-- 	{
 				-- 		{
 				-- 			tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
 				-- 			terminals = { 0 } -- 0 is the position of the linked terminal group, in base 0
 				-- 		}
 				-- 	}
-				-- LOLLO stock result.terminalGroups = 
+				-- LOLLO stock result.terminalGroups =
 				-- {
 				-- 	{
 				-- 		tag = -1, -- possibly useless, try to keep the m all different tho
