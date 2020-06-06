@@ -14,10 +14,14 @@ local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
 local _constants = arrayUtils.addProps(
 	{
-		-- cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- LOLLO NOTE 0 will make a module unselectable when the user wants to delete it
+		-- cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0},
 		cargoAreaSpacing = {.5, .5, .5, .5},
+		-- LOLLO NOTE spacing:
 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 		-- negative values don't matter, the api takes up the abs value
+		-- 0 will make a module unselectable when the user wants to delete it
+		-- the 3rd and 4th params may have to do with Y and the 1st and 2nd with X,
+		-- probably 1 = x before, 2 = x after, 3 = y before, 4 = y after
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
 		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
 		idBases = { -- LOLLO NOTE keep this sorted descending
@@ -111,7 +115,9 @@ function data()
 					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _modConstants.cargoAreaModuleType,
-					spacing = _constants.cargoAreaSpacing
+					spacing = _constants.cargoAreaSpacing,
+					-- height
+					-- shape 1 2 3 4
 				})
 			end
 
@@ -124,7 +130,9 @@ function data()
 					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _modConstants.lorryBayModuleType,
-					spacing = _constants.lorryBaySpacing
+					spacing = _constants.lorryBaySpacing,
+					-- height
+					-- shape
 				})
 			end
 
