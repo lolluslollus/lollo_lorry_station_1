@@ -5,7 +5,13 @@ local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 
 local _modConstants = require('lollo_lorry_station/constants')
+local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
+
+-- only for testing
+math.atan2 = function(dy, dx)
+	return math.tan(dy / dx)
+end
 
 local _constants = arrayUtils.addProps(
 	{
@@ -87,5 +93,15 @@ slotUtils.setValueInNestedTable(nested1, 'A', 4, 3)
 slotUtils.setValueInNestedTable(nested1, 'A', -4, 3)
 slotUtils.setValueInNestedTable(nested1, 'A', -4, -3)
 local flat = slotUtils.getFlatTable(nested1)
+
+local edge0 = {
+	{0, 0, 0},
+	{1, 0, 0}
+}
+local edge1 = {
+	{10, 0, 0},
+	{1, 0, 0}
+}
+local edgeMiddle = edgeUtils.getEdgeBetween(edge0, edge1)
 
 local par = { lollo = true }

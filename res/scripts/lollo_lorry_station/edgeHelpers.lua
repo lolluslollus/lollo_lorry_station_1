@@ -2,7 +2,7 @@ local _constants = require('lollo_lorry_station/constants')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local matrixUtils = require('lollo_lorry_station/matrix')
 local transfUtils = require('lollo_lorry_station/transfUtils')
-local debugger = require('debugger')
+-- local debugger = require('debugger')
 local luadump = require('lollo_lorry_station/luadump')
 
 local helper = {}
@@ -23,7 +23,7 @@ helper.getNearbyStreetEdges = function(position, edgeSearchRadius)
         {includeData = true}
     )
 
-    debugger()
+    -- debugger()
 
     local results = {}
     for i, v in pairs(nearbyEdges) do
@@ -173,11 +173,15 @@ helper.getEdgeBetween = function(edge0, edge1)
         }
     )
 
+    local a = abcd[1][1]
+    local b = abcd[2][1]
+    local c = abcd[3][1]
+    local d = abcd[4][1]
     -- Now I take the x2' halfway between x0' and x1',
     local x2I = x0I + (x1I - x0I) * 0.5
-    local y2I = abcd[1] + abcd[2] * x2I + abcd[3] * x2I * x2I + abcd[4] * x2I * x2I * x2I
+    local y2I = a + b * x2I + c * x2I * x2I + d * x2I * x2I * x2I
     -- calculate its y derivative:
-    local tan2I = abcd[2] + 2 * abcd[3] * x2I + 3 * abcd[4] * x2I * x2I
+    local tan2I = b + 2 * c * x2I + 3 * d * x2I * x2I
     local ro2 = math.sqrt((x2I - x0I) * (x2I - x0I) + (y2I - y0I) * (y2I - y0I))
     local alpha2I = math.atan2(y2I - y0I, x2I - x0I)
     local theta2I = math.atan(tan2I) -- LOLLO TODO find out the quadrant or try to use atan2, which does it automagically
@@ -190,8 +194,8 @@ helper.getEdgeBetween = function(edge0, edge1)
             0
         },
         {
-            math.cos(theta1 - zRotation),
-            math.sin(theta1 - zRotation),
+            math.cos(theta2I - zRotation),
+            math.sin(theta2I - zRotation),
             0
         }
     }
