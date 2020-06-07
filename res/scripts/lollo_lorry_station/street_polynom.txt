@@ -1,0 +1,68 @@
+x(0) = node0.x
+y(0) = node0.y
+z(0) = node0.y
+
+x(1) = node1.x
+y(1) = node1.y
+z(1) = node1.y
+
+// fy(x) = a + b x + c x^2 + d x^3
+// fy'(x) = b + 2 c x + 3 d x^2
+f(node0.x) = node0.y
+f(node1.x) = node1.y
+if node0.tanx <> 0
+    fy'(node0.x) = tany / tanx
+else if node0.tanx == 0 and node0.tany <> 0
+    TODO make b very high, this may be trouble tho, we must think differently
+    ok let's try the inverse of f then. but that would involve roots, so it's not a polynomial anymore, just think of the inverse of y = x^3.
+    or let's cut down the polynom order
+    or let's transform-rotate so no tangent is ever nought
+else if node0.tanx == 0 and node0.tany == 0
+    error
+
+if node1.tanx <> 0
+    fy'(node1.x) = tany / tanx
+else if node1.tanx == 0 and node1.tany <> 0
+    TODO make b very high, this may be trouble tho, we must think differently
+    ok let's try the inverse of f then. but that would involve roots, so it's not a polynomial anymore, just think of the inverse of y = x^3.
+    or let's cut down the polynom order
+    or let's transform-rotate so no tangent is ever nought
+else if node1.tanx == 0 and node1.tany == 0
+    error
+
+In general, I must transform-rotate around x0 so that y0 = y1, solve the system, then transform back when I use its results.
+So how do I transform back and forth?
+My transformation implies a rotation:
+
+local rotation = -math.atan2(y1-y0, x1-x0)
+
+So the new coordinates will be:
+function sign(x)
+  return x > 0 and 1 or x < 0 and -1 or 0
+end
+
+x0' = x0
+x1' = x0 + sign(x1 - x0) * math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0))
+y0' = y0
+y1' = y0
+And the new tangents will be:
+transfUtils.getVec123Transformed({tanx0, tany0, 0}, transf.rotZ(rotation))
+transfUtils.getVec123Transformed({tanx1, tany1, 0}, transf.rotZ(rotation))
+
+Now I can solve the system:
+y0' = a + b x0' + c x0'^2 + d x0'^3
+y0' = a + b x1' + c x1'^2 + d x1'^3
+tany0' / tanx0' = b + 2 c x0 + 3 d x0^2
+tany1' / tanx1' = b + 2 c x1 + 3 d x1^2
+
+How do I solve the system efficiently?
+With matrixes: {a, b, c, d} = matrixUtils.invert(matrix) * {y0', y0', tany0' / tanx0', tany1' / tanx1'}
+
+Now I take the x halfway between x0' and x1',
+calculate its y,
+calculate its y derivative,
+to obtain the edge:
+{{x2, y2, z2}, {1, der, 0}}
+
+Finally, I rotate-transform this edge applying -rotation.
+The result is the edge with the new terminal.
