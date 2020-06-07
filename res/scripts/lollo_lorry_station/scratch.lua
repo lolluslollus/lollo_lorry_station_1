@@ -10,6 +10,7 @@ local slotUtils = require('lollo_lorry_station/slotHelpers')
 
 -- only for testing
 math.atan2 = function(dy, dx)
+	if dx == 0 then return math.pi * 0.5 end
 	return math.tan(dy / dx)
 end
 
@@ -96,12 +97,17 @@ local flat = slotUtils.getFlatTable(nested1)
 
 local edge0 = {
 	{0, 0, 0},
-	{1, 0, 0}
+	{0, 1, 0}
 }
+-- local edge1 = {
+-- 	{10, 0, 0},
+-- 	{1, 0, 0}
+-- }
 local edge1 = {
-	{10, 0, 0},
-	{1, 0, 0}
+	{0, 10, 0},
+	{0, 1, 0}
 }
+
 local edgeMiddle = edgeUtils.getEdgeBetween(edge0, edge1)
 
 local par = { lollo = true }

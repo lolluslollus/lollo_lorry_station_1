@@ -102,7 +102,7 @@ end
 
 helper.getEdgeBetween = function(edge0, edge1)
     local sign = function(n)
-        return n > 0 and 1 or n < 0 and -1 or 0
+        return n > 0 and 1 or n < 0 and -1 or 1 --0
     end
     local x0 = edge0[1][1]
     local x1 = edge1[1][1]
