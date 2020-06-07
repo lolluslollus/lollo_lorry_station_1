@@ -116,16 +116,17 @@ local flat = slotUtils.getFlatTable(nested1)
 
 local edge0 = {
 	{0, 0, 0},
-	{1, 1, 0}
+	{-1, 1, 0}
 }
 -- local edge1 = {
 -- 	{10, 0, 0},
 -- 	{1, 0, 0}
 -- }
 local edge1 = {
-	{10, 10, 0},
-	{1, 1, 0}
+	{-10, 10, 0},
+	{-1, 1, 0}
 }
+-- LOLLO TODO wrong sign
 local edgeMiddle = edgeUtils.getEdgeBetween(edge0, edge1)
 
 local par = { lollo = true }

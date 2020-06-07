@@ -130,7 +130,8 @@ helper.getEdgeBetween = function(edge0, edge1)
     }
     local edge1Rotated = {
         {
-            x0 + sign(x1 - x0) * math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)),
+            -- x0 + sign(x1 - x0) * math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)),
+            x0 + math.sqrt((x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0)),
             y0,
             0
         },
