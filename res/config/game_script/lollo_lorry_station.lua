@@ -1,6 +1,7 @@
 local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local transfUtils = require('lollo_lorry_station/transfUtils')
 local _constants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
@@ -79,6 +80,7 @@ function data()
                     -- luadump(true)(newParams.streetEdgesWithRelativeCoordinates)
                     newParams.position = _getCloneWoutSeed(args.position)
                     newParams.transf = _getCloneWoutSeed(args.transf)
+                    newParams.inverseTransf = transfUtils.getInverseTransf(args.transf)
                     local newId = game.interface.upgradeConstruction(
                         args.id,
                         _constants.constructionFileName,

@@ -251,15 +251,20 @@ function data()
 
 			-- add lorry bay slots
 			-- no access to api or interface, I must work with the params.
-			if type(params.streetNodeGroups) == 'table' and type(params.transf) == 'table' then
-				local inverseLeadingTransf = transfUtils.getInverseTransf(params.transf)
+			if type(params.streetNodeGroups) == 'table' and type(params.transf) == 'table' and type(params.inverseTransf) == 'table' then
 				for _, nodeGroup in pairs(params.streetNodeGroups) do
-					-- LOLLO TODO make relative coordinates, relative to the transf
 					local absolutePosition = nodeGroup[2][1]
+					-- LOLLO TODO make relative coordinates, relative to the transf. This looks good but it is probably too stupid
 					local relativePosition = {
 						absolutePosition[1] - params.transf[13],
 						absolutePosition[2] - params.transf[14],
 					}
+					print('LOLLO relativePosition 1 = ')
+					luadump(true)(relativePosition)
+					local relativePosition = transfUtils.getVec123Transformed(absolutePosition, params.inverseTransf)
+					print('LOLLO relativePosition 2 = ')
+					luadump(true)(relativePosition)
+
 					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
 					table.insert(
@@ -270,13 +275,13 @@ function data()
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
 								_constants.idBases.baySlotIdBase
 							),
-							-- transf = transfUtils.mul(transf.transl(vec3.new(absolutePosition[1], absolutePosition[2], 0)), inverseLeadingTransf),
 							transf = transfUtils.mul(
 								transf.rotZTransl(
 									math.atan2(tangents[2], tangents[1]),
 									vec3.new(absolutePosition[1], absolutePosition[2], 0)
+									-- vec3.new(relativePosition[1], relativePosition[2], 0)
 								),
-								inverseLeadingTransf
+								params.inverseTransf
 							),
 							type = _modConstants.lorryBayModuleType,
 							spacing = _constants.lorryBaySpacing,
