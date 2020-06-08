@@ -7,6 +7,7 @@ local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local _modConstants = require('lollo_lorry_station/constants')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
+local transfUtils = require('lollo_lorry_station/transfUtils')
 local debugger = require('debugger')
 local inspect = require('lollo_lorry_station/inspect')
 local luadump = require('lollo_lorry_station/luadump')
@@ -23,7 +24,7 @@ local _constants = arrayUtils.addProps(
 		-- the 3rd and 4th params may have to do with Y and the 1st and 2nd with X,
 		-- probably 1 = x before, 2 = x after, 3 = y before, 4 = y after
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
-		lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
+		lorryBaySpacing = {0.1, 0.5, 0.1, 0.5},
 		idBases = {
 			areaSlotIdBase = 120000,
 			baySlotIdBase = 110000,
@@ -109,9 +110,10 @@ function data()
 				})
 			end
 
-			local _addCargoAreaSlot = function(x, y, baseId)
+			local _addCargoAreaSlot = function(x, y)
 				-- if _isSlotOccupied(x, y) then return end
 
+				local baseId = _constants.idBases.areaSlotIdBase
 				_setSlotOccupied(x, y)
 				table.insert(result.slots, {
 					id = result.MangleId(x, y, baseId),
@@ -121,21 +123,6 @@ function data()
 					spacing = _constants.cargoAreaSpacing,
 					-- height
 					-- shape 1 2 3 4
-				})
-			end
-
-			local _addLorryBaySlot = function(x, y, baseId)
-				-- if _isSlotOccupied(x, y) then return end
-
-				_setSlotOccupied(x, y)
-				table.insert(result.slots, {
-					id = result.MangleId(x, y, baseId),
-					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
-					-- type = "street_terminal_passenger",
-					type = _modConstants.lorryBayModuleType,
-					spacing = _constants.lorryBaySpacing,
-					-- height
-					-- shape
 				})
 			end
 
@@ -258,20 +245,39 @@ function data()
 			local adjacentXYs = slotUtils.getFlatTable(slotXYs)
 			-- print('LOLLO adjacentXYs = ')
 			-- luadump(true)(adjacentXYs)
-
 			for _, v in pairs(adjacentXYs) do
-				_addCargoAreaSlot(v.x, v.y, _constants.idBases.areaSlotIdBase)
+				_addCargoAreaSlot(v.x, v.y)
 			end
+
 			-- add lorry bay slots
 			-- no access to api or interface, I must work with the params.
-			if type(params.streetEdges) == 'table' then
-				for x = _modConstants.xMin, _modConstants.xMax do
-					for y = _modConstants.yMin, _modConstants.yMax do
-						if params.streetEdges[edgeUtils.getXKey(x)]
-						and params.streetEdges[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then
-							_addLorryBaySlot(x, y, _constants.idBases.baySlotIdBase)
-						end
-					end
+			if type(params.streetNodeGroups) == 'table' and type(params.transf) == 'table' then
+				local inverseLeadingTransf = transfUtils.getInverseTransf(params.transf)
+				for _, nodeGroup in pairs(params.streetNodeGroups) do
+					-- LOLLO TODO make relative coordinates, relative to the transf
+					local absolutePosition = nodeGroup[2][1]
+					local relativePosition = {
+						absolutePosition[1] - params.transf[13],
+						absolutePosition[2] - params.transf[14],
+					}
+					local absoluteTangents = nodeGroup[2][2]
+					-- _setSlotOccupied(x, y)
+					table.insert(
+						result.slots,
+						{
+							id = result.MangleId(
+								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
+								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
+								_constants.idBases.baySlotIdBase
+							),
+							transf = transfUtils.mul(transf.transl(vec3.new(absolutePosition[1], absolutePosition[2], 0)), inverseLeadingTransf),
+							type = _modConstants.lorryBayModuleType,
+							spacing = _constants.lorryBaySpacing,
+							skipCollision = true, -- useless
+							-- height
+							-- shape
+						}
+					)
 				end
 			end
 

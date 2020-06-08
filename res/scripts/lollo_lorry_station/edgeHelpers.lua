@@ -2,7 +2,7 @@ local _constants = require('lollo_lorry_station/constants')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local matrixUtils = require('lollo_lorry_station/matrix')
 local transfUtils = require('lollo_lorry_station/transfUtils')
--- local debugger = require('debugger')
+local debugger = require('debugger')
 local luadump = require('lollo_lorry_station/luadump')
 
 if math.atan2 == nil then
@@ -31,26 +31,75 @@ end
 
 local helper = {}
 
-helper.getNearbyStreetEdges = function(position, edgeSearchRadius)
-    -- if you want to use this, you may have to account for the transformation
-    if type(position) ~= 'table' then return {} end
-    
-    -- local nearbyNodes = game.interface.getEntities(
-    --     {pos = entity.position, radius = _constants.edgeSearchRadius},
-    --     {type = "BASE_NODE", includeData = true}
-    --     -- {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
-    -- )
+-- helper.getNearbyStreetEdges = function(position, edgeSearchRadius)
+--     -- if you want to use this, you may have to account for the transformation
+--     if type(position) ~= 'table' then return {} end
 
-    local nearbyEdges = game.interface.getEntities(
-        {pos = position, radius = edgeSearchRadius},
-        -- {type = "BASE_EDGE", includeData = true}
-        {includeData = true}
-    )
+--     local nearbyEdges = game.interface.getEntities(
+--         {pos = position, radius = edgeSearchRadius},
+--         -- {type = "BASE_EDGE", includeData = true}
+--         {includeData = true}
+--     )
+
+--     local results = {}
+--     for i, v in pairs(nearbyEdges) do
+--         if not v.track and v.streetType then
+--             table.insert(results, v)
+--         end
+--     end
+
+--     return results
+-- end
+
+helper.getNearbyStreetEdges = function(transf)
+    -- if you want to use this, you may have to account for the transformation
+    if type(transf) ~= 'table' then return {} end
 
     -- debugger()
+    local edgeSearchRadius = _constants.xMax * _constants.xTransfFactor -- * 0.7071
+    local squareCentrePosition = transfUtils.getVec123Transformed({0, 0, 0}, transf)
+    local nearbyEdges = game.interface.getEntities(
+        {pos = squareCentrePosition, radius = edgeSearchRadius},
+        {type = "BASE_EDGE", includeData = true}
+        -- {includeData = true}
+    )
+    local sampleNearbyEdges = {
+        [27346] = {
+            ["node0pos"] = {503.47393798828, -3262.2072753906, 15.127754211426},
+            ["node0tangent"] = {11.807357788086, -53.536338806152, -1.3161367177963},
+            ["node1tangent"] = {39.382007598877, -39.382049560547, -1.2736799716949},
+            ["type"] = "BASE_EDGE",
+            ["hasTram"] = false,
+            ["id"] = 27346,
+            ["node1"] = 25371,
+            ["track"] = false,
+            ["streetType"] = "standard/country_small_new.lua",
+            ["node0"] = 27343,
+            ["hasBus"] = false,
+            ["node1pos"] = {529.49230957031, -3309.6865234375, 13.174621582031}
+        },
+        [27350] = {
+            ["node0pos"] = {529.49230957031, -3309.6865234375, 13.174621582031},
+            ["node0tangent"] = {55.327167510986, -55.327224731445, -1.7893730401993},
+            ["node1tangent"] = {15.339179992676, -76.696083068848, 2.7962200641632},
+            ["type"] = "BASE_EDGE",
+            ["hasTram"] = false,
+            ["id"] = 27350,
+            ["node1"] = 25826,
+            ["track"] = false,
+            ["streetType"] = "standard/country_small_new.lua",
+            ["node0"] = 25371,
+            ["hasBus"] = false,
+            ["node1pos"] = {565.62121582031, -3377.1943359375, 13.753684997559}
+        }
+    }
+
 
     local results = {}
-    for i, v in pairs(nearbyEdges) do
+    for _, v in pairs(nearbyEdges) do
+        -- LOLLO TODO make it discard paths and other unsuitable street types
+        -- edges contain a field like:
+        -- "streetType" = "standard/country_small_new.lua",
         if not v.track and v.streetType then
             table.insert(results, v)
         end
@@ -58,6 +107,19 @@ helper.getNearbyStreetEdges = function(position, edgeSearchRadius)
 
     return results
 end
+
+-- helper.getEdgeWithSequentialFields = function(edgeWithNamedFields)
+--     return {
+--         {
+--             edgeWithNamedFields['node0pos'],
+--             edgeWithNamedFields['node1pos'],
+--         },
+--         {
+--             edgeWithNamedFields['node0tangent'],
+--             edgeWithNamedFields['node1tangent'],
+--         }
+--     }
+-- end
 
 helper.getStreetEdgesSquareBySquare = function(transf)
     -- transf is an absolute transformation, which contains the absolute coordinates in 13, 14, 15
@@ -124,20 +186,22 @@ helper.getYKey = function(y)
     -- return _constants.yPrefix .. tostring(y)
 end
 
-helper.getEdgeBetween = function(edge0, edge1)
-    local sign = function(n)
-        return n > 0 and 1 or n < 0 and -1 or 1 --0
-    end
-    local x0 = edge0[1][1]
-    local x1 = edge1[1][1]
-    local cos0 = edge0[2][1]
-    local cos1 = edge1[2][1]
-    local y0 = edge0[1][2]
-    local y1 = edge1[1][2]
-    local sin0 = edge0[2][2]
-    local sin1 = edge1[2][2]
+helper.getEdgeBetween = function(node0, node1)
+    -- local sign = function(n)
+    --     return n > 0 and 1 or n < 0 and -1 or 1 --0
+    -- end
+    local x0 = node0[1][1]
+    local x1 = node1[1][1]
+    local cos0 = node0[2][1]
+    local cos1 = node1[2][1]
+    local y0 = node0[1][2]
+    local y1 = node1[1][2]
+    local sin0 = node0[2][2]
+    local sin1 = node1[2][2]
     local theta0 = math.atan2(sin0, cos0)
     local theta1 = math.atan2(sin1, cos1)
+    local z0 = node0[1][3]
+    local z1 = node1[1][3]
     -- rotate the edges around the Z axis so that y0 = y1
     local zRotation = -math.atan2(y1 - y0, x1 - x0)
     local edge0Rotated = {
@@ -207,15 +271,15 @@ helper.getEdgeBetween = function(edge0, edge1)
     local y2I = a + b * x2I + c * x2I * x2I + d * x2I * x2I * x2I
     -- calculate its y derivative:
     local tan2I = b + 2 * c * x2I + 3 * d * x2I * x2I
+    -- Now I undo the rotation I did at the beginning
     local ro2 = math.sqrt((x2I - x0I) * (x2I - x0I) + (y2I - y0I) * (y2I - y0I))
     local alpha2I = math.atan2(y2I - y0I, x2I - x0I)
     local theta2I = math.atan(tan2I) -- LOLLO TODO find out the quadrant or try to use atan2, which does it automagically
 
-    -- Now I undo the rotation I did at the beginning
-    local edge2 = {
+    local edge2WithAbsoluteCoordinates = {
         {
-            ro2 * math.cos(alpha2I - zRotation),
-            ro2 * math.sin(alpha2I - zRotation),
+            x0I + ro2 * math.cos(alpha2I - zRotation),
+            y0I + ro2 * math.sin(alpha2I - zRotation),
             0
         },
         {
@@ -225,11 +289,11 @@ helper.getEdgeBetween = function(edge0, edge1)
         }
     }
     -- add Z
-    -- LOLLO TODO uncomment after testing
-    -- edge2[1][3] = game.interface.getHeight({edge2[1][1], edge2[1][2]})
-    edge2[2][3] = (edge0[2][3] + edge1[2][3]) * 0.5
+    local z2 = game.interface.getHeight({edge2WithAbsoluteCoordinates[1][1], edge2WithAbsoluteCoordinates[1][2]})
+    edge2WithAbsoluteCoordinates[1][3] = z2
+    edge2WithAbsoluteCoordinates[2][3] = (node0[2][3] + node1[2][3]) * 0.5
 
-    return edge2
+    return edge2WithAbsoluteCoordinates
 end
 
 return helper

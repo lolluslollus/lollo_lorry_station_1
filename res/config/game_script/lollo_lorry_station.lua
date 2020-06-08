@@ -34,17 +34,55 @@ function data()
                 luadump(true)(args)
                 -- we upgrade the construction to inject the street edges
                 if name == 'select' then
-                    args.params = _getCloneWoutSeed(args.params)
-                    args.params.id = args.id
-                    args.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
+                    local newParams = _getCloneWoutSeed(args.params)
+                    newParams.id = args.id
+                    -- args.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
+                    --     args.transf
+                    -- )
+                    -- debugger()
+                    local nearbyStreetEdges = edgeUtils.getNearbyStreetEdges(
                         args.transf
                     )
-                    args.params.position = _getCloneWoutSeed(args.position)
-                    args.params.transf = _getCloneWoutSeed(args.transf)
+                    print('LOLLO nearbyStreetEdges =')
+                    luadump(true)(nearbyStreetEdges)
+                    -- newParams.streetEdgesWithAbsoluteCoordinates = {}
+                    -- newParams.streetEdgesWithRelativeCoordinates = {}
+                    newParams.streetNodeGroups = {}
+                    for _, edge in pairs(nearbyStreetEdges) do
+                        local abs = edgeUtils.getEdgeBetween(
+                            {
+                                edge['node0pos'],
+                                edge['node0tangent']
+                            },
+                            {
+                                edge['node1pos'],
+                                edge['node1tangent']
+                            }
+                        )
+                        -- newParams.streetEdgesWithAbsoluteCoordinates[#newParams.streetEdgesWithAbsoluteCoordinates + 1] = abs
+                        -- newParams.streetEdgesWithRelativeCoordinates[#newParams.streetEdgesWithRelativeCoordinates + 1] = rel
+                        newParams.streetNodeGroups[#newParams.streetNodeGroups+1] = {
+                            {
+                                edge['node0pos'],
+                                edge['node0tangent']
+                            },
+                            abs,
+                            {
+                                edge['node1pos'],
+                                edge['node1tangent']
+                            }
+                        }
+                    end
+                    print('LOLLO newParams.streetNodeGroups = ')
+                    luadump(true)(newParams.streetNodeGroups)
+                    -- print('LOLLO newParams.streetEdgesWithRelativeCoordinates = ')
+                    -- luadump(true)(newParams.streetEdgesWithRelativeCoordinates)
+                    newParams.position = _getCloneWoutSeed(args.position)
+                    newParams.transf = _getCloneWoutSeed(args.transf)
                     local newId = game.interface.upgradeConstruction(
                         args.id,
                         _constants.constructionFileName,
-                        args.params
+                        newParams
                     )
                 end
             end

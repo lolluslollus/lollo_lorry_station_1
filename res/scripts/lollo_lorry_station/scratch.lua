@@ -126,7 +126,6 @@ local edge1 = {
 	{-10, 10, 0},
 	{-1, 1, 0}
 }
--- LOLLO TODO wrong sign
 local edgeMiddle = edgeUtils.getEdgeBetween(edge0, edge1)
 
 local par = { lollo = true }

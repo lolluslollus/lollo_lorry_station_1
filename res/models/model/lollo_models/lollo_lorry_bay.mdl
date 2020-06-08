@@ -56,10 +56,10 @@ function data()
         -- },
         collider = {
             params = {
-                halfExtents = { 0.0, 0.0, 0.0, },
+                -- halfExtents = { 0.0, 0.0, 0.0, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-            type = "BOX",
+            type = "NONE",
         },
         lods = {
             {
@@ -93,6 +93,7 @@ function data()
             },
         },
         metadata = {
+            skipCollision = true, -- useless
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
@@ -123,7 +124,7 @@ function data()
                 },
             },
         },
-        -- skipCollision = true,
+        skipCollision = true, -- useless
         -- skipCollisionCheck = true,
         version = 1,
     }
