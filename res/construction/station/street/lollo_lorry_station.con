@@ -260,7 +260,7 @@ function data()
 						absolutePosition[1] - params.transf[13],
 						absolutePosition[2] - params.transf[14],
 					}
-					local absoluteTangents = nodeGroup[2][2]
+					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
 					table.insert(
 						result.slots,
@@ -270,7 +270,14 @@ function data()
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
 								_constants.idBases.baySlotIdBase
 							),
-							transf = transfUtils.mul(transf.transl(vec3.new(absolutePosition[1], absolutePosition[2], 0)), inverseLeadingTransf),
+							-- transf = transfUtils.mul(transf.transl(vec3.new(absolutePosition[1], absolutePosition[2], 0)), inverseLeadingTransf),
+							transf = transfUtils.mul(
+								transf.rotZTransl(
+									math.atan2(tangents[2], tangents[1]),
+									vec3.new(absolutePosition[1], absolutePosition[2], 0)
+								),
+								inverseLeadingTransf
+							),
 							type = _modConstants.lorryBayModuleType,
 							spacing = _constants.lorryBaySpacing,
 							skipCollision = true, -- useless
