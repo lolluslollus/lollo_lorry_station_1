@@ -29,6 +29,7 @@ return {
 	},
 	metadata = {
 		cargo = true,
+		lorryBay = true,
 		skipCollision = true, -- useless
 	},
 	skipCollision = true, -- useless

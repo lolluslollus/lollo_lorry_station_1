@@ -28,10 +28,11 @@ return {
 	},
 	type = _constants.cargoAreaModuleType,
 	order = {
-		value = 6,
+		value = 7,
 	},
 	metadata = {
 		cargo = true,
+		cargoArea = true,
 	},
 	
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)

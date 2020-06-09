@@ -110,37 +110,31 @@ function data()
 				})
 			end
 
-			local _addCargoAreaSlot = function(x, y)
-				-- if _isSlotOccupied(x, y) then return end
-
-				local baseId = _constants.idBases.areaSlotIdBase
-				_setSlotOccupied(x, y)
-				table.insert(result.slots, {
-					id = result.MangleId(x, y, baseId),
-					transf = transf.transl(vec3.new(x * _modConstants.xTransfFactor, y * _modConstants.yTransfFactor, 0.0)),
-					-- type = "street_terminal_passenger",
-					type = _modConstants.cargoAreaModuleType,
-					spacing = _constants.cargoAreaSpacing,
-					-- height
-					-- shape 1 2 3 4
-				})
+			result.MangleId = function(x, y, baseId)
+				return baseId + _constants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
 			end
 
-			-- add the lorry bay at 0, 0
-			_addModel(_modConstants.lorryBayModelFileName, _idTransf, _modConstants.lorryBayTag)
-			slotUtils.setValueInNestedTable(
-				result.coord2terminalInfo,
-				{
-					model = #result.models - 1, -- position with base 0
-					terminal = 0 -- always 0, it seems
-				},
-				0,
-				0
-			)
-			_setSlotOccupied(0, 0)
+			result.DemangleId = function(slotId)
+				local function _getIdBase(slotId)
+					local baseId = 0
+					for _, v in pairs(_idBasesSortedDesc) do
+						if slotId >= v.id then
+							baseId = v.id
+							break
+						end
+					end
 
-			-- add the default model at 0, 0
-			-- _addModel(_modConstants.markModelFileName, _idTransf, _modConstants.markTag)
+					return baseId > 0 and baseId or false
+				end
+
+				local baseId = _getIdBase(slotId)
+				if not baseId then return false, false, false end
+
+				local y = math.floor((slotId - baseId) / _constants.idFactorY)
+				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+
+				return x + _modConstants.xMin, y + _modConstants.yMin, baseId
+			end
 
 			-- add the streets leading into the station
 --[[ 			result.edgeLists = {
@@ -190,32 +184,22 @@ function data()
 				},
 			} ]]
 
-			result.MangleId = function(x, y, baseId)
-				return baseId + _constants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
-			end
+			-- add the lorry bay at 0, 0
+			-- _addModel(_modConstants.lorryBayModelFileName, _idTransf, _modConstants.lorryBayTag)
+			-- slotUtils.setValueInNestedTable(
+			-- 	result.coord2terminalInfo,
+			-- 	{
+			-- 		model = #result.models - 1, -- position with base 0
+			-- 		terminal = 0 -- always 0, it seems
+			-- 	},
+			-- 	0,
+			-- 	0
+			-- )
+			-- _setSlotOccupied(0, 0)
 
-			result.DemangleId = function(slotId)
-				local function _getIdBase(slotId)
-					local baseId = 0
-					for _, v in pairs(_idBasesSortedDesc) do
-						if slotId >= v.id then
-							baseId = v.id
-							break
-						end
-					end
-
-					return baseId > 0 and baseId or false
-				end
-
-				local baseId = _getIdBase(slotId)
-				if not baseId then return false, false, false end
-
-				local y = math.floor((slotId - baseId) / _constants.idFactorY)
-				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
-
-				return x + _modConstants.xMin, y + _modConstants.yMin, baseId
-			end
-
+			-- add the default model at 0, 0
+			-- _addModel(_modConstants.markModelFileName, _idTransf, _modConstants.markTag)
+			
 			-- add cargo area slots
 			local slotXYs = { -- default lorry bay
 				['-1'] = {
@@ -246,7 +230,16 @@ function data()
 			-- print('LOLLO adjacentXYs = ')
 			-- luadump(true)(adjacentXYs)
 			for _, v in pairs(adjacentXYs) do
-				_addCargoAreaSlot(v.x, v.y)
+				_setSlotOccupied(v.x, v.y)
+				table.insert(result.slots, {
+					id = result.MangleId(v.x, v.y, _constants.idBases.areaSlotIdBase),
+					transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
+					-- type = "street_terminal_passenger",
+					type = _modConstants.cargoAreaModuleType,
+					spacing = _constants.cargoAreaSpacing,
+					-- height
+					-- shape 1 2 3 4
+				})
 			end
 
 			-- add lorry bay slots
@@ -327,6 +320,10 @@ luadump(true)(adjacentCargoAreas)
 				for lorryBayCounter = 1, tagCounterBase0 do
 					table.insert(result.stations[1].terminals, lorryBayCounter - 1)
 				end
+				-- avoid dump when configuring
+				if #(result.stations[1].terminals) == 0 then
+					table.insert(result.stations[1].terminals, 0)
+				end
 
 				-- it should output something like (this example has one terminal made of two adjacent bits)
 				-- LOLLO stock result.stations =
@@ -361,6 +358,36 @@ luadump(true)(adjacentCargoAreas)
 				print('LOLLO result.terminalGroups = ')
 				luadump(true)(result.terminalGroups)
 			end
+
+			local isNoLorryBays = true
+			if type(params.modules) == 'table' then
+				for _, modu in pairs(params.modules) do
+					print('LOLLO modu =')
+					if modu.metadata.lorryBay then
+						isNoLorryBays = false
+						break
+					end
+				end
+			end
+			if isNoLorryBays and type(params.models) == 'table' then
+				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
+				print('LOLLO #lorryBayModelIndexesBase0 =', #lorryBayModelIndexesBase0)
+				if #lorryBayModelIndexesBase0 > 0 then
+					isNoLorryBays = false
+				end
+			end
+			-- if params.modules[result.MangleId({0, 0, 0})] == nil and params.modules[result.MangleId({-1, 0, 0})] == nil
+			-- and params.modules[result.MangleId({0, 0, 1})] == nil and params.modules[result.MangleId({-1, 0, 1})] == nil
+			-- and params.modules[result.MangleId({55, 0, 3})] == nil and params.modules[result.MangleId({55, 0, 4})] == nil and params.modules[result.MangleId({55, 0, 5})] == nil
+			-- and params.modules[result.MangleId({55, 1, 3})] == nil and params.modules[result.MangleId({55, 1, 4})] == nil and params.modules[result.MangleId({55, 1, 5})] == nil then
+			if isNoLorryBays then
+				table.insert(result.models, {
+					-- id = "asset/icon/marker_exclamation.mdl",
+					id = _modConstants.markModelFileName,
+					transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
+				})
+			end
+
 			print('LOLLO lollo_lorry_station leaving updateFn, result = ')
 			luadump(true)(result)
 

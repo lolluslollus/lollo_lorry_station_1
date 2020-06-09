@@ -1,4 +1,4 @@
-local laneutil = require "laneutil"
+-- local laneutil = require "laneutil"
 
 --Begin Generated
 local generatedData = {
@@ -44,39 +44,41 @@ local generatedData = {
 function data()
     return {
         boundingInfo = {
-            --		bbMax = { 0.82412099838257, 0.15319600701332, 2.9688000679016, },
-            --		bbMin = { -0.66414201259613, -0.15319900214672, 0.32851299643517, },
-            bbMax = {0.1, 0.1, 0.1},
-            bbMin = {-0.1, -0.1, 0.0}
+            bbMax = { 1.91938996315, 1.5319600105286, 29.351999282837, },
+            bbMin = { -2.0629599094391, -1.5319900512695, 3.2851300239563, },
         },
-        --[[         collider = {
-            params = {},
-            transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-            type = 'MESH'
-        }, ]]
         collider = {
-            type = 'NONE'
+            params = { },
+            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            type = "MESH",
         },
+        -- LOLLO NOTE this makes for collisions with roads AND ability to select the object
+        boundingInfo = {
+            bbMax = { 1.91938996315, 1.5319600105286, 29.351999282837, },
+            bbMin = { 0, 0, 0, },
+        },
+        -- boundingInfo = {
+        --     bbMax = {0.1, 0.1, 0.1},
+        --     bbMin = {-0.1, -0.1, 0.0}
+        -- },
+        -- collider = {
+        --     type = 'NONE'
+        -- },
         lods = {
             {
                 node = {
                     children = {
                         {
-                            materials = {'asset/icon/asset_icon_mark.mtl'},
-                            mesh = 'asset/icon/lod_0_icon_exclamation_mark.msh',
-                            transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+                            materials = { "asset/icon/asset_icon_mark.mtl", },
+                            mesh = "asset/icon/lod_0_icon_exclamation_mark.msh",
+                            transf = { 10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 1, },
                         },
-                        {
-                            materials = {'asset/icon/asset_icon_mark.mtl'},
-                            mesh = 'asset/icon/lod_0_icon_question_mark.msh',
-                            transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
-                        }
                     },
-                    transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
+                    transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
                 },
                 static = false,
                 visibleFrom = 0,
-                visibleTo = 1000
+                visibleTo = 8000
             }
         },
         metadata = {

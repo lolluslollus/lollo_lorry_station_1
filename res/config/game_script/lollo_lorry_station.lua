@@ -118,39 +118,49 @@ function data()
                     function()
                         -- with this event, param is the selected item id
                         local entity = game.interface.getEntity(param)
+                        print('LOLLO selected entity = ')
+                        luadump(true)(entity)
 
-                        if type(entity) ~= 'table' or entity.type ~= 'STATION_GROUP' or type(entity.position) ~= 'table' then return end
-                        -- print('LOLLO selected entity = ')
-                        -- luadump(true)(entity)
-
+                        if type(entity) ~= 'table' or type(entity.position) ~= 'table' then return end
+                        
                         -- now I know the user has selected a station group, but we need to know more
                         local constructionId = false
                         local constructionParams = {}
                         local constructionPosition = {}
                         local constructionTransf = {}
-                        local nearbyLorryStationConstructions = game.interface.getEntities(
-                            {pos = entity.position, radius = 999},
-                            {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
-                        )
-                        -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
-                        -- the game distinguishes constructions, stations and station groups.
-                        -- Constructions and stations in a station group are not selected, only the station group itself, 
-                        -- which does not contain a lot of data.
-                        -- This is why we need this loop.
-                        for _, staId in ipairs(entity.stations) do
-                            for _, con in pairs(nearbyLorryStationConstructions) do
-                                if stringUtils.arrayHasValue(con.stations, staId) then
-                                    if not constructionId then
-                                        -- debugger()
-                                        constructionId = con.id
-                                        constructionParams = con.params
-                                        constructionPosition = con.position
-                                        constructionTransf = con.transf
-                                    else
-                                        break
+                        if entity.type == 'STATION_GROUP' then
+                            local nearbyLorryStationConstructions = game.interface.getEntities(
+                                {pos = entity.position, radius = 999},
+                                {type = "CONSTRUCTION", includeData = true, fileName = _constants.constructionFileName}
+                            )
+                            -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
+                            -- the game distinguishes constructions, stations and station groups.
+                            -- Constructions and stations in a station group are not selected, only the station group itself, 
+                            -- which does not contain a lot of data.
+                            -- This is why we need this loop.
+                            for _, staId in ipairs(entity.stations) do
+                                for _, con in pairs(nearbyLorryStationConstructions) do
+                                    if stringUtils.arrayHasValue(con.stations, staId) then
+                                        if not constructionId then
+                                            -- debugger()
+                                            constructionId = con.id
+                                            constructionParams = con.params
+                                            constructionPosition = con.position
+                                            constructionTransf = con.transf
+                                        else
+                                            break
+                                        end
                                     end
                                 end
                             end
+                        elseif entity.type == 'CONSTRUCTION' and entity.fileName == _constants.constructionFileName then
+                            local con = entity
+                            constructionId = con.id
+                            constructionParams = con.params
+                            constructionPosition = con.position
+                            constructionTransf = con.transf
+                        else
+                            return
                         end
 
                         -- debugger()
