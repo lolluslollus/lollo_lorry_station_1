@@ -24,10 +24,12 @@ local _constants = arrayUtils.addProps(
 		-- the 3rd and 4th params may have to do with Y and the 1st and 2nd with X,
 		-- probably 1 = x before, 2 = x after, 3 = y before, 4 = y after
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
-		lorryBaySpacing = {0.1, 0.5, 0.1, 0.5},
+		lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
+		-- lorryBaySpacing = {0, 0, 0, 0},
 		idBases = {
-			areaSlotIdBase = 120000,
-			baySlotIdBase = 110000,
+			areaSlotIdBase = 130000,
+			rightBaySlotIdBase = 120000,
+			leftBaySlotIdBase = 110000,
 			centreSlotIdBase = 100000,
 		},
 		idFactorY = 100,
@@ -217,7 +219,9 @@ function data()
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
-					if moduleBaseId == _constants.idBases.areaSlotIdBase or moduleBaseId == _constants.idBases.baySlotIdBase then
+					if moduleBaseId == _constants.idBases.areaSlotIdBase 
+					or moduleBaseId == _constants.idBases.rightBaySlotIdBase
+					or moduleBaseId == _constants.idBases.leftBaySlotIdBase then
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY + 1)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
@@ -246,7 +250,11 @@ function data()
 			-- no access to api or interface, I must work with the params.
 			if type(params.streetNodeGroups) == 'table' and type(params.transf) == 'table' and type(params.inverseTransf) == 'table' then
 				for _, nodeGroup in pairs(params.streetNodeGroups) do
+					print('LOLLO params.inverseTransf = ')
+					luadump(true)(params.inverseTransf)
 					local absolutePosition = nodeGroup[2][1]
+					print('LOLLO absolutePosition = ')
+					luadump(true)(absolutePosition)
 					-- LOLLO TODO make relative coordinates, relative to the transf. This looks good but it is probably too stupid
 					local relativePosition = {
 						absolutePosition[1] - params.transf[13],
@@ -254,24 +262,61 @@ function data()
 					}
 					print('LOLLO relativePosition 1 = ')
 					luadump(true)(relativePosition)
+					-- this should be better
 					local relativePosition = transfUtils.getVec123Transformed(absolutePosition, params.inverseTransf)
 					print('LOLLO relativePosition 2 = ')
 					luadump(true)(relativePosition)
 
 					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
+					-- table.insert(
+					-- 	result.slots,
+					-- 	{
+					-- 		id = result.MangleId(
+					-- 			math.floor(relativePosition[1] / _modConstants.xTransfFactor),
+					-- 			math.floor(relativePosition[2] / _modConstants.yTransfFactor),
+					-- 			-- math.ceil(relativePosition[1] / _modConstants.xTransfFactor),
+					-- 			-- math.ceil(relativePosition[2] / _modConstants.yTransfFactor),
+					-- 			_constants.idBases.leftBaySlotIdBase
+					-- 		),
+					-- 		transf = transfUtils.mul(
+					-- 			transf.rotZTransl(
+					-- 				math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
+					-- 				vec3.new(absolutePosition[1], absolutePosition[2], absolutePosition[3])
+					-- 				-- vec3.new(relativePosition[1], relativePosition[2], 0)
+					-- 			),
+					-- 			params.inverseTransf
+					-- 		),
+					-- 		type = _modConstants.lorryBayModuleType,
+					-- 		spacing = _constants.lorryBaySpacing,
+					-- 		skipCollision = true, -- useless
+					-- 		-- height
+					-- 		-- shape
+					-- 	}
+					-- )
+					-- LOLLO TODO put left and right into separate slots
+					-- or only do one, and only use 1-way roads (easier)
+					print('LOLLO absolutePosition[3] =', absolutePosition[3])
 					table.insert(
 						result.slots,
 						{
+							-- LOLLO TODO try changing the id to avoid red dots in the grid
+							-- basically, try getting the dot out of the road
+							-- the rest seems fine: add some shift in the lorry bay module, 
+							-- build a lorry bay,
+							-- remove the shift, build a cargo area: it is all nice and level
+							-- except for that red dot, that is.
 							id = result.MangleId(
 								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
-								_constants.idBases.baySlotIdBase
+								_constants.idBases.rightBaySlotIdBase
 							),
 							transf = transfUtils.mul(
 								transf.rotZTransl(
-									math.atan2(tangents[2], tangents[1]),
-									vec3.new(absolutePosition[1], absolutePosition[2], 0)
+									- math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
+									vec3.new(absolutePosition[1], absolutePosition[2], absolutePosition[3])
+									-- vec3.new(absolutePosition[1], absolutePosition[2], 0)
+									-- vec3.new(absolutePosition[1], absolutePosition[2], 11)
 									-- vec3.new(relativePosition[1], relativePosition[2], 0)
 								),
 								params.inverseTransf
@@ -347,7 +392,7 @@ luadump(true)(adjacentCargoAreas)
 				-- test: add road connections to lorry bays
 				-- LOLLO TODO add road connections to lorry bays, with the appropriate transf,
 				-- basing on params.streetEdges and result.models with lorry bay tag
-				_addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
+				-- _addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				if #station.terminals > 0 then table.insert(result.stations, station) end

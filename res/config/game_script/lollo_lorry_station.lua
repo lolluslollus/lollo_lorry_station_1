@@ -44,8 +44,8 @@ function data()
                     local nearbyStreetEdges = edgeUtils.getNearbyStreetEdges(
                         args.transf
                     )
-                    print('LOLLO nearbyStreetEdges =')
-                    luadump(true)(nearbyStreetEdges)
+                    -- print('LOLLO nearbyStreetEdges =')
+                    -- luadump(true)(nearbyStreetEdges)
                     -- newParams.streetEdgesWithAbsoluteCoordinates = {}
                     -- newParams.streetEdgesWithRelativeCoordinates = {}
                     newParams.streetNodeGroups = {}
@@ -60,8 +60,6 @@ function data()
                                 edge['node1tangent']
                             }
                         )
-                        -- newParams.streetEdgesWithAbsoluteCoordinates[#newParams.streetEdgesWithAbsoluteCoordinates + 1] = abs
-                        -- newParams.streetEdgesWithRelativeCoordinates[#newParams.streetEdgesWithRelativeCoordinates + 1] = rel
                         newParams.streetNodeGroups[#newParams.streetNodeGroups+1] = {
                             {
                                 edge['node0pos'],
@@ -76,8 +74,6 @@ function data()
                     end
                     print('LOLLO newParams.streetNodeGroups = ')
                     luadump(true)(newParams.streetNodeGroups)
-                    -- print('LOLLO newParams.streetEdgesWithRelativeCoordinates = ')
-                    -- luadump(true)(newParams.streetEdgesWithRelativeCoordinates)
                     newParams.position = _getCloneWoutSeed(args.position)
                     newParams.transf = _getCloneWoutSeed(args.transf)
                     newParams.inverseTransf = transfUtils.getInverseTransf(args.transf)

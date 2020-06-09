@@ -55,7 +55,7 @@ function data()
         -- LOLLO NOTE this makes for collisions with roads AND ability to select the object
         boundingInfo = {
             bbMax = { 1.91938996315, 1.5319600105286, 29.351999282837, },
-            bbMin = { 0, 0, 0, },
+            bbMin = { -2.0629599094391, -1.5319900512695, 0, },
         },
         -- boundingInfo = {
         --     bbMax = {0.1, 0.1, 0.1},
