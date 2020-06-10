@@ -1,17 +1,10 @@
-local laneutil = require "laneutil"
+local nodeGroupHelper = require('lollo_lorry_station/nodeGroupHelper')
 
 function data()
     return {
-        boundingInfo = {
-            bbMax = { 0, 0, 0, },
-            bbMin = { 0, 0, 0, },
-        },
-        -- collider = {
-        --     params = {
-        --         halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
-        --     },
-        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-        --     type = "BOX",
+        -- boundingInfo = {
+        --     bbMax = { 0, 0, 0, },
+        --     bbMin = { 0, 0, 0, },
         -- },
         collider = {
             params = {
@@ -25,11 +18,11 @@ function data()
                 node = {
                     -- LOLLO TODO remove when done testing
                     children = {
-                        {
-                            materials = {'asset/icon/asset_icon_mark.mtl'},
-                            mesh = 'asset/icon/lod_0_icon_exclamation_mark.msh',
-                            transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
-                        },
+                        -- {
+                        --     materials = {'asset/icon/asset_icon_mark.mtl'},
+                        --     mesh = 'asset/icon/lod_0_icon_exclamation_mark.msh',
+                        --     transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
+                        -- },
                         {
                             materials = {'asset/icon/asset_icon_mark.mtl'},
                             mesh = 'asset/icon/lod_0_icon_question_mark.msh',
@@ -49,19 +42,12 @@ function data()
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
             transportNetworkProvider = {
                 laneLists = {
-                    laneutil.createLanes(
-                        {
-                            curves = {
-                                ['lane'] = {
-                                    {{-1, -1, 0.00000}, {0, -1, 0.00000}, {0, 0, 0.00000}}
-                                },
-                            }
-                        },
-                        {'BUS', 'CAR', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK'},
-                        100,
-                        3,
-                        false --linkable
-                    ),
+                    {
+                        linkable = false,
+                        nodes = nodeGroupHelper.getMyNodeGroup(),
+                        speedLimit = 100,
+                        transportModes = {'TRUCK'},
+                    },
                 },
                 runways = {},
                 terminals = {}

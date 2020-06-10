@@ -38,11 +38,29 @@ return {
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
 
+		-- tag looks like __module_121309, it has nothing to do with the slot tag
+		-- params are those of the modular construction
+		-- result is that of the parent modular construction, and they contain the slots with their tags
 		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
-		print('LOLLO transform =')
+		print('LOLLO module received transform =')
 		luadump(true)(transform)
+		print('LOLLO module received tag =')
+		luadump(true)(tag)
+		print('LOLLO module received slotId =')
+		luadump(true)(slotId)
+		print('LOLLO module received result =')
+		luadump(true)(result)
 
-		addModelFn(_constants.lorryBayModelFileName, transf.transl(vec3.new(-_constants.lorryBayXShift, 0.0, 0.0)), _constants.lorryBayTag)
+		local modelTag = _constants.lorryBayTag
+		if type(result) == 'table' and type (result.slots) == 'table' then
+			for _, slotData in pairs(result.slots) do
+				if slotData.id == slotId and type(slotData.tag) == 'table' then
+					modelTag = slotData.tag
+					break
+				end
+			end
+		end
+		addModelFn(_constants.lorryBayModelFileName, transf.transl(vec3.new(-_constants.lorryBayXShift, 0.0, 0.0)), modelTag)
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then
 		-- 	addModelFn("station/road/streetstation/" .. result.erastr .. "cargo_pltfrm_r_top.mdl", transf.rotZTransl(right and 0 or math.pi, vec3.new(.0, .0, .0)))

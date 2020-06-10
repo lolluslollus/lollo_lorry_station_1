@@ -105,6 +105,12 @@ for i = 1, #mangledIds do
 	local x, y, baseId = DemangleId(mangledIds[i])
 	demangledIds[#demangledIds + 1] = {x, y, baseId}
 end
+game = {
+	interface = {}
+}
+game.interface.getHeight = function(fff)
+	return 0
+end
 
 local nested1 = {}
 slotUtils.setValueInNestedTable(nested1, 'A', 2, 2)
@@ -127,5 +133,19 @@ local edge1 = {
 	{-1, 1, 0}
 }
 local edgeMiddle = edgeUtils.getEdgeBetween(edge0, edge1)
+
+print('source 0 = ', debug.getinfo(0).source)
+print('source 1 = ', debug.getinfo(1).source)
+local currentFileName = debug.getinfo(1).source
+local currentFileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
+local id = currentFileNameEnd:sub(1, 2)
+
+local getIdFromFileName = function()
+    local currentFileName = debug.getinfo(2).source
+    local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
+    return fileNameEnd:sub(1, 2)
+end
+
+local id = getIdFromFileName()
 
 local par = { lollo = true }

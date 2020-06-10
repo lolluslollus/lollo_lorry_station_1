@@ -2,7 +2,7 @@ local _constants = require('lollo_lorry_station/constants')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local matrixUtils = require('lollo_lorry_station/matrix')
 local transfUtils = require('lollo_lorry_station/transfUtils')
-local debugger = require('debugger')
+-- local debugger = require('debugger')
 local luadump = require('lollo_lorry_station/luadump')
 
 if math.atan2 == nil then
