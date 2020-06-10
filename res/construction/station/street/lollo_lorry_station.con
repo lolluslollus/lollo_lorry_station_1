@@ -26,21 +26,9 @@ local _constants = arrayUtils.addProps(
 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
 		lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
 		-- lorryBaySpacing = {0, 0, 0, 0},
-		idBases = {
-			areaSlotIdBase = 130000,
-			rightBaySlotIdBase = 120000,
-			leftBaySlotIdBase = 110000,
-			centreSlotIdBase = 100000,
-		},
-		idFactorY = 100,
 	},
 	_modConstants
 )
-local _idBasesSortedDesc = {}
-for k, v in pairs(_constants.idBases) do
-    table.insert(_idBasesSortedDesc, {id = v, name = k})
-end
-arrayUtils.sort(_idBasesSortedDesc, 'id', false)
 
 function data()
 	return {
@@ -113,13 +101,13 @@ function data()
 			end
 
 			result.MangleId = function(x, y, baseId)
-				return baseId + _constants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
+				return baseId + _modConstants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
 			end
 
 			result.DemangleId = function(slotId)
 				local function _getIdBase(slotId)
 					local baseId = 0
-					for _, v in pairs(_idBasesSortedDesc) do
+					for _, v in pairs(_modConstants.idBasesSortedDesc) do
 						if slotId >= v.id then
 							baseId = v.id
 							break
@@ -132,8 +120,8 @@ function data()
 				local baseId = _getIdBase(slotId)
 				if not baseId then return false, false, false end
 
-				local y = math.floor((slotId - baseId) / _constants.idFactorY)
-				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+				local y = math.floor((slotId - baseId) / _modConstants.idFactorY)
+				local x = math.floor((slotId - baseId - y * _modConstants.idFactorY))
 
 				return x + _modConstants.xMin, y + _modConstants.yMin, baseId
 			end
@@ -219,9 +207,9 @@ function data()
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
-					if moduleBaseId == _constants.idBases.areaSlotIdBase 
-					or moduleBaseId == _constants.idBases.rightBaySlotIdBase
-					or moduleBaseId == _constants.idBases.leftBaySlotIdBase then
+					if moduleBaseId == _modConstants.idBases.areaSlotIdBase 
+					or moduleBaseId == _modConstants.idBases.rightBaySlotIdBase
+					or moduleBaseId == _modConstants.idBases.leftBaySlotIdBase then
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY + 1)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
@@ -236,7 +224,7 @@ function data()
 			for _, v in pairs(adjacentXYs) do
 				_setSlotOccupied(v.x, v.y)
 				table.insert(result.slots, {
-					id = result.MangleId(v.x, v.y, _constants.idBases.areaSlotIdBase),
+					id = result.MangleId(v.x, v.y, _modConstants.idBases.areaSlotIdBase),
 					transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _modConstants.cargoAreaModuleType,
@@ -269,55 +257,42 @@ function data()
 
 					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
-					-- table.insert(
-					-- 	result.slots,
-					-- 	{
-					-- 		id = result.MangleId(
-					-- 			math.floor(relativePosition[1] / _modConstants.xTransfFactor),
-					-- 			math.floor(relativePosition[2] / _modConstants.yTransfFactor),
-					-- 			-- math.ceil(relativePosition[1] / _modConstants.xTransfFactor),
-					-- 			-- math.ceil(relativePosition[2] / _modConstants.yTransfFactor),
-					-- 			_constants.idBases.leftBaySlotIdBase
-					-- 		),
-					-- 		transf = transfUtils.mul(
-					-- 			transf.rotZTransl(
-					-- 				math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
-					-- 				vec3.new(absolutePosition[1], absolutePosition[2], absolutePosition[3])
-					-- 				-- vec3.new(relativePosition[1], relativePosition[2], 0)
-					-- 			),
-					-- 			params.inverseTransf
-					-- 		),
-					-- 		type = _modConstants.lorryBayModuleType,
-					-- 		spacing = _constants.lorryBaySpacing,
-					-- 		skipCollision = true, -- useless
-					-- 		-- height
-					-- 		-- shape
-					-- 	}
-					-- )
-					-- LOLLO TODO put left and right into separate slots
-					-- or only do one, and only use 1-way roads (easier)
-					print('LOLLO absolutePosition[3] =', absolutePosition[3])
 					table.insert(
 						result.slots,
 						{
-							-- LOLLO TODO try changing the id to avoid red dots in the grid
-							-- basically, try getting the dot out of the road
-							-- the rest seems fine: add some shift in the lorry bay module, 
-							-- build a lorry bay,
-							-- remove the shift, build a cargo area: it is all nice and level
-							-- except for that red dot, that is.
 							id = result.MangleId(
 								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
-								_constants.idBases.rightBaySlotIdBase
+								_modConstants.idBases.leftBaySlotIdBase
+							),
+							transf = transfUtils.mul(
+								transf.rotZTransl(
+									math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
+									-- the shift is to avoid the dot in the grid getting red, the module makes up for it.
+									vec3.new(_modConstants.lorryBayXShift + absolutePosition[1], absolutePosition[2], absolutePosition[3])
+								),
+								params.inverseTransf
+							),
+							type = _modConstants.lorryBayModuleType,
+							spacing = _constants.lorryBaySpacing,
+							skipCollision = true, -- useless
+							-- height
+							-- shape
+						}
+					)
+					table.insert(
+						result.slots,
+						{
+							id = result.MangleId(
+								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
+								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
+								_modConstants.idBases.rightBaySlotIdBase
 							),
 							transf = transfUtils.mul(
 								transf.rotZTransl(
 									- math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
-									vec3.new(absolutePosition[1], absolutePosition[2], absolutePosition[3])
-									-- vec3.new(absolutePosition[1], absolutePosition[2], 0)
-									-- vec3.new(absolutePosition[1], absolutePosition[2], 11)
-									-- vec3.new(relativePosition[1], relativePosition[2], 0)
+									-- the shift is to avoid the dot in the grid getting red, the module makes up for it.
+									vec3.new(-_modConstants.lorryBayXShift + absolutePosition[1], absolutePosition[2], absolutePosition[3])
 								),
 								params.inverseTransf
 							),
