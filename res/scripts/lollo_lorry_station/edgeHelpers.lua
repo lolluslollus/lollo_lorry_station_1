@@ -52,6 +52,7 @@ local helper = {}
 -- end
 
 helper.getNearbyStreetEdges = function(transf)
+    -- LOLLO TODO only return edges that are long enough
     -- if you want to use this, you may have to account for the transformation
     if type(transf) ~= 'table' then return {} end
 
