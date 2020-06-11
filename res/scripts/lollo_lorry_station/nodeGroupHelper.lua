@@ -36,12 +36,69 @@ end
 
 local nodeGroupHelper = {}
 
-nodeGroupHelper.getMyNodeGroup = function()
+nodeGroupHelper.getModelData = function()
     local currentFileName = debug.getinfo(2).source
-    print('LOLLO nodeGroupHelper.getMyNodeGroup currentFileName = ', currentFileName)
+    print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
     local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
     local id = fileNameEnd:sub(1, 2)
-    return _nodeGroups[id] or {}
+
+    return {
+        -- boundingInfo = {
+        --     bbMax = { 0, 0, 0, },
+        --     bbMin = { 0, 0, 0, },
+        -- },
+        collider = {
+            params = {
+                halfExtents = { 0.0, 0.0, 0.0, },
+            },
+            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            type = "BOX",
+        },
+        lods = {
+            {
+                node = {
+                    -- LOLLO TODO remove when done testing
+                    children = {
+                        -- {
+                        --     materials = {'asset/icon/asset_icon_mark.mtl'},
+                        --     mesh = 'asset/icon/lod_0_icon_exclamation_mark.msh',
+                        --     transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
+                        -- },
+                        {
+                            materials = {'asset/icon/asset_icon_mark.mtl'},
+                            mesh = 'asset/icon/lod_0_icon_question_mark.msh',
+                            transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
+                        }
+                    },
+                    name = "RootNode",
+                    transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                },
+                static = false,
+                visibleFrom = 0,
+                visibleTo = 1000,
+            },
+        },
+        metadata = {
+            -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
+            -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
+            transportNetworkProvider = {
+                laneLists = {
+                    {
+                        linkable = false,
+                        nodes = _nodeGroups[id] or {},
+                        speedLimit = 100,
+                        transportModes = {'TRUCK'},
+                    },
+                },
+                runways = {},
+                terminals = {}
+            },
+        },
+        -- skipCollision = true,
+        -- skipCollisionCheck = true,
+        version = 1,
+    }
+
 end
 
 nodeGroupHelper.getNodeGroupFileName = function(integerId)
