@@ -176,7 +176,7 @@ function data()
 			} ]]
 
 			-- add the lorry bay at 0, 0
-			-- _addModel(_modConstants.lorryBayModelFileName, _idTransf, _modConstants.lorryBayTag)
+			-- _addModel(_modConstants.lorryBayModelFileName, _idTransf, { lorryBay = true })
 			-- slotUtils.setValueInNestedTable(
 			-- 	result.coord2terminalInfo,
 			-- 	{
@@ -266,7 +266,7 @@ function data()
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
 								_modConstants.idBases.leftBaySlotIdBase
 							),
-							tag = {
+							tag = { -- this tag goes into the slot and, if the slot is used, into its model
 								lorryBay = true,
 								node0 = nodeGroup[1],
 								node1 = nodeGroup[3],
@@ -295,7 +295,7 @@ function data()
 								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
 								_modConstants.idBases.rightBaySlotIdBase
 							),
-							tag = {
+							tag = { -- this tag goes into the slot and, if the slot is used, into its model
 								lorryBay = true,
 								node0 = nodeGroup[1],
 								node1 = nodeGroup[3],

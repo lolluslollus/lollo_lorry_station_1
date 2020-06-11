@@ -41,6 +41,7 @@ nodeGroupHelper.getModelData = function()
     print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
     local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
     local id = fileNameEnd:sub(1, 2)
+    print('LOLLO nodeGroupHelper.getModelData id = ', id)
 
     return {
         -- boundingInfo = {

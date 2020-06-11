@@ -64,7 +64,7 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, v in pairs(models) do
-        if v.tag == _modConstants.cargoAreaTag then
+        if type(v.tag) == 'table' and v.tag.cargoArea then
             local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
             local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
@@ -85,7 +85,7 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, v in pairs(models) do
-        if v.tag == _modConstants.lorryBayTag then
+        if type(v.tag) == 'table' and v.tag.lorryBay then
             -- local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
             -- local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
             -- if lorryBays[x] == nil then lorryBays[x] = {} end
