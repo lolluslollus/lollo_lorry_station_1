@@ -96,6 +96,13 @@ function data()
             -- local reloaded = require("lollo_lorry_station/reloaded")
             -- reloaded.tryGlobalVariables()
 
+            -- something to try:
+            -- local id = game.interface.buildConstruction(
+            --     "constructionName.con",
+            --     params, -- params you use in your construction
+            --     transf -- transformation for your construction
+            -- )
+
         end,
         guiHandleEvent = function(id, name, param)
             -- LOLLO NOTE when U try to add a streetside bus or lorry stop, the streetBuilder fires this event.

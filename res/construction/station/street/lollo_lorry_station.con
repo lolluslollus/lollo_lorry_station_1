@@ -130,11 +130,12 @@ function data()
 			-- add the streets leading into the station
 --[[ 			result.edgeLists = {
 				{
-					type = 'STREET',
+					type = 'STREET', -- 'TRACK'
 					alignTerrain = false,
 					params = {
 						busLaneType = 'YES', -- does not pull, neither do hasBusLane and busLane, with true or false
 						busLane = 'YES',
+						-- catenary = ???
 						hasBusType = 'YES',
 						hasBus = true,
 						skipCollision = true,
@@ -148,9 +149,12 @@ function data()
 						{ { -10, -1, 0 }, { 0, 1, 0 } },
 						-- { { -10, 0, 0 }, { 0, 1, 0 } },
 					},
+					-- edgeType = 'TUNNEL', 'BRIDGE',
+					-- edgeTypeName = tunnel-or-bridge-name.lua
 					freeNodes = {0},
 					snapNodes = {0},
 					skipCollision = true,
+					-- slot = ???
 					--					tag2nodes = {},
 				},
 				{
