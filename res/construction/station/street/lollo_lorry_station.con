@@ -6,7 +6,7 @@ local colliderutil = require "colliderutil"
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local _modConstants = require('lollo_lorry_station/constants')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
-local nodeGroupHelper = require('lollo_lorry_station/nodeGroupHelper')
+local roadConnectionHelpers = require('lollo_lorry_station/roadConnectionHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transfUtils = require('lollo_lorry_station/transfUtils')
 local debugger = require('debugger')
@@ -71,10 +71,13 @@ function data()
 				edgeLists = {},
 				groundFaces = {},
 				models = {},
+				modelTagsAndNodes = {},
 				slots = {},
 				stations = {},
 				terminalGroups = {},
-				terrainAlignmentLists = {}
+				terrainAlignmentLists = {},
+				DemangleId = nil,
+				MangleId = nil,
 			}
 			print('LOLLO starting updateFn, params = ')
 			luadump(true)(params)
@@ -262,20 +265,15 @@ function data()
 
 					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
+					local slotId = result.MangleId(
+						math.floor(relativePosition[1] / _modConstants.xTransfFactor),
+						math.floor(relativePosition[2] / _modConstants.yTransfFactor),
+						_modConstants.idBases.leftBaySlotIdBase
+					)
 					table.insert(
 						result.slots,
 						{
-							id = result.MangleId(
-								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
-								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
-								_modConstants.idBases.leftBaySlotIdBase
-							),
-							tag = { -- this tag goes into the slot and, if the slot is used, into its model
-								lorryBay = true,
-								node0 = nodeGroup[1],
-								node1 = nodeGroup[3],
-								nodeMid = nodeGroup[2]
-							},
+							id = slotId,
 							transf = transfUtils.mul(
 								transf.rotZTransl(
 									math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
@@ -291,20 +289,21 @@ function data()
 							-- shape
 						}
 					)
+					result.modelTagsAndNodes[tostring(slotId)] = {
+						lorryBay = true,
+						node0 = nodeGroup[1],
+						node1 = nodeGroup[3],
+						nodeMid = nodeGroup[2]
+					}
+					local slotId = result.MangleId(
+						math.floor(relativePosition[1] / _modConstants.xTransfFactor),
+						math.floor(relativePosition[2] / _modConstants.yTransfFactor),
+						_modConstants.idBases.rightBaySlotIdBase
+					)
 					table.insert(
 						result.slots,
 						{
-							id = result.MangleId(
-								math.floor(relativePosition[1] / _modConstants.xTransfFactor),
-								math.floor(relativePosition[2] / _modConstants.yTransfFactor),
-								_modConstants.idBases.rightBaySlotIdBase
-							),
-							tag = { -- this tag goes into the slot and, if the slot is used, into its model
-								lorryBay = true,
-								node0 = nodeGroup[1],
-								node1 = nodeGroup[3],
-								nodeMid = nodeGroup[2]
-							},
+							id = slotId,
 							transf = transfUtils.mul(
 								transf.rotZTransl(
 									- math.pi / 2.0 + math.atan2(tangents[2], tangents[1]),
@@ -320,6 +319,12 @@ function data()
 							-- shape
 						}
 					)
+					result.modelTagsAndNodes[tostring(slotId)] = {
+						lorryBay = true,
+						node0 = nodeGroup[1],
+						node1 = nodeGroup[3],
+						nodeMid = nodeGroup[2]
+					}
 				end
 			end
 
@@ -386,14 +391,21 @@ luadump(true)(adjacentCargoAreas)
 				-- basing on params.streetEdges and result.models with lorry bay tag
 				-- _addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
 				local nodeGroupCounter = 1
+				-- debugger()
 				for _, model in pairs(result.models) do
-					if type(model) == 'table' and type(model.tag) == 'table' and model.tag.lorryBay then
-						nodeGroupHelper.setNodeGroup(nodeGroupCounter, {model.tag.node0, model.tag.nodeMid})
-						_addModel(nodeGroupHelper.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
-						nodeGroupCounter = nodeGroupCounter + 1
-						nodeGroupHelper.setNodeGroup(nodeGroupCounter, {model.tag.nodeMid, model.tag.node1})
-						_addModel(nodeGroupHelper.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
-						nodeGroupCounter = nodeGroupCounter + 1
+					if type(model) == 'table' then
+						local slotId = slotUtils.getLorryBaySlotId(model.tag)
+						-- print('LOLLO slotId = ', slotId)
+						-- print('LOLLO result.modelTagsAndNodes = ')
+						-- luadump(true)(result.modelTagsAndNodes)
+						if slotId then
+							roadConnectionHelpers.setNodeGroup(nodeGroupCounter, {result.modelTagsAndNodes[slotId].node0, result.modelTagsAndNodes[slotId].nodeMid})
+							_addModel(roadConnectionHelpers.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
+							nodeGroupCounter = nodeGroupCounter + 1
+							roadConnectionHelpers.setNodeGroup(nodeGroupCounter, {result.modelTagsAndNodes[slotId].nodeMid, result.modelTagsAndNodes[slotId].node1})
+							_addModel(roadConnectionHelpers.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
+							nodeGroupCounter = nodeGroupCounter + 1
+						end
 					end
 				end
 
@@ -407,6 +419,7 @@ luadump(true)(adjacentCargoAreas)
 				luadump(true)(result.terminalGroups)
 			end
 
+			-- debugger()
 			local isNoLorryBays = true
 			if type(params.modules) == 'table' then
 				for _, modu in pairs(params.modules) do
@@ -417,7 +430,7 @@ luadump(true)(adjacentCargoAreas)
 					end
 				end
 			end
-			if isNoLorryBays and type(params.models) == 'table' then
+			if isNoLorryBays and type(result.models) == 'table' then
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 				print('LOLLO #lorryBayModelIndexesBase0 =', #lorryBayModelIndexesBase0)
 				if #lorryBayModelIndexesBase0 > 0 then

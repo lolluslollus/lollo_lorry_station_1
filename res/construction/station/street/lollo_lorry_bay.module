@@ -3,6 +3,7 @@ local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local slotUtils = require('lollo_lorry_station/slotHelpers')
 local _constants = require('lollo_lorry_station/constants')
 local luadump = require('lollo_lorry_station/luadump')
 
@@ -53,15 +54,15 @@ return {
 		print('LOLLO module received callback =')
 		luadump(true)(callback)
 
-		local modelTag = { lorryBay = true }
-		if type(result) == 'table' and type (result.slots) == 'table' then
-			for _, slotData in pairs(result.slots) do
-				if slotData.id == slotId and type(slotData.tag) == 'table' then
-					modelTag = slotData.tag
-					break
-				end
-			end
-		end
+		local modelTag = slotUtils.getLorryBayModelTag(slotId)
+		-- if type(result) == 'table' and type (result.slots) == 'table' then
+		-- 	for _, slotData in pairs(result.slots) do
+		-- 		if slotData.id == slotId and type(slotData.tag) == 'table' then
+		-- 			modelTag = slotData.tag
+		-- 			break
+		-- 		end
+		-- 	end
+		-- end
 		addModelFn(_constants.lorryBayModelFileName, transf.transl(vec3.new(-_constants.lorryBayXShift, 0.0, 0.0)), modelTag)
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then

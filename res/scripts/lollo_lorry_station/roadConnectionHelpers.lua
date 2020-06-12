@@ -23,7 +23,12 @@ local sampleNodes = {
     },
 }
 
-local _nodeGroups = {}
+if game.__lolloLorryStationData__ == nil then
+    game.__lolloLorryStationData__ = {} -- LOLLO TODO add the construction id, we also need different models for different constructions
+end
+if game.__lolloLorryStationData__.nodeGroups == nil then
+    game.__lolloLorryStationData__.nodeGroups = {}
+end
 
 local _getStringFromNumber = function(num)
     local str = tostring(num)
@@ -36,42 +41,47 @@ local _getStringFromNumber = function(num)
     end
 end
 
-local nodeGroupHelper = {}
+local helper = {}
 
-nodeGroupHelper.getModelData = function()
-    -- local currentFileName = debug.getinfo(1).source
-    -- print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
-    local debugInfo = debug.getinfo(2, 'S')
-    print('LOLLO debugInfo = ')
-    luadump(true)(debugInfo)
-    if debugInfo == nil then
-        return {
-            lods = {
-                {
-                    node = {
-                        children = {},
-                        name = "RootNode",
-                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-                    },
-                    static = false,
-                    visibleFrom = 0,
-                    visibleTo = 0,
-                }
-            },
-            metadata = {},
-            version = 1
-        }
-    end
-    local currentFileName = debugInfo.source
-    print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
-    -- local currentFileName = debug.getinfo(3).source
-    -- print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
+helper.getModelData = function(id)
+    -- local debugInfo = debug.getinfo(1)
+    -- print('LOLLO debugInfo(1) = ')
+    -- luadump(true)(debugInfo)
+    -- local debugInfo = debug.getinfo(2)
+    -- print('LOLLO debugInfo(2) = ')
+    -- luadump(true)(debugInfo)
+    -- if debugInfo == nil then
+    --     return {
+    --         lods = {
+    --             {
+    --                 node = {
+    --                     children = {
+    --                         {
+    --                             materials = { "asset/icon/asset_icon_mark.mtl", },
+    --                             mesh = "asset/icon/lod_0_icon_question_mark.msh",
+    --                             transf = { 10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 10, 0, 0, 0, 0, 1, },
+    --                         },
+    --                     },
+    --                     name = "RootNode",
+    --                     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+    --                 },
+    --                 static = false,
+    --                 visibleFrom = 0,
+    --                 visibleTo = 9000,
+    --             }
+    --         },
+    --         metadata = {},
+    --         version = 1
+    --     }
+    -- end
+    -- local currentFileName = debugInfo.source
+    -- print('LOLLO roadConnectionHelpers.getModelData currentFileName = ', currentFileName)
 
-    local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
-    local id = fileNameEnd:sub(1, 2)
-    print('LOLLO nodeGroupHelper.getModelData id = ', id)
+    -- local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
+    -- local id = fileNameEnd:sub(1, 2)
+    print('LOLLO roadConnectionHelpers.getModelData id = ', id)
 
-    return {
+    local result = {
         -- boundingInfo = {
         --     bbMax = { 0, 0, 0, },
         --     bbMin = { 0, 0, 0, },
@@ -95,7 +105,7 @@ nodeGroupHelper.getModelData = function()
                         -- },
                         {
                             materials = {'asset/icon/asset_icon_mark.mtl'},
-                            mesh = 'asset/icon/lod_0_icon_question_mark.msh',
+                            mesh = 'asset/icon/lod_0_icon_exclamation_mark.msh',
                             transf = {5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 5, 0, 0, 0, 0, 1}
                         }
                     },
@@ -104,7 +114,7 @@ nodeGroupHelper.getModelData = function()
                 },
                 static = false,
                 visibleFrom = 0,
-                visibleTo = 1000,
+                visibleTo = 9000,
             },
         },
         metadata = {
@@ -114,7 +124,7 @@ nodeGroupHelper.getModelData = function()
                 laneLists = {
                     {
                         linkable = false,
-                        nodes = _nodeGroups[id] or {},
+                        nodes = game.__lolloLorryStationData__.nodeGroups[tostring(id)] or {},
                         speedLimit = 100,
                         transportModes = {'TRUCK'},
                     },
@@ -127,17 +137,21 @@ nodeGroupHelper.getModelData = function()
         -- skipCollisionCheck = true,
         version = 1,
     }
-
+    print('LOLLO game.__lolloLorryStationData__.nodeGroups[id] = ')
+    luadump(true)(game.__lolloLorryStationData__.nodeGroups[tostring(id)])
+    print('LOLLO game.__lolloLorryStationData__.nodeGroups = ')
+    luadump(true)(game.__lolloLorryStationData__.nodeGroups)
+    return result
 end
 
-nodeGroupHelper.getNodeGroupFileName = function(integerId)
+helper.getNodeGroupFileName = function(integerId)
     return 'lollo_models/connectors/' .. _getStringFromNumber(integerId) .. '.mdl'
 end
 
-nodeGroupHelper.setNodeGroup = function(integerId, nodes)
+helper.setNodeGroup = function(integerId, nodes)
     local stringId = _getStringFromNumber(integerId)
-    _nodeGroups[stringId] = nodes
-    _nodeGroups[stringId][3] = 3 -- lane width
+    game.__lolloLorryStationData__.nodeGroups[stringId] = nodes
+    game.__lolloLorryStationData__.nodeGroups[stringId][3] = 3 -- lane width
 end
 
-return nodeGroupHelper
+return helper

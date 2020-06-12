@@ -63,10 +63,10 @@ end
 helpers.getCargoAreaModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
-    for _, v in pairs(models) do
-        if type(v.tag) == 'table' and v.tag.cargoArea then
-            local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
-            local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
+    for _, model in pairs(models) do
+        if type(model.tag) == 'table' and helpers.getCargoAreaSlotId(model.tag) then
+            local x = tostring(model.transf[13] / _modConstants.xTransfFactor)
+            local y = tostring(model.transf[14] / _modConstants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
             -- if cargoAreas[x] == nil then cargoAreas[x] = {} end
             -- cargoAreas[x][y] = base0ModelIndex
@@ -84,23 +84,47 @@ end
 helpers.getLorryBayModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
-    for _, v in pairs(models) do
-        if type(v.tag) == 'table' and v.tag.lorryBay then
+    for _, model in pairs(models) do
+        if type(model.tag) == 'table' and helpers.getLorryBaySlotId(model.tag) then
             -- local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
             -- local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
             -- if lorryBays[x] == nil then lorryBays[x] = {} end
             -- lorryBays[x][y] = base0ModelIndex
 
             results[#results+1] = {
-                    x = v.transf[13] / _modConstants.xTransfFactor,
-                    y = v.transf[14] / _modConstants.yTransfFactor,
-                    z = v.transf[15],
+                    x = model.transf[13] / _modConstants.xTransfFactor,
+                    y = model.transf[14] / _modConstants.yTransfFactor,
+                    z = model.transf[15],
                     base0ModelIndex = base0ModelIndex
                 }
         end
         base0ModelIndex = base0ModelIndex + 1
     end
     return results
+end
+
+helpers.getCargoAreaModelTag = function(slotId)
+    return 'cargoArea_slotId_' .. slotId
+end
+
+helpers.getCargoAreaSlotId = function(tag)
+    if tag:find('cargoArea_slotId_') then
+        return tag:sub(('cargoArea_slotId_'):len() + 1) or false
+    else
+        return false
+    end
+end
+
+helpers.getLorryBayModelTag = function(slotId)
+    return 'lorryBay_slotId_' .. slotId
+end
+
+helpers.getLorryBaySlotId = function(tag)
+    if tag:find('lorryBay_slotId_') then
+        return tag:sub(('lorryBay_slotId_'):len() + 1) or false
+    else
+        return false
+    end
 end
 
 return helpers

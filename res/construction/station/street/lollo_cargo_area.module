@@ -3,6 +3,7 @@ local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local slotUtils = require('lollo_lorry_station/slotHelpers')
 local inspect = require('lollo_lorry_station/inspect')
 local luadump = require('lollo_lorry_station/luadump')
 local debugger = require('debugger')
@@ -41,7 +42,8 @@ return {
 		
 		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
 
-		addModelFn(_constants.cargoAreaModelFileName, transf.transl(vec3.new(.0, .0, .0)), { cargoArea = true})
+		local modelTag = slotUtils.getCargoAreaModelTag(slotId)
+		addModelFn(_constants.cargoAreaModelFileName, transf.transl(vec3.new(.0, .0, .0)), modelTag)
 		
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then
 		-- 	addModelFn("station/road/streetstation/" .. result.erastr .. "cargo_pltfrm_r_top.mdl", transf.rotZTransl(right and 0 or math.pi, vec3.new(.0, .0, .0)))

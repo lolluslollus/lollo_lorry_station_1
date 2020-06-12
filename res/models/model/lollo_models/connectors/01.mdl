@@ -1,5 +1,5 @@
-local nodeGroupHelper = require('lollo_lorry_station/nodeGroupHelper')
+local roadConnectionHelpers = require('lollo_lorry_station/roadConnectionHelpers')
 
 function data()
-    return nodeGroupHelper.getModelData()
+    return roadConnectionHelpers.getModelData('01')
 end
