@@ -1,3 +1,5 @@
+local luadump = require('lollo_lorry_station/luadump')
+
 local sampleNodes = {
     {
         {-2, -2, 0.00000},
@@ -37,8 +39,34 @@ end
 local nodeGroupHelper = {}
 
 nodeGroupHelper.getModelData = function()
-    local currentFileName = debug.getinfo(2).source
+    -- local currentFileName = debug.getinfo(1).source
+    -- print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
+    local debugInfo = debug.getinfo(2, 'S')
+    print('LOLLO debugInfo = ')
+    luadump(true)(debugInfo)
+    if debugInfo == nil then
+        return {
+            lods = {
+                {
+                    node = {
+                        children = {},
+                        name = "RootNode",
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                    },
+                    static = false,
+                    visibleFrom = 0,
+                    visibleTo = 0,
+                }
+            },
+            metadata = {},
+            version = 1
+        }
+    end
+    local currentFileName = debugInfo.source
     print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
+    -- local currentFileName = debug.getinfo(3).source
+    -- print('LOLLO nodeGroupHelper.getModelData currentFileName = ', currentFileName)
+
     local fileNameEnd = string.sub(currentFileName, string.len(currentFileName) - 5)
     local id = fileNameEnd:sub(1, 2)
     print('LOLLO nodeGroupHelper.getModelData id = ', id)
