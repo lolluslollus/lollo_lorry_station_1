@@ -138,7 +138,7 @@ function data()
 					params = {
 						busLaneType = 'YES', -- does not pull, neither do hasBusLane and busLane, with true or false
 						busLane = 'YES',
-						-- catenary = ???
+						-- catenary = true or false,
 						hasBusType = 'YES',
 						hasBus = true,
 						skipCollision = true,
