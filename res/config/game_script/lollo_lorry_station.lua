@@ -1,3 +1,4 @@
+local inspect = require('lollo_lorry_station/inspect')
 local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
@@ -235,10 +236,11 @@ function data()
             elseif name == 'builder.apply' then
                 if param and param.proposal then
                     debugger()
-                    print('LOLLO builder.apply caught with param = ')
+                    print('LOLLO builder.apply caught with param = ', inspect(param))
+                    print('LOLLO param.data =', inspect(param.data))
+                    print('LOLLO param.proposal =', inspect(param.proposal))
+                    print('LOLLO param.result =', inspect(param.result))
                     luadump(true)(param)
-                    luadump(true)(four)
-                    luadump(true)(five)
                 end
                 if true then return end
                 -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
