@@ -21,7 +21,18 @@ local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
 
+-- Hi man! I have edge0 and edge1, each with {x, y, z} and {sin x, cos x, some func of z}.
+-- Given these two nodes, I can find a 3rd order polynom that connects the two edges and respects their tangents.
+-- Now I can find out the coordinates of any point along the piece of road, that connects the two edges.
+-- Now I put a point somewhere near the middle into the module grid. I know its coordinates and tangents.
+-- This works already.
+-- The trouble starts now: I want to remove the previous segment connecting edge0 and edge1, replace it with two segments and add a terminal inbetween. The new api seems to be the smart way to do it.
+-- Question: if I replace the segment with the new api, like you did in the road toolbox, will that bulldoze the buildings?
 function data()
+    local function addSplitter(params)
+
+    end
+
     return {
         handleEvent = function(src, id, name, args)
             if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
@@ -33,6 +44,8 @@ function data()
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 -- src =	lollo_lorry_station.lua	 id =	__lolloLorryStationEvent__	 name =	select
                 luadump(true)(args)
+                -- print('LOLLO api = ')
+                -- luadump(true)(api)
                 -- we upgrade the construction to inject the street edges
                 if name == 'select' then
                     local newParams = _getCloneWoutSeed(args.params)
@@ -44,6 +57,39 @@ function data()
                     local nearbyStreetEdges = edgeUtils.getNearbyStreetEdges(
                         args.transf
                     )
+
+                    -- local BuildProposal = api.type.BuildProposal:new()
+                    -- print('LOLLO BuildProposal = ')
+                    -- luadump(true)(BuildProposal)
+
+                    -- local Proposal = api.type.Proposal:new()
+                    -- print('LOLLO Proposal = ')
+                    -- luadump(true)(Proposal)
+
+                    -- local ProposalCreateCallbackResult = api.type.ProposalCreateCallbackResult:new()
+                    -- print('LOLLO ProposalCreateCallbackResult = ')
+                    -- luadump(true)(ProposalCreateCallbackResult)
+
+                    -- local ProposalData = api.type.ProposalData:new()
+                    -- print('LOLLO ProposalData = ')
+                    -- luadump(true)(ProposalData)
+
+                    -- local SimpleProposal = api.type.SimpleProposal:new()
+                    -- print('LOLLO SimpleProposal = ')
+                    -- luadump(true)(SimpleProposal)
+
+                    -- local SimpleStreetProposal = api.type.SimpleStreetProposal:new()
+                    -- print('LOLLO SimpleStreetProposal = ')
+                    -- luadump(true)(SimpleStreetProposal)
+
+                    -- local StreetProposal = api.type.StreetProposal:new()
+                    -- print('LOLLO StreetProposal = ')
+                    -- luadump(true)(StreetProposal)
+
+                    -- local TpNetLinkProposal = api.type.TpNetLinkProposal:new()
+                    -- print('LOLLO TpNetLinkProposal = ')
+                    -- luadump(true)(TpNetLinkProposal)
+
                     -- print('LOLLO nearbyStreetEdges =')
                     -- luadump(true)(nearbyStreetEdges)
                     -- newParams.streetEdgesWithAbsoluteCoordinates = {}
@@ -77,6 +123,9 @@ function data()
                     newParams.position = _getCloneWoutSeed(args.position)
                     newParams.transf = _getCloneWoutSeed(args.transf)
                     newParams.inverseTransf = transfUtils.getInverseTransf(args.transf)
+
+                    addSplitter(newParams)
+
                     local newId = game.interface.upgradeConstruction(
                         args.id,
                         _constants.constructionFileName,
@@ -104,7 +153,7 @@ function data()
             -- )
 
         end,
-        guiHandleEvent = function(id, name, param)
+        guiHandleEvent = function(id, name, param, four, five)
             -- LOLLO NOTE when U try to add a streetside bus or lorry stop, the streetBuilder fires this event.
             -- Then, the proposal contains no new objects and no old objects: it's not empty, but it's only filled with objects
             -- that are in turn filled with empty objects.
@@ -184,6 +233,13 @@ function data()
                     _myErrorHandler
                 )
             elseif name == 'builder.apply' then
+                if param and param.proposal then
+                    debugger()
+                    print('LOLLO builder.apply caught with param = ')
+                    luadump(true)(param)
+                    luadump(true)(four)
+                    luadump(true)(five)
+                end
                 if true then return end
                 -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
                 -- luadump(true)(param)

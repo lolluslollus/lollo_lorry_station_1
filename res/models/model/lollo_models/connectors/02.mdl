@@ -2,12 +2,12 @@ local roadConnectionHelpers = require('lollo_lorry_station/roadConnectionHelpers
 
 function data()
     local luadump = require('lollo_lorry_station/luadump')
-    local debugInfo = debug.getinfo(0)
-    print('LOLLO 02.mdl debugInfo(0) = ')
-    luadump(true)(debugInfo)
-    local debugInfo = debug.getinfo(1)
-    print('LOLLO 02.mdl debugInfo(1) = ')
-    luadump(true)(debugInfo)
+    -- local debugInfo = debug.getinfo(0)
+    -- print('LOLLO 02.mdl debugInfo(0) = ')
+    -- luadump(true)(debugInfo)
+    -- local debugInfo = debug.getinfo(1)
+    -- print('LOLLO 02.mdl debugInfo(1) = ')
+    -- luadump(true)(debugInfo)
 
     return roadConnectionHelpers.getModelData('02')
 end

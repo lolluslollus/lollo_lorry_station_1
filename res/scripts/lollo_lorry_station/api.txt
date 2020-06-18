@@ -1,486 +1,538 @@
 LOLLO api = 
 {
   cmd = {
-    buildProposal = {
-      __doc__ = "([SimpleProposal] proposal, Unknown-type context, Function callback) -> Nil"
-    },
     make = {
-      book = {
-        __doc__ = "(Entity playerEntity, Unknown-type journalEntry) -> [Command]"
+      bookJournalEntry = {
+        __doc__ = "(Entity playerEntity, JournalEntry journalEntry) -> Command"
+      },
+      buildProposal = {
+        __doc__ = "(SimpleProposal proposal, Optional[Context] context, Bool ignoreErrors) -> Command"
       },
       buyVehicle = {
-        __doc__ = "(Entity playerEntity, Entity depotEntity, Unknown-type config) -> [Command]"
+        __doc__ = "(Entity playerEntity, Entity depotEntity, TransportVehicleConfig config) -> Command"
       },
       connectTownsAndIndustries = {
-        __doc__ = "(Vector[Entity] townEntities, Vector[Vec2i] connections, Bool keep) -> [Command]"
+        __doc__ = "(Vector[Entity] townEntities, Vector[Vec2i] connections, Bool keep) -> Command"
       },
       createLine = {
-        __doc__ = "(String name, Vec3f color, Entity playerEntity, Line line) -> [Command]"
+        __doc__ = "(String name, Vec3f color, Entity playerEntity, Line line) -> Command"
       },
       createTowns = {
-        __doc__ = "(Vector[Unknown-type] towns, Bool) -> [Command]"
+        __doc__ = "(Vector[TownInfo] towns, Bool updateInitialLandUseCapacities) -> Command"
       },
       deleteLine = {
-        __doc__ = "(Entity lineEntity) -> [Command]"
+        __doc__ = "(Entity lineEntity) -> Command"
       },
       developTown = {
-        __doc__ = "(Vec2f position) -> [Command]"
+        __doc__ = "(Vec2f position) -> Command"
       },
       instantlyUpdateTownCargoNeeds = {
-        __doc__ = "(Entity townEntity, Unknown-type cargoNeeds) -> [Command]"
+        __doc__ = "(Entity townEntity, Array[Vector[Number],3] cargoNeeds) -> Command"
       },
       removeField = {
-        __doc__ = "(Entity fieldEntity) -> [Command]"
+        __doc__ = "(Entity fieldEntity) -> Command"
       },
       removeTown = {
-        __doc__ = "(Entity townEntity) -> [Command]"
+        __doc__ = "(Entity townEntity) -> Command"
       },
       replaceTerrain = {
-        __doc__ = "(Unknown-type, Unknown-type, String, Entity, Bool) -> [Command]"
+        __doc__ = "(Map map, BaseConfig.Terrain config, String seedText, Entity worldEntity, Bool keepAssets) -> Command"
       },
       replaceVehicle = {
-        __doc__ = "(Entity vehicleEntity, Unknown-type config) -> [Command]"
+        __doc__ = "(Entity vehicleEntity, TransportVehicleConfig config) -> Command"
       },
-      reverse = {
-        __doc__ = "(Entity vehicleEntity) -> [Command]"
+      reverseVehicle = {
+        __doc__ = "(Entity vehicleEntity) -> Command"
       },
       sellVehicle = {
-        __doc__ = "(Entity vehicleEntity) -> [Command]"
+        __doc__ = "(Entity vehicleEntity) -> Command"
       },
       sendToDepot = {
-        __doc__ = "(Entity vehicleEntity, Bool sellOnArrival) -> [Command]"
+        __doc__ = "(Entity vehicleEntity, Bool sellOnArrival) -> Command"
       },
       setAnimalState = {
-        __doc__ = "(Entity animalEntity, Number movementType, Number targetChangedElapsed, Number invalidTileElapsed, Number movementSpeed, Number angularSpeed) -> [Command]"
+        __doc__ = "(Entity animalEntity, Number movementType, Number targetChangedElapsed, Number invalidTileElapsed, Number movementSpeed, Number angularSpeed) -> Command"
       },
       setCalendarSpeed = {
-        __doc__ = "(Number millisecondsPerDay) -> [Command]"
+        __doc__ = "(Number millisecondsPerDay) -> Command"
       },
       setColor = {
-        __doc__ = "(Entity entity, Vec3f color) -> [Command]"
+        __doc__ = "(Entity entity, Vec3f color) -> Command"
       },
       setDate = {
-        __doc__ = "(Date date) -> [Command]"
+        __doc__ = "(Date date) -> Command"
       },
       setGameSpeed = {
-        __doc__ = "(Number speed) -> [Command]"
+        __doc__ = "(Number speed) -> Command"
       },
       setLine = {
-        __doc__ = "(Entity vehicleEntity, Entity lineEntity, Number stopIndex) -> [Command]"
+        __doc__ = "(Entity vehicleEntity, Entity lineEntity, Number stopIndex) -> Command"
       },
       setName = {
-        __doc__ = "(Entity entity, String name) -> [Command]"
-      },
-      setNoCosts = {
-        __doc__ = "(Bool enabled) -> [Command]"
+        __doc__ = "(Entity entity, String name) -> Command"
       },
       setTownInfo = {
-        __doc__ = "(Entity townEntity, Unknown-type initialLandUseCapacities) -> [Command]"
+        __doc__ = "(Entity townEntity, Array[Number,3] initialLandUseCapacities) -> Command"
       },
       setUserStopped = {
-        __doc__ = "(Entity vehicleEntity, Bool userStopped) -> [Command]"
+        __doc__ = "(Entity vehicleEntity, Bool userStopped) -> Command"
       },
       setVehicleTargetMaintenanceState = {
-        __doc__ = "(Entity vehicleEntity, Number value) -> [Command]"
+        __doc__ = "(Entity vehicleEntity, Number value) -> Command"
       },
       spawnAnimal = {
-        __doc__ = "(String fileName, Vec2f position) -> [Command]"
+        __doc__ = "(String fileName, Vec2f position) -> Command"
       },
       updateLine = {
-        __doc__ = "(Entity lineEntity, Line line) -> [Command]"
+        __doc__ = "(Entity lineEntity, Line line) -> Command"
       }
     },
     sendCommand = {
-      __doc__ = "([Command] command, Function callback) -> Nil"
+      __doc__ = "(Command command, Optional[Function] callback[Result, Bool]) -> Nil"
     }
   },
   engine = {
-    aircraftMoveSystem = {
-      getAirCraftInfo = {
-        __doc__ = "(Entity vehicleEntity) -> AircraftInfo"
-      },
-      isReserved = {
-        __doc__ = "(EdgeId edgeId) -> Bool"
-      }
-    },
-    baseParallelStripSystem = {
-      getStrips = {
-        __doc__ = "(Entity edgeEntity) -> Vector[Entity]"
-      }
-    },
-    catchmentAreaSystem = {
-      getEdge2stationsMap = {
-        __doc__ = "() -> Table[EdgeId,Vector[Pair[Entity,Number]]]"
-      },
-      getStation2edgesMap = {
-        __doc__ = "() -> Table[Entity,Vector[Pair[EdgeId,Number]]]"
-      },
-      getStation2stationsAndDistancesMap = {
-        __doc__ = "() -> Table[Entity,Table[Entity,Number]]"
-      }
-    },
     getComponent = {
-      __doc__ = "(Entity entity, Unknown-type type) -> Object"
+      __doc__ = "(Entity entity, ComponentType type) -> Object"
     },
-    lineSystem = {
-      getLineStops = {
-        __doc__ = "(Entity stationGroupEntity) -> Vector[Pair[Entity,Number]]"
+    system = {
+      aircraftMoveSystem = {
+        getAirCraftInfo = {
+          __doc__ = "(Entity vehicleEntity) -> AircraftInfo"
+        },
+        isReserved = {
+          __doc__ = "(EdgeId edgeId) -> Bool"
+        }
       },
-      getLineStopsForStation = {
-        __doc__ = "(Entity stationEntity) -> Vector[Pair[Entity,Number]]"
+      baseParallelStripSystem = {
+        getStrips = {
+          __doc__ = "(Entity edgeEntity) -> Vector[Entity]"
+        }
       },
-      getLineStopsForTerminal = {
-        __doc__ = "(Entity stationEntity, Number terminal) -> Vector[Pair[Entity,Number]]"
+      catchmentAreaSystem = {
+        getEdge2stationsMap = {
+          __doc__ = "() -> Table[EdgeId,Vector[Pair[Entity,Number]]]"
+        },
+        getStation2edgesMap = {
+          __doc__ = "() -> Table[Entity,Vector[Pair[EdgeId,Number]]]"
+        },
+        getStation2stationsAndDistancesMap = {
+          __doc__ = "() -> Table[Entity,Table[Entity,Number]]"
+        }
       },
-      getLines = {
-        __doc__ = "() -> Vector[Entity]"
+      lineSystem = {
+        getLineStops = {
+          __doc__ = "(Entity stationGroupEntity) -> Vector[Pair[Entity,Number]]"
+        },
+        getLineStopsForStation = {
+          __doc__ = "(Entity stationEntity) -> Vector[Pair[Entity,Number]]"
+        },
+        getLineStopsForTerminal = {
+          __doc__ = "(Entity stationEntity, Number terminal) -> Vector[Pair[Entity,Number]]"
+        },
+        getLines = {
+          __doc__ = "() -> Vector[Entity]"
+        },
+        getLinesForPlayer = {
+          __doc__ = "(Entity playerEntity) -> Vector[Entity]"
+        },
+        getLinesForWaypoint = {
+          __doc__ = "(Entity waypointEntity) -> Vector[Entity]"
+        },
+        getProblemLines = {
+          __doc__ = "(Entity playerEntity) -> Vector[Pair[Entity,LineProblem]]"
+        },
+        getStationGroup2LineStopsMap = {
+          __doc__ = "() -> Table[Entity,Vector[Pair[Entity,Number]]]"
+        },
+        getTerminal2lineStops = {
+          __doc__ = "() -> Table[Pair[Entity,Number],Vector[Pair[Entity,Number]]]"
+        }
       },
-      getLinesForPlayer = {
-        __doc__ = "(Entity playerEntity) -> Vector[Entity]"
+      octreeSystem = {
+        findIntersectingEntities = {
+          __doc__ = "(Box3 box, Function callback(Entity, BoundingVolume)) -> Nil"
+        }
       },
-      getLinesForWaypoint = {
-        __doc__ = "(Entity waypointEntity) -> Vector[Entity]"
+      railRoadCrossingSystem = {
+        getRailroadCrossingForEdge = {
+          __doc__ = "(Entity edgeEntity) -> Entity"
+        },
+        getRailroadCrossingForNode = {
+          __doc__ = "(Entity nodeEntity) -> Entity"
+        }
       },
-      getProblemLines = {
-        __doc__ = "(Entity playerEntity) -> Vector[Pair[Entity,Unknown-type]]"
+      riverSystem = {
+        getWaterMeshEntities = {
+          __doc__ = "(Vec2i tile0, Vec2i tile1) -> Vector[Entity]"
+        }
       },
-      getStationGroup2LineStopsMap = {
-        __doc__ = "() -> Table[Entity,Vector[Pair[Entity,Number]]]"
+      runwaySystem = {
+        getLandingNodeIdMap = {
+          __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
+        },
+        getTakeoffNodeIdMap = {
+          __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
+        }
       },
-      getTerminal2lineStops = {
-        __doc__ = "() -> Table[Pair[Entity,Number],Vector[Pair[Entity,Number]]]"
+      shipMoveSystem = {
+        getShipInfo = {
+          __doc__ = "(Entity vehicleEntity) -> ShipInfo"
+        }
+      },
+      signalSystem = {
+        getSignal = {
+          __doc__ = "(EdgeId edgeId, Bool reversed) -> Pair[Entity,Number]"
+        }
+      },
+      simCargoAtTerminalSystem = {
+        getCount = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
+        },
+        getEntity = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Entity"
+        },
+        getMaxCount = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
+        },
+        getPlace = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
+        },
+        hasFreePlaces = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Bool"
+        },
+        supportsCargoType = {
+          __doc__ = "(EdgeId edgeId, Id cargoType) -> Bool"
+        }
+      },
+      simCargoSystem = {
+        getSimCargoAtTerminalForTransportNetwork = {
+          __doc__ = "(Entity tnEntity) -> Vector[Entity]"
+        },
+        getSimCargoIdleForTransportNetwork = {
+          __doc__ = "(Entity tnEntity) -> Vector[Entity]"
+        },
+        getSimCargosForLine = {
+          __doc__ = "(Entity lineEntity) -> Vector[Entity]"
+        },
+        getSimCargosForSource = {
+          __doc__ = "(Entity sourceEntity) -> Vector[Entity]"
+        },
+        getSimCargosForTarget = {
+          __doc__ = "(Entity targetEntity) -> Vector[Entity]"
+        }
+      },
+      simEntityAtStockSystem = {
+        getStock2SimEntityMap = {
+          __doc__ = "() -> Table[Pair[Entity,Id],Vector[Entity]]"
+        },
+        getStockCount = {
+          __doc__ = "(Entity stockEntity, Id stockId) -> Number"
+        },
+        getStockEntities = {
+          __doc__ = "(Entity stockEntity, Id stockId) -> Unknown-type"
+        },
+        getStockSimEntity = {
+          __doc__ = "(Entity stockEntity, Id stockId) -> Entity"
+        }
+      },
+      simEntityAtTerminalSystem = {  },
+      simEntityAtVehicleSystem = {
+        getFare = {
+          __doc__ = "() -> Number"
+        },
+        getVehicle2Cargo2SimEntitesMap = {
+          __doc__ = "() -> Table[Entity,Vector[Vector[Entity]]]"
+        }
+      },
+      simPersonAtTerminalSystem = {
+        getEdgeInfoMap = {
+          __doc__ = "() -> Table[EdgeId,Unknown-type]"
+        },
+        getNumFreePlaces = {
+          __doc__ = "(EdgeId edgeId) -> Number"
+        },
+        getPos01 = {
+          __doc__ = "(EdgeId edgeId, Number place) -> Pair[Number,Number]"
+        }
+      },
+      simPersonAtVehicleSystem = {
+        getVehiclePartInfoList = {
+          __doc__ = "(Entity vehicleEntity) -> Vector[Unknown-type]"
+        }
+      },
+      simPersonSystem = {
+        getCount = {
+          __doc__ = "() -> Number"
+        },
+        getDestination2SpMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        },
+        getSimPersonsAtTerminalForTransportNetwork = {
+          __doc__ = "(Entity tnEntity) -> Vector[Entity]"
+        },
+        getSimPersonsForDestination = {
+          __doc__ = "(Entity targetEntity) -> Vector[Entity]"
+        },
+        getSimPersonsForLine = {
+          __doc__ = "(Entity lineEntity) -> Vector[Entity]"
+        },
+        getSimPersonsForTarget = {
+          __doc__ = "(Entity targetEntity) -> Vector[Entity]"
+        },
+        getSimPersonsIdleForTransportNetwork = {
+          __doc__ = "(Entity tnEntity) -> Vector[Entity]"
+        },
+        getSimPersonsMovingForTransportNetwork = {
+          __doc__ = "(Entity tnEntity) -> Vector[Entity]"
+        }
+      },
+      stationGroupSystem = {
+        getExpiredStationGroups = {
+          __doc__ = "(Number time) -> Vector[Entity]"
+        },
+        getExpiryProgress = {
+          __doc__ = "(Entity stationGroupEntity, Number time) -> Number"
+        },
+        getStationGroup = {
+          __doc__ = "(Entity stationEntity) -> Entity"
+        }
+      },
+      stationSystem = {
+        getPersonNodeId2StationTerminalsMap = {
+          __doc__ = "() -> Table[NodeId,Vector[Pair[Entity,Number]]]"
+        },
+        getStation2TownMap = {
+          __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
+        },
+        getStationTerminalForVehicleNode = {
+          __doc__ = "(NodeId nodeId) -> Pair[Entity,Number]"
+        },
+        getStationTerminalsForPersonEdge = {
+          __doc__ = "(EdgeId edgeId) -> Vector[Pair[Entity,Number]]"
+        },
+        getStationTerminalsForPersonNode = {
+          __doc__ = "(NodeId nodeId) -> Vector[Pair[Entity,Number]]"
+        },
+        getStations = {
+          __doc__ = "(Entity townEntity) -> Vector[Entity]"
+        },
+        getTown2StationsMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        }
+      },
+      stockListSystem = {
+        getCargoType2stockList2sourceAndCount = {
+          __doc__ = "() -> Vector[Table[Entity,Table[Entity,Number]]]"
+        },
+        getSources = {
+          __doc__ = "(Entity destinationEntity) -> Vector[Entity]"
+        }
+      },
+      streetConnectorSystem = { -- LOLLO interesting
+        forEach = {
+          __doc__ = "(Function fn) -> Nil"
+        },
+        getConstructionEntityForDepot = {
+          __doc__ = "(Entity depotEntity) -> Entity"
+        },
+        getConstructionEntityForEdge = {
+          __doc__ = "(Entity edgeEntity) -> Entity"
+        },
+        getConstructionEntityForSimBuilding = {
+          __doc__ = "(Entity townBuildingEntity) -> Entity"
+        },
+        getConstructionEntityForStation = {
+          __doc__ = "(Entity stationEntity) -> Entity"
+        },
+        getConstructionEntityForTownBuilding = {
+          __doc__ = "(Entity townBuilding) -> Entity"
+        },
+        getNode2StreetConnectorMap = {
+          __doc__ = "() -> Table[Entity,Entity]"
+        },
+        getStation2ConstructionMap = {
+          __doc__ = "() -> Table[Entity,Entity]"
+        },
+        getStreetConnectorEntity = {
+          __doc__ = "(Entity nodeEntity) -> Entity"
+        }
+      },
+      streetSystem = {
+        getEdgeForEdgeObject = {
+          __doc__ = "(Entity edgeEntity) -> Entity"
+        },
+        getEdgeObject2EdgeMap = {
+          __doc__ = "() -> Table[Entity,Entity]"
+        },
+        getNode2SegmentMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        },
+        getNode2StreetEdgeMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        },
+        getNode2TrackEdgeMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        }
+      },
+      townBuildingSystem = {
+        getBuilding = {
+          __doc__ = "(Entity parcelEntity) -> Entity"
+        },
+        getCargoSupplyAndLimit = {
+          __doc__ = "(Entity townEntity) -> Table[Id,Pair[Number,Number]]"
+        },
+        getLandUsePersonCapacities = {
+          __doc__ = "(Entity townEntity) -> Array[Number,3]"
+        },
+        getParcel2BuildingMap = {
+          __doc__ = "() -> Table[Entity,Entity]"
+        },
+        getPersonCapacity2townBuildingMap = {
+          __doc__ = "() -> Table[Entity,Entity]"
+        },
+        getTown2BuildingMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        },
+        getTown2personCapacitiesMap = {
+          __doc__ = "() -> Table[Entity,Array[Number,3]]"
+        },
+        hasBuilding = {
+          __doc__ = "(Entity parcelEntity) -> Bool"
+        }
+      },
+      tpNetLinkSystem = {
+        getEdgeId2linkEntities = {
+          __doc__ = "() -> Table[EdgeId,Vector[Entity]]"
+        },
+        getLinkEntities = {
+          __doc__ = "(EdgeId edgeId) -> Vector[Entity]"
+        }
+      },
+      trainMoveSystem = {
+        getBlockedTrains = {
+          __doc__ = "() -> Vector[Pair[Entity,Entity]]"
+        },
+        getTrainInfo = {
+          __doc__ = "(Entity trainEntity) -> TrainMoveInfo"
+        },
+        getVehicleInfo = {
+          __doc__ = "(Entity vehicleEntity) -> TrainMoveSystem.VehicleInfo"
+        }
+      },
+      transportHistorySystem = {
+        getStationTransportHistoryReferences = {
+          __doc__ = "(Entity stationEntity) -> Vector[Entity]"
+        },
+        getTargetTransportHistoryReferences = {
+          __doc__ = "(Entity targetEntity) -> Vector[Entity]"
+        }
+      },
+      transportNetworkSystem = {
+        getIntersections = {
+          __doc__ = "(Entity tnEntity) -> Unknown-type"
+        },
+        getTpNetData = {
+          __doc__ = "() -> TpNetData"
+        }
+      },
+      transportVehicleSystem = {
+        getDepotVehicles = {
+          __doc__ = "(Entity depotEntity) -> Vector[Entity]"
+        },
+        getGoingToDepotVehicles = {
+          __doc__ = "(Entity depotEntity) -> Vector[Entity]"
+        },
+        getInfo = {
+          __doc__ = "(Entity transportVehicleEntity) -> TransportVehicleInfo"
+        },
+        getLine2VehicleMap = {
+          __doc__ = "() -> Table[Entity,Vector[Entity]]"
+        },
+        getLineStopVehicles = {
+          __doc__ = "(Entity lineEntity, Number stopIndex) -> Vector[Entity]"
+        },
+        getLineVehicles = {
+          __doc__ = "(Entity lineEntity) -> Vector[Entity]"
+        },
+        getNoPathVehicles = {
+          __doc__ = "() -> Vector[Entity]"
+        },
+        getVehicleNames = {
+          __doc__ = "(Carrier carrier) -> Vector[String]"
+        },
+        getVehicles = {
+          __doc__ = "(Vector[Entity] tnEntities, Bool wholePath) -> Vector[Entity]"
+        }
+      },
+      vehicleDepotSystem = {
+        getDepotForInNodeId = {
+          __doc__ = "(NodeId nodeId) -> Entity"
+        }
       }
     },
-    railRoadCrossingSystem = {
-      getRailroadCrossingForEdge = {
-        __doc__ = "(Entity edgeEntity) -> Entity"
+    terrain = {
+      getBaseHeightAt = {
+        __doc__ = "(Vec2f position) -> Number"
       },
-      getRailroadCrossingForNode = {
-        __doc__ = "(Entity nodeEntity) -> Entity"
+      getHeightAt = {
+        __doc__ = "(Vec2f position) -> Number"
+      },
+      isValidCoordinate = {
+        __doc__ = "(Vec2f position) -> Bool"
       }
     },
-    riverSystem = {
-      getWaterMeshEntities = {
-        __doc__ = "(Vec2i tile0, Vec2i tile1) -> Vector[Entity]"
-      }
-    },
-    runwaySystem = {
-      getLandingNodeIdMap = {
-        __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
+    util = {
+      formatAge = {
+        __doc__ = "(Number time0, Number time1) -> String"
       },
-      getTakeoffNodeIdMap = {
-        __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
-      }
-    },
-    shipMoveSystem = {
-      getShipInfo = {
-        __doc__ = "(Entity vehicleEntity) -> ShipInfo"
-      }
-    },
-    signalSystem = {
-      getSignal = {
-        __doc__ = "(EdgeId edgeId, Bool reversed) -> Pair[Entity,Number]"
-      }
-    },
-    simCargoAtTerminalSystem = {
-      getCount = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
+      getPlayer = {
+        __doc__ = "() -> Entity"
       },
-      getEntity = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Entity"
+      getWorld = {
+        __doc__ = "() -> Entity"
       },
-      getMaxCount = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
+      pathfinding = {
+        EdgeIdDirAndLength = {
+          __name = "sol.scripting::EdgeIdDirAndLength.user",
+          __type = {
+            name = "scripting::EdgeIdDirAndLength"            is = ()
+          }          __eq = (),
+          __gc = (),
+          __pairs = (),
+          new = ()
+        },
+        findPath = {
+          __doc__ = "(Vector[EdgeIdDirAndLength] startingEdgesAndLengths, Vector[NodeId] destinationNodes, Vector[TransportMode] transportModes, Number maxLength) -> Vector[Pair[EdgeId,Bool]]"
+        }
       },
-      getPlace = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Number"
-      },
-      hasFreePlaces = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Bool"
-      },
-      supportsCargoType = {
-        __doc__ = "(EdgeId edgeId, Id cargoType) -> Bool"
-      }
-    },
-    simCargoSystem = {
-      getSimCargoAtTerminalForTransportNetwork = {
-        __doc__ = "(Entity tnEntity) -> Vector[Entity]"
-      },
-      getSimCargoIdleForTransportNetwork = {
-        __doc__ = "(Entity tnEntity) -> Vector[Entity]"
-      },
-      getSimCargosForLine = {
-        __doc__ = "(Entity lineEntity) -> Vector[Entity]"
-      },
-      getSimCargosForSource = {
-        __doc__ = "(Entity sourceEntity) -> Vector[Entity]"
-      },
-      getSimCargosForTarget = {
-        __doc__ = "(Entity targetEntity) -> Vector[Entity]"
-      }
-    },
-    simEntityAtStockSystem = {
-      getStock2SimEntityMap = {
-        __doc__ = "() -> Table[Pair[Entity,Id],Vector[Entity]]"
-      },
-      getStockCount = {
-        __doc__ = "(Entity stockEntity, Id stockId) -> Number"
-      },
-      getStockEntities = {
-        __doc__ = "(Entity stockEntity, Id stockId) -> Unknown-type"
-      },
-      getStockSimEntity = {
-        __doc__ = "(Entity stockEntity, Id stockId) -> Entity"
-      }
-    },
-    simEntityAtTerminalSystem = {  },
-    simEntityAtVehicleSystem = {
-      getFare = {
-        __doc__ = "() -> Number"
-      },
-      getVehicle2Cargo2SimEntitesMap = {
-        __doc__ = "() -> Table[Entity,Vector[Vector[Entity]]]"
-      }
-    },
-    simPersonAtTerminalSystem = {
-      getEdgeInfoMap = {
-        __doc__ = "() -> Table[EdgeId,Unknown-type]"
-      },
-      getNumFreePlaces = {
-        __doc__ = "(EdgeId edgeId) -> Number"
-      },
-      getPos01 = {
-        __doc__ = "(EdgeId edgeId, Number place) -> Pair[Number,Number]"
-      }
-    },
-    simPersonAtVehicleSystem = {
-      getVehiclePartInfoList = {
-        __doc__ = "(Entity vehicleEntity) -> Vector[Unknown-type]"
-      }
-    },
-    simPersonSystem = {
-      getCount = {
-        __doc__ = "() -> Number"
-      },
-      getDestination2SpMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      },
-      getSimPersonsAtTerminalForTransportNetwork = {
-        __doc__ = "(Entity tnEntity) -> Vector[Entity]"
-      },
-      getSimPersonsForDestination = {
-        __doc__ = "(Entity targetEntity) -> Vector[Entity]"
-      },
-      getSimPersonsForLine = {
-        __doc__ = "(Entity lineEntity) -> Vector[Entity]"
-      },
-      getSimPersonsForTarget = {
-        __doc__ = "(Entity targetEntity) -> Vector[Entity]"
-      },
-      getSimPersonsIdleForTransportNetwork = {
-        __doc__ = "(Entity tnEntity) -> Vector[Entity]"
-      },
-      getSimPersonsMovingForTransportNetwork = {
-        __doc__ = "(Entity tnEntity) -> Vector[Entity]"
-      }
-    },
-    stationGroupSystem = {
-      getExpiredStationGroups = {
-        __doc__ = "(Number time) -> Vector[Entity]"
-      },
-      getExpiryProgress = {
-        __doc__ = "(Entity stationGroupEntity, Number time) -> Number"
-      },
-      getStationGroup = {
-        __doc__ = "(Entity stationEntity) -> Entity"
-      }
-    },
-    stationSystem = {
-      getPersonNodeId2StationTerminalsMap = {
-        __doc__ = "() -> Table[NodeId,Vector[Pair[Entity,Number]]]"
-      },
-      getStation2TownMap = {
-        __doc__ = "() -> Table[NodeId,Pair[Entity,Number]]"
-      },
-      getStationTerminalForVehicleNode = {
-        __doc__ = "(NodeId nodeId) -> Pair[Entity,Number]"
-      },
-      getStationTerminalsForPersonEdge = {
-        __doc__ = "(EdgeId edgeId) -> Vector[Pair[Entity,Number]]"
-      },
-      getStationTerminalsForPersonNode = {
-        __doc__ = "(NodeId nodeId) -> Vector[Pair[Entity,Number]]"
-      },
-      getStations = {
-        __doc__ = "(Entity townEntity) -> Vector[Entity]"
-      },
-      getTown2StationsMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      }
-    },
-    stockListSystem = {
-      getCargoType2stockList2sourceAndCount = {
-        __doc__ = "() -> Vector[Table[Entity,Table[Entity,Number]]]"
-      },
-      getSources = {
-        __doc__ = "(Entity destinationEntity) -> Vector[Entity]"
-      }
-    },
-    streetConnectorSystem = {
-      forEach = {
-        __doc__ = "(Function fn) -> Nil"
-      },
-      getConstructionEntityForDepot = {
-        __doc__ = "(Entity depotEntity) -> Entity"
-      },
-      getConstructionEntityForEdge = { -- LOLLO check this
-        __doc__ = "(Entity edgeEntity) -> Entity"
-      },
-      getConstructionEntityForSimBuilding = {
-        __doc__ = "(Entity townBuildingEntity) -> Entity"
-      },
-      getConstructionEntityForStation = { -- LOLLO check this
-        __doc__ = "(Entity stationEntity) -> Entity"
-      },
-      getConstructionEntityForTownBuilding = {
-        __doc__ = "(Entity townBuilding) -> Entity"
-      },
-      getNode2StreetConnectorMap = {
-        __doc__ = "() -> Table[Entity,Entity]"
-      },
-      getStation2ConstructionMap = {
-        __doc__ = "() -> Table[Entity,Entity]"
-      },
-      getStreetConnectorEntity = { -- LOLLO check this
-        __doc__ = "(Entity nodeEntity) -> Entity"
-      }
-    },
-    streetSystem = {
-      getEdgeForEdgeObject = { -- LOLLO check this
-        __doc__ = "(Entity edgeEntity) -> Entity"
-      },
-      getEdgeObject2EdgeMap = {
-        __doc__ = "() -> Table[Entity,Entity]"
-      },
-      getNode2SegmentMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      },
-      getNode2StreetEdgeMap = { -- LOLLO check this
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      },
-      getNode2TrackEdgeMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      }
-    },
-    townBuildingSystem = {
-      getBuilding = {
-        __doc__ = "(Entity parcelEntity) -> Entity"
-      },
-      getCargoSupplyAndLimit = {
-        __doc__ = "(Entity townEntity) -> Table[Id,Pair[Number,Number]]"
-      },
-      getLandUsePersonCapacities = {
-        __doc__ = "(Entity townEntity) -> Unknown-type"
-      },
-      getParcel2BuildingMap = {
-        __doc__ = "() -> Table[Entity,Entity]"
-      },
-      getPersonCapacity2townBuildingMap = {
-        __doc__ = "() -> Table[Entity,Entity]"
-      },
-      getTown2BuildingMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      },
-      getTown2personCapacitiesMap = {
-        __doc__ = "() -> Table[Entity,Unknown-type]"
-      },
-      hasBuilding = {
-        __doc__ = "(Entity parcelEntity) -> Bool"
-      }
-    },
-    tpNetLinkSystem = {
-      getEdgeId2linkEntities = {
-        __doc__ = "() -> Table[EdgeId,Vector[Entity]]"
-      },
-      getLinkEntities = {
-        __doc__ = "(EdgeId edgeId) -> Vector[Entity]"
-      }
-    },
-    trainMoveSystem = {
-      getBlockedTrains = {
-        __doc__ = "() -> Vector[Pair[Entity,Entity]]"
-      },
-      getTrainInfo = {
-        __doc__ = "(Entity trainEntity) -> Unknown-type"
-      },
-      getVehicleInfo = {
-        __doc__ = "(Entity vehicleEntity) -> Unknown-type"
-      }
-    },
-    transportHistorySystem = {
-      getStationTransportHistoryReferences = {
-        __doc__ = "(Entity stationEntity) -> Vector[Entity]"
-      },
-      getTargetTransportHistoryReferences = {
-        __doc__ = "(Entity targetEntity) -> Vector[Entity]"
-      }
-    },
-    transportNetworkSystem = {
-      getIntersections = {
-        __doc__ = "(Entity tnEntity) -> Unknown-type"
-      }
-    },
-    transportVehicleSystem = {
-      getDepotVehicles = {
-        __doc__ = "(Entity depotEntity) -> Vector[Entity]"
-      },
-      getGoingToDepotVehicles = {
-        __doc__ = "(Entity depotEntity) -> Vector[Entity]"
-      },
-      getInfo = {
-        __doc__ = "(Entity transportVehicleEntity) -> Unknown-type"
-      },
-      getLine2VehicleMap = {
-        __doc__ = "() -> Table[Entity,Vector[Entity]]"
-      },
-      getLineStopVehicles = {
-        __doc__ = "(Entity lineEntity, Number stopIndex) -> Vector[Entity]"
-      },
-      getLineVehicles = {
-        __doc__ = "(Entity lineEntity) -> Vector[Entity]"
-      },
-      getNoPathVehicles = {
-        __doc__ = "() -> Vector[Entity]"
-      },
-      getVehicleNames = {
-        __doc__ = "(Unknown-type carrier) -> Vector[String]"
-      },
-      getVehicles = {
-        __doc__ = "(Vector[Entity] tnEntities, Bool wholePath) -> Vector[Entity]"
-      }
-    },
-    vehicleDepotSystem = {
-      getDepotForInNodeId = {
-        __doc__ = "(NodeId nodeId) -> Entity"
+      proposal = {
+        makeProposalData = {
+          __doc__ = "(Unknown-type simpleProposal, Optional[Context] context) -> ProposalData"
+        }
       }
     }
   },
+  enum = {  },
   res = {
     autoGroundTexRep = {
       find = {
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> AutoGroundTexType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     bridgeTypeRep = {
@@ -488,16 +540,19 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> BridgeType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     cargoTypeRep = {
@@ -505,47 +560,99 @@ LOLLO api =
         __doc__ = "(String name) -> Id"
       },
       get = {
-        __doc__ = "(Id index) -> Unknown-type"
+        __doc__ = "(Id index) -> CargoType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Id index) -> String"
       },
       getName = {
         __doc__ = "(Id index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Id index) -> Bool"
       }
+    },
+    constructionRep = {
+      find = {
+        __doc__ = "(String name) -> Id"
+      },
+      get = {
+        __doc__ = "(Id index) -> ConstructionDesc"
+      },
+      getAll = {
+        __doc__ = "() -> Table[Number,String]"
+      },
+      getFileName = {
+        __doc__ = "(Id index) -> String"
+      },
+      getName = {
+        __doc__ = "(Id index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Id index) -> Bool"
+      }
+    },
+    getBaseConfig = {
+      __doc__ = "() -> Unknown-type"
     },
     groundTextureRep = {
       find = {
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> GroundTextureType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     modelRep = {
       contains = {
         __doc__ = "(Number id) -> Bool"
       },
-      find = { -- LOLLO check this
+      find = {
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number id) -> Unknown-type"
+        __doc__ = "(Number id) -> ModelType"
       },
       getAll = {
         __doc__ = "() -> Vector[String]"
+      },
+      getName = {
+        __doc__ = "(Number index) -> String"
+      }
+    },
+    moduleRep = {
+      find = {
+        __doc__ = "(String name) -> Number"
+      },
+      get = {
+        __doc__ = "(Number index) -> ModuleDesc"
+      },
+      getAll = {
+        __doc__ = "() -> Table[Number,String]"
+      },
+      getFileName = {
+        __doc__ = "(Number index) -> String"
+      },
+      getName = {
+        __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     multipleUnitRep = {
@@ -553,16 +660,19 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> MultipleUnitType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     railroadCrossingTypeRep = {
@@ -570,33 +680,39 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> RailroadCrossingType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     streetTypeRep = {
       find = {
         __doc__ = "(String name) -> Number"
       },
-      get = {-- LOLLO check this
-        __doc__ = "(Number index) -> Unknown-type"
+      get = {
+        __doc__ = "(Number index) -> StreetType"
       },
-      getAll = {-- LOLLO check this
-        __doc__ = "() -> Vector[String]"
+      getAll = {
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     trackTypeRep = {
@@ -604,16 +720,19 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> TrackType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     trafficLightTypeRep = {
@@ -621,16 +740,19 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> TrafficLightType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     },
     tunnelTypeRep = {
@@ -638,16 +760,19 @@ LOLLO api =
         __doc__ = "(String name) -> Number"
       },
       get = {
-        __doc__ = "(Number index) -> Unknown-type"
+        __doc__ = "(Number index) -> TunnelType"
       },
       getAll = {
-        __doc__ = "() -> Vector[String]"
+        __doc__ = "() -> Table[Number,String]"
       },
       getFileName = {
         __doc__ = "(Number index) -> String"
       },
       getName = {
         __doc__ = "(Number index) -> String"
+      },
+      isVisible = {
+        __doc__ = "(Number index) -> Bool"
       }
     }
   },
@@ -724,6 +849,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    BaseConfig = {
+      __name = "sol.BaseConfig.user",
+      __type = {
+        name = "BaseConfig"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     BaseEdge = {
       __name = "sol.ecs::component::BaseEdge.user",
       __type = {
@@ -793,7 +927,8 @@ LOLLO api =
         name = "BoundingInfo"        is = ()
       }      __eq = (),
       __gc = (),
-      __pairs = ()
+      __pairs = (),
+      new = ()
     },
     BoundingVolume = {
       __name = "sol.ecs::component::BoundingVolume.user",
@@ -804,10 +939,55 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    Box2 = {
+      __name = "sol.Box2.user",
+      __type = {
+        name = "Box2"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    Box3 = {
+      __name = "sol.Box3.user",
+      __type = {
+        name = "Box3"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    Bridge = {
+      __name = "sol.ecs::component::Bridge.user",
+      __type = {
+        name = "ecs::component::Bridge"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    BridgeType = {
+      __name = "sol.BridgeType.user",
+      __type = {
+        name = "BridgeType"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     BuildCost = {
       __name = "sol.ecs::component::BuildCost.user",
       __type = {
         name = "ecs::component::BuildCost"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    BuildProposal = {
+      __name = "sol.CmdData::BuildProposal.user",
+      __type = {
+        name = "CmdData::BuildProposal"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -868,10 +1048,39 @@ LOLLO api =
       new = ()
     },
     ComponentType = {  },
+    Connection = {
+      __name = "sol.boost::signals2::connection.user",
+      __type = {
+        name = "boost::signals2::connection"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __lt = (),
+      __pairs = (),
+      disconnect = (),
+      new = ()
+    },
     Construction = {
       __name = "sol.ecs::component::Construction.user",
       __type = {
         name = "ecs::component::Construction"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    ConstructionDesc = {
+      __name = "sol.ConstructionDesc.user",
+      __type = {
+        name = "ConstructionDesc"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    ConstructionTemplate = {
+      __name = "sol.ConstructionTemplate.user",
+      __type = {
+        name = "ConstructionTemplate"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -934,6 +1143,24 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    DynamicConstructionTemplate = {
+      __name = "sol.DynamicConstructionTemplate.user",
+      __type = {
+        name = "DynamicConstructionTemplate"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    EdgeGeometry = {
+      __name = "sol.transport::EdgeGeometry.user",
+      __type = {
+        name = "transport::EdgeGeometry"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     EdgeId = {
       __name = "sol.transport::EdgeId.user",
       __type = {
@@ -944,7 +1171,14 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
-    EdgeObjectType = {  },
+    EdgeIsect = {
+      __name = "sol.transport::EdgeIsect.user",
+      __type = {
+        name = "transport::EdgeIsect"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = ()
+    },
     EdgePos = {
       __name = "sol.transport::EdgePos.user",
       __type = {
@@ -1027,6 +1261,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    LaneConfig = {
+      __name = "sol.StreetGeometry::LaneConfig.user",
+      __type = {
+        name = "StreetGeometry::LaneConfig"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     Line = {
       __name = "sol.ecs::component::Line.user",
       __type = {
@@ -1063,14 +1306,27 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    Map = {
+      __name = "sol.Map.user",
+      __type = {
+        name = "Map"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     Mat4f = {
       __name = "sol.CMat4f.user",
       __type = {
         name = "CMat4f"        is = ()
-      }      __eq = (),
+      }      __add = (),
+      __eq = (),
       __gc = (),
+      __mul = (),
       __pairs = (),
+      __sub = (),
       __tostring = (),
+      cols = (),
       new = ()
     },
     MetadataMap = {
@@ -1121,6 +1377,15 @@ LOLLO api =
       __name = "sol.ecs::component::ModelPersonIdle.user",
       __type = {
         name = "ecs::component::ModelPersonIdle"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    ModuleDesc = {
+      __name = "sol.ModuleDesc.user",
+      __type = {
+        name = "ModuleDesc"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -1329,6 +1594,15 @@ LOLLO api =
       __name = "sol.ecs::component::RunwayList.user",
       __type = {
         name = "ecs::component::RunwayList"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    ScriptRef = {
+      __name = "sol.model_metadata::ScriptRef.user",
+      __type = {
+        name = "model_metadata::ScriptRef"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -1640,6 +1914,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    StaticConstructionTemplate = {
+      __name = "sol.StaticConstructionTemplate.user",
+      __type = {
+        name = "StaticConstructionTemplate"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     Station = {
       __name = "sol.ecs::component::Station.user",
       __type = {
@@ -1748,6 +2031,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    TownBuildingParams = {
+      __name = "sol.TownBuildingParams.user",
+      __type = {
+        name = "TownBuildingParams"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     TownConnection = {
       __name = "sol.ecs::component::TownConnection.user",
       __type = {
@@ -1755,6 +2047,26 @@ LOLLO api =
       }      __eq = (),
       __gc = (),
       __pairs = (),
+      new = ()
+    },
+    TownInfo = {
+      __name = "sol.init_game_util::TownInfo.user",
+      __type = {
+        name = "init_game_util::TownInfo"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    TpNetData = {
+      __name = "sol.transport::TpNetData.user",
+      __type = {
+        name = "transport::TpNetData"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      getEdgeData = (),
+      getNodeData = (),
       new = ()
     },
     TpNetLink = {
@@ -1820,6 +2132,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    TransportEdgeData = {
+      __name = "sol.transport::EdgeData.user",
+      __type = {
+        name = "transport::EdgeData"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     TransportHistory = {
       __name = "sol.ecs::component::TransportHistory.user",
       __type = {
@@ -1833,6 +2154,24 @@ LOLLO api =
       __name = "sol.ecs::component::TransportNetwork.user",
       __type = {
         name = "ecs::component::TransportNetwork"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    TransportNode = {
+      __name = "sol.transport::Node.user",
+      __type = {
+        name = "transport::Node"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    TransportNodeData = {
+      __name = "sol.transport::NodeData.user",
+      __type = {
+        name = "transport::NodeData"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -1866,9 +2205,9 @@ LOLLO api =
       new = ()
     },
     TunnelType = {
-      __name = "sol.BridgeType.user",
+      __name = "sol.TunnelType.user",
       __type = {
-        name = "BridgeType"        is = ()
+        name = "TunnelType"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -1887,10 +2226,13 @@ LOLLO api =
       __name = "sol.CVec2f.user",
       __type = {
         name = "CVec2f"        is = ()
-      }      __eq = (),
+      }      __add = (),
+      __eq = (),
       __gc = (),
       __lt = (),
+      __mul = (),
       __pairs = (),
+      __sub = (),
       __tostring = (),
       new = ()
     },
@@ -1898,10 +2240,12 @@ LOLLO api =
       __name = "sol.CVec2i.user",
       __type = {
         name = "CVec2i"        is = ()
-      }      __eq = (),
+      }      __add = (),
+      __eq = (),
       __gc = (),
       __lt = (),
       __pairs = (),
+      __sub = (),
       __tostring = (),
       new = ()
     },
@@ -1909,10 +2253,13 @@ LOLLO api =
       __name = "sol.CVec3f.user",
       __type = {
         name = "CVec3f"        is = ()
-      }      __eq = (),
+      }      __add = (),
+      __eq = (),
       __gc = (),
       __lt = (),
+      __mul = (),
       __pairs = (),
+      __sub = (),
       __tostring = (),
       new = ()
     },
@@ -1920,10 +2267,13 @@ LOLLO api =
       __name = "sol.CVec4f.user",
       __type = {
         name = "CVec4f"        is = ()
-      }      __eq = (),
+      }      __add = (),
+      __eq = (),
       __gc = (),
       __lt = (),
+      __mul = (),
       __pairs = (),
+      __sub = (),
       __tostring = (),
       new = ()
     },
@@ -1981,40 +2331,36 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
-    ["WaterMesh::Contour"] = {
-      __name = "sol.ecs::component::WaterMesh::Contour.user",
-      __type = {
-        name = "ecs::component::WaterMesh::Contour"        is = ()
-      }      __eq = (),
-      __gc = (),
-      __pairs = (),
-      new = ()
+    enum = {
+      BuildMode = {  },
+      Carrier = {  },
+      ConstructionType = {  },
+      EdgeObjectType = {  },
+      LandUseType = {  },
+      TransportMode = {  }
     },
     transport = {
       Carrier = {  }
     }
   },
   util = {
-    proposal = {
-      makeProposalData = {
-        __doc__ = "(Unknown-type simpleProposal, Unknown-type context) -> Unknown-type"
-      }
+    formatLength = {
+      __doc__ = "(Number length) -> String"
     },
-    terrain = {
-      getFastHeightAt = {
-        __doc__ = "(Vec2f position) -> Number"
-      },
-      getHeightAt = {
-        __doc__ = "(Vec2f position) -> Number"
-      },
-      isValidCoordinate = {
-        __doc__ = "(Vec2f position) -> Bool"
-      }
+    formatMoney = {
+      __doc__ = "(Number amount) -> String"
     },
-    usedMemory = {
+    formatNumber = {
+      __doc__ = "(Number number) -> String"
+    },
+    formatSpeed = {
+      __doc__ = "(Number speed) -> String"
+    },
+    getKeyName = {
+      __doc__ = "(String keyCmd) -> String"
+    },
+    getLuaUsedMemory = {
       __doc__ = "() -> Number"
-    }    formatMoney = (),
-    formatNumber = (),
-    getKeyName = ()
+    }
   }
 }
