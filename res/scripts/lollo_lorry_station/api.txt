@@ -1,4 +1,4 @@
-LOLLO api = 
+local api = 
 {
   cmd = {
     make = {
@@ -27,7 +27,7 @@ LOLLO api =
         __doc__ = "(Vec2f position) -> Command"
       },
       instantlyUpdateTownCargoNeeds = {
-        __doc__ = "(Entity townEntity, Array[Vector[Number],3] cargoNeeds) -> Command"
+        __doc__ = "(Entity townEntity, Unknown-type cargoNeeds) -> Command"
       },
       removeField = {
         __doc__ = "(Entity fieldEntity) -> Command"
@@ -46,6 +46,9 @@ LOLLO api =
       },
       sellVehicle = {
         __doc__ = "(Entity vehicleEntity) -> Command"
+      },
+      sendScriptEvent = {
+        __doc__ = "(String vehicleEntity, String sellOnArrival, String, Unknown-type) -> Command"
       },
       sendToDepot = {
         __doc__ = "(Entity vehicleEntity, Bool sellOnArrival) -> Command"
@@ -72,7 +75,7 @@ LOLLO api =
         __doc__ = "(Entity entity, String name) -> Command"
       },
       setTownInfo = {
-        __doc__ = "(Entity townEntity, Array[Number,3] initialLandUseCapacities) -> Command"
+        __doc__ = "(Entity townEntity, Unknown-type initialLandUseCapacities) -> Command"
       },
       setUserStopped = {
         __doc__ = "(Entity vehicleEntity, Bool userStopped) -> Command"
@@ -329,7 +332,7 @@ LOLLO api =
           __doc__ = "(Entity destinationEntity) -> Vector[Entity]"
         }
       },
-      streetConnectorSystem = { -- LOLLO interesting
+      streetConnectorSystem = {
         forEach = {
           __doc__ = "(Function fn) -> Nil"
         },
@@ -383,7 +386,7 @@ LOLLO api =
           __doc__ = "(Entity townEntity) -> Table[Id,Pair[Number,Number]]"
         },
         getLandUsePersonCapacities = {
-          __doc__ = "(Entity townEntity) -> Array[Number,3]"
+          __doc__ = "(Entity townEntity) -> Unknown-type"
         },
         getParcel2BuildingMap = {
           __doc__ = "() -> Table[Entity,Entity]"
@@ -395,7 +398,7 @@ LOLLO api =
           __doc__ = "() -> Table[Entity,Vector[Entity]]"
         },
         getTown2personCapacitiesMap = {
-          __doc__ = "() -> Table[Entity,Array[Number,3]]"
+          __doc__ = "() -> Table[Entity,Unknown-type]"
         },
         hasBuilding = {
           __doc__ = "(Entity parcelEntity) -> Bool"
@@ -513,7 +516,6 @@ LOLLO api =
       }
     }
   },
-  enum = {  },
   res = {
     autoGroundTexRep = {
       find = {
@@ -596,7 +598,7 @@ LOLLO api =
       }
     },
     getBaseConfig = {
-      __doc__ = "() -> Unknown-type"
+      __doc__ = "() -> BaseConfig"
     },
     groundTextureRep = {
       find = {
@@ -1048,6 +1050,15 @@ LOLLO api =
       new = ()
     },
     ComponentType = {  },
+    ConnectTownsAndIndustries = {
+      __name = "sol.CmdData::ConnectTownsAndIndustries.user",
+      __type = {
+        name = "CmdData::ConnectTownsAndIndustries"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     Connection = {
       __name = "sol.boost::signals2::connection.user",
       __type = {
@@ -1238,6 +1249,15 @@ LOLLO api =
       __name = "sol.GroundTexture.user",
       __type = {
         name = "GroundTexture"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
+    InstantlyUpdateTownCargoNeeds = {
+      __name = "sol.CmdData::InstantlyUpdateTownCargoNeeds.user",
+      __type = {
+        name = "CmdData::InstantlyUpdateTownCargoNeeds"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),
@@ -1626,6 +1646,15 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
+    SendScriptEvent = {
+      __name = "sol.CmdData::SendScriptEvent.user",
+      __type = {
+        name = "CmdData::SendScriptEvent"        is = ()
+      }      __eq = (),
+      __gc = (),
+      __pairs = (),
+      new = ()
+    },
     SendToDepot = {
       __name = "sol.CmdData::SendToDepot.user",
       __type = {
@@ -1698,16 +1727,7 @@ LOLLO api =
       __pairs = (),
       new = ()
     },
-    SetNoCosts = {
-      __name = "sol.CmdData::SetNoCosts.user",
-      __type = {
-        name = "CmdData::SetNoCosts"        is = ()
-      }      __eq = (),
-      __gc = (),
-      __pairs = (),
-      new = ()
-    },
-    SetTReplaceTerrainownInfo = {
+    SetReplaceTerrainownInfo = {
       __name = "sol.CmdData::ReplaceTerrain.user",
       __type = {
         name = "CmdData::ReplaceTerrain"        is = ()
@@ -1717,9 +1737,9 @@ LOLLO api =
       new = ()
     },
     SetTownInfo = {
-      __name = "sol.CmdData::ConnectTownsAndIndustries.user",
+      __name = "sol.CmdData::SetTownInfo.user",
       __type = {
-        name = "CmdData::ConnectTownsAndIndustries"        is = ()
+        name = "CmdData::SetTownInfo"        is = ()
       }      __eq = (),
       __gc = (),
       __pairs = (),

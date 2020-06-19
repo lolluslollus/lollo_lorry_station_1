@@ -31,6 +31,14 @@ end
 -- Question: if I replace the segment with the new api, like you did in the road toolbox, will that bulldoze the buildings?
 function data()
     local function addSplitter(params)
+        -- debugger()
+        -- local newProposal = api.type.SimpleProposal.new()
+        -- newProposal.streetProposal.edgesToAdd[1] = params.streetNodeGroups
+
+        -- local build = api.cmd.make.buildProposal(newProposal, nil)
+        -- build.ignoreErrors = true
+        
+        -- api.cmd.sendCommand(build, function(_) end)
 
     end
 
@@ -90,6 +98,18 @@ function data()
                     -- local TpNetLinkProposal = api.type.TpNetLinkProposal:new()
                     -- print('LOLLO TpNetLinkProposal = ')
                     -- luadump(true)(TpNetLinkProposal)
+
+                    -- local baseEdge = api.type.BaseEdge:new()
+                    -- -- print('LOLLO BaseEdge = ', inspect(getmetatable(baseEdge)))
+                    -- print('LOLLO BaseEdge = ', inspect(baseEdge))
+                    -- -- luadump(true)(BaseEdge)
+
+                    -- local baseNode = api.type.BaseNode:new()
+                    -- -- print('LOLLO BaseNode = ', inspect(getmetatable(baseNode)))
+                    -- print('LOLLO BaseNode = ', inspect(baseNode))
+                    -- -- luadump(true)(BaseNode)
+
+                    debugger()
 
                     -- print('LOLLO nearbyStreetEdges =')
                     -- luadump(true)(nearbyStreetEdges)
