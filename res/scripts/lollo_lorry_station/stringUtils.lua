@@ -73,7 +73,7 @@ stringUtils.stringContains = function(testString, containedString)
     return not (not (string.find(testString, containedString)))
 end
 stringUtils.getSteamTextWithNoTags = function(str)
-    return string.gsub(str, '%[%w+%]', '')
+    return string.gsub(str, '%[[%w+/+]+%]', '')
 end
 
 return stringUtils
