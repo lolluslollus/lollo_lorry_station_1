@@ -6,6 +6,7 @@ local transfUtils = require('lollo_lorry_station/transfUtils')
 local _constants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
+local serialize = require('lollo_lorry_station.serialize')
 
 local state = {
     isShowAllEvents = false
@@ -99,18 +100,15 @@ function data()
                     -- print('LOLLO TpNetLinkProposal = ')
                     -- luadump(true)(TpNetLinkProposal)
 
-                    local debugPrint = require('debugPrint')
                     local baseEdge = api.type.BaseEdge:new()
-                    -- print('LOLLO BaseEdge = ', inspect(getmetatable(baseEdge)))
-                    print('LOLLO BaseEdge = ', debugPrint(baseEdge))
-                    
-                    -- luadump(true)(BaseEdge)
+                    print('LOLLO BaseEdge = ', inspect(baseEdge))
+                    -- luadump(true)(baseEdge) -- dumps
+                    serialize.toString(baseEdge)
 
                     local baseNode = api.type.BaseNode:new()
-                    -- print('LOLLO BaseNode = ', inspect(getmetatable(baseNode)))
-                    print('LOLLO BaseNode = ', debugPrint(baseNode))
-                    
-                    -- luadump(true)(BaseNode)
+                    print('LOLLO BaseNode = ', inspect(baseNode))
+                    -- luadump(true)(baseNode)
+                    serialize.toString(baseNode)
 
                     debugger()
 
@@ -263,7 +261,12 @@ function data()
                     print('LOLLO param.data =', inspect(param.data))
                     print('LOLLO param.proposal =', inspect(param.proposal))
                     print('LOLLO param.result =', inspect(param.result))
-                    luadump(true)(param)
+                    -- print('LOLLO debugPrint(param) = ')
+                    -- debugPrint(param)
+                    -- print('LOLLO luadump(true)(param) = ')
+                    -- luadump(true)(param)
+                    print('LOLLO my serialise = ')
+                    serialize.toString(param)
                 end
                 if true then return end
                 -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
