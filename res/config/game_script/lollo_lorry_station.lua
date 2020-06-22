@@ -99,15 +99,18 @@ function data()
                     -- print('LOLLO TpNetLinkProposal = ')
                     -- luadump(true)(TpNetLinkProposal)
 
-                    -- local baseEdge = api.type.BaseEdge:new()
-                    -- -- print('LOLLO BaseEdge = ', inspect(getmetatable(baseEdge)))
-                    -- print('LOLLO BaseEdge = ', inspect(baseEdge))
-                    -- -- luadump(true)(BaseEdge)
+                    local debugPrint = require('debugPrint')
+                    local baseEdge = api.type.BaseEdge:new()
+                    -- print('LOLLO BaseEdge = ', inspect(getmetatable(baseEdge)))
+                    print('LOLLO BaseEdge = ', debugPrint(baseEdge))
+                    
+                    -- luadump(true)(BaseEdge)
 
-                    -- local baseNode = api.type.BaseNode:new()
-                    -- -- print('LOLLO BaseNode = ', inspect(getmetatable(baseNode)))
-                    -- print('LOLLO BaseNode = ', inspect(baseNode))
-                    -- -- luadump(true)(BaseNode)
+                    local baseNode = api.type.BaseNode:new()
+                    -- print('LOLLO BaseNode = ', inspect(getmetatable(baseNode)))
+                    print('LOLLO BaseNode = ', debugPrint(baseNode))
+                    
+                    -- luadump(true)(BaseNode)
 
                     debugger()
 
