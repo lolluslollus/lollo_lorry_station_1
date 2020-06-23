@@ -6,7 +6,6 @@ local transfUtils = require('lollo_lorry_station/transfUtils')
 local _constants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 local debugger = require('debugger')
-local serialize = require('lollo_lorry_station.serialize')
 
 local state = {
     isShowAllEvents = false
@@ -102,13 +101,11 @@ function data()
 
                     local baseEdge = api.type.BaseEdge:new()
                     print('LOLLO BaseEdge = ', inspect(baseEdge))
-                    -- luadump(true)(baseEdge) -- dumps
-                    serialize.toString(baseEdge)
+                    luadump(true)(baseEdge) -- dumps
 
                     local baseNode = api.type.BaseNode:new()
                     print('LOLLO BaseNode = ', inspect(baseNode))
-                    -- luadump(true)(baseNode)
-                    serialize.toString(baseNode)
+                    luadump(true)(baseNode)
 
                     debugger()
 
@@ -265,8 +262,8 @@ function data()
                     -- debugPrint(param)
                     -- print('LOLLO luadump(true)(param) = ')
                     -- luadump(true)(param)
-                    print('LOLLO my serialise = ')
-                    serialize.toString(param)
+print('LOLLO param = ')
+debugPrint(param)
                 end
                 if true then return end
                 -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
@@ -299,104 +296,6 @@ function data()
                     end,
                     _myErrorHandler
                 )
-
-                local sampleParam = {
-                    data = {
-                      collisionInfo = {
-                        collisionEntities = {  },
-                        autoRemovalEntity2models = {
-                          [18340] = { 1 }
-                        },
-                        fieldEntities = {  },
-                        buildingEntities = {  }
-                      },
-                      entity2tn = {
-                        [9361] = {
-                        --   nodes = {
-                        --     userdata: 0x7f08d56cd178,
-                        --     userdata: 0x7f08a0f15668,
-                        --     userdata: 0x7f08a0ebcd58,
-                        --     userdata: 0x7f08a0ea2968,
-                        --     userdata: 0x7f08a0dff6b8,
-                        --     userdata: 0x7f08be426c08,
-                        --     userdata: 0x7f08a0cf4538
-                        --   },
-                          edges = {
-                            {
-                              speedLimit = 5.5555558204651,
-                              curveSpeedLimit = 160.00799560547,
-                              curSpeed = 3.6666669845581,
-                              precedence = false
-                            },
-                            {
-                              speedLimit = 5.5555558204651,
-                              curveSpeedLimit = 160.00799560547,
-                              curSpeed = 3.6666669845581,
-                              precedence = false
-                            },
-                            {
-                              speedLimit = 5.5555558204651,
-                              curveSpeedLimit = 160.00799560547,
-                              curSpeed = 3.6666669845581,
-                              precedence = false
-                            },
-                            {
-                              speedLimit = 5.5555558204651,
-                              curveSpeedLimit = 160.00799560547,
-                              curSpeed = 3.6666669845581,
-                              precedence = false
-                            }
-                          }
-                        }
-                      },
-                      tpNetLinkProposal = {
-                        toRemove = {  },
-                        toAdd = {  }
-                      },
-                      costs = 1055,
-                      errorState = {
-                        critical = false,
-                        messages = {  },
-                        warnings = {  }
-                      }
-                    },
-                    proposal = {
-                      proposal = {
-                        addedNodes = {  },
-                        addedSegments = {  },
-                        removedNodes = {  },
-                        removedSegments = {  },
-                        edgeObjectsToRemove = {  },
-                        edgeObjectsToAdd = {  },
-                        new2oldNodes = {  },
-                        old2newNodes = {  },
-                        new2oldSegments = {  },
-                        old2newSegments = {  },
-                        new2oldEdgeObjects = {  },
-                        old2newEdgeObjects = {  },
-                        frozenNodes = {  }
-                      },
-                      terrainAlignSkipEdges = {  },
-                      segmentTags = {  },
-                      toRemove = {  },
-                      toAdd = {
-                        {
-                          fileName = _constants.constructionFileName,
-                          params = { busLane = 0, lockLayoutCentre = 0, paramX = 0, paramY = 0, seed = 0, tramTrack = 0, year = 1950 },
-                          hasCargoPlatform = false,
-                          transf = ((1 / 0 / 0 / 0)/(-0 / 1 / 0 / 0)/(0 / 0 / 1 / 0)/(-3547.22 / 3206.46 / 54.534 / 1)),
-                          frozenNodes = {  },
-                          segmentsBefore = 0,
-                          name = "Midsomer Norton Halt",
-                          playerEntity = 18737,
-                          setAsHeadquarterHack = false
-                        }
-                      },
-                      old2new = {  },
-                      parcelsToRemove = {  }
-                    },
-                    result = { 9361 }
-                  }
             end
 
 --[[             xpcall(
