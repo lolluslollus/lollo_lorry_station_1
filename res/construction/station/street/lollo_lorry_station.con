@@ -6,7 +6,6 @@ local colliderutil = require "colliderutil"
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local _modConstants = require('lollo_lorry_station/constants')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
-local roadConnectionHelpers = require('lollo_lorry_station/roadConnectionHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transfUtils = require('lollo_lorry_station/transfUtils')
 local debugger = require('debugger')
@@ -80,8 +79,17 @@ function data()
 				MangleId = nil,
 			}
 			print('LOLLO starting updateFn, params = ')
-			luadump(true)(params)
+			luadump(true)(arrayUtils.cloneOmittingFields(params, {'state'}))
 			-- debugger()
+
+			local _lorryBayModuleIdsBeforeUpdate = {}
+			if type(params.modules) == 'table' then
+				for k, v in pairs(params.modules) do
+					if v and v.metadata and v.metadata.lorryBay then
+						_lorryBayModuleIdsBeforeUpdate[#_lorryBayModuleIdsBeforeUpdate+1] = tostring(k)
+					end
+				end
+			end
 
 			local _occupiedSlots = {}
 			local _isSlotOccupied = function(x, y)
@@ -199,7 +207,7 @@ function data()
 			-- _addModel(_modConstants.markModelFileName, _idTransf, _modConstants.markTag)
 			
 			-- add cargo area slots
-			local slotXYs = { -- default lorry bay
+			local slotXYs = {
 				['-1'] = {
 					['0'] = true,
 				},
@@ -246,8 +254,6 @@ function data()
 			-- no access to api or interface, I must work with the params.
 			if type(params.streetNodeGroups) == 'table' and type(params.transf) == 'table' and type(params.inverseTransf) == 'table' then
 				for _, nodeGroup in pairs(params.streetNodeGroups) do
-					print('LOLLO params.inverseTransf = ')
-					luadump(true)(params.inverseTransf)
 					local absolutePosition = nodeGroup[2][1]
 					print('LOLLO absolutePosition = ')
 					luadump(true)(absolutePosition)
@@ -387,27 +393,36 @@ luadump(true)(adjacentCargoAreas)
 				-- }
 
 				-- test: add road connections to lorry bays
-				-- LOLLO TODO add road connections to lorry bays, with the appropriate transf,
-				-- basing on params.streetEdges and result.models with lorry bay tag
-				-- _addModel(_modConstants.roadConnectionFileName, _idTransf, _modConstants.roadConnectionTag)
-				local nodeGroupCounter = 1
 				-- debugger()
+				local newModelTags = {}
+				print('LOLLO _lorryBayModuleIdsBeforeUpdate =')
+				luadump(true)(_lorryBayModuleIdsBeforeUpdate)
 				for _, model in pairs(result.models) do
 					if type(model) == 'table' then
 						local slotId = slotUtils.getLorryBaySlotId(model.tag)
-						-- print('LOLLO slotId = ', slotId)
-						-- print('LOLLO result.modelTagsAndNodes = ')
-						-- luadump(true)(result.modelTagsAndNodes)
+						print('LOLLO model.slotId = ', slotId, 'type = ', type(slotId))
 						if slotId then
-							roadConnectionHelpers.setNodeGroup(nodeGroupCounter, {result.modelTagsAndNodes[slotId].node0, result.modelTagsAndNodes[slotId].nodeMid})
-							_addModel(roadConnectionHelpers.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
-							nodeGroupCounter = nodeGroupCounter + 1
-							roadConnectionHelpers.setNodeGroup(nodeGroupCounter, {result.modelTagsAndNodes[slotId].nodeMid, result.modelTagsAndNodes[slotId].node1})
-							_addModel(roadConnectionHelpers.getNodeGroupFileName(nodeGroupCounter), _idTransf, _modConstants.roadConnectionTag)
-							nodeGroupCounter = nodeGroupCounter + 1
+				-- LOLLO TODO this fails coz the module is always there,
+				-- updateFn is called too often to do this
+				-- solution: persist the edges I have already split
+				-- but: what if the road has changed since the last split?
+						local isInModules = false
+							for _, moduleId in pairs(_lorryBayModuleIdsBeforeUpdate) do
+								print('LOLLO moduleId = ', moduleId, 'type = ', type(moduleId))
+								if moduleId == slotId then
+									print('LOLLO isInModules is true')
+									isInModules = true
+									break
+								end
+							end
+							if not isInModules then
+								newModelTags[#newModelTags+1] = slotId
+							end
 						end
 					end
 				end
+				print('LOLLO newModelTags = ', inspect(newModelTags))
+				-- LOLLO TODO split newModelTags edges using the data in result.modelTagsAndNodes
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				if #station.terminals > 0 then table.insert(result.stations, station) end

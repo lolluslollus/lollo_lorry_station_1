@@ -22,13 +22,6 @@ local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
 
--- Hi man! I have edge0 and edge1, each with {x, y, z} and {sin x, cos x, some func of z}.
--- Given these two nodes, I can find a 3rd order polynom that connects the two edges and respects their tangents.
--- Now I can find out the coordinates of any point along the piece of road, that connects the two edges.
--- Now I put a point somewhere near the middle into the module grid. I know its coordinates and tangents.
--- This works already.
--- The trouble starts now: I want to remove the previous segment connecting edge0 and edge1, replace it with two segments and add a terminal inbetween. The new api seems to be the smart way to do it.
--- Question: if I replace the segment with the new api, like you did in the road toolbox, will that bulldoze the buildings?
 function data()
     local function addSplitter(params)
         -- debugger()
@@ -99,13 +92,13 @@ function data()
                     -- print('LOLLO TpNetLinkProposal = ')
                     -- luadump(true)(TpNetLinkProposal)
 
-                    local baseEdge = api.type.BaseEdge:new()
-                    print('LOLLO BaseEdge = ', inspect(baseEdge))
-                    luadump(true)(baseEdge) -- dumps
+                    -- local baseEdge = api.type.BaseEdge:new()
+                    -- print('LOLLO BaseEdge = ', inspect(baseEdge))
+                    -- luadump(true)(baseEdge) -- dumps
 
-                    local baseNode = api.type.BaseNode:new()
-                    print('LOLLO BaseNode = ', inspect(baseNode))
-                    luadump(true)(baseNode)
+                    -- local baseNode = api.type.BaseNode:new()
+                    -- print('LOLLO BaseNode = ', inspect(baseNode))
+                    -- luadump(true)(baseNode)
 
                     debugger()
 
@@ -143,8 +136,6 @@ function data()
                     newParams.transf = _getCloneWoutSeed(args.transf)
                     newParams.inverseTransf = transfUtils.getInverseTransf(args.transf)
 
-                    addSplitter(newParams)
-
                     local newId = game.interface.upgradeConstruction(
                         args.id,
                         _constants.constructionFileName,
@@ -172,7 +163,7 @@ function data()
             -- )
 
         end,
-        guiHandleEvent = function(id, name, param, four, five)
+        guiHandleEvent = function(id, name, param)
             -- LOLLO NOTE when U try to add a streetside bus or lorry stop, the streetBuilder fires this event.
             -- Then, the proposal contains no new objects and no old objects: it's not empty, but it's only filled with objects
             -- that are in turn filled with empty objects.
@@ -252,50 +243,8 @@ function data()
                     _myErrorHandler
                 )
             elseif name == 'builder.apply' then
-                if param and param.proposal then
-                    debugger()
-                    print('LOLLO builder.apply caught with param = ', inspect(param))
-                    print('LOLLO param.data =', inspect(param.data))
-                    print('LOLLO param.proposal =', inspect(param.proposal))
-                    print('LOLLO param.result =', inspect(param.result))
-                    -- print('LOLLO debugPrint(param) = ')
-                    -- debugPrint(param)
-                    -- print('LOLLO luadump(true)(param) = ')
-                    -- luadump(true)(param)
-print('LOLLO param = ')
-debugPrint(param)
-                end
+                -- this does not fire when adding a construction module
                 if true then return end
-                -- print('LOLLO gui select caught, id = ', id, ' name = ', name, ' param = ')
-                -- luadump(true)(param)
-                -- you cannot check the types coz they contain userdata, so use xpcall
-                -- if type(param) == 'table' and type(param.proposal) == 'table'
-                --     and type(param.proposal.toAdd) == 'table' and type(param.proposal.toAdd[1]) == 'table'
-                --     and param.proposal.toAdd[1].fileName == _constants.constructionFileName then
-                xpcall(
-                    function()
-                        if not param.proposal.toAdd or not param.proposal.toAdd[1] or param.proposal.toAdd[1].fileName ~= _constants.constructionFileName then return end
-                        if not param.result[1] then return end
-
-                        local entity = game.interface.getEntity(param.result[1]) -- the newly built station
-                        if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
-
-                        -- debugger()
-                        game.interface.sendScriptEvent(
-                            '__lolloLorryStationEvent__',
-                            'built',
-                            {
-                                id = param.result[1],
-                                params = entity.params,
-                                position = entity.position,
-                                -- proposal = param.proposal,
-                                -- result = param.result
-                                transf = entity.transf
-                            }
-                        )
-                    end,
-                    _myErrorHandler
-                )
             end
 
 --[[             xpcall(
@@ -400,9 +349,9 @@ debugPrint(param)
             if not state.isShowAllEvents then state.isShowAllEvents = false end
             return state
         end,
-        load = function(data)
-            if data then
-                state.isShowAllEvents = data.isShowAllEvents or false
+        load = function(loadedState)
+            if loadedState then
+                state.isShowAllEvents = loadedState.isShowAllEvents or false
             end
             -- if state ~= nil then
             --     print('LOLLO state = ')

@@ -1,5 +1,0 @@
-local roadConnectionHelpers = require('lollo_lorry_station/roadConnectionHelpers')
-
-function data()
-    return roadConnectionHelpers.getModelData('01')
-end

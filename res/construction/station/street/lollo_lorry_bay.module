@@ -35,7 +35,7 @@ return {
 		skipCollision = true, -- useless
 	},
 	skipCollision = true, -- useless
-	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
+	updateFn = function(result, transform, tag, slotId, addModelFn, params)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
 
@@ -51,8 +51,6 @@ return {
 		luadump(true)(slotId)
 		print('LOLLO module received result =')
 		luadump(true)(result)
-		print('LOLLO module received callback =')
-		luadump(true)(callback)
 
 		local modelTag = slotUtils.getLorryBayModelTag(slotId)
 		-- if type(result) == 'table' and type (result.slots) == 'table' then
