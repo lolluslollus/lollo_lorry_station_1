@@ -4,9 +4,6 @@ local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
-local inspect = require('lollo_lorry_station/inspect')
-local luadump = require('lollo_lorry_station/luadump')
-local debugger = require('debugger')
 local _constants = require('lollo_lorry_station/constants')
 
 function data()

@@ -1,11 +1,8 @@
-local inspect = require('lollo_lorry_station/inspect')
-local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local transfUtils = require('lollo_lorry_station/transfUtils')
 local _constants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
-local debugger = require('debugger')
 
 local state = {
     isShowAllEvents = false
@@ -24,7 +21,6 @@ end
 
 function data()
     local function addSplitter(params)
-        -- debugger()
         -- local newProposal = api.type.SimpleProposal.new()
         -- newProposal.streetProposal.edgesToAdd[1] = params.streetNodeGroups
 
@@ -45,9 +41,9 @@ function data()
                 print("__lolloLorryStationEvent__ caught")
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 -- src =	lollo_lorry_station.lua	 id =	__lolloLorryStationEvent__	 name =	select
-                luadump(true)(args)
+                debugPrint(args)
                 -- print('LOLLO api = ')
-                -- luadump(true)(api)
+                -- debugPrint(api)
                 -- we upgrade the construction to inject the street edges
                 if name == 'select' then
                     local newParams = _getCloneWoutSeed(args.params)
@@ -55,55 +51,52 @@ function data()
                     -- args.params.streetEdges = edgeUtils.getStreetEdgesSquareBySquare(
                     --     args.transf
                     -- )
-                    -- debugger()
                     local nearbyStreetEdges = edgeUtils.getNearbyStreetEdges(
                         args.transf
                     )
 
                     -- local BuildProposal = api.type.BuildProposal:new()
                     -- print('LOLLO BuildProposal = ')
-                    -- luadump(true)(BuildProposal)
+                    -- debugPrint(BuildProposal)
 
                     -- local Proposal = api.type.Proposal:new()
                     -- print('LOLLO Proposal = ')
-                    -- luadump(true)(Proposal)
+                    -- debugPrint(Proposal)
 
                     -- local ProposalCreateCallbackResult = api.type.ProposalCreateCallbackResult:new()
                     -- print('LOLLO ProposalCreateCallbackResult = ')
-                    -- luadump(true)(ProposalCreateCallbackResult)
+                    -- debugPrint(ProposalCreateCallbackResult)
 
                     -- local ProposalData = api.type.ProposalData:new()
                     -- print('LOLLO ProposalData = ')
-                    -- luadump(true)(ProposalData)
+                    -- debugPrint(ProposalData)
 
                     -- local SimpleProposal = api.type.SimpleProposal:new()
                     -- print('LOLLO SimpleProposal = ')
-                    -- luadump(true)(SimpleProposal)
+                    -- debugPrint(SimpleProposal)
 
                     -- local SimpleStreetProposal = api.type.SimpleStreetProposal:new()
                     -- print('LOLLO SimpleStreetProposal = ')
-                    -- luadump(true)(SimpleStreetProposal)
+                    -- debugPrint(SimpleStreetProposal)
 
                     -- local StreetProposal = api.type.StreetProposal:new()
                     -- print('LOLLO StreetProposal = ')
-                    -- luadump(true)(StreetProposal)
+                    -- debugPrint(StreetProposal)
 
                     -- local TpNetLinkProposal = api.type.TpNetLinkProposal:new()
                     -- print('LOLLO TpNetLinkProposal = ')
-                    -- luadump(true)(TpNetLinkProposal)
+                    -- debugPrint(TpNetLinkProposal)
 
                     -- local baseEdge = api.type.BaseEdge:new()
-                    -- print('LOLLO BaseEdge = ', inspect(baseEdge))
-                    -- luadump(true)(baseEdge) -- dumps
+                    -- print('LOLLO BaseEdge = ')
+                    -- debugPrint(baseEdge)
 
                     -- local baseNode = api.type.BaseNode:new()
-                    -- print('LOLLO BaseNode = ', inspect(baseNode))
-                    -- luadump(true)(baseNode)
-
-                    debugger()
+                    -- print('LOLLO BaseNode = ')
+                    -- debugPrint(baseNode)
 
                     -- print('LOLLO nearbyStreetEdges =')
-                    -- luadump(true)(nearbyStreetEdges)
+                    -- debugPrint(nearbyStreetEdges)
                     -- newParams.streetEdgesWithAbsoluteCoordinates = {}
                     -- newParams.streetEdgesWithRelativeCoordinates = {}
                     newParams.streetNodeGroups = {}
@@ -131,7 +124,7 @@ function data()
                         }
                     end
                     print('LOLLO newParams.streetNodeGroups = ')
-                    luadump(true)(newParams.streetNodeGroups)
+                    debugPrint(newParams.streetNodeGroups)
                     newParams.position = _getCloneWoutSeed(args.position)
                     newParams.transf = _getCloneWoutSeed(args.transf)
                     newParams.inverseTransf = transfUtils.getInverseTransf(args.transf)
@@ -174,14 +167,14 @@ function data()
             -- reloaded.showState(state)
             if name == 'select' then
                 print('LOLLO lorry station caught gui select, id = ', id, ' name = ', name, ' param = ')
-                luadump(true)(param)
+                debugPrint(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(
                     function()
                         -- with this event, param is the selected item id
                         local entity = game.interface.getEntity(param)
                         print('LOLLO selected entity = ')
-                        luadump(true)(entity)
+                        debugPrint(entity)
 
                         if type(entity) ~= 'table' or type(entity.position) ~= 'table' then return end
                         
@@ -204,7 +197,6 @@ function data()
                                 for _, con in pairs(nearbyLorryStationConstructions) do
                                     if stringUtils.arrayHasValue(con.stations, staId) then
                                         if not constructionId then
-                                            -- debugger()
                                             constructionId = con.id
                                             constructionParams = con.params
                                             constructionPosition = con.position
@@ -225,7 +217,6 @@ function data()
                             return
                         end
 
-                        -- debugger()
                         -- The user has selected one of my lorry stations: go ahead in the worker thread
                         if constructionId then
                             game.interface.sendScriptEvent(
@@ -252,8 +243,8 @@ function data()
                     print("one")
                     local out = io.popen('find /v "" > con', 'w')
                     print("out = ")
-                    luadump(true)(out)
-                    luadump(true)(table.unpack(out))
+                    debugPrint(out)
+                    debugPrint(table.unpack(out))
                     print("two")
                     out:write("three" .. '\r\n') --\r because windows
                     print("four")
@@ -262,41 +253,29 @@ function data()
                 end,
                 _myErrorHandler
             ) ]]
-            
-
-            --[[ xpcall(
-                function()
-                    print("debugger = ")
-                    luadump(true)(debugger)
-                    print('about to start debugger')
-                    debugger()
-                    print('debugger called')
-                end,
-                _myErrorHandler
-            ) ]]
 
             --[[ print('- io = ')
-            luadump(true)(io)
+            debugPrint(io)
 
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
                 -- if key ~= "package" and key ~= "_G" then
-                --     luadump(true)(value)
+                --     debugPrint(value)
                 -- else
-                --     print("luadump too long, skipped")
+                --     print("data too long, skipped")
                 -- end
             end ]]
             -- print('-- sol = ')
-            -- luadump(true)(sol)
+            -- debugPrint(sol)
             -- print('-- ug = ')
-            -- luadump(true)(ug)
+            -- debugPrint(ug)
 
             --[[ xpcall(
                 function()
                     print(' -- begin')
                     local one = ug.BaseEdge.new()
-                    luadump(true)(one)
+                    debugPrint(one)
                     print(' -- end')
                 end,
                 _myErrorHandler
@@ -305,7 +284,7 @@ function data()
             --[[ xpcall(
                 function()
                     print(' -- _ =')
-                    luadump(true)(_G._)
+                    debugPrint(_G._)
                 end,
                 _myErrorHandler
             ) ]]
@@ -329,14 +308,14 @@ function data()
             ) ]]
 
             -- -- print("-- package = ")
-            -- -- luadump(true)(package) --this hangs
+            -- -- debugPrint(package) --this hangs
             -- print('-- getmetatable = ')
-            -- luadump(true)(getmetatable(''))
+            -- debugPrint(getmetatable(''))
             -- print('-- io = ')
-            -- luadump(true)(io)
+            -- debugPrint(io)
 
             -- print('-- game = ')
-            -- luadump(true)(game)
+            -- debugPrint(game)
 
             -- _G.lollo = true
         end,
@@ -355,7 +334,7 @@ function data()
             end
             -- if state ~= nil then
             --     print('LOLLO state = ')
-            --     luadump(true)(state)
+            --     debugPrint(state)
             -- end
             return state
         end

@@ -1,6 +1,5 @@
 package.path = package.path .. ';res/scripts/?.lua'
 
-local luadump = require('lollo_lorry_station/luadump')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 
@@ -71,7 +70,6 @@ end
 -- end
 
 local DemangleId = function(slotId)
-	-- debugger()
 	local function _getIdBase(slotId)
 		local baseId = 0
 		for _, v in pairs(_idBasesSortedDesc) do

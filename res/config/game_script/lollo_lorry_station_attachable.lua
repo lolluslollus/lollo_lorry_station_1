@@ -1,10 +1,7 @@
-local luadump = require('lollo_lorry_station/luadump')
-local inspect = require('lollo_lorry_station/inspect')
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 -- local _modConstants = require('lollo_lorry_station/constants')
 local stringUtils = require('lollo_lorry_station/stringUtils')
-local debugger = require('debugger')
 
 local state = {
     isShowAllEvents = false
@@ -31,20 +28,19 @@ function data()
     return {
         handleEvent = function(src, id, name, args)
             if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
-            if state.isShowAllEvents then
+            -- if state.isShowAllEvents then
                 print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
-            end
+            -- end
             if (id == '__lolloLorryStation2Event__') then
                 print('__lolloLorryStation2Event__ caught')
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
-                luadump(true)(args)
+                debugPrint(args)
 
                 if name == 'built' then
-                    print('LOLLO game.interface.buildConstruction = ')
-                    luadump(true)(game.interface.buildConstruction)
+                    -- print('LOLLO game.interface.buildConstruction = ')
+                    -- debugPrint(game.interface.buildConstruction)
 
                     -- local allModels = api.res.modelRep.getAll()
-                    -- debugger()
                     -- I arrive here from built with a funny transf looking like
                     -- 'transf' = '((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))'
                     -- which I stringified coz it is userData
@@ -60,10 +56,9 @@ function data()
                     )
                     args.params.position = _getCloneWoutModulesAndSeed(args.position)
                 elseif name == 'select' then
-                    print('LOLLO game.interface.buildConstruction = ')
-                    luadump(true)(game.interface.buildConstruction)
+                    -- print('LOLLO game.interface.buildConstruction = ')
+                    -- debugPrint(game.interface.buildConstruction)
 
-                    -- debugger()
                     -- local newId = game.interface.upgradeConstruction(
                     --     parameters.id,
                     --     _constants.constructionFileName,
@@ -96,7 +91,7 @@ function data()
             if name == 'select' then
                 -- there is no way to know that I have selected one of my streetside stations
                 print('LOLLO lorry station attachable caught gui select, id = ', id, ' name = ', name, ' param = ')
-                luadump(true)(param)
+                debugPrint(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
                 xpcall(
                     function()
@@ -111,7 +106,7 @@ function data()
                             {type = 'STATION', includeData = true}
                         )
                         -- print('LOLLO allStations = ')
-                        -- luadump(true)(allStations)
+                        -- debugPrint(allStations)
                         -- local sampleAllStations = {
                         --   [27353] = {
                         --     cargo = true,
@@ -128,8 +123,6 @@ function data()
                         -- neither the station nor the edge contain any useful information
                         -- to find out if I am dealing with my own station or not.
                         -- However, I can find out if I am dealing with a lorry road station.
-
-                        -- debugger()
 
                         -- getConstructionEntity() is not available in the ui thread, sadly.
                         -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
@@ -149,7 +142,6 @@ function data()
                             end
                         end
 
-                        -- debugger()
                         if stationId then
                             game.interface.sendScriptEvent(
                                 '__lolloLorryStation2Event__',
@@ -169,28 +161,27 @@ function data()
                 -- it has no id (for now at least), so the edge id seems more interesting.
                 -- U can try to figure it out here, but it's probably easier in the select handler
                 -- print('LOLLO gui builder.apply caught, id = ', id, ' name = ', name, ' param = ')
-                -- luadump(true)(param)
+                -- debugPrint(param)
                 -- you cannot check the types coz they contain userdata, so use xpcall
                 xpcall(
                     function()
-                        print('LOLLO name = ')
-                        luadump(true)(name)
+                      print('LOLLO id = ')
+                      debugPrint(id)
+                      print('LOLLO name = ')
+                        debugPrint(name)
                         print('LOLLO param = ')
-                        -- luadump(true)(param)
+                        debugPrint(param)
                         -- local allModels = api.res.modelRep.getAll()
                         -- print('LOLLO allModels = ')
-                        -- luadump(true)(allModels)
-                        -- debugger()
+                        -- debugPrint(allModels)
                         local stationModelId = api.res.modelRep.find(_constants.stationFileName)
 
                         -- print('LOLLO model instance =')
-                        -- luadump(true)(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
+                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
                         -- print('LOLLO transf0 = ')
-                        -- luadump(true)(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0)
-                        -- print(inspect(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0))
+                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0)
                         -- print('LOLLO transf = ')
-                        -- luadump(true)(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
-                        -- print(inspect(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
 
                         if not param
                         or not param.proposal
@@ -202,8 +193,11 @@ function data()
 
                         -- local entity = game.interface.getEntity(param.result[1]) -- the newly built station
                         -- if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
-
-                        -- debugger()
+                        print('LOLLO lorry station built!')
+                        -- debugPrint(param)
+-- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
+-- better would be to use result, but it is empty after plopping a streetside station.
+-- I have notified UG of this bug.
                         game.interface.sendScriptEvent(
                             '__lolloLorryStation2Event__',
                             'built',
@@ -484,6 +478,13 @@ function data()
                   },
                   result = {  }
                 }
+                -- elseif state.isShowAllEvents then
+            else
+                -- print('LOLLO guiHandleEvent caught the following:')
+                -- print('LOLLO id =', id)
+                -- print('LOLLO name =', name)
+                -- print('LOLLO param =')
+                -- debugPrint(param)
             end
 
 --[[             xpcall(
@@ -491,8 +492,8 @@ function data()
                     print('one')
                     local out = io.popen('find /v '' > con', 'w')
                     print('out = ')
-                    luadump(true)(out)
-                    luadump(true)(table.unpack(out))
+                    debugPrint(out)
+                    debugPrint(table.unpack(out))
                     print('two')
                     out:write('three' .. '\r\n') --\r because windows
                     print('four')
@@ -502,40 +503,28 @@ function data()
                 _myErrorHandler
             ) ]]
             
-
-            --[[ xpcall(
-                function()
-                    print('debugger = ')
-                    luadump(true)(debugger)
-                    print('about to start debugger')
-                    debugger()
-                    print('debugger called')
-                end,
-                _myErrorHandler
-            ) ]]
-
             --[[ print('- io = ')
-            luadump(true)(io)
+            debugPrint(io)
 
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
                 -- if key ~= 'package' and key ~= '_G' then
-                --     luadump(true)(value)
+                --     debugPrint(value)
                 -- else
-                --     print('luadump too long, skipped')
+                --     print('data too long, skipped')
                 -- end
             end ]]
             -- print('-- sol = ')
-            -- luadump(true)(sol)
+            -- debugPrint(sol)
             -- print('-- ug = ')
-            -- luadump(true)(ug)
+            -- debugPrint(ug)
 
             --[[ xpcall(
                 function()
                     print(' -- begin')
                     local one = ug.BaseEdge.new()
-                    luadump(true)(one)
+                    debugPrint(one)
                     print(' -- end')
                 end,
                 _myErrorHandler
@@ -544,7 +533,7 @@ function data()
             --[[ xpcall(
                 function()
                     print(' -- _ =')
-                    luadump(true)(_G._)
+                    debugPrint(_G._)
                 end,
                 _myErrorHandler
             ) ]]
@@ -568,14 +557,14 @@ function data()
             ) ]]
 
             -- -- print('-- package = ')
-            -- -- luadump(true)(package) --this hangs
+            -- -- debugPrint(package) --this hangs
             -- print('-- getmetatable = ')
-            -- luadump(true)(getmetatable(''))
+            -- debugPrint(getmetatable(''))
             -- print('-- io = ')
-            -- luadump(true)(io)
+            -- debugPrint(io)
 
             -- print('-- game = ')
-            -- luadump(true)(game)
+            -- debugPrint(game)
 
             -- _G.lollo = true
         end,
@@ -594,7 +583,7 @@ function data()
             end
             -- if state ~= nil then
             --     print('LOLLO state = ')
-            --     luadump(true)(state)
+            --     debugPrint(state)
             -- end
             return state
         end

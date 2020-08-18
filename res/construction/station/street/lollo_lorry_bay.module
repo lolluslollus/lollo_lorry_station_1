@@ -5,7 +5,6 @@ local constructionutil = require "constructionutil"
 local edgeUtils = require('lollo_lorry_station/edgeHelpers')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local _constants = require('lollo_lorry_station/constants')
-local luadump = require('lollo_lorry_station/luadump')
 
 function data()
 
@@ -44,13 +43,13 @@ return {
 		-- result is that of the parent modular construction, and they contain the slots with their tags
 		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
 		print('LOLLO module received transform =')
-		luadump(true)(transform)
+		debugPrint(transform)
 		print('LOLLO module received tag =')
-		luadump(true)(tag)
+		debugPrint(tag)
 		print('LOLLO module received slotId =')
-		luadump(true)(slotId)
+		debugPrint(slotId)
 		print('LOLLO module received result =')
-		luadump(true)(result)
+		debugPrint(result)
 
 		local modelTag = slotUtils.getLorryBayModelTag(slotId)
 		-- if type(result) == 'table' and type (result.slots) == 'table' then

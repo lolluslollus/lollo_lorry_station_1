@@ -1,8 +1,5 @@
 local lollo = {}
-local luadump = require('lollo_lorry_station/luadump')
-local inspect = require('lollo_lorry_station/inspect')
 local stringUtils = require('lollo_lorry_station/stringUtils')
--- local debugger = require('debugger')
 
 local function myErrorHandler(err)
     print('ERROR: ', err)
@@ -22,7 +19,7 @@ function lollo.debugGetInfo()
 end
 function lollo.showState(state)
     print('LOLLO state = ')
-    luadump(true)(state)
+    debugPrint(state)
 end
 function lollo.tryGlobalVariables()
     -- -USEALLAVAILABLECORES
@@ -30,79 +27,75 @@ function lollo.tryGlobalVariables()
     -- xfce4-terminal -- %command%
     -- print('about to try global variables')
     -- print('---')
-    -- luadump(true)(game)
+    -- debugPrint(game)
 
     -- if true then return end
 print('LOLLO game.interface.buildConstruction = ')
-luadump(true)(game.interface.buildConstruction)
+debugPrint(game.interface.buildConstruction)
 print('LOLLO game.interface.bulldoze = ')
-luadump(true)(game.interface.bulldoze)
+debugPrint(game.interface.bulldoze)
 print('LOLLO game.interface.findPath = ')
-luadump(true)(game.interface.findPath)
+debugPrint(game.interface.findPath)
 print('LOLLO game.interface.setZone = ')
-luadump(true)(game.interface.setZone)
+debugPrint(game.interface.setZone)
 print('LOLLO game.interface.startEvent = ')
-luadump(true)(game.interface.startEvent)
+debugPrint(game.interface.startEvent)
 print('LOLLO game.interface.upgradeConstruction = ')
-luadump(true)(game.interface.upgradeConstruction)
+debugPrint(game.interface.upgradeConstruction)
 
-local debugger = require('debugger')
-    debugger()
-    
     xpcall(
         function()
             print('-- global variables = ')
             for key, value in pairs(_G) do
                 print(key, value)
                 -- if key ~= "package" and key ~= "_G" then
-                --     luadump(true)(value)
+                --     debugPrint(value)
                 -- else
-                --     print("luadump too long, skipped")
+                --     print("data too long, skipped")
                 -- end
             end
 
             --  print('---')
             -- print('LOLLO getmetatable("") = ')
-            -- luadump(true)(getmetatable(''))
+            -- debugPrint(getmetatable(''))
             -- print('---')
             -- print('LOLLO getmetatable(_G) = ')
-            -- luadump(true)(getmetatable(_G))
+            -- debugPrint(getmetatable(_G))
 
             -- local filefilterutil = require('filefilterutil')
             -- print('filefilterutil.package.mod')
-            -- luadump(true)(filefilterutil.package.mod)
-            -- luadump(true)(filefilterutil.package.mod('vehicle/train/etr500_gen2_locomotive_f_eurostar_italy.mdl', {}))
+            -- debugPrint(filefilterutil.package.mod)
+            -- debugPrint(filefilterutil.package.mod('vehicle/train/etr500_gen2_locomotive_f_eurostar_italy.mdl', {}))
 
             print('---')
-            -- print(inspect(package.loaded['lollo_cement']))
-            -- print(inspect(package.loaded['lollo_cement.lua']))
-            -- print('---')
 
-            --print('package.loaded = ', inspect(package.loaded))
+            --print('package.loaded = ')
+            -- debugPrint(package.loaded)
             -- print('debug.getregistry = ')
-            -- print(inspect(debug.getregistry()))
+            -- debugPrint(debug.getregistry())
             -- print('---')
-            --print('package.preload = ', inspect(package.preload))
+            --print('package.preload = ')
+            -- debugPrint(package.preload)
             --print('LOLLO path = ', package.path) -- workshop mods do not appear here, only local mods
 
             -- local getMods = print('LOLLO getMods = ', package.loadlib('loadall.dll', 'getMods')) -- LOLLO TODO look into this, it may help with remote debugging
-            -- luadump(true)(getMods)
+            -- debugPrint(getMods)
             -- local getActiveMods = print('LOLLO getMods = ', package.loadlib('loadall.dll', 'getActiveMods')) -- LOLLO TODO look into this, it may help with remote debugging
-            -- luadump(true)(getActiveMods)
+            -- debugPrint(getActiveMods)
             
             print('---')
 
 --[[             print('game.interface.getLog() = ')
-            luadump(true)(game.interface.getLog) -- this needs 3 params
-            --luadump(true)(game.interface.getLog()) -- this needs 3 params
+            debugPrint(game.interface.getLog) -- this needs 3 params
+            --debugPrint(game.interface.getLog()) -- this needs 3 params
             print('game.interface.getName() = ')
-            luadump(true)(game.interface.getName) -- this needs 1 param
-            --luadump(true)(game.interface.getName()) -- this needs 1 param
+            debugPrint(game.interface.getName) -- this needs 1 param
+            --debugPrint(game.interface.getName()) -- this needs 1 param
             print('game.interface.getPlayer() = ')
-            luadump(true)(game.interface.getPlayer())
+            debugPrint(game.interface.getPlayer())
             print('game.interface.getPlayerJournal() = ')
-            luadump(true)(game.interface.getPlayerJournal) -- this needs 2 to 3 params
-            --luadump(true)(game.interface.getPlayerJournal()) -- this needs 2 to 3 params
+            debugPrint(game.interface.getPlayerJournal) -- this needs 2 to 3 params
+            --debugPrint(game.interface.getPlayerJournal()) -- this needs 2 to 3 params
  ]]        end,
         myErrorHandler
     )
@@ -112,14 +105,12 @@ function lollo.tryDebugger()
     -- -USEALLAVAILABLECORES
     -- gnome-terminal -- %command%
     -- xfce4-terminal -- %command%
-    print('about to require debugger')
-    --require("debugger")()
 
     print('---')
-    --luadump(true)(package)
+    --debugPrint(package)
     print('---')
-    print(inspect(package.loaded['lollo_cement']))
-    print(inspect(package.loaded['lollo_cement.lua']))
+    debugPrint(package.loaded['lollo_cement'])
+    debugPrint(package.loaded['lollo_cement.lua'])
     print('---')
     print('traceback = ', debug.traceback(nil, 4))
     print('---')
@@ -154,7 +145,7 @@ function lollo.trySocket()
             print('about to start mobdebug')
             local mdbg = require('mobdebug')
             print('mobdebug required')
-            luadump(true)(mdbg)
+            debugPrint(mdbg)
             mdbg.listen('*', 8172) -- same as listen("*", 8172)
             print('mobdebug listening')
             --require('mobdebug').start()
@@ -166,7 +157,7 @@ function lollo.trySocket()
             print('about to start mobdebug')
             local mdbg = require('mobdebug')
             print('mobdebug required')
-            luadump(true)(mdbg)
+            debugPrint(mdbg)
             mdbg.start()
             print('mobdebug listening')
             --require('mobdebug').start()

@@ -3,8 +3,6 @@ local transf = require "transf"
 local constructionutil = require "constructionutil"
 local paramsutil = require "paramsutil"
 local colliderutil = require "colliderutil"
-local constructionutil = require "constructionutil"
-local luadump = require('lollo_lorry_station/luadump')
 
 --Begin Generated
 local generatedData = {
@@ -1417,7 +1415,7 @@ return {
 	end,
 	updateFn = function(params)
 		print('LOLLO stock params = ')
-		luadump(true)(params)
+		debugPrint(params)
 		local result = { }
 		
 		local cargoSpacing = {5, 5, 5, 5}
@@ -2950,11 +2948,11 @@ return {
 			if #cargoStation.terminals > 0 then table.insert(result.stations, cargoStation) end
 
 			print('LOLLO stock result.models = ')
-			luadump(true)(result.models)
+			debugPrint(result.models)
 			print('LOLLO stock result.stations = ')
-			luadump(true)(result.stations)
+			debugPrint(result.stations)
 			print('LOLLO stock result.terminalGroups = ')
-			luadump(true)(result.terminalGroups)
+			debugPrint(result.terminalGroups)
 			
 			local era = "era_a_"
 			-- local cargo = "cargo_" -- change this
@@ -3159,7 +3157,7 @@ return {
 		result.colliders = { }
 
 		print('LOLLO stock result = ')
-		luadump(true)(result)
+		debugPrint(result)
 		return result
 	end
 }

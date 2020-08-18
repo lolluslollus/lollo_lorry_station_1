@@ -101,7 +101,7 @@ function data()
                 runways = { },
                 terminals = {
                     {
-                        order = 0,
+                        -- order = 0,
                         personEdges = { 2, 3, },
                         personNodes = { 4, 5, },
                         vehicleNode = 2,
