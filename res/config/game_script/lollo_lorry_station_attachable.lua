@@ -7,12 +7,10 @@ local state = {
     isShowAllEvents = false
 }
 
-local _constants = arrayUtils.addProps(
-    {
-        constructionFileName = 'station/street/lollo_lorry_station.con',
-        stationFileName = 'station/road/lollo_small_cargo.mdl'
-    }
-)
+local _constants = arrayUtils.addProps({
+    constructionFileName = 'station/street/lollo_lorry_station.con',
+    stationFileName = 'station/road/lollo_small_cargo.mdl'
+})
 
 -- The idea here is, the user plops a streetside lorry station and then selects it.
 -- The trouble is, there is no way to tell what I really selected.
@@ -21,17 +19,17 @@ local function _getCloneWoutModulesAndSeed(obj)
 end
 
 local function _getTransfFromApiResult(transfStr)
-	transfStr = transfStr:gsub('%(%(', '(')
-	transfStr = transfStr:gsub('%)%)', ')')
-	local results = {}
-	for match0 in transfStr:gmatch('%([^(%))]+%)') do
-		local noBrackets = match0:gsub('%(', '')
-		noBrackets = noBrackets:gsub('%)', '')
-		for match1 in noBrackets:gmatch('[%-%.%d]+') do
-			results[#results + 1] = match1
-		end
-	end
-	return results
+    transfStr = transfStr:gsub('%(%(', '(')
+    transfStr = transfStr:gsub('%)%)', ')')
+    local results = {}
+    for match0 in transfStr:gmatch('%([^(%))]+%)') do
+        local noBrackets = match0:gsub('%(', '')
+        noBrackets = noBrackets:gsub('%)', '')
+        for match1 in noBrackets:gmatch('[%-%.%d]+') do
+            results[#results + 1] = match1
+        end
+    end
+    return results
 end
 
 local function _myErrorHandler(err)
@@ -41,9 +39,11 @@ end
 function data()
     return {
         handleEvent = function(src, id, name, args)
-            if src == 'guidesystem.lua' then return end -- also comes with guide system switched off
+            if src == 'guidesystem.lua' then
+                return
+            end -- also comes with guide system switched off
             -- if state.isShowAllEvents then
-                print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
+            print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
             -- end
             if (id == '__lolloLorryStation2Event__') then
                 print('__lolloLorryStation2Event__ caught')
@@ -51,6 +51,22 @@ function data()
                 debugPrint(args)
 
                 if name == 'built' then
+                    -- LOLLO TODO check out args.entity2tn
+                    local baseEdge = nil
+                    for key, value in args.entity2tn do
+                        local entity = game.interface.getEntity(key)
+                        if entity.type == 'BASE_EDGE' then
+                            baseEdge = entity
+                        end
+                    end
+                    if not (baseEdge) then
+                        return
+                    end
+
+                    local transf0 = _getTransfFromApiResult(args.transfStr)
+                    -- LOLLO TODO destroy the newly built streetside station
+                    -- and replace it with a construction containing the same, but with the cargo lanes
+
                     -- print('LOLLO game.interface.buildConstruction = ')
                     -- debugPrint(game.interface.buildConstruction)
 
@@ -62,13 +78,6 @@ function data()
                     -- from here on, I need to reverse the parameters.transf string somehow.
                     -- It looks like:
                     -- 'transf' = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
-                    args.params = {}
-                    -- parameters.params.id = parameters.id
-                    args.params.streetEdges = edgeUtils.getNearbyStreetEdges(
-                        args.position,
-                        10
-                    )
-                    args.params.position = _getCloneWoutModulesAndSeed(args.position)
                 elseif name == 'select' then
                     -- print('LOLLO game.interface.buildConstruction = ')
                     -- debugPrint(game.interface.buildConstruction)
@@ -83,7 +92,7 @@ function data()
 
             state.isShowAllEvents = true
 
---[[             package.loaded['lollo_lorry_station/reloaded'] = nil
+            --[[             package.loaded['lollo_lorry_station/reloaded'] = nil
             local reloaded = require('lollo_lorry_station/reloaded')
             reloaded.tryDebugger()
  ]]
@@ -107,69 +116,69 @@ function data()
                 print('LOLLO lorry station attachable caught gui select, id = ', id, ' name = ', name, ' param = ')
                 debugPrint(param)
                 -- id = 	mainView	 name = 	select	 param = 25278
-                xpcall(
-                    function()
-                        -- with this event, param is the selected item id
-                        local stationGroup = game.interface.getEntity(param)
-                        if type(stationGroup) ~= 'table' or stationGroup.type ~= 'STATION_GROUP' or type(stationGroup.position) ~= 'table' then return end
+                xpcall(function()
+                    -- with this event, param is the selected item id
+                    local stationGroup = game.interface.getEntity(param)
+                    if type(stationGroup) ~= 'table' or stationGroup.type ~= 'STATION_GROUP' or
+                        type(stationGroup.position) ~= 'table' then
+                        return
+                    end
 
-                        local stationId = false
-                        local stationPosition = {}
-                        local allStations = game.interface.getEntities(
-                            {pos = stationGroup.position, radius = 0},
-                            {type = 'STATION', includeData = true}
-                        )
-                        -- print('LOLLO allStations = ')
-                        -- debugPrint(allStations)
-                        -- local sampleAllStations = {
-                        --   [27353] = {
-                        --     cargo = true,
-                        --     carriers = { ROAD = true },
-                        --     id = 27353,
-                        --     name = 'Park Road',
-                        --     position = { 569.74090576172, -3373.41796875, 15.128763198853 },
-                        --     stationGroup = 27364,
-                        --     town = 18738,
-                        --     type = 'STATION'
-                        --   }
-                        -- }
+                    local stationId = false
+                    local stationPosition = {}
+                    local allStations = game.interface.getEntities(
+                                            {
+                            pos = stationGroup.position,
+                            radius = 0
+                        }, {
+                            type = 'STATION',
+                            includeData = true
+                        })
+                    -- print('LOLLO allStations = ')
+                    -- debugPrint(allStations)
+                    -- local sampleAllStations = {
+                    --   [27353] = {
+                    --     cargo = true,
+                    --     carriers = { ROAD = true },
+                    --     id = 27353,
+                    --     name = 'Park Road',
+                    --     position = { 569.74090576172, -3373.41796875, 15.128763198853 },
+                    --     stationGroup = 27364,
+                    --     town = 18738,
+                    --     type = 'STATION'
+                    --   }
+                    -- }
 
-                        -- neither the station nor the edge contain any useful information
-                        -- to find out if I am dealing with my own station or not.
-                        -- However, I can find out if I am dealing with a lorry road station.
+                    -- neither the station nor the edge contain any useful information
+                    -- to find out if I am dealing with my own station or not.
+                    -- However, I can find out if I am dealing with a lorry road station.
 
-                        -- getConstructionEntity() is not available in the ui thread, sadly.
-                        -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
-                        -- the game distinguishes constructions, stations and station groups.
-                        -- Constructions and stations in a station group are not selected, only the station group itself, which does not contain a lot of data.
-                        -- This is why we need this loop.
-                        for _, staId in pairs(stationGroup.stations) do
-                            for _, sta in pairs(allStations) do
-                                if staId == sta.id then
-                                    if not stationId and sta and sta.cargo and sta.carriers and sta.carriers['ROAD'] then
-                                        stationId = sta.id
-                                        stationPosition = sta.position
-                                    else
-                                      break
-                                    end
+                    -- getConstructionEntity() is not available in the ui thread, sadly.
+                    -- LOLLO NOTE this call returns constructions mostly sorted by distance, but not reliably!
+                    -- the game distinguishes constructions, stations and station groups.
+                    -- Constructions and stations in a station group are not selected, only the station group itself, which does not contain a lot of data.
+                    -- This is why we need this loop.
+                    for _, staId in pairs(stationGroup.stations) do
+                        for _, sta in pairs(allStations) do
+                            if staId == sta.id then
+                                if not stationId and sta and sta.cargo and sta.carriers and sta.carriers['ROAD'] then
+                                    stationId = sta.id
+                                    stationPosition = sta.position
+                                else
+                                    break
                                 end
                             end
                         end
+                    end
 
-                        if stationId then
-                            game.interface.sendScriptEvent(
-                                '__lolloLorryStation2Event__',
-                                'select',
-                                {
-                                    id = stationId,
-                                    position = stationPosition,
-                                    stationGroupId = stationGroup.id,
-                                }
-                            )
-                        end
-                    end,
-                    _myErrorHandler
-                )
+                    if stationId then
+                        game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'select', {
+                            id = stationId,
+                            position = stationPosition,
+                            stationGroupId = stationGroup.id
+                        })
+                    end
+                end, _myErrorHandler)
             elseif name == 'builder.apply' then
                 -- when U add a streetside station, U don't get any ids. The streetside station is an edge object,
                 -- it has no id (for now at least), so the edge id seems more interesting.
@@ -177,322 +186,44 @@ function data()
                 -- print('LOLLO gui builder.apply caught, id = ', id, ' name = ', name, ' param = ')
                 -- debugPrint(param)
                 -- you cannot check the types coz they contain userdata, so use xpcall
-                xpcall(
-                    function()
-                      print('LOLLO id = ')
-                      debugPrint(id)
-                      print('LOLLO name = ')
-                        debugPrint(name)
-                        print('LOLLO param = ')
-                        debugPrint(param)
-                        -- local allModels = api.res.modelRep.getAll()
-                        -- print('LOLLO allModels = ')
-                        -- debugPrint(allModels)
-                        local stationModelId = api.res.modelRep.find(_constants.stationFileName)
+                xpcall(function()
+                    print('LOLLO id = ')
+                    debugPrint(id)
+                    print('LOLLO name = ')
+                    debugPrint(name)
+                    print('LOLLO param = ')
+                    debugPrint(param)
+                    -- local allModels = api.res.modelRep.getAll()
+                    -- print('LOLLO allModels = ')
+                    -- debugPrint(allModels)
+                    local stationModelId = api.res.modelRep.find(_constants.stationFileName)
 
-                        -- print('LOLLO model instance =')
-                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
-                        -- print('LOLLO transf0 = ')
-                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0)
-                        -- print('LOLLO transf = ')
-                        -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
+                    -- print('LOLLO model instance =')
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
+                    -- print('LOLLO transf0 = ')
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0)
+                    -- print('LOLLO transf = ')
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
 
-                        if not param
-                        or not param.proposal
-                        or not param.proposal.proposal
-                        or not param.proposal.proposal.edgeObjectsToAdd
-                        or not param.proposal.proposal.edgeObjectsToAdd[1]
-                        or not param.proposal.proposal.edgeObjectsToAdd[1].modelInstance
-                        or param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId ~= stationModelId then return end
+                    if not param or not param.proposal or not param.proposal.proposal or
+                        not param.proposal.proposal.edgeObjectsToAdd or not param.proposal.proposal.edgeObjectsToAdd[1] or
+                        not param.proposal.proposal.edgeObjectsToAdd[1].modelInstance or
+                        param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId ~= stationModelId then
+                        return
+                    end
 
-                        -- local entity = game.interface.getEntity(param.result[1]) -- the newly built station
-                        -- if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
-                        print('LOLLO lorry station built!')
-                        -- debugPrint(param)
--- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
--- better would be to use result, but it is empty after plopping a streetside station.
--- I have notified UG of this bug.
-                        game.interface.sendScriptEvent(
-                            '__lolloLorryStation2Event__',
-                            'built',
-                            {
-                                -- id = param.result[1],
-                                -- params = entity.params,
-                                -- position = entity.position,
-                                -- proposal = param.proposal,
-                                -- result = param.result
-                                entity2tn = param.data.entity2tn,
-                                transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
-                            }
-                        )
-                    end,
-                    _myErrorHandler
-                )
-
-                local sampleParam = 
-                {
-                  data = {
-                    collisionInfo = {
-                      collisionEntities = {  },
-                      autoRemovalEntity2models = {  },
-                      fieldEntities = {  },
-                      buildingEntities = {  }
-                    },
-                    entity2tn = {
-                      [25280] = {
-                        nodes = {  },
-                        edges = {
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.967430114746,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.900161743164,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          }
-                        }
-                      },
-                      [25284] = {
-                        -- nodes = {
-                        --   userdata: 0x7f2662053758,
-                        --   userdata: 0xd822fa8
-                        -- },
-                        edges = {
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.964141845703,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.586784362793,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.892021179199,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          }
-                        }
-                      },
-                      [25288] = {
-                        -- nodes = {
-                        --   userdata: 0x7f265b5edd68,
-                        --   userdata: 0x7f2634524d08,
-                        --   userdata: 0x7f2698d103c8,
-                        --   userdata: 0x7f2667194928
-                        -- },
-                        edges = {
-                          {
-                            speedLimit = -1,
-                            curveSpeedLimit = 100,
-                            curSpeed = -0.66000002622604,
-                            precedence = false
-                          }
-                        }
-                      },
-                      [25289] = {
-                        -- nodes = {
-                        --   userdata: 0x7f263455a488,
-                        --   userdata: 0x7f26345cfe28,
-                        --   userdata: 0x7f263460bc68,
-                        --   userdata: 0x7f2634560a38
-                        -- },
-                        edges = {
-                          {
-                            speedLimit = -1,
-                            curveSpeedLimit = 100,
-                            curSpeed = -0.66000002622604,
-                            precedence = false
-                          }
-                        }
-                      },
-                      [27258] = {
-                        nodes = {  },
-                        edges = {
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.962844848633,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 22.22222328186,
-                            curveSpeedLimit = 75.895401000977,
-                            curSpeed = 14.666667938232,
-                            precedence = false
-                          },
-                          {
-                            speedLimit = 0,
-                            curveSpeedLimit = 0,
-                            curSpeed = 0,
-                            precedence = false
-                          }
-                        }
-                      }
-                    },
-                    tpNetLinkProposal = {
-                      toRemove = {  },
-                      toAdd = {  }
-                    },
-                    costs = 1200,
-                    errorState = {
-                      critical = false,
-                      messages = {  },
-                      warnings = {  }
-                    }
-                  },
-                  proposal = {
-                    proposal = {
-                      addedNodes = {  },
-                      addedSegments = {
-                        {
-                          entity = -1,
-                          comp = {
-                            node0 = 25289,
-                            node1 = 25288,
-                            tangent0 = (-47.2417 / 58.2757 / -0.227116),
-                            tangent1 = (-45.2802 / 59.8255 / -0.310316),
-                            type = 0,
-                            typeIndex = -1,
-                            objects = {
-                              { -1, 1 }
-                            }
-                          },
-                          type = 0,
-                          params = {
-                            streetType = 12,
-                            hasBus = false,
-                            tramTrackType = 0,
-                            precedenceNode0 = 2,
-                            precedenceNode1 = 2
-                          },
-                        --   playerOwned = <unknown type>,
-                          streetEdge = {
-                            streetType = 12,
-                            hasBus = false,
-                            tramTrackType = 0,
-                            precedenceNode0 = 2,
-                            precedenceNode1 = 2
-                          },
-                          trackEdge = {
-                            trackType = -1,
-                            catenary = false
-                          }
-                        }
-                      },
-                      removedNodes = {  },
-                      removedSegments = {
-                        {
-                          entity = 26286,
-                          comp = {
-                            node0 = 25289,
-                            node1 = 25288,
-                            tangent0 = (-47.2417 / 58.2757 / -0.227116),
-                            tangent1 = (-45.2802 / 59.8255 / -0.310316),
-                            type = 0,
-                            typeIndex = -1,
-                            objects = {  }
-                          },
-                          type = 0,
-                          params = {
-                            streetType = 12,
-                            hasBus = false,
-                            tramTrackType = 0,
-                            precedenceNode0 = 2,
-                            precedenceNode1 = 2
-                          },
-                        --   playerOwned = <unknown type>,
-                          streetEdge = {
-                            streetType = 12,
-                            hasBus = false,
-                            tramTrackType = 0,
-                            precedenceNode0 = 2,
-                            precedenceNode1 = 2
-                          },
-                          trackEdge = {
-                            trackType = -1,
-                            catenary = false
-                          }
-                        }
-                      },
-                      edgeObjectsToRemove = {  },
-                      edgeObjectsToAdd = {
-                        {
-                          category = 0,
-                          segmentEntity = -1,
-                          modelInstance = {
-                            modelId = 3639,
-                            -- transf0 = <unknown type>,
-                            transf = ((0.625234 / -0.780437 / 0 / 0)/(0.780437 / 0.625234 / 0 / 0)/(0 / 0 / 1 / 0)/(-3409.59 / 3126.84 / 55.8393 / 1)),
-                            transformator = -1
-                          },
-                          oneWay = false,
-                          left = false,
-                          name = 'High Street',
-                          playerEntity = 18737
-                        }
-                      },
-                      new2oldNodes = {  },
-                      old2newNodes = {  },
-                      new2oldSegments = {  },
-                      old2newSegments = {  },
-                      new2oldEdgeObjects = {  },
-                      old2newEdgeObjects = {  },
-                      frozenNodes = {  }
-                    },
-                    terrainAlignSkipEdges = {  },
-                    segmentTags = {  },
-                    toRemove = {  },
-                    toAdd = {  },
-                    old2new = {  },
-                    parcelsToRemove = {  }
-                  },
-                  result = {  }
-                }
+                    -- local entity = game.interface.getEntity(param.result[1]) -- the newly built station
+                    -- if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
+                    print('LOLLO lorry station built!')
+                    -- debugPrint(param)
+                    -- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
+                    -- better would be to use result, but it is empty after plopping a streetside station.
+                    -- I have notified UG of this bug.
+                    game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built', {
+                        entity2tn = param.data.entity2tn,
+                        transfStr = tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
+                    })
+                end, _myErrorHandler)
                 -- elseif state.isShowAllEvents then
             else
                 -- print('LOLLO guiHandleEvent caught the following:')
@@ -502,7 +233,7 @@ function data()
                 -- debugPrint(param)
             end
 
---[[             xpcall(
+            --[[             xpcall(
                 function()
                     print('one')
                     local out = io.popen('find /v '' > con', 'w')
@@ -517,7 +248,7 @@ function data()
                 end,
                 _myErrorHandler
             ) ]]
-            
+
             --[[ print('- io = ')
             debugPrint(io)
 
@@ -588,8 +319,12 @@ function data()
         guiUpdate = function()
         end,
         save = function()
-            if not state then state = {} end
-            if not state.isShowAllEvents then state.isShowAllEvents = false end
+            if not state then
+                state = {}
+            end
+            if not state.isShowAllEvents then
+                state.isShowAllEvents = false
+            end
             return state
         end,
         load = function(data)
