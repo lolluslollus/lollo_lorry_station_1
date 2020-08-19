@@ -20,6 +20,20 @@ local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
 end
 
+local function _getTransfFromApiResult(transfStr)
+	transfStr = transfStr:gsub('%(%(', '(')
+	transfStr = transfStr:gsub('%)%)', ')')
+	local results = {}
+	for match0 in transfStr:gmatch('%([^(%))]+%)') do
+		local noBrackets = match0:gsub('%(', '')
+		noBrackets = noBrackets:gsub('%)', '')
+		for match1 in noBrackets:gmatch('[%-%.%d]+') do
+			results[#results + 1] = match1
+		end
+	end
+	return results
+end
+
 local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
@@ -207,7 +221,8 @@ function data()
                                 -- position = entity.position,
                                 -- proposal = param.proposal,
                                 -- result = param.result
-                                transf = tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
+                                entity2tn = param.data.entity2tn,
+                                transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
                             }
                         )
                     end,
