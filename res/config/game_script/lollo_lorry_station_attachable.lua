@@ -56,6 +56,9 @@ function data()
                     for key, value in args.entity2tn do
                         local entity = game.interface.getEntity(key)
                         if entity.type == 'BASE_EDGE' then
+                            -- LOLLO TODO localise the base edge
+                            -- that owns the model with the right id,
+                            -- this is too simple
                             baseEdge = entity
                         end
                     end
