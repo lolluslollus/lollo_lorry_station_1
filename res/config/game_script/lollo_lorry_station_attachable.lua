@@ -69,6 +69,7 @@ function data()
                     local transf0 = _getTransfFromApiResult(args.transfStr)
                     -- LOLLO TODO destroy the newly built streetside station
                     -- and replace it with a construction containing the same, but with the cargo lanes
+                    -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl
 
                     -- print('LOLLO game.interface.buildConstruction = ')
                     -- debugPrint(game.interface.buildConstruction)
