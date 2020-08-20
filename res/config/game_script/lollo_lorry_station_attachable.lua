@@ -75,6 +75,149 @@ local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
 
+local function _replaceEdgeRemovingObjects(edgeId, objectToRemoveId)
+    -- this replaces the street without destroying the buildings
+    if not(edgeId) then return end
+
+	local proposal = api.type.SimpleProposal.new()
+	proposal.streetProposal.edgesToRemove[1] = edgeId
+
+	local baseEdge = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
+	local baseEdgeStreet = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE_STREET)
+
+	local newEdge = api.type.SegmentAndEntity.new()
+	newEdge.entity = -1
+	newEdge.type = 0
+    newEdge.comp = baseEdge
+    newEdge.playerOwned = {player = api.engine.util.getPlayer()}
+    newEdge.streetEdge = baseEdgeStreet
+
+    -- remove edge object
+    print('LOLLO proposal =')
+    debugPrint(proposal)
+    print('LOLLO proposal.edgeObjectsToRemove =')
+    debugPrint(proposal.edgeObjectsToRemove)
+    print('LOLLO newEdge before =')
+    debugPrint(newEdge)
+    -- local newEdgeCompObjects = {}
+    for i = 1, #newEdge.comp.objects do
+        local edgeObject = newEdge.comp.objects[i]
+        print('LOLLO edgeObject =')
+        debugPrint(edgeObject)
+        if edgeObject[1] == objectToRemoveId then
+            print('one')
+            proposal.streetProposal.edgeObjectsToRemove[#proposal.streetProposal.edgeObjectsToRemove + 1] = objectToRemoveId
+        else
+            proposal.edgesToAdd = newEdge
+            print('two')
+        end
+    end
+    
+    print('LOLLO newEdge after =')
+    debugPrint(newEdge)
+    print('LOLLO proposal =')
+    debugPrint(proposal)
+
+    -- newEdge.comp.objects = newEdgeCompObjects
+
+    proposal.streetProposal.edgesToAdd[1] = newEdge
+    -- print('LOLLO eo = ')
+    -- debugPrint(newEdge)
+    --[[ local sampleNewEdge =
+    {
+      entity = -1,
+      comp = {
+        node0 = 13010,
+        node1 = 18753,
+        tangent0 = {
+          x = -32.318000793457,
+          y = 81.757850646973,
+          z = 3.0953373908997,
+        },
+        tangent1 = {
+          x = -34.457527160645,
+          y = 80.931526184082,
+          z = -1.0708819627762,
+        },
+        type = 0,
+        typeIndex = -1,
+        objects = { },
+      },
+      type = 0,
+      params = {
+        streetType = 23,
+        hasBus = false,
+        tramTrackType = 0,
+        precedenceNode0 = 2,
+        precedenceNode1 = 2,
+      },
+      playerOwned = nil,
+      streetEdge = {
+        streetType = 23,
+        hasBus = false,
+        tramTrackType = 0,
+        precedenceNode0 = 2,
+        precedenceNode1 = 2,
+      },
+      trackEdge = {
+        trackType = -1,
+        catenary = false,
+      },
+    } ]]
+
+    local callback = function(res, success)
+        -- print('LOLLO res = ')
+		-- debugPrint(res)
+        --for _, v in pairs(res.entities) do print(v) end
+        -- print('LOLLO success = ')
+		-- debugPrint(success)
+	end
+
+	local cmd = api.cmd.make.buildProposal(proposal, nil, false)
+	api.cmd.sendCommand(cmd, callback)
+end
+
+local function _buildStation(transf)
+	local proposal = api.type.SimpleProposal.new()
+
+    local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
+    newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
+    newConstruction.params = {
+        seed = 123e4 -- we need this to avoid dumps
+    }
+    -- print('LOLLO transf =')
+    -- debugPrint(transf)
+    local transfMatrix = api.type.Mat4f.new(
+        api.type.Vec4f.new(transf[1], transf[2], transf[3], transf[4]),
+        api.type.Vec4f.new(transf[5], transf[6], transf[7], transf[8]),
+        api.type.Vec4f.new(transf[9], transf[10], transf[11], transf[12]),
+        api.type.Vec4f.new(transf[13], transf[14], transf[15], transf[16])
+    )
+    newConstruction.transf = transfMatrix
+    newConstruction.name = 'LOLLO simple lorry bay'
+    newConstruction.playerEntity = game.interface.getPlayer()
+    print('LOLLO game.interface.getPlayer() =')
+    debugPrint(game.interface.getPlayer())
+    newConstruction.playerEntity = api.engine.util.getPlayer()
+    print('LOLLO api.engine.util.getPlayer() =')
+    debugPrint(api.engine.util.getPlayer())
+
+    proposal.constructionsToAdd[1] = newConstruction
+    print('LOLLO proposal.constructionsToAdd =')
+    debugPrint(proposal.constructionsToAdd)
+
+    local callback = function(res, success)
+        print('LOLLO res = ')
+		debugPrint(res)
+        --for _, v in pairs(res.entities) do print(v) end
+        print('LOLLO success = ')
+		debugPrint(success)
+	end
+
+	local cmd = api.cmd.make.buildProposal(proposal, nil, false)
+	api.cmd.sendCommand(cmd, callback)
+end
+
 function data()
     return {
         handleEvent = function(src, id, name, args)
@@ -99,7 +242,14 @@ function data()
 
                     -- LOLLO TODO destroy the newly built streetside station
                     -- and replace it with a construction containing the same, but with the cargo lanes
-                    -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl
+                    -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
+                    -- Tried, it does not store any cargo.
+
+                    if stationId then
+                    --     game.interface.bulldoze(stationId) -- dumps
+                        _replaceEdgeRemovingObjects(args.edgeId, stationId)
+                        _buildStation(args.transf)
+                    end
 
                     -- print('LOLLO game.interface.buildConstruction = ')
                     -- debugPrint(game.interface.buildConstruction)
@@ -261,6 +411,11 @@ function data()
                     end
                     if not(edgeId) then return end
 
+                    -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
+                    -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col(1))
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf.col(1))
                     game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built', {
                         edgeId = edgeId,
                         transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))

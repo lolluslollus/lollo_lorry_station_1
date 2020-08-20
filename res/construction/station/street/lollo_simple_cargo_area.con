@@ -1,0 +1,73 @@
+local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+
+function data()
+	return {
+		type = "STREET_STATION_CARGO",
+		-- type = "STREET_STATION",
+		-- type = 'STREET_CONSTRUCTION',
+		description = {
+			name = _("Lollo cargo area for lorry station"),
+			description = _("Lollo cargo area for lorry station."),
+		},
+		availability = {
+			yearFrom = 0,
+			yearTo = 0
+		},
+		params = {
+			-- {
+			-- 	key = 'lockLayoutCentre',
+			-- 	name = _('Lock curve'),
+			-- 	tooltip = _('Lock a curve to keep its shape pretty and prevent other roads merging in. Unlock it to treat it like ordinary roads. You cannot relock an unlocked curve.'),
+			-- 	values = {
+			-- 		_('No'),
+			-- 		_('Yes')
+			-- 	},
+			-- 	defaultIndex = 0
+			-- },
+		},
+		-- hasCargoPlatform = true, -- useless
+		-- streetTerminal = { -- useless
+		-- 	cargo = true,
+		-- },
+		order = 5005,
+
+		skipCollision = true,
+		updateFn = function(params)
+			local result = {
+				colliders = {},
+				-- coord2terminalInfo = {},
+				cost = 1000,
+				edgeLists = {},
+				groundFaces = {},
+				models = {},
+				-- modelTagsAndNodes = {},
+				-- slots = {},
+				-- stations = {},
+				-- terminalGroups = {},
+				terrainAlignmentLists = {},
+				-- DemangleId = nil,
+				-- MangleId = nil,
+			}
+			print('LOLLO starting updateFn, params = ')
+			debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
+
+			table.insert(result.models, {
+				id = 'lollo_models/lollo_cargo_area.mdl',
+				transf = _idTransf,
+			})
+
+			print('LOLLO lollo_lorry_station leaving updateFn, result = ')
+			debugPrint(result)
+
+			return result
+		end,
+		upgradeFn = function(_)
+		-- it does not get here when I call it with game.interface.upgradeConstruction()
+		-- 	-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
+		-- 	-- If you leave it out, adding and removing tram tracks won't work.
+		-- 	-- (Bus lanes don't work anyway.)
+		-- 	return {}
+		end,
+	}
+end

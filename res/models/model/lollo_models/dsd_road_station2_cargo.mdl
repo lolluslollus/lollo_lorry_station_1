@@ -1,0 +1,185 @@
+
+local pY = 5
+local params = 
+	{
+	materials = { "station/train/cargo/trainstation_cargo_1850_borders_1.mtl", "station/train/cargo/trainstation_cargo_1850_floor_1.mtl", },
+	mesh_single = "station/train/passenger/1990/lod_0_perron_single_end.msh",
+	mesh_repeat = "station/train/passenger/1990/lod_0_perron_single_repeat.msh",
+	height = -.6,
+	platformY = pY,
+	transf = { .5, 0, 0, 0, 0, .5, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+	cargoY = pY-2.25,
+	}
+
+function data()
+return {
+	boundingInfo = {
+		bbMax = { 10.800000190735, 8, 6, },
+		bbMin = { -10.800000190735, -2, -0.050000000745058, },
+	},
+	collider = {
+		params = {
+			halfExtents = { 10.800000190735, 5, 3.0250000953674, },
+		},
+		transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 3, 2.9749999046326, 1, },
+		type = "BOX",
+	},
+	lods = {
+		{
+			node = {
+				children = {
+					{
+						materials = params.materials,
+						mesh = params.mesh_single,
+						name = "MSH_lod_0_perron_single_end_1",
+						transf = { 0, 1, 0, 0, -0.27, 0, 0, 0, 0, 0, 1, 0, -5.4, params.platformY, params.height, 1, },
+					},
+					{
+						materials = params.materials,
+						mesh = params.mesh_single,
+						name = "MSH_lod_0_perron_single_end_2",
+						transf = { 0, 1, 0, 0, 0.27, 0, 0, 0, 0, 0, 1, 0, 5.4, params.platformY, params.height, 1, },
+					},
+					{
+						materials = params.materials,
+						mesh = params.mesh_repeat,
+						name = "MSH_lod_0_perron_single_repeat_1",
+						transf = { 0, 1, 0, 0, 0.27, 0, 0, 0, 0, 0, 1, 0, 0, params.platformY, params.height, 1, },
+					},
+				},
+				name = "RootNode",
+				transf = params.transf,
+			},
+			static = false,
+			visibleFrom = 0,
+			visibleTo = 2000,
+		},
+	},
+	metadata = {
+		transportNetworkProvider = {
+			laneLists = {
+				{
+					linkable = false,
+					nodes = {
+						{{ 2, -1., 0, },{ -3.25, 0, 0, },3,},
+						{{ -1.25, -1., 0, },{ -3.25, 0, 0, },3,},
+
+						{{ -1.25, -1., 0, },{ -.75, 0, 0, },3,},
+						{{ -2, -1., 0, },{ -.75, 0, 0, },3,},
+					},
+					speedLimit = 30,
+					transportModes = { "TRUCK", "BUS", "TRAM", "ELECTRIC_TRAM", },
+				},
+--[[ 				{
+					linkable = true,
+					transportModes = { "CARGO", },
+					nodes = {
+						{{ 4, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--2
+						{{ 2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ 2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--3
+						{{ 0, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ 0, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--4
+						{{ -2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ -2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--5
+						{{ -4, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ 4, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--6
+						{{ 4, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+
+						{{ -4, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--7
+						{{ -4, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+
+						{{ 0, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--8
+						{{ 0, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+					}
+				},
+				{
+					linkable = false,
+					nodes = {
+						{{ 4, -8, -3.5, },{ -2, 0, 0, },8,},--9
+						{{ 2, -8, -3.5, },{ -2, 0, 0, },8,},
+
+						{{ 2, -8, -3.5, },{ -2, 0, 0, },8,},--10
+						{{ 0, -8, -3.5, },{ -2, 0, 0, },8,},
+
+						{{ 2, -8, -3.5, },{ 0, 8, 0, },2,},--11
+						{{ 2, 0, -3.5, },{ 0, 8, 0, },2,},
+
+						{{ 0, -8, -3.5, },{ -2, 0, 0, },8,},--12
+						{{ -2, -8, -3.5, },{ -2, 0, 0, },8,},
+
+						{{ -2, -8, -3.5, },{ -2, 0, 0, },8,},--13
+						{{ -4, -8, -3.5, },{ -2, 0, 0, },8,},
+
+						{{ -2, -8, -3.5, },{ 0, 8, 0, },2,},--14
+						{{ -2, 0, -3.5, },{ 0, 8, 0, },2,},
+
+						{{ 4, 4, -3.5, },{ -2, 0, 0, },4,},--15
+						{{ 2, 4, -3.5, },{ -2, 0, 0, },4,},
+
+						{{ 2, 4, -3.5, },{ -2, 0, 0, },4,},--16
+						{{ 0, 4, -3.5, },{ -2, 0, 0, },4,},
+
+						{{ 2, 0, -3.5, },{ 0, 4, 0, },2,},--17
+						{{ 2, 4, -3.5, },{ 0, 4, 0, },2,},
+
+						{{ 0, 4, -3.5, },{ -2, 0, 0, },4},--18
+						{{ -2, 4, -3.5, },{ -2, 0, 0, },4,},
+
+						{{ -2, 4, -3.5, },{ -2, 0, 0, },4,},--19
+						{{ -4, 4, -3.5, },{ -2, 0, 0, },4,},
+
+						{{ -2, 0, -3.5, },{ 0, 4, 0, },2,},--20
+						{{ -2, 4, -3.5, },{ 0, 4, 0, },2,}
+
+
+					},
+					speedLimit = 30,
+					transportModes = { "CARGO", },
+				}, ]]
+				{
+					linkable = true,
+					transportModes = { "CARGO", },
+					nodes = {
+						{{ 4, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--2
+						{{ 2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ 2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--3
+						{{ 0, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ 0, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--4
+						{{ -2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						{{ -2, params.cargoY, 0.2, },{ -2, 0, 0, },2,},--5
+						{{ -4, params.cargoY, 0.2, },{ -2, 0, 0, },2,},
+
+						-- {{ 4, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--6
+						-- {{ 4, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+
+						-- {{ -4, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--7
+						-- {{ -4, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+
+						-- {{ 0, params.cargoY, 0.2, },{ 0, 2, 0, },2,},--8
+						-- {{ 0, params.cargoY+2, 0.2, },{ 0, 2, 0, },2,},
+					}
+				},
+			},
+			runways = { },
+			terminals = {
+				{
+					-- personEdges = { 2, 3, 4, 5, 9,10,12,13,15,16,18,19},
+					-- personNodes = { 2,15, 9, },
+					-- vehicleNode = 2,
+					personEdges = { 2, 3, 4, 5 },
+					personNodes = { 2 },
+					vehicleNode = 2,
+				},
+			},
+		},
+	},
+	version = 1,
+}
+end
