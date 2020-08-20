@@ -8,6 +8,7 @@ local state = {
 }
 
 local _constants = arrayUtils.addProps({
+    approxToDeclareSamePosition = 0.1,
     constructionFileName = 'station/street/lollo_lorry_station.con',
     stationFileName = 'station/road/lollo_small_cargo.mdl'
 })
@@ -18,6 +19,44 @@ local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
 end
 
+local function _getLastPloppedStationId(edgeId, stationTransf)
+    if not(edgeId) or type(stationTransf) ~= 'table' then return nil end
+
+    local extraEdgeData = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
+    print('LOLLO extraEdgeData =')
+    debugPrint(extraEdgeData)
+    -- print('LOLLO type(extraEdgeData) =', type(extraEdgeData))
+    -- print('LOLLO type(extraEdgeData.objects) =', type(extraEdgeData.objects))
+    print('LOLLO #extraEdgeData.objects =', #extraEdgeData.objects)
+    for i = 1, #(extraEdgeData.objects or {}) do
+        -- print('LOLLO object #', i, '=', extraEdgeData.objects[i])
+        -- print('LOLLO object #', i, 'type =', type(extraEdgeData.objects[i]))
+        local stationId = extraEdgeData.objects[i][1]
+        local rightOrLeft = extraEdgeData.objects[i][2]
+        print('stationId =', stationId)
+        print('rightOrLeft =', rightOrLeft)
+        if stationId then
+            local stationEntity = game.interface.getEntity(stationId)
+            if stationEntity and stationEntity.position then
+                if math.ceil(stationTransf[13] * _constants.approxToDeclareSamePosition) == math.ceil(stationEntity.position[1] * _constants.approxToDeclareSamePosition)
+                and math.ceil(stationTransf[14] * _constants.approxToDeclareSamePosition) == math.ceil(stationEntity.position[2] * _constants.approxToDeclareSamePosition)
+                -- and stationTransf[15] == stationEntity.position[3]
+                then
+                    print('LOLLO found station, its id = ', stationId)
+                    return stationId
+                else
+                    print('LOLLO station not found')
+                    print('x =', stationTransf[13], stationEntity.position[1])
+                    print('y =', stationTransf[14], stationEntity.position[2])
+                    print('z =', stationTransf[15], stationEntity.position[3])
+                end
+            end
+        end
+    end
+
+    return nil
+end
+
 local function _getTransfFromApiResult(transfStr)
     transfStr = transfStr:gsub('%(%(', '(')
     transfStr = transfStr:gsub('%)%)', ')')
@@ -26,7 +65,7 @@ local function _getTransfFromApiResult(transfStr)
         local noBrackets = match0:gsub('%(', '')
         noBrackets = noBrackets:gsub('%)', '')
         for match1 in noBrackets:gmatch('[%-%.%d]+') do
-            results[#results + 1] = match1
+            results[#results + 1] = tonumber(match1 or '0')
         end
     end
     return results
@@ -51,22 +90,13 @@ function data()
                 debugPrint(args)
 
                 if name == 'built' then
-                    -- LOLLO TODO check out args.entity2tn
-                    local baseEdge = nil
-                    for key, value in args.entity2tn do
-                        local entity = game.interface.getEntity(key)
-                        if entity.type == 'BASE_EDGE' then
-                            -- LOLLO TODO localise the base edge
-                            -- that owns the model with the right id,
-                            -- this is too simple
-                            baseEdge = entity
-                        end
-                    end
-                    if not (baseEdge) then
-                        return
-                    end
+                    print('LOLLO stationTransf =')
+                    debugPrint(args.transf)
 
-                    local transf0 = _getTransfFromApiResult(args.transfStr)
+                    local stationId = _getLastPloppedStationId(args.edgeId, args.transf)
+                    print('LOLLO stationId =')
+                    debugPrint(stationId)
+
                     -- LOLLO TODO destroy the newly built streetside station
                     -- and replace it with a construction containing the same, but with the cargo lanes
                     -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl
@@ -191,23 +221,13 @@ function data()
                 -- debugPrint(param)
                 -- you cannot check the types coz they contain userdata, so use xpcall
                 xpcall(function()
-                    print('LOLLO id = ')
-                    debugPrint(id)
-                    print('LOLLO name = ')
-                    debugPrint(name)
-                    print('LOLLO param = ')
-                    debugPrint(param)
-                    -- local allModels = api.res.modelRep.getAll()
-                    -- print('LOLLO allModels = ')
-                    -- debugPrint(allModels)
+                    -- print('LOLLO id = ')
+                    -- debugPrint(id)
+                    -- print('LOLLO name = ')
+                    -- debugPrint(name)
+                    -- print('LOLLO param = ')
+                    -- debugPrint(param)
                     local stationModelId = api.res.modelRep.find(_constants.stationFileName)
-
-                    -- print('LOLLO model instance =')
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
-                    -- print('LOLLO transf0 = ')
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf0)
-                    -- print('LOLLO transf = ')
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
 
                     if not param or not param.proposal or not param.proposal.proposal or
                         not param.proposal.proposal.edgeObjectsToAdd or not param.proposal.proposal.edgeObjectsToAdd[1] or
@@ -216,16 +236,34 @@ function data()
                         return
                     end
 
-                    -- local entity = game.interface.getEntity(param.result[1]) -- the newly built station
-                    -- if type(entity) ~= 'table' or entity.type ~= 'CONSTRUCTION' or type(entity.position) ~= 'table' then return end
                     print('LOLLO lorry station built!')
-                    -- debugPrint(param)
                     -- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
                     -- better would be to use result, but it is empty after plopping a streetside station.
                     -- I have notified UG of this bug.
+                    -- cannot pass entity2tn as it is, pass its useful part only, and no userdata
+                    print('LOLLO type of param.data.entity2tn = ', type(param.data.entity2tn))
+
+                    local nodeIds = {}
+                    for k, _ in pairs(param.data.entity2tn) do
+                        local entity = game.interface.getEntity(k)
+                        if entity.type == 'BASE_NODE' then nodeIds[#nodeIds+1] = entity.id end
+                    end
+                    if #nodeIds ~= 2 then return end
+
+                    local edgeId = nil
+                    for k, _ in pairs(param.data.entity2tn) do
+                        local entity = game.interface.getEntity(k)
+                        if entity.type == 'BASE_EDGE'
+                        and ((entity.node0 == nodeIds[1] and entity.node1 == nodeIds[2])
+                        or (entity.node0 == nodeIds[2] and entity.node1 == nodeIds[1])) then
+                            edgeId = entity.id -- arrayUtils.cloneOmittingFields(entity)
+                        end
+                    end
+                    if not(edgeId) then return end
+
                     game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built', {
-                        entity2tn = param.data.entity2tn,
-                        transfStr = tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf)
+                        edgeId = edgeId,
+                        transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
                     })
                 end, _myErrorHandler)
                 -- elseif state.isShowAllEvents then

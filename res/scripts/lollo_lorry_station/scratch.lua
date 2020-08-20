@@ -25,6 +25,9 @@ end
 local transf1 = _getTransfFromApiResult(transfStr)
 local dummy = 0
 
+local n1 = -1440.7044677734
+local n1000 = math.ceil(n1 * 1000) / 1000
+local dummy = 0
 -- only for testing
 -- if math.atan2 == nil then
 -- 	math.atan2 = function(dy, dx)
