@@ -123,6 +123,7 @@ local function _buildStation(transf)
     newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
     newConstruction.params = {
         seed = 123e4 -- we need this to avoid dumps
+        -- LOLLO TODO pass the street type as a param
     }
     -- print('LOLLO transf =')
     -- debugPrint(transf)
