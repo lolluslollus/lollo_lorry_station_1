@@ -2,7 +2,7 @@ local transf = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
-local edgeUtils = require('lollo_lorry_station/edgeHelpers')
+local edgeUtils = require('lollo_lorry_station/edgeHelper')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local _constants = require('lollo_lorry_station/constants')
 
