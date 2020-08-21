@@ -19,7 +19,7 @@ local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
 end
 
-local function _getLastPloppedStationId(edgeId, stationTransf)
+local function _getLastPloppedStation(edgeId, stationTransf)
     if not(edgeId) or type(stationTransf) ~= 'table' then return nil end
 
     local extraEdgeData = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
@@ -43,7 +43,10 @@ local function _getLastPloppedStationId(edgeId, stationTransf)
                 -- and stationTransf[15] == stationEntity.position[3]
                 then
                     print('LOLLO found station, its id = ', stationId)
-                    return stationId
+                    return {
+                        id = stationId,
+                        position = stationEntity.position
+                    }
                 else
                     print('LOLLO station not found')
                     print('x =', stationTransf[13], stationEntity.position[1])
@@ -69,6 +72,26 @@ local function _getTransfFromApiResult(transfStr)
         end
     end
     return results
+end
+
+local function _getVehicleNodeOffset(edgeId)
+    if not(edgeId) then return 0 end
+
+    local edgeEntity = game.interface.getEntity(edgeId)
+    if edgeEntity and edgeEntity.type == 'BASE_EDGE' and not(stringUtils.isNullOrEmptyString(edgeEntity.streetType)) then
+        local streetTypeId = api.res.streetTypeRep.find(edgeEntity.streetType)
+        if streetTypeId then
+            local streetTypeData = api.res.streetTypeRep.get(streetTypeId)
+            if streetTypeData then
+                if streetTypeData.laneConfigs and #(streetTypeData.laneConfigs) > 1 then
+                    return streetTypeData.laneConfigs[1].width * 0.5
+                    + streetTypeData.laneConfigs[2].width * 0.5
+                end
+            end
+        end
+    end
+
+    return 0
 end
 
 local function _myErrorHandler(err)
@@ -116,14 +139,19 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
 	api.cmd.sendCommand(cmd, callback)
 end
 
-local function _buildStation(transf, streetType)
-	local proposal = api.type.SimpleProposal.new()
+local function _buildStation(transf, position, vehicleNodeOffset)
+    local proposal = api.type.SimpleProposal.new()
+
+    print('LOLLO transf =')
+    debugPrint(transf)
+    print('LOLLO position =')
+    debugPrint(position)
 
     local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
     newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
     newConstruction.params = {
         seed = 123e4, -- we need this to avoid dumps
-        streetType = streetType
+        vehicleNodeOffset = vehicleNodeOffset
     }
     -- print('LOLLO transf =')
     -- debugPrint(transf)
@@ -132,6 +160,7 @@ local function _buildStation(transf, streetType)
         api.type.Vec4f.new(transf[5], transf[6], transf[7], transf[8]),
         api.type.Vec4f.new(transf[9], transf[10], transf[11], transf[12]),
         api.type.Vec4f.new(transf[13], transf[14], transf[15], transf[16])
+        -- api.type.Vec4f.new(position[1], position[2], position[3], transf[16])
     )
     newConstruction.transf = transfMatrix
     newConstruction.name = 'LOLLO simple lorry bay'
@@ -154,7 +183,14 @@ local function _buildStation(transf, streetType)
 		debugPrint(success)
 	end
 
-	local cmd = api.cmd.make.buildProposal(proposal, nil, false)
+    local context = api.type.Context:new()
+    context.checkTerrainAlignment = true -- true gives smoother z, default is false
+    context.cleanupStreetGraph = true -- default is false
+    context.gatherBuildings = false -- default is false
+    context.gatherFields = true -- default is true
+    context.player = api.engine.util.getPlayer()
+
+	local cmd = api.cmd.make.buildProposal(proposal, nil, true)
 	api.cmd.sendCommand(cmd, callback)
 end
 
@@ -166,6 +202,7 @@ function data()
             end -- also comes with guide system switched off
             -- if state.isShowAllEvents then
             print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
+            state.isShowAllEvents = true
             -- end
             if (id == '__lolloLorryStation2Event__') then
                 print('__lolloLorryStation2Event__ caught')
@@ -177,21 +214,21 @@ function data()
                         print('LOLLO stationTransf =')
                         debugPrint(args.transf)
 
-                        local stationId = _getLastPloppedStationId(args.edgeId, args.transf)
-                        print('LOLLO stationId =')
-                        debugPrint(stationId)
+                        local lastPloppedStation = _getLastPloppedStation(args.edgeId, args.transf)
+                        print('LOLLO lastPloppedStation =')
+                        debugPrint(lastPloppedStation)
 
                         -- LOLLO TODO destroy the newly built streetside station
                         -- and replace it with a construction containing the same, but with the cargo lanes
                         -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
                         -- Tried, it does not store any cargo.
 
-                        if stationId then
-                            local edgeEntity = game.interface.getEntity(args.edgeId)
-                            if edgeEntity and edgeEntity.type == 'BASE_EDGE' and not(stringUtils.isNullOrEmptyString(edgeEntity.streetType)) then
-                            --     game.interface.bulldoze(stationId) -- dumps
-                                _replaceEdgeRemovingObject(args.edgeId, stationId)
-                                _buildStation(args.transf, api.res.streetTypeRep.find(edgeEntity.streetType))
+                        if lastPloppedStation then
+                            local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)
+                            _replaceEdgeRemovingObject(args.edgeId, lastPloppedStation.id)
+                            if vehicleNodeOffset > 0 then
+                                -- game.interface.bulldoze(stationId) -- dumps
+                                _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset)
                             end
                         end
 
@@ -218,8 +255,6 @@ function data()
                     -- )
                 end
             end
-
-            state.isShowAllEvents = true
 
             --[[             package.loaded['lollo_lorry_station/reloaded'] = nil
             local reloaded = require('lollo_lorry_station/reloaded')
