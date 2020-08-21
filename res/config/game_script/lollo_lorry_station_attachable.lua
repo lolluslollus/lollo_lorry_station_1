@@ -23,18 +23,16 @@ local function _getLastPloppedStation(edgeId, stationTransf)
     if not(edgeId) or type(stationTransf) ~= 'table' then return nil end
 
     local extraEdgeData = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
-    print('LOLLO extraEdgeData =')
-    debugPrint(extraEdgeData)
-    -- print('LOLLO type(extraEdgeData) =', type(extraEdgeData))
-    -- print('LOLLO type(extraEdgeData.objects) =', type(extraEdgeData.objects))
-    print('LOLLO #extraEdgeData.objects =', #extraEdgeData.objects)
+    -- print('LOLLO extraEdgeData =')
+    -- debugPrint(extraEdgeData)
+    -- print('LOLLO #extraEdgeData.objects =', #extraEdgeData.objects)
     for i = 1, #(extraEdgeData.objects or {}) do
         -- print('LOLLO object #', i, '=', extraEdgeData.objects[i])
         -- print('LOLLO object #', i, 'type =', type(extraEdgeData.objects[i]))
         local stationId = extraEdgeData.objects[i][1]
         local rightOrLeft = extraEdgeData.objects[i][2]
-        print('stationId =', stationId)
-        print('rightOrLeft =', rightOrLeft)
+        -- print('stationId =', stationId)
+        -- print('rightOrLeft =', rightOrLeft)
         if stationId then
             local stationEntity = game.interface.getEntity(stationId)
             if stationEntity and stationEntity.position then
@@ -42,16 +40,16 @@ local function _getLastPloppedStation(edgeId, stationTransf)
                 and math.ceil(stationTransf[14] * _constants.approxToDeclareSamePosition) == math.ceil(stationEntity.position[2] * _constants.approxToDeclareSamePosition)
                 -- and stationTransf[15] == stationEntity.position[3]
                 then
-                    print('LOLLO found station, its id = ', stationId)
+                    -- print('LOLLO found station, its id = ', stationId)
                     return {
                         id = stationId,
                         position = stationEntity.position
                     }
                 else
-                    print('LOLLO station not found')
-                    print('x =', stationTransf[13], stationEntity.position[1])
-                    print('y =', stationTransf[14], stationEntity.position[2])
-                    print('z =', stationTransf[15], stationEntity.position[3])
+                    -- print('LOLLO station not found')
+                    -- print('x =', stationTransf[13], stationEntity.position[1])
+                    -- print('y =', stationTransf[14], stationEntity.position[2])
+                    -- print('z =', stationTransf[15], stationEntity.position[3])
                 end
             end
         end
@@ -139,7 +137,7 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
 	api.cmd.sendCommand(cmd, callback)
 end
 
-local function _buildStation(transf, position, vehicleNodeOffset)
+local function _buildStation(transf, position, vehicleNodeOffset, edgeEntity)
     local proposal = api.type.SimpleProposal.new()
 
     print('LOLLO transf =')
@@ -150,6 +148,7 @@ local function _buildStation(transf, position, vehicleNodeOffset)
     local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
     newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
     newConstruction.params = {
+        edgeEntity = edgeEntity,
         seed = 123e4, -- we need this to avoid dumps
         vehicleNodeOffset = vehicleNodeOffset
     }
@@ -214,6 +213,9 @@ function data()
                         print('LOLLO stationTransf =')
                         debugPrint(args.transf)
 
+                        -- local edgeEntity = game.interface.getEntity(args.edgeId)
+                        -- print('LOLLO edgeEntity =')
+                        -- debugPrint(edgeEntity)
                         local lastPloppedStation = _getLastPloppedStation(args.edgeId, args.transf)
                         print('LOLLO lastPloppedStation =')
                         debugPrint(lastPloppedStation)
@@ -225,10 +227,11 @@ function data()
 
                         if lastPloppedStation then
                             local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)
+                            local edgeEntity = game.interface.getEntity(args.edgeId)
                             _replaceEdgeRemovingObject(args.edgeId, lastPloppedStation.id)
                             if vehicleNodeOffset > 0 then
                                 -- game.interface.bulldoze(stationId) -- dumps
-                                _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset)
+                                _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset, edgeEntity)
                             end
                         end
 
