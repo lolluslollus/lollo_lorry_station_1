@@ -116,14 +116,14 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
 	api.cmd.sendCommand(cmd, callback)
 end
 
-local function _buildStation(transf)
+local function _buildStation(transf, streetType)
 	local proposal = api.type.SimpleProposal.new()
 
     local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
     newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
     newConstruction.params = {
-        seed = 123e4 -- we need this to avoid dumps
-        -- LOLLO TODO pass the street type as a param
+        seed = 123e4, -- we need this to avoid dumps
+        streetType = streetType
     }
     -- print('LOLLO transf =')
     -- debugPrint(transf)
@@ -173,35 +173,40 @@ function data()
                 debugPrint(args)
 
                 if name == 'built' then
-                    print('LOLLO stationTransf =')
-                    debugPrint(args.transf)
+                    if args and args.edgeId and args.transf then
+                        print('LOLLO stationTransf =')
+                        debugPrint(args.transf)
 
-                    local stationId = _getLastPloppedStationId(args.edgeId, args.transf)
-                    print('LOLLO stationId =')
-                    debugPrint(stationId)
+                        local stationId = _getLastPloppedStationId(args.edgeId, args.transf)
+                        print('LOLLO stationId =')
+                        debugPrint(stationId)
 
-                    -- LOLLO TODO destroy the newly built streetside station
-                    -- and replace it with a construction containing the same, but with the cargo lanes
-                    -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
-                    -- Tried, it does not store any cargo.
+                        -- LOLLO TODO destroy the newly built streetside station
+                        -- and replace it with a construction containing the same, but with the cargo lanes
+                        -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
+                        -- Tried, it does not store any cargo.
 
-                    if stationId then
-                    --     game.interface.bulldoze(stationId) -- dumps
-                        _replaceEdgeRemovingObject(args.edgeId, stationId)
-                        _buildStation(args.transf)
+                        if stationId then
+                            local edgeEntity = game.interface.getEntity(args.edgeId)
+                            if edgeEntity and edgeEntity.type == 'BASE_EDGE' and not(stringUtils.isNullOrEmptyString(edgeEntity.streetType)) then
+                            --     game.interface.bulldoze(stationId) -- dumps
+                                _replaceEdgeRemovingObject(args.edgeId, stationId)
+                                _buildStation(args.transf, api.res.streetTypeRep.find(edgeEntity.streetType))
+                            end
+                        end
+
+                        -- print('LOLLO game.interface.buildConstruction = ')
+                        -- debugPrint(game.interface.buildConstruction)
+
+                        -- local allModels = api.res.modelRep.getAll()
+                        -- I arrive here from built with a funny transf looking like
+                        -- 'transf' = '((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))'
+                        -- which I stringified coz it is userData
+
+                        -- from here on, I need to reverse the parameters.transf string somehow.
+                        -- It looks like:
+                        -- 'transf' = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
                     end
-
-                    -- print('LOLLO game.interface.buildConstruction = ')
-                    -- debugPrint(game.interface.buildConstruction)
-
-                    -- local allModels = api.res.modelRep.getAll()
-                    -- I arrive here from built with a funny transf looking like
-                    -- 'transf' = '((0.203505 / -0.979074 / 0 / 0)/(0.979074 / 0.203505 / 0 / 0)/(0 / 0 / 1 / 0)/(569.336 / -3375.41 / 14.1587 / 1))'
-                    -- which I stringified coz it is userData
-
-                    -- from here on, I need to reverse the parameters.transf string somehow.
-                    -- It looks like:
-                    -- 'transf' = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
                 elseif name == 'select' then
                     -- print('LOLLO game.interface.buildConstruction = ')
                     -- debugPrint(game.interface.buildConstruction)
