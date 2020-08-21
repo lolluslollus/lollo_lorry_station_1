@@ -75,16 +75,12 @@ local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
 
-local function _replaceEdgeRemovingObjects(edgeId, objectToRemoveId)
-    -- this replaces the street without destroying the buildings
-    if not(edgeId) then return end
+local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
+    if not(oldEdgeId) then return end
 
-	local proposal = api.type.SimpleProposal.new()
-	proposal.streetProposal.edgesToRemove[1] = edgeId
-
-	local baseEdge = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
-	local baseEdgeStreet = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE_STREET)
-
+    -- make a copy of the edge that owns the station
+	local baseEdge = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE)
+	local baseEdgeStreet = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE_STREET)
 	local newEdge = api.type.SegmentAndEntity.new()
 	newEdge.entity = -1
 	newEdge.type = 0
@@ -92,85 +88,28 @@ local function _replaceEdgeRemovingObjects(edgeId, objectToRemoveId)
     newEdge.playerOwned = {player = api.engine.util.getPlayer()}
     newEdge.streetEdge = baseEdgeStreet
 
-    -- remove edge object
-    print('LOLLO proposal =')
-    debugPrint(proposal)
-    print('LOLLO proposal.edgeObjectsToRemove =')
-    debugPrint(proposal.edgeObjectsToRemove)
-    print('LOLLO newEdge before =')
-    debugPrint(newEdge)
-    -- local newEdgeCompObjects = {}
+    -- remove the station from the new edge
+    local newEdgeCompObjects = api.type.SegmentAndEntity.new().comp.objects
     for i = 1, #newEdge.comp.objects do
         local edgeObject = newEdge.comp.objects[i]
-        print('LOLLO edgeObject =')
-        debugPrint(edgeObject)
-        if edgeObject[1] == objectToRemoveId then
-            print('one')
-            proposal.streetProposal.edgeObjectsToRemove[#proposal.streetProposal.edgeObjectsToRemove + 1] = objectToRemoveId
-        else
-            proposal.edgesToAdd = newEdge
-            print('two')
+        if edgeObject[1] ~= objectToRemoveId then
+            newEdgeCompObjects[#newEdgeCompObjects + 1] = edgeObject
         end
     end
-    
-    print('LOLLO newEdge after =')
-    debugPrint(newEdge)
-    print('LOLLO proposal =')
-    debugPrint(proposal)
+    newEdge.comp.objects = newEdgeCompObjects
 
-    -- newEdge.comp.objects = newEdgeCompObjects
-
+    -- make a proposal
+    local proposal = api.type.SimpleProposal.new()
     proposal.streetProposal.edgesToAdd[1] = newEdge
-    -- print('LOLLO eo = ')
-    -- debugPrint(newEdge)
-    --[[ local sampleNewEdge =
-    {
-      entity = -1,
-      comp = {
-        node0 = 13010,
-        node1 = 18753,
-        tangent0 = {
-          x = -32.318000793457,
-          y = 81.757850646973,
-          z = 3.0953373908997,
-        },
-        tangent1 = {
-          x = -34.457527160645,
-          y = 80.931526184082,
-          z = -1.0708819627762,
-        },
-        type = 0,
-        typeIndex = -1,
-        objects = { },
-      },
-      type = 0,
-      params = {
-        streetType = 23,
-        hasBus = false,
-        tramTrackType = 0,
-        precedenceNode0 = 2,
-        precedenceNode1 = 2,
-      },
-      playerOwned = nil,
-      streetEdge = {
-        streetType = 23,
-        hasBus = false,
-        tramTrackType = 0,
-        precedenceNode0 = 2,
-        precedenceNode1 = 2,
-      },
-      trackEdge = {
-        trackType = -1,
-        catenary = false,
-      },
-    } ]]
+    proposal.streetProposal.edgesToRemove[1] = oldEdgeId
+    proposal.streetProposal.edgeObjectsToRemove[1] = objectToRemoveId
 
     local callback = function(res, success)
-        -- print('LOLLO res = ')
+        -- print('LOLLO _replaceEdgeRemovingObject res = ')
 		-- debugPrint(res)
         --for _, v in pairs(res.entities) do print(v) end
-        -- print('LOLLO success = ')
-		-- debugPrint(success)
+        print('LOLLO _replaceEdgeRemovingObject success = ')
+		debugPrint(success)
 	end
 
 	local cmd = api.cmd.make.buildProposal(proposal, nil, false)
@@ -207,10 +146,10 @@ local function _buildStation(transf)
     debugPrint(proposal.constructionsToAdd)
 
     local callback = function(res, success)
-        print('LOLLO res = ')
-		debugPrint(res)
+        -- print('LOLLO _buildStation res = ')
+		-- debugPrint(res)
         --for _, v in pairs(res.entities) do print(v) end
-        print('LOLLO success = ')
+        print('LOLLO _buildStation success = ')
 		debugPrint(success)
 	end
 
@@ -247,7 +186,7 @@ function data()
 
                     if stationId then
                     --     game.interface.bulldoze(stationId) -- dumps
-                        _replaceEdgeRemovingObjects(args.edgeId, stationId)
+                        _replaceEdgeRemovingObject(args.edgeId, stationId)
                         _buildStation(args.transf)
                     end
 
