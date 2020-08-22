@@ -1,6 +1,6 @@
 function data()
 	local _cargoNodeY = 0 --2.75
-	local _cargoNodeZ = 0.2
+	local _cargoNodeZ = -0.3 -- 0.2
 	local _platformY = 0 -- 5
 	local _platformZ = -0.6 -- -0.6
 	local _vehicleNodeY = -4
