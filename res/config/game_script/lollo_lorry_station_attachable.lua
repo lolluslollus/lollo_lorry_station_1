@@ -73,7 +73,7 @@ local function _getCloneWoutModulesAndSeed(obj)
     return arrayUtils.cloneOmittingFields(obj, {'modules', 'seed'})
 end
 
-local function _getLastBuiltEdgeId(entity2tn)
+local function _getLastBuiltEdge(entity2tn)
     local nodeIds = {}
     for k, _ in pairs(entity2tn) do
         local entity = game.interface.getEntity(k)
@@ -81,52 +81,16 @@ local function _getLastBuiltEdgeId(entity2tn)
     end
     if #nodeIds ~= 2 then return nil end
 
-    local edgeId = nil
     for k, _ in pairs(entity2tn) do
         local entity = game.interface.getEntity(k)
         if entity.type == 'BASE_EDGE'
         and ((entity.node0 == nodeIds[1] and entity.node1 == nodeIds[2])
         or (entity.node0 == nodeIds[2] and entity.node1 == nodeIds[1])) then
-            edgeId = entity.id -- arrayUtils.cloneOmittingFields(entity)
-        end
-    end
-
-    return edgeId
-end
-
-local function _getLastPloppedStation(edgeId, stationTransf)
-    if not(edgeId) or type(stationTransf) ~= 'table' then return nil end
-
-    local extraEdgeData = api.engine.getComponent(edgeId, api.type.ComponentType.BASE_EDGE)
-    -- print('LOLLO extraEdgeData =')
-    -- debugPrint(extraEdgeData)
-    -- print('LOLLO #extraEdgeData.objects =', #extraEdgeData.objects)
-    for i = 1, #(extraEdgeData.objects or {}) do
-        -- print('LOLLO object #', i, '=', extraEdgeData.objects[i])
-        -- print('LOLLO object #', i, 'type =', type(extraEdgeData.objects[i]))
-        local stationId = extraEdgeData.objects[i][1]
-        local rightOrLeft = extraEdgeData.objects[i][2]
-        -- print('stationId =', stationId)
-        -- print('rightOrLeft =', rightOrLeft)
-        if stationId then
-            local stationEntity = game.interface.getEntity(stationId)
-            if stationEntity and stationEntity.position then
-                if math.ceil(stationTransf[13] * _constants.approxToDeclareSamePosition) == math.ceil(stationEntity.position[1] * _constants.approxToDeclareSamePosition)
-                and math.ceil(stationTransf[14] * _constants.approxToDeclareSamePosition) == math.ceil(stationEntity.position[2] * _constants.approxToDeclareSamePosition)
-                -- and stationTransf[15] == stationEntity.position[3]
-                then
-                    -- print('LOLLO found station, its id = ', stationId)
-                    return {
-                        id = stationId,
-                        position = stationEntity.position
-                    }
-                else
-                    -- print('LOLLO station not found')
-                    -- print('x =', stationTransf[13], stationEntity.position[1])
-                    -- print('y =', stationTransf[14], stationEntity.position[2])
-                    -- print('z =', stationTransf[15], stationEntity.position[3])
-                end
-            end
+            local extraEdgeData = api.engine.getComponent(entity.id, api.type.ComponentType.BASE_EDGE)
+            return {
+                id = entity.id,
+                objects = extraEdgeData.objects
+            }
         end
     end
 
@@ -171,12 +135,13 @@ local function _myErrorHandler(err)
     print('ERROR: ', err)
 end
 
-local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
+local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId, isAddNewObject)
     if not(oldEdgeId) then return end
 
+    if isAddNewObject ~= false then isAddNewObject = true end
     -- make a copy of the edge that owns the station
-	local baseEdge = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE)
-	local baseEdgeStreet = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE_STREET)
+    local baseEdge = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE)
+    local baseEdgeStreet = api.engine.getComponent(oldEdgeId, api.type.ComponentType.BASE_EDGE_STREET)
 	local newEdge = api.type.SegmentAndEntity.new()
 	newEdge.entity = -1
 	newEdge.type = 0
@@ -184,8 +149,18 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
     newEdge.playerOwned = {player = api.engine.util.getPlayer()}
     newEdge.streetEdge = baseEdgeStreet
 
-    -- remove the station from the new edge
+    -- take care of the new edge objects
     local newEdgeCompObjects = api.type.SegmentAndEntity.new().comp.objects
+    -- add the new edge object
+    if isAddNewObject then
+        for i = 1, #newEdge.comp.objects do
+            local edgeObject = newEdge.comp.objects[i]
+            if edgeObject[1] == objectToRemoveId then
+                newEdgeCompObjects[#newEdgeCompObjects + 1] = { -1, edgeObject[2] }
+            end
+        end
+    end
+    -- add the old edge objects, except for the one to be replaced
     for i = 1, #newEdge.comp.objects do
         local edgeObject = newEdge.comp.objects[i]
         if edgeObject[1] ~= objectToRemoveId then
@@ -194,10 +169,29 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
     end
     newEdge.comp.objects = newEdgeCompObjects
 
-    -- make a proposal
+    -- make the new object
+    local newObject = api.type.SimpleStreetProposal.EdgeObject.new()
+    newObject.left = true
+    newObject.model = 'street/signal_waypoint.mdl'
+    -- I could plop a streetside station, but it would need
+    -- streetTerminal = {
+    --     cargo = true,
+    -- },
+    -- and that would automatically delete the cargo paths
+    -- newObject.model = 'lollo_models/dsd_road_station3_cargo.mdl'
+    newObject.playerEntity = game.interface.getPlayer()
+    newObject.oneWay = true
+    newObject.param = 0.5
+    newObject.edgeEntity = -1
+    newObject.name = 'MY Beautiful Signal'
+
+    -- make the proposal
     local proposal = api.type.SimpleProposal.new()
     proposal.streetProposal.edgesToAdd[1] = newEdge
     proposal.streetProposal.edgesToRemove[1] = oldEdgeId
+    if isAddNewObject then
+        proposal.streetProposal.edgeObjectsToAdd[1] = newObject
+    end
     proposal.streetProposal.edgeObjectsToRemove[1] = objectToRemoveId
 
     local callback = function(res, success)
@@ -208,8 +202,8 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId)
         debugPrint(success) -- boolean
 	end
 
-	local cmd = api.cmd.make.buildProposal(proposal, nil, false)
-	api.cmd.sendCommand(cmd, callback)
+    local cmd = api.cmd.make.buildProposal(proposal, nil, false)
+    api.cmd.sendCommand(cmd, callback)
 end
 
 
@@ -229,32 +223,32 @@ function data()
                 debugPrint(args)
 
                 if name == 'built' then
-                    if args and args.edgeId and args.transf then
+                    if args and args.edgeId and args.stationId and args.transf then
                         print('LOLLO stationTransf =')
                         debugPrint(args.transf)
 
-                        local lastPloppedStation = _getLastPloppedStation(args.edgeId, args.transf)
-                        print('LOLLO lastPloppedStation =')
-                        debugPrint(lastPloppedStation)
+                        print('LOLLO stationId =')
+                        debugPrint(args.stationId)
+
+                        print('LOLLO edgeId =')
+                        debugPrint(args.edgeId)
 
                         -- destroy the newly built streetside station
                         -- and replace it with a construction containing the same, but with the cargo lanes
                         -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
                         -- Tried, it does not store any cargo.
 
-                        if lastPloppedStation then
-                            local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)
-                            local edgeEntity = game.interface.getEntity(args.edgeId)
+                        local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)
+                        -- local edgeEntity = game.interface.getEntity(args.edgeId)
 
-                            -- game.interface.bulldoze(stationId) -- dumps
-                            _replaceEdgeRemovingObject(args.edgeId, lastPloppedStation.id)
+                        -- game.interface.bulldoze(stationId) -- dumps
+                        _replaceEdgeRemovingObject(args.edgeId, args.stationId)
 
-                            if vehicleNodeOffset > 0 then
-                                -- LOLLO TODO vehicles can never reach the vehicle node in the model,
-                                -- the station won't be connected to the road network.
-                                -- I tried the splitter too, to no avail.
-                                _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset, edgeEntity)
-                            end
+                        if vehicleNodeOffset > 0 then
+                            -- LOLLO TODO vehicles can never reach the vehicle node in the model,
+                            -- the station won't be connected to the road network.
+                            -- I tried the splitter too, to no avail.
+                            -- _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset, edgeEntity)
                         end
 
                         -- print('LOLLO game.interface.buildConstruction = ')
@@ -373,12 +367,12 @@ function data()
                     -- debugPrint(name)
                     -- print('LOLLO param = ')
                     -- debugPrint(param)
-                    local stationModelId = api.res.modelRep.find(_constants.stationFileName)
+                    local myStationModelId = api.res.modelRep.find(_constants.stationFileName)
 
                     if not param or not param.proposal or not param.proposal.proposal or
                         not param.proposal.proposal.edgeObjectsToAdd or not param.proposal.proposal.edgeObjectsToAdd[1] or
                         not param.proposal.proposal.edgeObjectsToAdd[1].modelInstance or
-                        param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId ~= stationModelId then
+                        param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId ~= myStationModelId then
                         return
                     end
 
@@ -387,18 +381,37 @@ function data()
                     -- better would be to use result, but it is empty after plopping a streetside station.
                     -- I have notified UG of this bug.
                     -- cannot pass entity2tn as it is, pass its useful part only, and no userdata
-                    print('LOLLO type of param.data.entity2tn = ', type(param.data.entity2tn))
+                    -- print('LOLLO type of param.data.entity2tn = ', type(param.data.entity2tn)) -- userdata
+                    local lastBuiltEdge = _getLastBuiltEdge(param.data.entity2tn)
+                    if not(lastBuiltEdge) then return end
 
-                    local edgeId = _getLastBuiltEdgeId(param.data.entity2tn)
-                    if not(edgeId) then return end
+                    local stationId = nil
+                    for i = 1, #lastBuiltEdge.objects do
+                        -- debugPrint(game.interface.getEntity(lastBuiltEdge.objects[i][1]))
+                        local modelInstanceList = api.engine.getComponent(lastBuiltEdge.objects[i][1], api.type.ComponentType.MODEL_INSTANCE_LIST)
+                        -- print('LOLLO model instance list =')
+                        -- debugPrint(modelInstanceList)
+                        if modelInstanceList
+                        and modelInstanceList.fatInstances
+                        and modelInstanceList.fatInstances[1]
+                        and modelInstanceList.fatInstances[1].modelId == myStationModelId then
+                            stationId = lastBuiltEdge.objects[i][1]
+                        end
+                    end
+                    if not(stationId) then return end
 
+                    -- the following all fail coz they expect numers but receive a string
                     -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
                     -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
+                    -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                    -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
                     -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col(1))
                     -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
                     -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf.col(1))
+                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
                     game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built', {
-                        edgeId = edgeId,
+                        edgeId = lastBuiltEdge.id,
+                        stationId = stationId,
                         transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
                     })
                 end, _myErrorHandler)
