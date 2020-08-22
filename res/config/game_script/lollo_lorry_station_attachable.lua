@@ -10,7 +10,8 @@ local state = {
 local _constants = arrayUtils.addProps({
     approxToDeclareSamePosition = 0.1,
     constructionFileName = 'station/street/lollo_lorry_station.con',
-    stationFileName = 'station/road/lollo_small_cargo.mdl'
+    stationFileName = 'station/road/lollo_small_cargo.mdl',
+    waypointFileName = 'station/road/lollo_signal_waypoint.mdl',
 })
 
 local function _buildStation(transf, position, vehicleNodeOffset, edgeEntity)
@@ -222,7 +223,7 @@ function data()
                 print('LOLLO src = ', src, ' id = ', id, ' name = ', name, 'param = ')
                 debugPrint(args)
 
-                if name == 'built' then
+                if name == 'built.station' then
                     if args and args.edgeId and args.stationId and args.transf then
                         print('LOLLO stationTransf =')
                         debugPrint(args.transf)
@@ -249,6 +250,37 @@ function data()
                             -- the station won't be connected to the road network.
                             -- I tried the splitter too, to no avail.
                             -- _buildStation(args.transf, lastPloppedStation.position, vehicleNodeOffset, edgeEntity)
+                        end
+
+                        -- print('LOLLO game.interface.buildConstruction = ')
+                        -- debugPrint(game.interface.buildConstruction)
+                    end
+                elseif name == 'built.waypoint' then
+                    if args and args.edgeId and args.waypointId and args.transf then
+                        print('LOLLO waypoint transf =')
+                        debugPrint(args.transf)
+
+                        print('LOLLO waypointId =')
+                        debugPrint(args.waypointId)
+
+                        print('LOLLO edgeId =')
+                        debugPrint(args.edgeId)
+
+                        -- add a station construction with the cargo lanes
+                        local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)
+                        local edgeEntity = game.interface.getEntity(args.edgeId)
+                        local waypointEntity = game.interface.getEntity(args.waypointId)
+
+                        if vehicleNodeOffset > 0 then
+                            -- LOLLO TODO vehicles can never reach the vehicle node in the model,
+                            -- the station won't be connected to the road network.
+                            -- I tried the splitter too, to no avail.
+                            _buildStation(
+                                args.transf,
+                                waypointEntity.position,
+                                vehicleNodeOffset,
+                                edgeEntity
+                            )
                         end
 
                         -- print('LOLLO game.interface.buildConstruction = ')
@@ -368,52 +400,79 @@ function data()
                     -- print('LOLLO param = ')
                     -- debugPrint(param)
                     local myStationModelId = api.res.modelRep.find(_constants.stationFileName)
+                    local myWaypointModelId = api.res.modelRep.find(_constants.waypointFileName)
 
-                    if not param or not param.proposal or not param.proposal.proposal or
-                        not param.proposal.proposal.edgeObjectsToAdd or not param.proposal.proposal.edgeObjectsToAdd[1] or
-                        not param.proposal.proposal.edgeObjectsToAdd[1].modelInstance or
-                        param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId ~= myStationModelId then
-                        return
-                    end
+                    if param and param.proposal and param.proposal.proposal
+                        and param.proposal.proposal.edgeObjectsToAdd
+                        and param.proposal.proposal.edgeObjectsToAdd[1]
+                        and param.proposal.proposal.edgeObjectsToAdd[1].modelInstance
+                        then
+                        if param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == myStationModelId then
+                            print('LOLLO lorry station built!')
+                            -- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
+                            -- better would be to use result, but it is empty after plopping a streetside station.
+                            -- I have notified UG of this bug.
+                            -- cannot pass entity2tn as it is, pass its useful part only, and no userdata
+                            -- print('LOLLO type of param.data.entity2tn = ', type(param.data.entity2tn)) -- userdata
+                            local lastBuiltEdge = _getLastBuiltEdge(param.data.entity2tn)
+                            if not(lastBuiltEdge) then return end
 
-                    print('LOLLO lorry station built!')
-                    -- LOLLO NOTE I could do some complex estimations with param.data.entity2tn
-                    -- better would be to use result, but it is empty after plopping a streetside station.
-                    -- I have notified UG of this bug.
-                    -- cannot pass entity2tn as it is, pass its useful part only, and no userdata
-                    -- print('LOLLO type of param.data.entity2tn = ', type(param.data.entity2tn)) -- userdata
-                    local lastBuiltEdge = _getLastBuiltEdge(param.data.entity2tn)
-                    if not(lastBuiltEdge) then return end
+                            local stationId = nil
+                            for i = 1, #lastBuiltEdge.objects do
+                                -- debugPrint(game.interface.getEntity(lastBuiltEdge.objects[i][1]))
+                                local modelInstanceList = api.engine.getComponent(lastBuiltEdge.objects[i][1], api.type.ComponentType.MODEL_INSTANCE_LIST)
+                                -- print('LOLLO model instance list =')
+                                -- debugPrint(modelInstanceList)
+                                if modelInstanceList
+                                and modelInstanceList.fatInstances
+                                and modelInstanceList.fatInstances[1]
+                                and modelInstanceList.fatInstances[1].modelId == myStationModelId then
+                                    stationId = lastBuiltEdge.objects[i][1]
+                                end
+                            end
+                            if not(stationId) then return end
 
-                    local stationId = nil
-                    for i = 1, #lastBuiltEdge.objects do
-                        -- debugPrint(game.interface.getEntity(lastBuiltEdge.objects[i][1]))
-                        local modelInstanceList = api.engine.getComponent(lastBuiltEdge.objects[i][1], api.type.ComponentType.MODEL_INSTANCE_LIST)
-                        -- print('LOLLO model instance list =')
-                        -- debugPrint(modelInstanceList)
-                        if modelInstanceList
-                        and modelInstanceList.fatInstances
-                        and modelInstanceList.fatInstances[1]
-                        and modelInstanceList.fatInstances[1].modelId == myStationModelId then
-                            stationId = lastBuiltEdge.objects[i][1]
+                            -- the following all fail coz they expect numers but receive a string
+                            -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
+                            -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
+                            -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                            -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                            -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col(1))
+                            -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
+                            -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf.col(1))
+                            -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
+                            game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built.station', {
+                                edgeId = lastBuiltEdge.id,
+                                stationId = stationId,
+                                transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                            })        
+                        elseif param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == myWaypointModelId then
+                            print('LOLLO waypoint built!')
+                            local lastBuiltEdge = _getLastBuiltEdge(param.data.entity2tn)
+                            if not(lastBuiltEdge) then return end
+        
+                            local waypointId = nil
+                            for i = 1, #lastBuiltEdge.objects do
+                                -- debugPrint(game.interface.getEntity(lastBuiltEdge.objects[i][1]))
+                                local modelInstanceList = api.engine.getComponent(lastBuiltEdge.objects[i][1], api.type.ComponentType.MODEL_INSTANCE_LIST)
+                                -- print('LOLLO model instance list =')
+                                -- debugPrint(modelInstanceList)
+                                if modelInstanceList
+                                and modelInstanceList.fatInstances
+                                and modelInstanceList.fatInstances[1]
+                                and modelInstanceList.fatInstances[1].modelId == myWaypointModelId then
+                                    waypointId = lastBuiltEdge.objects[i][1]
+                                end
+                            end
+                            if not(waypointId) then return end
+
+                            game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built.waypoint', {
+                                edgeId = lastBuiltEdge.id,
+                                waypointId = waypointId,
+                                transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
+                            })
                         end
                     end
-                    if not(stationId) then return end
-
-                    -- the following all fail coz they expect numers but receive a string
-                    -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
-                    -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf, 1))
-                    -- debugPrint(api.type.Mat4f:col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
-                    -- debugPrint(api.type.Mat4f.col(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col(1))
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf.col(1))
-                    -- debugPrint(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf:col())
-                    game.interface.sendScriptEvent('__lolloLorryStation2Event__', 'built', {
-                        edgeId = lastBuiltEdge.id,
-                        stationId = stationId,
-                        transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
-                    })
                 end, _myErrorHandler)
                 -- elseif state.isShowAllEvents then
             else
