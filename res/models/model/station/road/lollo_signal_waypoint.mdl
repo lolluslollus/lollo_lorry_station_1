@@ -35,8 +35,8 @@ return {
 			price = 2000,
 		},
 		description = {
-			description = _("Used for rerouting a line. Can be added to a line like a station."),
-			name = _("Waypoint"),
+			description = _("Lollo streetside station."),
+			name = _("Lollo Waypoint"),
 		},
 		signal = {
 			type = "WAYPOINT",
