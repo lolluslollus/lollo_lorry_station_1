@@ -1,5 +1,10 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+local _modConstants = require('lollo_lorry_station/constants')
+local slotUtils = require('lollo_lorry_station/slotHelpers')
+local transf = require "transf"
+local vec3 = require "vec3"
+
 
 function data()
 	local function _getTramTrackType(params)
@@ -41,80 +46,159 @@ function data()
 		updateFn = function(params)
 			local result = {
 				colliders = {},
-				-- coord2terminalInfo = {},
+				coord2terminalInfo = {},
 				cost = 1000,
-				edgeLists = {},
+				edgeLists = {
+					{
+						type = 'STREET',
+						params = {
+							skipCollision = true,
+							type = 'standard/country_medium_new.lua',
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
+							{
+								{-11, -6 + _modConstants.lorryBayYShift, 0},
+								{10, 0, 0},
+							},
+							{
+								{-1, -6 + _modConstants.lorryBayYShift, 0},
+								{10, 0, 0},
+							},
+							{
+								{-1, -6 + _modConstants.lorryBayYShift, 0},
+								{2, 0, 0},
+							},
+							{
+								{1, -6 + _modConstants.lorryBayYShift, 0},
+								{2, 0, 0}
+							},
+							{
+								{1, -6 + _modConstants.lorryBayYShift, 0},
+								{10, 0, 0}
+							},
+							{
+								{11, -6 + _modConstants.lorryBayYShift, 0},
+								{10, 0, 0}
+							}
+						},
+						freeNodes = {0, 5},
+						snapNodes = {}
+					},
+				},
 				groundFaces = {},
-				models = {},
+				models = {
+					{
+						id = 'lollo_models/lollo_simple_lorry_bay.mdl',
+						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _modConstants.lorryBayYShift, 0, 1},
+					},
+					-- {
+						-- 	id = 'lollo_models/dsd_road_station2_freight_only_sbend.mdl',
+						-- 	transf = _idTransf,
+					-- }
+				},
 				-- modelTagsAndNodes = {},
-				-- slots = {},
+				slots = {},
 				-- stations = {},
 				-- terminalGroups = {},
 				terrainAlignmentLists = {},
-				-- DemangleId = nil,
-				-- MangleId = nil,
+				DemangleId = nil,
+				MangleId = nil,
 			}
 
 			print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
 
-			if params and params.vehicleNodeOffset then
-				print('LOLLO vehicleNodeOffset =')
-				debugPrint(params.vehicleNodeOffset)
-				-- local streetData = api.res.streetTypeRep.get(params.streetType) -- dumps
-			else
-				print('LOLLO no street type in params')
+			result.MangleId = function(x, y, baseId)
+				return baseId + _modConstants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
 			end
 
-			result.models = {
-				{
-					id = 'lollo_models/lollo_simple_lorry_bay.mdl',
-					transf = _idTransf,
-				},
-				-- {
-					-- 	id = 'lollo_models/dsd_road_station2_freight_only_sbend.mdl',
-					-- 	transf = _idTransf,
-				-- }
-			}
+			result.DemangleId = function(slotId)
+				local function _getIdBase(slotId)
+					local baseId = 0
+					for _, v in pairs(_modConstants.idBasesSortedDesc) do
+						if slotId >= v.id then
+							baseId = v.id
+							break
+						end
+					end
 
-			result.edgeLists = {
-				{
-					type = 'STREET',
-					params = {
-						skipCollision = true,
-						type = 'standard/country_medium_new.lua',
-						tramTrackType = 'NO' --_getTramTrackType(params)
-					},
-					edges = {
-						{
-							{-11, -6, 0},
-							{10, 0, 0},
-						},
-						{
-							{-1, -6, 0},
-							{10, 0, 0},
-						},
-						{
-							{-1, -6, 0},
-							{2, 0, 0},
-						},
-						{
-							{1, -6, 0},
-							{2, 0, 0}
-						},
-						{
-							{1, -6, 0},
-							{10, 0, 0}
-						},
-						{
-							{11, -6, 0},
-							{10, 0, 0}
-						}
-					},
-					freeNodes = {0, 5},
-					snapNodes = {}
+					return baseId > 0 and baseId or false
+				end
+
+				local baseId = _getIdBase(slotId)
+				if not baseId then return false, false, false end
+
+				local y = math.floor((slotId - baseId) / _modConstants.idFactorY)
+				local x = math.floor((slotId - baseId - y * _modConstants.idFactorY))
+
+				return x + _modConstants.xMin, y + _modConstants.yMin, baseId
+			end
+
+			local _occupiedSlots = {}
+			local _isSlotOccupied = function(x, y)
+				return slotUtils.getValueFromNestedTable(_occupiedSlots, x, y) == true
+				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then return false end
+				-- if _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then return true end
+				-- return false
+			end
+			local _setSlotOccupied = function(x, y)
+				slotUtils.setValueInNestedTable(_occupiedSlots, true, x, y)
+				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then _occupiedSlots[edgeUtils.getXKey(x)] = {} end
+				-- _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = true
+			end
+
+			-- bar slots along the road and in its middle
+			_setSlotOccupied(0, 0)
+			_setSlotOccupied(0, -1)
+			_setSlotOccupied(-1, 0)
+			_setSlotOccupied(1, 0)
+
+			-- add cargo area slots
+			local slotXYs = {
+				['-1'] = {
+					['0'] = true,
 				},
+				['0'] = {
+					['-1'] = true,
+					['0'] = true,
+					['1'] = true
+				},
+				['1'] = {
+					['0'] = true,
+				}
 			}
+			if type(params.modules) == 'table' then
+				for moduId, _ in pairs(params.modules) do
+					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
+					if moduleBaseId == _modConstants.idBases.areaSlotIdBase
+					or moduleBaseId == _modConstants.idBases.rightBaySlotIdBase
+					or moduleBaseId == _modConstants.idBases.leftBaySlotIdBase then
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY + 1)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY - 1)
+						slotUtils.setValueInNestedTable(slotXYs, true, moduleX - 1, moduleY)
+					end
+				end
+			end
+			local adjacentXYs = slotUtils.getFlatTable(slotXYs)
+			-- print('LOLLO adjacentXYs = ')
+			-- debugPrint(adjacentXYs)
+			for _, v in pairs(adjacentXYs) do
+				if not(_isSlotOccupied(v.x, v.y)) then
+					_setSlotOccupied(v.x, v.y)
+					table.insert(result.slots, {
+						id = result.MangleId(v.x, v.y, _modConstants.idBases.areaSlotIdBase),
+						transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
+						-- type = "street_terminal_passenger",
+						type = _modConstants.cargoAreaModuleType,
+						spacing = _modConstants.cargoAreaSpacing,
+						-- height
+						-- shape 1 2 3 4
+					})
+				end
+			end
 
 			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
 			debugPrint(result)
@@ -126,7 +210,7 @@ function data()
 		-- 	-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
 		-- 	-- If you leave it out, adding and removing tram tracks won't work.
 		-- 	-- (Bus lanes don't work anyway.)
-		-- 	return {}
+			return {}
 		end,
 	}
 end

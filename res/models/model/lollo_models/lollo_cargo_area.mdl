@@ -1,40 +1,24 @@
-local laneutil = require "laneutil"
-
---Begin Generated
-local generatedData = {
-	["lanes_terminal"] = {
-		curves = {
-			-- ["cargo_path_rep_cargo"] = {
-			-- 	{ { 10.00000, -5.00000, 0.34450 }, { 10.00000, 5.00000, 0.34450 }, },
-			-- },
-			-- ["cargo_path_rep_cargo2"] = {
-			-- 	{ { 5.00000, -5.00000, 0.34450 }, { 5.00000, 5.00000, 0.34450 }, },
-            -- },
-            ["cargo_path_rep_cargo3"] = {
-				{ { -4.00000, -5.00000, 0.34450 }, { -4.00000, 5.00000, 0.34450 }, },
-			},
-			["cargo_path_rep_cargo4"] = {
-				{ { 4.00000, -5.00000, 0.34450 }, { 4.00000, 5.00000, 0.34450 }, },
-			},
-		},
-	},
-}
---End Generated
+local _cargoNodeZ = 0 -- 0.2
 
 function data()
     return {
         boundingInfo = {
-            bbMax = { 3.840000629425, 2.1260833740234, 3.2567188739777, },
-            bbMin = { -3.4699983596802, -1.5046007633209, -0.29989165067673, },
+            -- bbMax = { 3.840000629425, 2.1260833740234, 3.2567188739777, },
+            -- bbMin = { -3.4699983596802, -1.5046007633209, -0.29989165067673, },
+            bbMax = { 1, 1, 1 },
+            bbMin = { -1, -1, 0 },
         },
+        -- collider = {
+        --     params = {
+        --         -- halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
+        --         -- halfExtents = { 0.1, 0.1, 0.1, },
+        --         halfExtents = { 0.0, 0.0, 0.0, },
+        --     },
+        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        --     type = "BOX",
+        -- },
         collider = {
-            params = {
-                -- halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
-                -- halfExtents = { 0.1, 0.1, 0.1, },
-                halfExtents = { 0.0, 0.0, 0.0, },
-            },
-            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-            type = "BOX",
+            type = 'NONE',
         },
         lods = {
             {
@@ -76,20 +60,202 @@ function data()
         metadata = {
             transportNetworkProvider = {
                 laneLists = {
-                    laneutil.createLanes(
-                        generatedData["lanes_terminal"], -- curves
-                        { "CARGO" }, -- transport means
-                        20, -- max speed
-                        4, -- lane width
-                        true -- linkable
-                    ),
+                    {
+                        linkable = false, --true,
+                        nodes = {
+                            {
+                                { -5.00000, -3.33333, _cargoNodeZ }, -- edge 0
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, -3.33333, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, -3.33333, _cargoNodeZ }, -- edge 1
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, -3.33333, _cargoNodeZ },
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, -3.33333, _cargoNodeZ }, -- edge 2
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 5.00000, -3.33333, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+
+                            {
+                                { -5.00000, 0, _cargoNodeZ }, -- edge 3
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, 0, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, 0, _cargoNodeZ }, -- edge 4
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, 0, _cargoNodeZ },
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, 0, _cargoNodeZ }, -- edge 5
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 5.00000, 0, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+
+                            {
+                                { -5.00000, 3.33333, _cargoNodeZ }, -- edge 6
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, 3.33333, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -4.00000, 3.33333, _cargoNodeZ }, -- edge 7
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, 3.33333, _cargoNodeZ },
+                                { 8, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 4.00000, 3.33333, _cargoNodeZ }, -- edge 8
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 5.00000, 3.33333, _cargoNodeZ },
+                                { 1, 0, 0 },
+                                3,
+                            },
+                            -- lanes across 1
+                            {
+                                { 4, 5, _cargoNodeZ }, -- edge 9
+                                { 0, -1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { 4, 3.33333, _cargoNodeZ },
+                                { 0, -1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { 4, 3.33333, _cargoNodeZ }, -- edge 10
+                                { 0, -3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { 4, 0, _cargoNodeZ },
+                                { 0, -3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { 4, 0, _cargoNodeZ }, -- edge 11
+                                { 0, -3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { 4, -3.33333, _cargoNodeZ },
+                                { 0, -3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { 4, -3.33333, _cargoNodeZ }, -- edge 12
+                                { 0, -1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { 4, -5, _cargoNodeZ },
+                                { 0, -1.66667, 0 },
+                                3,
+                            },
+                            -- lanes across 2
+                            {
+                                { -4, -5, _cargoNodeZ },
+                                { 0, 1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { -4, -3.33333, _cargoNodeZ }, -- edge 13
+                                { 0, 1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { -4, -3.33333, _cargoNodeZ },
+                                { 0, 3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { -4, 0, _cargoNodeZ }, -- edge 14
+                                { 0, 3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { -4, 0, _cargoNodeZ },
+                                { 0, 3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { -4, 3.33333, _cargoNodeZ }, -- edge 15
+                                { 0, 3.33333, 0 },
+                                3,
+                            },
+                            {
+                                { -4, 3.33333, _cargoNodeZ },
+                                { 0, 1.66667, 0 },
+                                3,
+                            },
+                            {
+                                { -4, 5, _cargoNodeZ }, -- edge 16
+                                { 0, 1.66667, 0 },
+                                3,
+                            },
+                        },
+                        transportModes = { "CARGO", },
+                        speedLimit = 30,
+                    },
+
+                    -- laneutil.createLanes(
+                    --     generatedData["lanes_terminal"], -- curves
+                    --     { "CARGO" }, -- transport means
+                    --     20, -- max speed
+                    --     4, -- lane width
+                    --     true -- linkable
+                    -- ),
                 },
                 runways = { },
                 terminals = {
                     {
                         -- order = 0,
-                        personEdges = { 0, 1 },
-                        personNodes = { 0, 1, 2, 3 },
+                        personEdges = { 1, 4, 7 },
+                        personNodes = { 2, 3, 8, 9, 14, 15 },
                         -- vehicleNode = -1, -- 0,
                     },
                 },
