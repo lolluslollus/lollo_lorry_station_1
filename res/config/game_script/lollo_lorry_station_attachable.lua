@@ -216,7 +216,7 @@ function data()
                 return
             end -- also comes with guide system switched off
             -- if state.isShowAllEvents then
-            print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
+            -- print('LOLLO handleEvent src =', src, ' id =', id, ' name =', name)
             state.isShowAllEvents = true
             -- end
             if (id == '__lolloLorryStation2Event__') then
