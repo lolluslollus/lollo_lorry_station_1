@@ -62,7 +62,7 @@ function data()
 			end
 
 			table.insert(result.models, {
-				id = 'lollo_models/dsd_road_station2_cargo.mdl',
+				id = 'lollo_models/lollo_simple_lorry_bay.mdl',
 				transf = _idTransf,
 			})
 			-- table.insert(result.models, {

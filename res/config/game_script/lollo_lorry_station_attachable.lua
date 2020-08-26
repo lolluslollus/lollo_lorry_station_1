@@ -63,11 +63,11 @@ local function _buildStation(transf, position, vehicleNodeOffset, edgeEntity)
     local context = api.type.Context:new()
     context.checkTerrainAlignment = true -- true gives smoother z, default is false
     context.cleanupStreetGraph = true -- default is false
-    context.gatherBuildings = false -- default is false
+    context.gatherBuildings = true -- default is false
     context.gatherFields = true -- default is true
     context.player = api.engine.util.getPlayer()
 
-	local cmd = api.cmd.make.buildProposal(proposal, nil, true)
+	local cmd = api.cmd.make.buildProposal(proposal, context, true)
 	api.cmd.sendCommand(cmd, callback)
 end
 
@@ -528,6 +528,8 @@ function data()
                                 waypointId = waypointId,
                                 transf = _getTransfFromApiResult(tostring(param.proposal.proposal.edgeObjectsToAdd[1].modelInstance.transf))
                             })
+                        -- else
+                        --     print('LOLLO builder.apply, id =', id, ', name =', name)
                         end
                     end
                 end, _myErrorHandler)
