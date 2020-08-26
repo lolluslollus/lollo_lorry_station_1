@@ -1,0 +1,132 @@
+local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
+
+function data()
+	local function _getTramTrackType(params)
+		return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
+		-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
+	end
+
+	return {
+		type = "STREET_STATION_CARGO",
+		-- type = "STREET_STATION",
+		-- type = 'STREET_CONSTRUCTION',
+		description = {
+			name = _("Lollo simple roadside lorry bay with edges"),
+			description = _("Lollo simple roadside lorry bay with edges."),
+		},
+		availability = {
+			yearFrom = 0,
+			yearTo = 0
+		},
+		params = {
+			-- {
+			-- 	key = 'lockLayoutCentre',
+			-- 	name = _('Lock curve'),
+			-- 	tooltip = _('Lock a curve to keep its shape pretty and prevent other roads merging in. Unlock it to treat it like ordinary roads. You cannot relock an unlocked curve.'),
+			-- 	values = {
+			-- 		_('No'),
+			-- 		_('Yes')
+			-- 	},
+			-- 	defaultIndex = 0
+			-- },
+		},
+		-- hasCargoPlatform = true, -- useless
+		-- streetTerminal = { -- useless
+		-- 	cargo = true,
+		-- },
+		order = 5005,
+
+		skipCollision = true,
+		updateFn = function(params)
+			local result = {
+				colliders = {},
+				-- coord2terminalInfo = {},
+				cost = 1000,
+				edgeLists = {},
+				groundFaces = {},
+				models = {},
+				-- modelTagsAndNodes = {},
+				-- slots = {},
+				-- stations = {},
+				-- terminalGroups = {},
+				terrainAlignmentLists = {},
+				-- DemangleId = nil,
+				-- MangleId = nil,
+			}
+
+			print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
+			debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
+
+			if params and params.vehicleNodeOffset then
+				print('LOLLO vehicleNodeOffset =')
+				debugPrint(params.vehicleNodeOffset)
+				-- local streetData = api.res.streetTypeRep.get(params.streetType) -- dumps
+			else
+				print('LOLLO no street type in params')
+			end
+
+			result.models = {
+				{
+					id = 'lollo_models/lollo_simple_lorry_bay.mdl',
+					transf = _idTransf,
+				},
+				-- {
+					-- 	id = 'lollo_models/dsd_road_station2_freight_only_sbend.mdl',
+					-- 	transf = _idTransf,
+				-- }
+			}
+
+			result.edgeLists = {
+				{
+					type = 'STREET',
+					params = {
+						skipCollision = true,
+						type = 'standard/country_medium_new.lua',
+						tramTrackType = 'NO' --_getTramTrackType(params)
+					},
+					edges = {
+						{
+							{-20, -6, 0},
+							{10, 0, 0},
+						},
+						{
+							{-10, -6, 0},
+							{10, 0, 0},
+						},
+						{
+							{-10, -6, 0},
+							{20, 0, 0},
+						},
+						{
+							{10, -6, 0},
+							{20, 0, 0}
+						},
+						{
+							{10, -6, 0},
+							{10, 0, 0}
+						},
+						{
+							{20, -6, 0},
+							{10, 0, 0}
+						}
+					},
+					freeNodes = {0, 5},
+					snapNodes = {}
+				},
+			}
+
+			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
+			debugPrint(result)
+
+			return result
+		end,
+		upgradeFn = function(_)
+		-- it does not get here when I call it with game.interface.upgradeConstruction()
+		-- 	-- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
+		-- 	-- If you leave it out, adding and removing tram tracks won't work.
+		-- 	-- (Bus lanes don't work anyway.)
+		-- 	return {}
+		end,
+	}
+end

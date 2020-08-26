@@ -4,7 +4,7 @@ function data()
 	local _platformY = 0 -- 5
 	local _platformZ = -0.6 -- -0.6
 	local _vehicleNodeY = -4
-	local _vehicleNodeZ = -0.3
+	local _vehicleNodeZ = 0 -- -0.3
 
 	return {
 		boundingInfo = {
@@ -70,11 +70,11 @@ function data()
 
 							-- {{ -1.25, -1., 0, },{ -.75, 0, 0, },3,},
 							-- {{ -2, -1., 0, },{ -.75, 0, 0, },3,},
-							{{ 1, _vehicleNodeY, _vehicleNodeZ }, { -1, 0, 0, }, 3}, -- edge 0
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -1, 0, 0, }, 3},
+							{{ 10, _vehicleNodeY, _vehicleNodeZ }, { -10, 0, 0, }, 3}, -- edge 0
+							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -10, 0, 0, }, 3},
 
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -1, 0, 0 }, 3}, -- edge 1
-							{{ -1, _vehicleNodeY, _vehicleNodeZ }, { -1, 0, 0 }, 3},
+							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -10, 0, 0 }, 3}, -- edge 1
+							{{ -10, _vehicleNodeY, _vehicleNodeZ }, { -10, 0, 0 }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
