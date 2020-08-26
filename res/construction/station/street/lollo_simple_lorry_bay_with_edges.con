@@ -206,7 +206,7 @@ function data()
 				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				print('LOLLO cargoAreaModelIndexesBase0 =')
 				debugPrint(cargoAreaModelIndexesBase0)
-				-- LOLLO TODO in future, take only non-adjacent lorry bays
+				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 				print('LOLLO lorryBayModelIndexesBase0 =')
 				debugPrint(lorryBayModelIndexesBase0)
