@@ -26,7 +26,6 @@ return {
 	},
 	metadata = {
 		cargo = true,
-		-- cargoArea = true,
 	},
 	order = {
 		value = 7,

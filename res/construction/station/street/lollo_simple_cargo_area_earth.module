@@ -20,8 +20,8 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Lollo cargo area"),
-		description = _("Lollo platform for waiting cargo."),
+		name = _("Lollo cargo area with earth"),
+		description = _("Lollo platform for waiting cargo, with earth."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	},
 	metadata = {
@@ -42,7 +42,7 @@ return {
 		local modelTag = slotUtils.getCargoAreaModelTag(slotId)
 		-- addModelFn(_constants.cargoAreaModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = _constants.cargoAreaModelFileName,
+			id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaModelFileName,
 			transf = transform,
 			tag = modelTag
 		}
@@ -90,7 +90,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = _constants.cargoAreaModelFileName,
+				id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}
