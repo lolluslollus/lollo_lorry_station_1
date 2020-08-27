@@ -8,18 +8,16 @@ function data()
             bbMax = { 1, 1, 1 },
             bbMin = { -1, -1, 0 },
         },
-        -- collider = {
-        --     params = {
-        --         -- halfExtents = { 3.6549994945526, 1.8153420686722, 1.7783052921295, },
-        --         -- halfExtents = { 0.1, 0.1, 0.1, },
-        --         halfExtents = { 0.0, 0.0, 0.0, },
-        --     },
-        --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-        --     type = "BOX",
-        -- },
         collider = {
-            type = 'NONE',
+            params = {
+                halfExtents = { 1.0, 1.0, 0.5, },
+            },
+            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            type = "BOX",
         },
+        -- collider = {
+        --     type = 'NONE',
+        -- },
         lods = {
             {
                 node = {

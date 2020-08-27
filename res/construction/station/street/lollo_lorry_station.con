@@ -10,22 +10,6 @@ local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transfUtils = require('lollo_lorry_station/transfUtils')
 local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
 
-local _constants = arrayUtils.addProps(
-	{
-		-- cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0},
-		cargoAreaSpacing = {0.5, 0.5, 0.5, 0.5},
-		-- LOLLO NOTE spacing:
-		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
-		-- negative values don't matter, the api takes up the abs value
-		-- 0 will make a module unselectable when the user wants to delete it
-		-- the 3rd and 4th params may have to do with Y and the 1st and 2nd with X,
-		-- probably 1 = x before, 2 = x after, 3 = y before, 4 = y after
-		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
-		lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
-		-- lorryBaySpacing = {0, 0, 0, 0},
-	},
-	_modConstants
-)
 
 function data()
 	return {
@@ -240,7 +224,7 @@ function data()
 					transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _modConstants.cargoAreaModuleType,
-					spacing = _constants.cargoAreaSpacing,
+					spacing = _modConstants.cargoAreaSpacing,
 					-- height
 					-- shape 1 2 3 4
 				})
@@ -285,7 +269,7 @@ function data()
 								params.inverseTransf
 							),
 							type = _modConstants.lorryBayModuleType,
-							spacing = _constants.lorryBaySpacing,
+							spacing = _modConstants.lorryBaySpacing,
 							skipCollision = true, -- useless
 							-- height
 							-- shape
@@ -315,7 +299,7 @@ function data()
 								params.inverseTransf
 							),
 							type = _modConstants.lorryBayModuleType,
-							spacing = _constants.lorryBaySpacing,
+							spacing = _modConstants.lorryBaySpacing,
 							skipCollision = true, -- useless
 							-- height
 							-- shape

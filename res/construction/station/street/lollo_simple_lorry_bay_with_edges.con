@@ -5,13 +5,6 @@ local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transf = require "transf"
 local vec3 = require "vec3"
 
--- LOLLO TODO after building a station and attaching it to a road,
--- configure the station and add a cargo area: collision!
--- Probably, we are a tad too close to the road.
--- Or else, try reducing the abs values in _modConstants.cargoAreaSpacing
--- Or else, try manipulating the cargo area bounding box so its min z is higher
--- Or else, make the middle edge longer
--- or, try leaving out the cargo paths along y
 function data()
 	local function _getTramTrackType(params)
 		return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
@@ -19,8 +12,8 @@ function data()
 	end
 
 	return {
-		type = "STREET_STATION_CARGO",
-		-- type = "STREET_STATION",
+		type = 'STREET_STATION_CARGO',
+		-- type = 'STREET_STATION',
 		-- type = 'STREET_CONSTRUCTION',
 		description = {
 			name = _("Lollo simple roadside lorry bay with edges"),
@@ -42,39 +35,10 @@ function data()
 			-- 	defaultIndex = 0
 			-- },
 		},
-		-- hasCargoPlatform = true, -- useless
-		-- streetTerminal = { -- useless
-		-- 	cargo = true,
-		-- },
 		order = 5005,
-
+		autoRemovable = false,
 		skipCollision = true,
 		updateFn = function(params)
-			-- local _demangleId = function(slotId)
-			-- 	local function _getIdBase(slotId)
-			-- 		local baseId = 0
-			-- 		for _, v in pairs(_modConstants.idBasesSortedDesc) do
-			-- 			if slotId >= v.id then
-			-- 				baseId = v.id
-			-- 				break
-			-- 			end
-			-- 		end
-
-			-- 		return baseId > 0 and baseId or false
-			-- 	end
-
-			-- 	local baseId = _getIdBase(slotId)
-			-- 	if not baseId then return false, false, false end
-
-			-- 	local y = math.floor((slotId - baseId) / _modConstants.idFactorY)
-			-- 	local x = math.floor((slotId - baseId - y * _modConstants.idFactorY))
-
-			-- 	return x + _modConstants.xMin, y + _modConstants.yMin, baseId
-			-- end
-			-- local _mangleId = function(x, y, baseId)
-			-- 	return baseId + _modConstants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
-			-- end
-
 			local result = {
 				colliders = {},
 				coord2terminalInfo = {},
@@ -83,7 +47,7 @@ function data()
 					{
 						type = 'STREET',
 						params = {
-							skipCollision = true,
+							-- skipCollision = true,
 							type = 'standard/country_medium_new.lua',
 							tramTrackType = 'NO' --_getTramTrackType(params)
 						},
@@ -96,6 +60,19 @@ function data()
 								{-1, -6 + _modConstants.lorryBayYShift, 0},
 								{10, 0, 0},
 							},
+						},
+						freeNodes = {},
+						snapNodes = {0}, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
+						-- skipCollision = true,
+					},
+					{
+						type = 'STREET',
+						params = {
+							-- skipCollision = true,
+							type = 'standard/country_medium_new.lua',
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
 							{
 								{-1, -6 + _modConstants.lorryBayYShift, 0},
 								{2, 0, 0},
@@ -104,6 +81,19 @@ function data()
 								{1, -6 + _modConstants.lorryBayYShift, 0},
 								{2, 0, 0}
 							},
+						},
+						freeNodes = {},
+						snapNodes = {},
+						-- skipCollision = true,
+					},
+					{
+						type = 'STREET',
+						params = {
+							skipCollision = true,
+							type = 'standard/country_medium_new.lua',
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
 							{
 								{1, -6 + _modConstants.lorryBayYShift, 0},
 								{10, 0, 0}
@@ -113,8 +103,9 @@ function data()
 								{10, 0, 0}
 							}
 						},
-						freeNodes = {0, 5},
-						snapNodes = {}
+						freeNodes = {},
+						snapNodes = {1},
+					 skipCollision = true,
 					},
 				},
 				groundFaces = {},
@@ -125,6 +116,13 @@ function data()
 						tag = slotUtils.getLorryBayModelTag(slotUtils.mangleId(0, 0, _modConstants.idBases.leftBaySlotIdBase)),
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _modConstants.lorryBayYShift, 0, 1},
 					},
+				},
+				slotConfig = {
+					-- [_modConstants.cargoAreaModuleType] = {
+					-- 	maxModules = -1,
+					-- 	message = nil, --'LOLLO slotConfig message',
+					-- 	skipCollisionCheck = true,
+					-- }
 				},
 				slots = {},
 				stations = {},
@@ -152,18 +150,23 @@ function data()
 			_setSlotOccupied(1, 0)
 
 			-- add cargo area slots
+			-- local slotXYs = {
+			-- 	['-1'] = {
+			-- 		['0'] = true,
+			-- 	},
+			-- 	['0'] = {
+			-- 		['-1'] = true,
+			-- 		['0'] = true,
+			-- 		['1'] = true
+			-- 	},
+			-- 	['1'] = {
+			-- 		['0'] = true,
+			-- 	}
+			-- }
 			local slotXYs = {
-				['-1'] = {
-					['0'] = true,
-				},
 				['0'] = {
-					['-1'] = true,
-					['0'] = true,
 					['1'] = true
 				},
-				['1'] = {
-					['0'] = true,
-				}
 			}
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
@@ -186,31 +189,30 @@ function data()
 				if not(_isSlotOccupied(v.x, v.y)) then
 					_setSlotOccupied(v.x, v.y)
 					table.insert(result.slots, {
+						-- height = 1,
 						id = result.MangleId(v.x, v.y, _modConstants.idBases.areaSlotIdBase),
-						transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
-						-- type = "street_terminal_passenger",
-						type = _modConstants.cargoAreaModuleType,
-						spacing = _modConstants.cargoAreaSpacing,
-						-- height
 						-- shape 1 2 3 4
+						spacing = _modConstants.cargoAreaSpacing,
+						transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
+						type = _modConstants.cargoAreaModuleType,
 					})
 				end
 			end
 
 			-- join terminals together
 			result.terminateConstructionHook = function(one, two)
-				print('LOLLO starting terminateConstructionHook')
-				print('LOLLO result.models =')
-				debugPrint(result.models)
 				-- this fires after the user has added a module
+				print('LOLLO starting terminateConstructionHook')
+				-- print('LOLLO result.models =')
+				-- debugPrint(result.models)
 				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
 				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
-				print('LOLLO cargoAreaModelIndexesBase0 =')
-				debugPrint(cargoAreaModelIndexesBase0)
+				-- print('LOLLO cargoAreaModelIndexesBase0 =')
+				-- debugPrint(cargoAreaModelIndexesBase0)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
-				print('LOLLO lorryBayModelIndexesBase0 =')
-				debugPrint(lorryBayModelIndexesBase0)
+				-- print('LOLLO lorryBayModelIndexesBase0 =')
+				-- debugPrint(lorryBayModelIndexesBase0)
 
 				local tagCounterBase0 = 0
 				result.terminalGroups = {}
@@ -221,8 +223,8 @@ function data()
 					)
 
 					local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
-print('LOLLO adjacentCargoAreas = ')
-debugPrint(adjacentCargoAreas)
+					-- print('LOLLO adjacentCargoAreas = ')
+					-- debugPrint(adjacentCargoAreas)
 					for _, v in pairs(adjacentCargoAreas) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					end
@@ -265,12 +267,13 @@ debugPrint(adjacentCargoAreas)
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				if #station.terminals > 0 then table.insert(result.stations, station) end
-				print('LOLLO result.models = ')
-				debugPrint(result.models)
-				print('LOLLO result.stations = ')
-				debugPrint(result.stations)
-				print('LOLLO result.terminalGroups = ')
-				debugPrint(result.terminalGroups)
+				-- print('LOLLO result.models = ')
+				-- debugPrint(result.models)
+				-- print('LOLLO result.stations = ')
+				-- debugPrint(result.stations)
+				-- print('LOLLO result.terminalGroups = ')
+				-- debugPrint(result.terminalGroups)
+				result.colliders = {}
 			end
 			
 			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')

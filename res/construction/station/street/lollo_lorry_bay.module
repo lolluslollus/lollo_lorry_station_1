@@ -31,9 +31,9 @@ return {
 	metadata = {
 		cargo = true,
 		lorryBay = true,
-		skipCollision = true, -- useless
+		-- skipCollision = true, -- useless
 	},
-	skipCollision = true, -- useless
+	-- skipCollision = true, -- useless
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
