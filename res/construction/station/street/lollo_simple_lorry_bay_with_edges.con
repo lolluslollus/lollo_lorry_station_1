@@ -177,6 +177,10 @@ function data()
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY - 1)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX - 1, moduleY)
+						-- bar building in front of a streetside cargo area
+						if moduleBaseId == _constants.idBases.streetsideCargoAreaSlotId then
+							_setSlotOccupied(moduleX, moduleY - 1)
+						end
 					end
 				end
 			end
@@ -184,9 +188,10 @@ function data()
 			-- print('LOLLO adjacentXYs = ')
 			-- debugPrint(adjacentXYs)
 
-			-- add streetside cargo area slots
+			-- add streetside cargo area slots, only along the road
 			for _, v in pairs(adjacentXYs) do
-				if not(_isSlotOccupied(v.x, v.y)) then
+				print('LOLLO v.y =', v.y, 'its type =', type(v.y))
+				if (v.y == '0' or v.y == 0) and not(_isSlotOccupied(v.x, v.y)) then
 					-- _setSlotOccupied(v.x, v.y)
 					table.insert(result.slots, {
 						-- height = 1,
@@ -202,9 +207,9 @@ function data()
 			-- add cargo area slots
 			-- -- bar slots along the road and in its middle
 			-- _setSlotOccupied(0, 0)
-			-- _setSlotOccupied(0, -1)
-			-- _setSlotOccupied(-1, 0)
-			-- _setSlotOccupied(1, 0)
+			_setSlotOccupied(0, -1)
+			_setSlotOccupied(-1, 0)
+			_setSlotOccupied(1, 0)
 			for _, v in pairs(adjacentXYs) do
 				if not(_isSlotOccupied(v.x, v.y)) then
 					-- _setSlotOccupied(v.x, v.y)
@@ -225,7 +230,7 @@ function data()
 				print('LOLLO starting terminateConstructionHook')
 				-- print('LOLLO result.models =')
 				-- debugPrint(result.models)
-				local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
+				-- local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
 				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
 				-- debugPrint(cargoAreaModelIndexesBase0)
@@ -234,12 +239,18 @@ function data()
 				-- print('LOLLO lorryBayModelIndexesBase0 =')
 				-- debugPrint(lorryBayModelIndexesBase0)
 
-				local tagCounterBase0 = 0
+				result.stations = {
+					{
+						tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
+						terminals = { } -- 0 is the position of the linked terminal group, in base 0
+					}
+				}
 				result.terminalGroups = {}
+				local bayIndexBase0 = 0
 				for _, bay in pairs(lorryBayModelIndexesBase0) do
 					table.insert(
 						result.terminalGroups,
-						{tag = tagCounterBase0, terminals = { { bay.base0ModelIndex, 0 }}}
+						{tag = bayIndexBase0, terminals = { { bay.base0ModelIndex, 0 }}}
 					)
 
 					local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
@@ -249,18 +260,13 @@ function data()
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					end
 
-					tagCounterBase0 = tagCounterBase0 + 1
+					table.insert(result.stations[1].terminals, bayIndexBase0)
+					bayIndexBase0 = bayIndexBase0 + 1
 				end
 
-				result.stations = {
-					{
-						tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
-						terminals = { } -- 0 is the position of the linked terminal group, in base 0
-					}
-				}
-				for lorryBayCounter = 1, tagCounterBase0 do
-					table.insert(result.stations[1].terminals, lorryBayCounter - 1)
-				end
+				-- for lorryBayCounter = 1, tagCounterBase0 do
+				-- 	table.insert(result.stations[1].terminals, lorryBayCounter - 1)
+				-- end
 				-- avoid dump when configuring
 				if #(result.stations[1].terminals) == 0 then
 					table.insert(result.stations[1].terminals, 0)
@@ -286,17 +292,17 @@ function data()
 				-- }
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
-				if #station.terminals > 0 then table.insert(result.stations, station) end
-				print('LOLLO result.models = ')
-				debugPrint(result.models)
-				print('LOLLO result.stations = ')
-				debugPrint(result.stations)
-				print('LOLLO result.terminalGroups = ')
-				debugPrint(result.terminalGroups)
+				-- if #station.terminals > 0 then table.insert(result.stations, station) end
+				-- print('LOLLO result.models = ')
+				-- debugPrint(result.models)
+				-- print('LOLLO result.stations = ')
+				-- debugPrint(result.stations)
+				-- print('LOLLO result.terminalGroups = ')
+				-- debugPrint(result.terminalGroups)
 			end
 			
 			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
-			debugPrint(result)
+			-- debugPrint(result)
 
 			return result
 		end,
