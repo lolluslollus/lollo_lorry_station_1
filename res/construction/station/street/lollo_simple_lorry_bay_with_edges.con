@@ -10,6 +10,8 @@ local vec3 = require "vec3"
 -- Probably, we are a tad too close to the road.
 -- Or else, try reducing the abs values in _modConstants.cargoAreaSpacing
 -- Or else, try manipulating the cargo area bounding box so its min z is higher
+-- Or else, make the middle edge longer
+-- or, try leaving out the cargo paths along y
 function data()
 	local function _getTramTrackType(params)
 		return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
