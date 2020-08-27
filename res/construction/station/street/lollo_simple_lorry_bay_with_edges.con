@@ -137,8 +137,8 @@ function data()
 				MangleId = slotUtils.mangleId,
 			}
 
-			print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
-			debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
+			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
+			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
 
 			local _occupiedSlots = {}
 			local _isSlotOccupied = function(x, y)
@@ -190,7 +190,7 @@ function data()
 
 			-- add streetside cargo area slots, only along the road
 			for _, v in pairs(adjacentXYs) do
-				print('LOLLO v.y =', v.y, 'its type =', type(v.y))
+				-- print('LOLLO v.y =', v.y, 'its type =', type(v.y))
 				if (v.y == '0' or v.y == 0) and not(_isSlotOccupied(v.x, v.y)) then
 					-- _setSlotOccupied(v.x, v.y)
 					table.insert(result.slots, {
@@ -227,7 +227,7 @@ function data()
 			-- join terminals together
 			result.terminateConstructionHook = function(one, two)
 				-- this fires after the user has added a module
-				print('LOLLO starting terminateConstructionHook')
+				-- print('LOLLO starting terminateConstructionHook')
 				-- print('LOLLO result.models =')
 				-- debugPrint(result.models)
 				-- local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
@@ -291,7 +291,7 @@ function data()
 				-- 	}
 				-- }
 
-				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
+				-- print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				-- if #station.terminals > 0 then table.insert(result.stations, station) end
 				-- print('LOLLO result.models = ')
 				-- debugPrint(result.models)
@@ -300,8 +300,8 @@ function data()
 				-- print('LOLLO result.terminalGroups = ')
 				-- debugPrint(result.terminalGroups)
 			end
-			
-			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
+
+			-- print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
 			-- debugPrint(result)
 
 			return result

@@ -22,7 +22,7 @@ helpers.setValueInNestedTable = function(nestedTable, newValue, x, y)
     nestedTable[tostring(x)][tostring(y)] = newValue
 end
 local function getPoint(inValues, x, y)
-    print('LOLLO getPoint, x = ', x, ' y = ', y)
+    -- print('LOLLO getPoint, x = ', x, ' y = ', y)
     if x > _constants.xMax or x < _constants.xMin
     or y > _constants.yMax or y < _constants.yMin
     then return false end
