@@ -61,7 +61,7 @@ function data()
             transportNetworkProvider = {
                 laneLists = {
                     {
-                        linkable = true, -- false, --true,
+                        linkable = false, -- false, --true,
                         nodes = {
                             {
                                 { -5.00000, -3.33333, _cargoNodeZ }, -- edge 0

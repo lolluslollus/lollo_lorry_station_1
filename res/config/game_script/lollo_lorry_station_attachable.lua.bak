@@ -239,7 +239,7 @@ function data()
 
                         -- destroy the newly built streetside station
                         -- and replace it with a construction containing the same, but with the cargo lanes
-                        -- Alternatively, try just adding a cargo area like lollo_cargo_area.mdl.
+                        -- Alternatively, try just adding a cargo area like lollo_simple_cargo_area.mdl.
                         -- Tried, it does not store any cargo.
 
                         local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)

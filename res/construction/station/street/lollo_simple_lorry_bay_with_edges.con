@@ -5,7 +5,11 @@ local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transf = require "transf"
 local vec3 = require "vec3"
 
-
+-- LOLLO TODO after building a station and attaching it to a road,
+-- configure the station and add a cargo area: collision!
+-- Probably, we are a tad too close to the road.
+-- Or else, try reducing the abs values in _modConstants.cargoAreaSpacing
+-- Or else, try manipulating the cargo area bounding box so its min z is higher
 function data()
 	local function _getTramTrackType(params)
 		return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
@@ -134,14 +138,9 @@ function data()
 			local _occupiedSlots = {}
 			local _isSlotOccupied = function(x, y)
 				return slotUtils.getValueFromNestedTable(_occupiedSlots, x, y) == true
-				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then return false end
-				-- if _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then return true end
-				-- return false
 			end
 			local _setSlotOccupied = function(x, y)
 				slotUtils.setValueInNestedTable(_occupiedSlots, true, x, y)
-				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then _occupiedSlots[edgeUtils.getXKey(x)] = {} end
-				-- _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = true
 			end
 
 			-- bar slots along the road and in its middle
