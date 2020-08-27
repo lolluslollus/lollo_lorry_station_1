@@ -1,4 +1,4 @@
-local _modConstants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station/constants')
 local helpers = {}
 
 helpers.getFlatTable = function(nestedTable)
@@ -23,14 +23,14 @@ helpers.setValueInNestedTable = function(nestedTable, newValue, x, y)
 end
 local function getPoint(inValues, x, y)
     print('LOLLO getPoint, x = ', x, ' y = ', y)
-    if x > _modConstants.xMax or x < _modConstants.xMin
-    or y > _modConstants.yMax or y < _modConstants.yMin
+    if x > _constants.xMax or x < _constants.xMin
+    or y > _constants.yMax or y < _constants.yMin
     then return false end
     return helpers.getValueFromNestedTable(inValues, x, y)
 end
 local function addPointThenNeighbours(inValues, outValues, visitedXYs, x, y)
-    if x > _modConstants.xMax or x < _modConstants.xMin
-    or y > _modConstants.yMax or y < _modConstants.yMin
+    if x > _constants.xMax or x < _constants.xMin
+    or y > _constants.yMax or y < _constants.yMin
     then return end
 
     if helpers.getValueFromNestedTable(visitedXYs, x, y) then return end
@@ -65,14 +65,14 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local base0ModelIndex = 0
     for _, model in pairs(models) do
         if helpers.getCargoAreaSlotId(model.tag) then
-            local x = tostring((model.transf[13]) / _modConstants.xTransfFactor)
-            local y = tostring((model.transf[14]) / _modConstants.yTransfFactor)
+            local x = tostring((model.transf[13]) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
             -- if cargoAreas[x] == nil then cargoAreas[x] = {} end
             -- cargoAreas[x][y] = base0ModelIndex
             -- cargoAreas[#cargoAreas+1] = {
-            -- 	x = v.transf[13] / _modConstants.xTransfFactor,
-            -- 	y = v.transf[14] / _modConstants.yTransfFactor,
+            -- 	x = v.transf[13] / _constants.xTransfFactor,
+            -- 	y = v.transf[14] / _constants.yTransfFactor,
             -- 	z = v.transf[15],
             -- }
         end
@@ -86,14 +86,14 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     local base0ModelIndex = 0
     for _, model in pairs(models) do
         if helpers.getLorryBaySlotId(model.tag) then
-            -- local x = tostring(v.transf[13] / _modConstants.xTransfFactor)
-            -- local y = tostring(v.transf[14] / _modConstants.yTransfFactor)
+            -- local x = tostring(v.transf[13] / _constants.xTransfFactor)
+            -- local y = tostring(v.transf[14] / _constants.yTransfFactor)
             -- if lorryBays[x] == nil then lorryBays[x] = {} end
             -- lorryBays[x][y] = base0ModelIndex
 
             results[#results+1] = {
-                    x = (model.transf[13]  - _modConstants.lorryBayXShift) / _modConstants.xTransfFactor,
-                    y = (model.transf[14]  - _modConstants.lorryBayYShift) / _modConstants.yTransfFactor,
+                    x = (model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor,
+                    y = (model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor,
                     z = model.transf[15],
                     base0ModelIndex = base0ModelIndex
                 }
@@ -130,7 +130,7 @@ end
 helpers.demangleId = function(slotId)
     local function _getIdBase(slotId)
         local baseId = 0
-        for _, v in pairs(_modConstants.idBasesSortedDesc) do
+        for _, v in pairs(_constants.idBasesSortedDesc) do
             if slotId >= v.id then
                 baseId = v.id
                 break
@@ -143,14 +143,14 @@ helpers.demangleId = function(slotId)
     local baseId = _getIdBase(slotId)
     if not baseId then return false, false, false end
 
-    local y = math.floor((slotId - baseId) / _modConstants.idFactorY)
-    local x = math.floor((slotId - baseId - y * _modConstants.idFactorY))
+    local y = math.floor((slotId - baseId) / _constants.idFactorY)
+    local x = math.floor((slotId - baseId - y * _constants.idFactorY))
 
-    return x + _modConstants.xMin, y + _modConstants.yMin, baseId
+    return x + _constants.xMin, y + _constants.yMin, baseId
 end
 
 helpers.mangleId = function(x, y, baseId)
-    return baseId + _modConstants.idFactorY * (y  - _modConstants.yMin) + (x  - _modConstants.xMin)
+    return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
 end
 
 return helpers

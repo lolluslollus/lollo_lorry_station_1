@@ -1,6 +1,6 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local _idTransf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1}
-local _modConstants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station/constants')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transf = require "transf"
 local vec3 = require "vec3"
@@ -53,11 +53,11 @@ function data()
 						},
 						edges = {
 							{
-								{-11, -6 + _modConstants.lorryBayYShift, 0},
+								{-11, -6 + _constants.lorryBayYShift, 0},
 								{10, 0, 0},
 							},
 							{
-								{-1, -6 + _modConstants.lorryBayYShift, 0},
+								{-1, -6 + _constants.lorryBayYShift, 0},
 								{10, 0, 0},
 							},
 						},
@@ -74,11 +74,11 @@ function data()
 						},
 						edges = {
 							{
-								{-1, -6 + _modConstants.lorryBayYShift, 0},
+								{-1, -6 + _constants.lorryBayYShift, 0},
 								{2, 0, 0},
 							},
 							{
-								{1, -6 + _modConstants.lorryBayYShift, 0},
+								{1, -6 + _constants.lorryBayYShift, 0},
 								{2, 0, 0}
 							},
 						},
@@ -95,11 +95,11 @@ function data()
 						},
 						edges = {
 							{
-								{1, -6 + _modConstants.lorryBayYShift, 0},
+								{1, -6 + _constants.lorryBayYShift, 0},
 								{10, 0, 0}
 							},
 							{
-								{11, -6 + _modConstants.lorryBayYShift, 0},
+								{11, -6 + _constants.lorryBayYShift, 0},
 								{10, 0, 0}
 							}
 						},
@@ -113,12 +113,12 @@ function data()
 					{
 						id = 'lollo_models/lollo_simple_lorry_bay.mdl',
 						-- tag = slotUtils.getCargoAreaModelTag(slotId),
-						tag = slotUtils.getLorryBayModelTag(slotUtils.mangleId(0, 0, _modConstants.idBases.leftBaySlotIdBase)),
-						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _modConstants.lorryBayYShift, 0, 1},
+						tag = slotUtils.getLorryBayModelTag(slotUtils.mangleId(0, 0, _constants.idBases.leftBaySlotIdBase)),
+						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.lorryBayYShift, 0, 1},
 					},
 				},
 				slotConfig = {
-					-- [_modConstants.cargoAreaModuleType] = {
+					-- [_constants.cargoAreaModuleType] = {
 					-- 	maxModules = -1,
 					-- 	message = nil, --'LOLLO slotConfig message',
 					-- 	skipCollisionCheck = true,
@@ -171,9 +171,9 @@ function data()
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
-					if moduleBaseId == _modConstants.idBases.areaSlotIdBase
-					or moduleBaseId == _modConstants.idBases.rightBaySlotIdBase
-					or moduleBaseId == _modConstants.idBases.leftBaySlotIdBase then
+					if moduleBaseId == _constants.idBases.areaSlotIdBase
+					or moduleBaseId == _constants.idBases.rightBaySlotIdBase
+					or moduleBaseId == _constants.idBases.leftBaySlotIdBase then
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY + 1)
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX + 1, moduleY)
@@ -190,11 +190,11 @@ function data()
 					_setSlotOccupied(v.x, v.y)
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.MangleId(v.x, v.y, _modConstants.idBases.areaSlotIdBase),
+						id = result.MangleId(v.x, v.y, _constants.idBases.areaSlotIdBase),
 						-- shape 1 2 3 4
-						spacing = _modConstants.cargoAreaSpacing,
-						transf = transf.transl(vec3.new(v.x * _modConstants.xTransfFactor, v.y * _modConstants.yTransfFactor, 0.0)),
-						type = _modConstants.cargoAreaModuleType,
+						spacing = _constants.cargoAreaSpacing,
+						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor, 0.0)),
+						type = _constants.cargoAreaModuleType,
 					})
 				end
 			end
