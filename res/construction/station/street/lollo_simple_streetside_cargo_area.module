@@ -1,0 +1,71 @@
+local transf = require "transf"
+local vec3 = require "vec3"
+local modulesutil = require "modulesutil"
+local constructionutil = require "constructionutil"
+local edgeUtils = require('lollo_lorry_station/edgeHelper')
+local slotUtils = require('lollo_lorry_station/slotHelpers')
+local _constants = require('lollo_lorry_station/constants')
+
+function data()
+
+return {
+	availability = {
+		yearFrom = 0,
+		yearTo = 0
+	},
+	cost = {
+		price = 24000,
+	},
+	category = {
+		categories = { "cargo", },
+	},
+	description = {
+		name = _("Lollo streetside cargo area"),
+		description = _("Lollo streetside platform for waiting cargo."),
+		icon = "ui/construction/station/street/platform_cargo.tga"
+	},
+	metadata = {
+		cargo = true,
+		cargoArea = true,
+	},
+	order = {
+		value = 7,
+	},
+	type = _constants.streetsideCargoAreaModuleType,
+	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
+        local x, y, baseId = result.DemangleId(slotId)
+		if not x or not y or not baseId then return end
+
+		print('LOLLO streetside cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
+		-- print('LOLLO result =')
+		-- debugPrint(result)
+
+		local modelTag = slotUtils.getStreetsideCargoAreaModelTag(slotId)
+		-- addModelFn(_constants.streetsideCargoAreaModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
+		result.models[#result.models + 1] = {
+			id = _constants.streetsideCargoAreaModelFileName,
+			transf = transform,
+			tag = modelTag
+		}
+
+		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then
+			result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+		end
+		print('LOLLO setting coord2TerminalInfo in streetside cargo area module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
+		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
+			model = #result.models - 1,
+			terminal = 0
+		}
+	end,
+
+	getModelsFn = function()
+		return {
+			{
+				id = _constants.streetsideCargoAreaModelFileName,
+				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
+			},
+		}
+	end
+}
+
+end

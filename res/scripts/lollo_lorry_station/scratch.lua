@@ -61,12 +61,12 @@ local dummy = 0
 -- 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
 -- 		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
 -- 		idBases = { -- LOLLO NOTE keep this sorted descending
--- 			areaSlotIdBase = 120000,
+-- 			cargoAreaSlotId = 120000,
 --             baySlotIdBase = 110000,
 --             lollo = 1333,
 --             lalla = 999999999999
 -- 		},
--- 		idFactorY = 100
+-- 		idRoundingFactor = 100
 -- 	},
 -- 	_modConstants
 -- )
@@ -77,7 +77,7 @@ local dummy = 0
 -- arrayUtils.sort(_idBasesSortedDesc, 'id', false)
 
 -- local MangleId = function(x, y, baseId)
--- 	return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
+-- 	return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 -- end
 
 -- -- result.DemangleId = function(slotId)
@@ -106,8 +106,8 @@ local dummy = 0
 -- 	local baseId = _getIdBase(slotId)
 -- 	if not baseId then return false, false, false end
 
--- 	local y = math.floor((slotId - baseId) / _constants.idFactorY)
--- 	local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+-- 	local y = math.floor((slotId - baseId) / _constants.idRoundingFactor)
+-- 	local x = math.floor((slotId - baseId - y * _constants.idRoundingFactor))
 
 -- 	return x + _constants.xMin, y + _constants.yMin, baseId
 -- end
@@ -115,7 +115,7 @@ local dummy = 0
 -- local mangledIds = {}
 -- for x = _constants.xMin, _constants.xMax do
 -- 	for y = _constants.yMin, _constants.yMax do
--- 		mangledIds[#mangledIds + 1] = MangleId(x, y, _constants.idBases.areaSlotIdBase)
+-- 		mangledIds[#mangledIds + 1] = MangleId(x, y, _constants.idBases.cargoAreaSlotId)
 -- 	end
 -- end
 

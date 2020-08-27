@@ -122,7 +122,12 @@ function data()
 					-- 	maxModules = -1,
 					-- 	message = nil, --'LOLLO slotConfig message',
 					-- 	skipCollisionCheck = true,
-					-- }
+					-- },
+					[_constants.streetsideCargoAreaModuleType] = {
+						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
+					}
 				},
 				slots = {},
 				stations = {},
@@ -143,35 +148,28 @@ function data()
 				slotUtils.setValueInNestedTable(_occupiedSlots, true, x, y)
 			end
 
-			-- bar slots along the road and in its middle
+			-- bar main slot, the one with the vehicle loading bay
 			_setSlotOccupied(0, 0)
-			_setSlotOccupied(0, -1)
-			_setSlotOccupied(-1, 0)
-			_setSlotOccupied(1, 0)
-
-			-- add cargo area slots
-			-- local slotXYs = {
-			-- 	['-1'] = {
-			-- 		['0'] = true,
-			-- 	},
-			-- 	['0'] = {
-			-- 		['-1'] = true,
-			-- 		['0'] = true,
-			-- 		['1'] = true
-			-- 	},
-			-- 	['1'] = {
-			-- 		['0'] = true,
-			-- 	}
-			-- }
+			-- set default slot locations
 			local slotXYs = {
+				['-1'] = {
+					['0'] = true,
+				},
 				['0'] = {
+					['-1'] = true,
+					['0'] = true, -- the main unit, with the vehicle loading bay
 					['1'] = true
 				},
+				['1'] = {
+					['0'] = true,
+				}
 			}
+			-- fill slots on and around modules, if present
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
-					if moduleBaseId == _constants.idBases.areaSlotIdBase
+					if moduleBaseId == _constants.idBases.streetsideCargoAreaSlotId
+					or moduleBaseId == _constants.idBases.cargoAreaSlotId
 					or moduleBaseId == _constants.idBases.rightBaySlotIdBase
 					or moduleBaseId == _constants.idBases.leftBaySlotIdBase then
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
@@ -185,12 +183,34 @@ function data()
 			local adjacentXYs = slotUtils.getFlatTable(slotXYs)
 			-- print('LOLLO adjacentXYs = ')
 			-- debugPrint(adjacentXYs)
+
+			-- add streetside cargo area slots
 			for _, v in pairs(adjacentXYs) do
 				if not(_isSlotOccupied(v.x, v.y)) then
-					_setSlotOccupied(v.x, v.y)
+					-- _setSlotOccupied(v.x, v.y)
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.MangleId(v.x, v.y, _constants.idBases.areaSlotIdBase),
+						id = result.MangleId(v.x, v.y, _constants.idBases.streetsideCargoAreaSlotId),
+						-- shape 1 2 3 4
+						spacing = _constants.streetsideCargoAreaSpacing,
+						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.lorryBayYShift, 0.0)),
+						type = _constants.streetsideCargoAreaModuleType,
+					})
+				end
+			end
+
+			-- add cargo area slots
+			-- -- bar slots along the road and in its middle
+			-- _setSlotOccupied(0, 0)
+			-- _setSlotOccupied(0, -1)
+			-- _setSlotOccupied(-1, 0)
+			-- _setSlotOccupied(1, 0)
+			for _, v in pairs(adjacentXYs) do
+				if not(_isSlotOccupied(v.x, v.y)) then
+					-- _setSlotOccupied(v.x, v.y)
+					table.insert(result.slots, {
+						-- height = 1,
+						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaSlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.cargoAreaSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor, 0.0)),
@@ -247,33 +267,32 @@ function data()
 				end
 
 				-- it should output something like (this example has one terminal made of two adjacent bits)
-				-- LOLLO stock result.stations =
+				-- stock result.stations =
 				-- 	{
 				-- 		{
 				-- 			tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
 				-- 			terminals = { 0 } -- 0 is the position of the linked terminal group, in base 0
 				-- 		}
 				-- 	}
-				-- LOLLO stock result.terminalGroups =
+				-- stock result.terminalGroups =
 				-- {
 				-- 	{
 				-- 		tag = -1, -- possibly useless, try to keep the m all different tho
 				-- 		terminals = {
-				-- 		{ 22, 0 }, -- 22 is the position of a model with a terminal, in base 0
-				-- 		{ 25, 0 }, -- 0 is always 0 in the stock station, it is something like a terminal number
+				-- 			{ 22, 0 }, -- 22 is the position of a model with a terminal, in base 0
+				-- 			{ 25, 0 }, -- 0 is always 0 in the stock station, it is something like a terminal number
 				-- 		}
 				-- 	}
 				-- }
 
 				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
 				if #station.terminals > 0 then table.insert(result.stations, station) end
-				-- print('LOLLO result.models = ')
-				-- debugPrint(result.models)
-				-- print('LOLLO result.stations = ')
-				-- debugPrint(result.stations)
-				-- print('LOLLO result.terminalGroups = ')
-				-- debugPrint(result.terminalGroups)
-				result.colliders = {}
+				print('LOLLO result.models = ')
+				debugPrint(result.models)
+				print('LOLLO result.stations = ')
+				debugPrint(result.stations)
+				print('LOLLO result.terminalGroups = ')
+				debugPrint(result.terminalGroups)
 			end
 			
 			print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')

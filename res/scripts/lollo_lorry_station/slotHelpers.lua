@@ -75,6 +75,10 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
             -- 	y = v.transf[14] / _constants.yTransfFactor,
             -- 	z = v.transf[15],
             -- }
+        elseif helpers.getStreetsideCargoAreaSlotId(model.tag) then
+            local x = tostring((model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor)
+            helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         end
         base0ModelIndex = base0ModelIndex + 1
     end
@@ -115,6 +119,18 @@ helpers.getCargoAreaSlotId = function(tag)
     end
 end
 
+helpers.getStreetsideCargoAreaModelTag = function(slotId)
+    return 'streetsideCargoArea_slotId_' .. slotId
+end
+
+helpers.getStreetsideCargoAreaSlotId = function(tag)
+    if tag:find('streetsideCargoArea_slotId_') then
+        return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
+    else
+        return false
+    end
+end
+
 helpers.getLorryBayModelTag = function(slotId)
     return 'lorryBay_slotId_' .. slotId
 end
@@ -143,14 +159,14 @@ helpers.demangleId = function(slotId)
     local baseId = _getIdBase(slotId)
     if not baseId then return false, false, false end
 
-    local y = math.floor((slotId - baseId) / _constants.idFactorY)
-    local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+    local y = math.floor((slotId - baseId) / _constants.idRoundingFactor)
+    local x = math.floor((slotId - baseId - y * _constants.idRoundingFactor))
 
     return x + _constants.xMin, y + _constants.yMin, baseId
 end
 
 helpers.mangleId = function(x, y, baseId)
-    return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
+    return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 end
 
 return helpers

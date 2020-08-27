@@ -15,18 +15,22 @@ local constants = {
 	cargoAreaModelFileName = 'lollo_models/lollo_simple_cargo_area.mdl',
 	cargoAreaModuleType = 'lollo_street_terminal_cargo_area',
 	cargoAreaSpacing = {2, 2, 2, 2}, -- the smaller, the less the risk of collision. Too small, problems removing the module.
+	streetsideCargoAreaModelFileName = 'lollo_models/lollo_simple_streetside_cargo_area.mdl',
+	streetsideCargoAreaModuleType = 'lollo_street_terminal_streetside_cargo_area',
+	streetsideCargoAreaSpacing = {2, 2, 2, 2},
 	lorryBayModelFileName = 'lollo_models/lollo_lorry_bay.mdl',
 	lorryBayModuleType = 'lollo_street_terminal_lorry_bay',
 	lorryBaySpacing = {0.5, 0.5, 0.5, 0.5},
 	markModelFileName = 'lollo_models/lollo_mark.mdl',
 	constructionFileName = 'station/street/lollo_lorry_station.con',
 	idBases = {
-		areaSlotIdBase = 130000,
+		streetsideCargoAreaSlotId = 140000,
+		cargoAreaSlotId = 130000,
 		rightBaySlotIdBase = 120000,
 		leftBaySlotIdBase = 110000,
 		centreSlotIdBase = 100000,
 	},
-	idFactorY = 100,
+	idRoundingFactor = 100,
 }
 
 local _idBasesSortedDesc = {}

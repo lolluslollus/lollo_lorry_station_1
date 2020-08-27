@@ -31,16 +31,14 @@ return {
 	order = {
 		value = 7,
 	},
-	-- skipCollision = true,
-	-- skipCollisionCheck = true,
 	type = _constants.cargoAreaModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)
-		print('LOLLO result =')
-		debugPrint(result)
+		print('LOLLO cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
+		-- print('LOLLO result =')
+		-- debugPrint(result)
 
 		local modelTag = slotUtils.getCargoAreaModelTag(slotId)
 		-- addModelFn(_constants.cargoAreaModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)

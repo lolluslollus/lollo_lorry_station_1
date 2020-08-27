@@ -93,7 +93,7 @@ function data()
 			end
 
 			result.MangleId = function(x, y, baseId)
-				return baseId + _constants.idFactorY * (y  - _constants.yMin) + (x  - _constants.xMin)
+				return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 			end
 
 			result.DemangleId = function(slotId)
@@ -112,8 +112,8 @@ function data()
 				local baseId = _getIdBase(slotId)
 				if not baseId then return false, false, false end
 
-				local y = math.floor((slotId - baseId) / _constants.idFactorY)
-				local x = math.floor((slotId - baseId - y * _constants.idFactorY))
+				local y = math.floor((slotId - baseId) / _constants.idRoundingFactor)
+				local x = math.floor((slotId - baseId - y * _constants.idRoundingFactor))
 
 				return x + _constants.xMin, y + _constants.yMin, baseId
 			end
@@ -203,7 +203,7 @@ function data()
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
-					if moduleBaseId == _constants.idBases.areaSlotIdBase 
+					if moduleBaseId == _constants.idBases.cargoAreaSlotId 
 					or moduleBaseId == _constants.idBases.rightBaySlotIdBase
 					or moduleBaseId == _constants.idBases.leftBaySlotIdBase then
 						slotUtils.setValueInNestedTable(slotXYs, true, moduleX, moduleY)
@@ -220,7 +220,7 @@ function data()
 			for _, v in pairs(adjacentXYs) do
 				_setSlotOccupied(v.x, v.y)
 				table.insert(result.slots, {
-					id = result.MangleId(v.x, v.y, _constants.idBases.areaSlotIdBase),
+					id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaSlotId),
 					transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _constants.cargoAreaModuleType,
