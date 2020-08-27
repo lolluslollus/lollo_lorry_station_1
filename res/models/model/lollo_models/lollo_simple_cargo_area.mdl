@@ -1,4 +1,4 @@
-local _cargoNodeZ = 0 -- 0.2
+local _cargoNodeZ = 0.3
 
 function data()
     return {
@@ -10,7 +10,7 @@ function data()
         },
         collider = {
             params = {
-                halfExtents = { 1.0, 1.0, 0.5, },
+                halfExtents = { 4.9, 4.9, 1.0, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             type = "BOX",
@@ -21,34 +21,48 @@ function data()
         lods = {
             {
                 node = {
-                    -- children = {
-                    --     {
-                    --         materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
-                    --         mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
-                    --         name = "small_street_platform",
-                    --         transf = { 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-                    --     },
-                    --     -- {
-                    --     --     materials = { "station/rail/cargo/cargo_station_borders_1.mtl", "station/rail/cargo/cargo_station_borders_2.mtl", "station/rail/cargo/cargo_station_windows_and_doors_2.mtl", "station/rail/cargo/cargo_station_roof_2.mtl", },
-                    --     --     mesh = "station/road/small_cargo/small_street_platform_lod0.msh",
-                    --     --     name = "small_street_platform",
-                    --     --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-                    --     -- },
-                    --     {
-                    --         materials = { "station/rail/cargo/cargo_assets_1.mtl", },
-                    --         mesh = "station/rail/asset/cargo_pallet_jack/pallet_jack_lod0.msh",
-                    --         name = "pallet_jack",
-                    --         transf = { 0.97029572725296, 0.24192188680172, 0, 0, -0.24192188680172, 0.97029572725296, 0, 0, 0, 0, 1, 0, -2.075092792511, 1.1254241466522, 0, 1, },
-                    --     },
-                    --     {
-                    --         materials = { "asset/industry/crates_mix_1.mtl", },
-                    --         mesh = "asset/industry/pallet_01/pallet_01_lod0.msh",
-                    --         name = "pallet_01",
-                    --         transf = { 1, 0, 0, 0, 0, 0.3387379348278, 0.94088071584702, 0, 0, -0.94088071584702, 0.3387379348278, 0, 1.9544242620468, 1.8165782690048, 0.53996938467026, 1, },
-                    --     },
-                    -- },
-                    -- name = "RootNode",
-                    -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                    children = {
+						{
+							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -5, -5.0, -0.02, 1, },
+						},
+						{
+							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
+							transf = {1, 0, 0, 0, 0, -2.05, 0, 0, 0, 0, 1, 0, 0, -5.0, -0.02, 1}
+						},
+						{
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 5, -5.0, -0.02, 1, },
+                        },
+                        {
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -5, 0.0, -0.02, 1, },
+						},
+						{
+							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
+							transf = {1, 0, 0, 0, 0, -2.05, 0, 0, 0, 0, 1, 0, 0, 0.0, -0.02, 1}
+						},
+						{
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 5, 0.0, -0.02, 1, },
+						},
+						-- waypoint post, just for testing.
+						-- transf[15] = -0.3 puts the height level with the stock waypoint
+						-- {
+						-- 	materials = { "street/signal_waypoint_road/signal_waypoint_road.mtl", },
+						-- 	mesh = "street/signal_waypoint_road/signal_waypoint_road_lod0.msh",
+						-- 	transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1.1000000238419, -0.3, 1, },
+						-- },
+					},
+                    name = "RootNode",
+                    transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
                 },
                 static = false,
                 visibleFrom = 0,
@@ -59,7 +73,7 @@ function data()
             transportNetworkProvider = {
                 laneLists = {
                     {
-                        linkable = false, -- false, --true,
+                        linkable = true, -- false, --true,
                         nodes = {
                             {
                                 { -5.00000, -3.33333, _cargoNodeZ }, -- edge 0

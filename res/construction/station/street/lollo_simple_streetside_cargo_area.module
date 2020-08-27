@@ -48,6 +48,23 @@ return {
 			tag = modelTag
 		}
 
+		local faces = {
+			{-5, -2, 0, 1},
+			{-5, 5, 0, 1},
+			{5, 5, 0, 1},
+			{5, -2, 0, 1},
+		}
+		modulesutil.TransformFaces(transform, faces)
+		result.groundFaces[#result.groundFaces + 1] = {
+			face = faces,
+			modes = {
+				{
+					type = 'FILL',
+					key = 'shared/asphalt_01.gtex.lua' -- 'asphalt_like_street.lua', -- 'shared/asphalt_01.gtex.lua' --'shared/gravel_03.gtex.lua'
+				}
+			}
+		}
+
 		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then
 			result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
 		end
