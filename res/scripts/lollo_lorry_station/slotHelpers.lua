@@ -65,8 +65,8 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local base0ModelIndex = 0
     for _, model in pairs(models) do
         if helpers.getIsCargoArea(model.tag) then
-            local x = tostring((model.transf[13]) / _constants.xTransfFactor)
-            local y = tostring((model.transf[14]) / _constants.yTransfFactor)
+            local x = tostring((model.transf[13]  - _constants.cargoAreaXShift) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]  - _constants.cargoAreaYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         elseif helpers.getIsStreetsideCargoArea(model.tag) then
             local x = tostring((model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor)

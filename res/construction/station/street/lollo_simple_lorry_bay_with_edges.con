@@ -218,7 +218,7 @@ function data()
 						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaSlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.cargoAreaSpacing,
-						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor, 0.0)),
+						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.cargoAreaYShift, 0.0)),
 						type = _constants.cargoAreaModuleType,
 					})
 				end
