@@ -112,8 +112,8 @@ function data()
 				models = {
 					{
 						id = 'lollo_models/lollo_simple_lorry_bay.mdl',
-						-- tag = slotUtils.getCargoAreaModelTag(slotId),
-						tag = slotUtils.getLorryBayModelTag(slotUtils.mangleId(0, 0, _constants.idBases.leftBaySlotIdBase)),
+						slotId = slotUtils.mangleId(0, 0, _constants.idBases.leftBaySlotIdBase),
+						tag = slotUtils.getLorryBayModelTag(),
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.lorryBayYShift, 0, 1},
 					},
 				},

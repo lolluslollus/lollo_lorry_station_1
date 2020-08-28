@@ -378,7 +378,7 @@ debugPrint(adjacentCargoAreas)
 				debugPrint(_lorryBayModuleIdsBeforeUpdate)
 				for _, model in pairs(result.models) do
 					if type(model) == 'table' then
-						local slotId = slotUtils.getLorryBaySlotId(model.tag)
+						local slotId = model.slotId
 						print('LOLLO model.slotId = ', slotId, 'type = ', type(slotId))
 						if slotId then
 				-- LOLLO TODO this fails coz the module is always there,

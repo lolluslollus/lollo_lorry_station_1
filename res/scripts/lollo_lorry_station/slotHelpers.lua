@@ -64,18 +64,11 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, model in pairs(models) do
-        if helpers.getCargoAreaSlotId(model.tag) then
+        if helpers.getIsCargoArea(model.tag) then
             local x = tostring((model.transf[13]) / _constants.xTransfFactor)
             local y = tostring((model.transf[14]) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
-            -- if cargoAreas[x] == nil then cargoAreas[x] = {} end
-            -- cargoAreas[x][y] = base0ModelIndex
-            -- cargoAreas[#cargoAreas+1] = {
-            -- 	x = v.transf[13] / _constants.xTransfFactor,
-            -- 	y = v.transf[14] / _constants.yTransfFactor,
-            -- 	z = v.transf[15],
-            -- }
-        elseif helpers.getStreetsideCargoAreaSlotId(model.tag) then
+        elseif helpers.getIsStreetsideCargoArea(model.tag) then
             local x = tostring((model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor)
             local y = tostring((model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
@@ -89,12 +82,7 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, model in pairs(models) do
-        if helpers.getLorryBaySlotId(model.tag) then
-            -- local x = tostring(v.transf[13] / _constants.xTransfFactor)
-            -- local y = tostring(v.transf[14] / _constants.yTransfFactor)
-            -- if lorryBays[x] == nil then lorryBays[x] = {} end
-            -- lorryBays[x][y] = base0ModelIndex
-
+        if helpers.getIsLorryBay(model.tag) then
             results[#results+1] = {
                     x = (model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor,
                     y = (model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor,
@@ -107,37 +95,40 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     return results
 end
 
-helpers.getCargoAreaModelTag = function(slotId)
-    return 'cargoArea_slotId_' .. slotId
+helpers.getCargoAreaModelTag = function()
+    return 'cargoArea'
 end
 
-helpers.getCargoAreaSlotId = function(tag)
-    if tag:find('cargoArea_slotId_') then
-        return tag:sub(('cargoArea_slotId_'):len() + 1) or false
+helpers.getIsCargoArea = function(tag)
+    if type(tag) == 'string' and tag:find(helpers.getCargoAreaModelTag()) then
+        -- return tag:sub(('cargoArea_slotId_'):len() + 1) or false
+        return true
     else
         return false
     end
 end
 
-helpers.getStreetsideCargoAreaModelTag = function(slotId)
-    return 'streetsideCargoArea_slotId_' .. slotId
+helpers.getStreetsideCargoAreaModelTag = function()
+    return 'streetsideCargoArea'
 end
 
-helpers.getStreetsideCargoAreaSlotId = function(tag)
-    if tag:find('streetsideCargoArea_slotId_') then
-        return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
+helpers.getIsStreetsideCargoArea = function(tag)
+    if type(tag) == 'string' and tag:find(helpers.getStreetsideCargoAreaModelTag()) then
+        -- return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
+        return true
     else
         return false
     end
 end
 
-helpers.getLorryBayModelTag = function(slotId)
-    return 'lorryBay_slotId_' .. slotId
+helpers.getLorryBayModelTag = function()
+    return 'lorryBay'
 end
 
-helpers.getLorryBaySlotId = function(tag)
-    if tag:find('lorryBay_slotId_') then
-        return tag:sub(('lorryBay_slotId_'):len() + 1) or false
+helpers.getIsLorryBay = function(tag)
+    if type(tag) == 'string' and tag:find(helpers.getLorryBayModelTag()) then
+        -- return tag:sub(('lorryBay_slotId_'):len() + 1) or false
+        return true
     else
         return false
     end

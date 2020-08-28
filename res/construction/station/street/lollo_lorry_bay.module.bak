@@ -30,8 +30,6 @@ return {
 	},
 	metadata = {
 		cargo = true,
-		lorryBay = true,
-		-- skipCollision = true, -- useless
 	},
 	-- skipCollision = true, -- useless
 	updateFn = function(result, transform, tag, slotId, addModelFn, params)
@@ -51,7 +49,7 @@ return {
 		print('LOLLO module received result =')
 		debugPrint(result)
 
-		local modelTag = slotUtils.getLorryBayModelTag(slotId)
+		local modelTag = slotUtils.getLorryBayModelTag()
 		-- if type(result) == 'table' and type (result.slots) == 'table' then
 		-- 	for _, slotData in pairs(result.slots) do
 		-- 		if slotData.id == slotId and type(slotData.tag) == 'table' then
