@@ -1,0 +1,187 @@
+local _cargoNodeZ = 0.3
+
+function data()
+    return {
+        boundingInfo = {
+            bbMax = { 2.4, 2.4, 2 },
+            bbMin = { -2.4, -2.4, 0 },
+        },
+        collider = {
+            params = {
+                halfExtents = { 2.4, 2.4, 1.0, },
+            },
+            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            type = "BOX",
+        },
+        lods = {
+            {
+                node = {
+                    children = {
+						{
+							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -2.5, -2.5, -0.02, 1, },
+						},
+						{
+							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 2.5, -2.5, -0.02, 1, },
+                        },
+					},
+                    name = "RootNode",
+                    transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                },
+                static = false,
+                visibleFrom = 0,
+                visibleTo = 1000,
+            },
+        },
+        metadata = {
+            transportNetworkProvider = {
+                laneLists = {
+                    {
+                        linkable = true, -- false, --true,
+                        nodes = {
+                            {
+                                { 2.50000, -1.25, _cargoNodeZ }, -- edge 0
+                                { -0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 2.00000, -1.25, _cargoNodeZ },
+                                { -0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 2.00000, -1.25, _cargoNodeZ }, -- edge 1
+                                { -4, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -2.00000, -1.25, _cargoNodeZ },
+                                { -4, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -2.00000, -1.25, _cargoNodeZ }, -- edge 2
+                                { -0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -2.50000, -1.25, _cargoNodeZ },
+                                { -0.5, 0, 0 },
+                                3,
+                            },
+
+                            {
+                                { -2.50000, 1.25, _cargoNodeZ }, -- edge 3
+                                { 0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -2.00000, 1.25, _cargoNodeZ },
+                                { 0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { -2.00000, 1.25, _cargoNodeZ }, -- edge 4
+                                { 4, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 2.00000, 1.25, _cargoNodeZ },
+                                { 4, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 2.00000, 1.25, _cargoNodeZ }, -- edge 5
+                                { 0.5, 0, 0 },
+                                3,
+                            },
+                            {
+                                { 2.50000, 1.25, _cargoNodeZ },
+                                { 0.5, 0, 0 },
+                                3,
+                            },
+                            -- lanes across 1
+                            {
+                                { 2, 2.5, _cargoNodeZ }, -- edge 6
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            {
+                                { 2, 1.25, _cargoNodeZ },
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            {
+                                { 2, 1.25, _cargoNodeZ }, -- edge 7
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            {
+                                { 2, -1.25, _cargoNodeZ },
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            {
+                                { 2, -1.25, _cargoNodeZ }, -- edge 8
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            {
+                                { 2, -2.5, _cargoNodeZ },
+                                { 0, -1.25, 0 },
+                                3,
+                            },
+                            -- lanes across 2
+                            {
+                                { -2, -2.5, _cargoNodeZ }, -- edge 9
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                            {
+                                { -2, -1.25, _cargoNodeZ },
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                            {
+                                { -2, -1.25, _cargoNodeZ }, -- edge 10
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                            {
+                                { -2, 1.25, _cargoNodeZ },
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                            {
+                                { -2, 1.25, _cargoNodeZ }, -- edge 11
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                            {
+                                { -2, 2.5, _cargoNodeZ },
+                                { 0, 1.25, 0 },
+                                3,
+                            },
+                        },
+                        transportModes = { "CARGO", },
+                        speedLimit = 30,
+                    },
+                },
+                runways = { },
+                terminals = {
+                    {
+                        -- order = 0,
+                        personEdges = { 1, 4 },
+                        personNodes = { 2, 3, 8, 9 },
+                        -- vehicleNode = -1, -- 0,
+                    },
+                },
+            },
+        },
+        version = 1
+    }
+    end

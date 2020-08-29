@@ -20,17 +20,19 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Lollo cargo area"),
-		description = _("Lollo platform for waiting cargo."),
+		name = _("Lollo cargo area with earth"),
+		description = _("Lollo platform for waiting cargo, with earth."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	},
 	metadata = {
 		cargo = true,
+		xSlotsTaken = 2,
+		ySlotsTaken = 2,
 	},
 	order = {
 		value = 7,
 	},
-	type = _constants.cargoAreaModuleType,
+	type = _constants.cargoAreaInner15x15ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
@@ -40,9 +42,9 @@ return {
 		-- debugPrint(result)
 
 		local modelTag = slotUtils.getCargoAreaModelTag()
-		-- addModelFn(_constants.cargoAreaModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
+		-- addModelFn(_constants.cargoAreaInner15x15ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = _constants.cargoAreaModelFileName,
+			id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
 			tag = modelTag
@@ -91,7 +93,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = _constants.cargoAreaModelFileName,
+				id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

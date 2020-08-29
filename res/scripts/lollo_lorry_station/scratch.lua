@@ -27,6 +27,22 @@ local dummy = 0
 
 local n1 = -1440.7044677734
 local n1000 = math.ceil(n1 * 1000) / 1000
+local tab1 = {
+	a = {
+		aa = 1,
+		bb = 2,
+		cc = {
+			aaa = 2,
+			bbb = 2,
+			ccc = {
+				aaaa = 3,
+			}
+		}
+	}
+}
+
+local tab1Cloned = arrayUtils.cloneDeepOmittingFields(tab1)
+tab1Cloned.a.cc.ccc.aaaa = 99999
 local dummy = 0
 -- only for testing
 -- if math.atan2 == nil then
@@ -55,13 +71,13 @@ local dummy = 0
 
 -- local _constants = arrayUtils.addProps(
 -- 	{
--- 		cargoAreaSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
+-- 		anyInnerSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
 -- 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 -- 		-- negative values don't matter, the api takes up the abs value
--- 		-- lorryBaySpacing = {0.1, 0.1, 0.1, 0.1},
--- 		lorryBaySpacing = {0.0, 0.0, 0.0, 0.0},
+-- 		-- anyStreetsideSpacing = {0.1, 0.1, 0.1, 0.1},
+-- 		anyStreetsideSpacing = {0.0, 0.0, 0.0, 0.0},
 -- 		idBases = { -- LOLLO NOTE keep this sorted descending
--- 			cargoAreaSlotId = 120000,
+-- 			cargoAreaInner15x15SlotId = 120000,
 --             baySlotIdBase = 110000,
 --             lollo = 1333,
 --             lalla = 999999999999
@@ -115,7 +131,7 @@ local dummy = 0
 -- local mangledIds = {}
 -- for x = _constants.xMin, _constants.xMax do
 -- 	for y = _constants.yMin, _constants.yMax do
--- 		mangledIds[#mangledIds + 1] = MangleId(x, y, _constants.idBases.cargoAreaSlotId)
+-- 		mangledIds[#mangledIds + 1] = MangleId(x, y, _constants.idBases.cargoAreaInner15x15SlotId)
 -- 	end
 -- end
 

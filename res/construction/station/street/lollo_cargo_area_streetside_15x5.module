@@ -26,11 +26,13 @@ return {
 	},
 	metadata = {
 		cargo = true,
+		xSlotsTaken = 3,
+		ySlotsTaken = 1,
 	},
 	order = {
 		value = 7,
 	},
-	type = _constants.streetsideCargoAreaModuleType,
+	type = _constants.cargoAreaStreetside15x5ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
@@ -40,19 +42,19 @@ return {
 		-- debugPrint(result)
 
 		local modelTag = slotUtils.getStreetsideCargoAreaModelTag()
-		-- addModelFn(_constants.streetsideCargoAreaModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
+		-- addModelFn(_constants.cargoAreaStreetside15x5ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = _constants.streetsideCargoAreaModelFileName,
+			id = _constants.cargoAreaStreetside15x5ModelFileName,
 			slotId = slotId,
 			transf = transform,
 			tag = modelTag
 		}
 
 		local faces = {
-			{-5, -2, 0, 1},
-			{-5, 5, 0, 1},
-			{5, 5, 0, 1},
-			{5, -2, 0, 1},
+			{-7.5, -2, 0, 1},
+			{-7.5, 5, 0, 1},
+			{7.5, 5, 0, 1},
+			{7.5, -2, 0, 1},
 		}
 		modulesutil.TransformFaces(transform, faces)
 		result.groundFaces[#result.groundFaces + 1] = {
@@ -78,7 +80,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = _constants.streetsideCargoAreaModelFileName,
+				id = _constants.cargoAreaStreetside15x5ModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

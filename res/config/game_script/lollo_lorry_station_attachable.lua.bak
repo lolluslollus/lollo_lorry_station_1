@@ -24,7 +24,7 @@ local function _buildStation(transf, position, vehicleNodeOffset, edgeEntity)
     debugPrint(position)
 
     local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
-    newConstruction.fileName = 'station/street/lollo_simple_lorry_bay.con'
+    newConstruction.fileName = 'station/street/lorry_bay_streetside_15x5.con'
     newConstruction.params = {
         edgeEntity = edgeEntity,
         seed = 123e4, -- we need this to avoid dumps
@@ -239,7 +239,7 @@ function data()
 
                         -- destroy the newly built streetside station
                         -- and replace it with a construction containing the same, but with the cargo lanes
-                        -- Alternatively, try just adding a cargo area like lollo_simple_cargo_area.mdl.
+                        -- Alternatively, try just adding a cargo area like cargo_area_inner_15x15.mdl.
                         -- Tried, it does not store any cargo.
 
                         local vehicleNodeOffset = _getVehicleNodeOffset(args.edgeId)

@@ -15,7 +15,8 @@ helpers.getFlatTable = function(nestedTable)
     return results
 end
 helpers.getValueFromNestedTable = function(nestedTable, x, y)
-    return nestedTable[tostring(x)] and (nestedTable[tostring(x)][tostring(y)] or false) or false
+    if not(nestedTable[tostring(x)]) then return nil end
+    return nestedTable[tostring(x)][tostring(y)]
 end
 helpers.setValueInNestedTable = function(nestedTable, newValue, x, y)
     if not nestedTable[tostring(x)] then nestedTable[tostring(x)] = {} end
@@ -26,14 +27,14 @@ local function getPoint(inValues, x, y)
     if x > _constants.xMax or x < _constants.xMin
     or y > _constants.yMax or y < _constants.yMin
     then return false end
-    return helpers.getValueFromNestedTable(inValues, x, y)
+    return helpers.getValueFromNestedTable(inValues, x, y) or false
 end
 local function addPointThenNeighbours(inValues, outValues, visitedXYs, x, y)
     if x > _constants.xMax or x < _constants.xMin
     or y > _constants.yMax or y < _constants.yMin
     then return end
 
-    if helpers.getValueFromNestedTable(visitedXYs, x, y) then return end
+    if (helpers.getValueFromNestedTable(visitedXYs, x, y) or false) then return end
 
     helpers.setValueInNestedTable(visitedXYs, true, x, y)
 
@@ -65,12 +66,16 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local base0ModelIndex = 0
     for _, model in pairs(models) do
         if helpers.getIsCargoArea(model.tag) then
-            local x = tostring((model.transf[13]  - _constants.cargoAreaXShift) / _constants.xTransfFactor)
-            local y = tostring((model.transf[14]  - _constants.cargoAreaYShift) / _constants.yTransfFactor)
+            local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
+        elseif helpers.getIsSmallCargoArea(model.tag) then
+                local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
+                local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
+                helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         elseif helpers.getIsStreetsideCargoArea(model.tag) then
-            local x = tostring((model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor)
-            local y = tostring((model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor)
+            local x = tostring((model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         end
         base0ModelIndex = base0ModelIndex + 1
@@ -84,8 +89,8 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     for _, model in pairs(models) do
         if helpers.getIsLorryBay(model.tag) then
             results[#results+1] = {
-                    x = (model.transf[13]  - _constants.lorryBayXShift) / _constants.xTransfFactor,
-                    y = (model.transf[14]  - _constants.lorryBayYShift) / _constants.yTransfFactor,
+                    x = (model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor,
+                    y = (model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor,
                     z = model.transf[15],
                     base0ModelIndex = base0ModelIndex
                 }
@@ -94,7 +99,7 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     end
     return results
 end
-
+-- LOLLO TODO make this and its siblings constants
 helpers.getCargoAreaModelTag = function()
     return 'cargoArea'
 end
@@ -102,6 +107,19 @@ end
 helpers.getIsCargoArea = function(tag)
     if type(tag) == 'string' and tag:find(helpers.getCargoAreaModelTag()) then
         -- return tag:sub(('cargoArea_slotId_'):len() + 1) or false
+        return true
+    else
+        return false
+    end
+end
+
+helpers.getSmallCargoAreaModelTag = function()
+    return 'smallCargoArea'
+end
+
+helpers.getIsSmallCargoArea = function(tag)
+    if type(tag) == 'string' and tag:find(helpers.getSmallCargoAreaModelTag()) then
+        -- return tag:sub(('smallCargoArea_slotId_'):len() + 1) or false
         return true
     else
         return false

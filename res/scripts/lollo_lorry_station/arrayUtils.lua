@@ -24,6 +24,24 @@ arrayUtils.map = function(arr, func)
     return results
 end
 
+arrayUtils.cloneDeepOmittingFields = function(tab, fields2Omit)
+    local results = {}
+    if type(tab) ~= 'table' then return results end
+
+    if type(fields2Omit) ~= 'table' then fields2Omit = {} end
+
+    for key, value in pairs(tab) do
+        if not arrayUtils.arrayHasValue(fields2Omit, key) then
+            if type(value) == 'table' then
+                results[key] = arrayUtils.cloneDeepOmittingFields(value, fields2Omit)
+            else
+                results[key] = value
+            end
+        end
+    end
+    return results
+end
+
 arrayUtils.cloneOmittingFields = function(tab, fields2Omit)
     local results = {}
     if type(tab) ~= 'table' then return results end

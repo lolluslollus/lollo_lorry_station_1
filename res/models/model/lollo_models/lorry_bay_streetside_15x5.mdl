@@ -6,12 +6,12 @@ function data()
 
 	return {
 		boundingInfo = {
-			bbMax = { 4.9, 1.9, 5, },
-			bbMin = { -4.9, -1.9, 0, },
+			bbMax = { 7.4, 1.9, 5, },
+			bbMin = { -7.4, -1.9, 0, },
 		},
 		collider = {
             params = {
-                halfExtents = { 4.9, 1.9, 2.5, },
+                halfExtents = { 7.4, 1.9, 2.5, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             type = "BOX",
@@ -24,17 +24,22 @@ function data()
 							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
 							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
 							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
-							transf = { 0, 1.65, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -5, -2.05, -0.02, 1, },
+							transf = { 0, 1.65, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, -2.05, -0.02, 1, },
 						},
 						{
 							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
 							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-							transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, 0, -2.05, -0.02, 1}
+							transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, -2.5, -2.05, -0.02, 1}
+						},
+						{
+							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
+							transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, 2.5, -2.05, -0.02, 1}
 						},
 						{
 							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
 							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
-							transf = { 0, 1.65, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 5, -2.05, -0.02, 1, },
+							transf = { 0, 1.65, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -2.05, -0.02, 1, },
 						},
 						-- waypoint post, just for testing.
 						-- transf[15] = -0.3 puts the height level with the stock waypoint
@@ -70,16 +75,16 @@ function data()
 					},
 					-- on the pavement
 					{
-						linkable = true, -- false, --true, -- LOLLO NOTE this is useful to connect the station to the industry
+						linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
 						nodes = {
-							{{ 5, _cargoNodeY, _cargoNodeZ, },{ -1, 0, 0, }, 3}, -- edge 2
-							{{ 4, _cargoNodeY, _cargoNodeZ, },{ -1, 0, 0, }, 3},
+							{{ 7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
+							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
 
-							{{ 4, _cargoNodeY, _cargoNodeZ, },{ -8, 0, 0, }, 3}, -- edge 3
-							{{ -4, _cargoNodeY, _cargoNodeZ, },{ -8, 0, 0, }, 3},
+							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 3
+							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3},
 
-							{{ -4, _cargoNodeY, _cargoNodeZ, },{ -1, 0, 0, }, 3}, -- edge 4
-							{{ -5, _cargoNodeY, _cargoNodeZ, },{ -1, 0, 0, }, 3},
+							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 4
+							{{ -7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },
@@ -88,8 +93,8 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 4, _cargoNodeY + 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 5
-							{{ 4, _cargoNodeY + 0, _cargoNodeZ, }, { 0, -2, 0, }, 3},
+							{{ 7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 5
+							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 0, -2, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },
@@ -97,8 +102,26 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ -4, _cargoNodeY + 0, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
-							{{ -4, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
+							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 5
+							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 5, -2, 0, }, 3},
+						},
+						speedLimit = 30,
+						transportModes = { 'CARGO' },
+					},
+					{
+						linkable = false,
+						nodes = {
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 6
+							{{ -2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, 2, 0, }, 3},
+						},
+						speedLimit = 30,
+						transportModes = { 'CARGO' },
+					},
+					{
+						linkable = false,
+						nodes = {
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
+							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },
