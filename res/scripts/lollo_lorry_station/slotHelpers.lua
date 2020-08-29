@@ -65,18 +65,34 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, model in pairs(models) do
-        if helpers.getIsCargoArea(model.tag) then
+        if helpers.getIsCargoAreaInner15x15(model.tag) then
             local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
             local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
-        elseif helpers.getIsSmallCargoArea(model.tag) then
+        elseif helpers.getIsCargoAreaInner5x5(model.tag) then
                 local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
                 local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
                 helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
-        elseif helpers.getIsStreetsideCargoArea(model.tag) then
+        elseif helpers.getIsCargoAreaStreetside15x5(model.tag) then
             local x = tostring((model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor)
             local y = tostring((model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
+        end
+        base0ModelIndex = base0ModelIndex + 1
+    end
+    return results
+end
+
+helpers.getCargoAreaModelIndexesBase0Simple = function(models)
+    local results = {}
+    local base0ModelIndex = 0
+    for _, model in pairs(models) do
+        if helpers.getIsCargoAreaInner15x15(model.tag) then
+            results[#results+1] = base0ModelIndex
+        elseif helpers.getIsCargoAreaInner5x5(model.tag) then
+            results[#results+1] = base0ModelIndex
+        elseif helpers.getIsCargoAreaStreetside15x5(model.tag) then
+            results[#results+1] = base0ModelIndex
         end
         base0ModelIndex = base0ModelIndex + 1
     end
@@ -100,7 +116,7 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     return results
 end
 
-helpers.getIsCargoArea = function(tag)
+helpers.getIsCargoAreaInner15x15 = function(tag)
     if type(tag) == 'string' and tag:find(_constants.cargoAreaInner15x15ModelTag) then
         -- return tag:sub(('cargoArea_slotId_'):len() + 1) or false
         return true
@@ -109,7 +125,7 @@ helpers.getIsCargoArea = function(tag)
     end
 end
 
-helpers.getIsSmallCargoArea = function(tag)
+helpers.getIsCargoAreaInner5x5 = function(tag)
     if type(tag) == 'string' and tag:find(_constants.cargoAreaInner5x5ModelTag) then
         -- return tag:sub(('smallCargoArea_slotId_'):len() + 1) or false
         return true
@@ -118,7 +134,7 @@ helpers.getIsSmallCargoArea = function(tag)
     end
 end
 
-helpers.getIsStreetsideCargoArea = function(tag)
+helpers.getIsCargoAreaStreetside15x5 = function(tag)
     if type(tag) == 'string' and tag:find(_constants.cargoAreaStreetside15x5ModelTag) then
         -- return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
         return true

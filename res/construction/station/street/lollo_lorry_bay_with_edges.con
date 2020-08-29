@@ -348,17 +348,7 @@ function data()
 
 			-- add 15x15 inner cargo area slots
 			for _, v in pairs(_slotXYsFlat[3]) do
-				if _isSlotOpen(3, v.x, v.y)
-				-- if not(_isSlotBarred(v.x - 1, v.y - 1))
-				-- and not(_isSlotBarred(v.x -1, v.y))
-				-- and not(_isSlotBarred(v.x - 1, v.y + 1))
-				-- and not(_isSlotBarred(v.x, v.y - 1))
-				-- and not(_isSlotBarred(v.x, v.y))
-				-- and not(_isSlotBarred(v.x, v.y + 1))
-				-- and not(_isSlotBarred(v.x + 1, v.y - 1))
-				-- and not(_isSlotBarred(v.x + 1, v.y))
-				-- and not(_isSlotBarred(v.x + 1, v.y + 1))
-				then
+				if _isSlotOpen(3, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
 						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
@@ -372,8 +362,7 @@ function data()
 
 			-- add 5x5 inner cargo area slots
 			for _, v in pairs(_slotXYsFlat[1]) do
-				if _isSlotOpen(1, v.x, v.y)
-				then
+				if _isSlotOpen(1, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
 						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaInner5x5SlotId),
@@ -391,10 +380,12 @@ function data()
 				-- print('LOLLO starting terminateConstructionHook')
 				-- print('LOLLO result.models =')
 				-- debugPrint(result.models)
-				-- local station = { terminals = {}, tag = 0 } -- tag = 0 means cargo
-				local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
+				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
+				local cargoAreaModelIndexesBase0Simple = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
 				-- debugPrint(cargoAreaModelIndexesBase0)
+				print('LOLLO cargoAreaModelIndexesBase0Simple =')
+				debugPrint(cargoAreaModelIndexesBase0Simple)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 				-- print('LOLLO lorryBayModelIndexesBase0 =')
@@ -411,13 +402,22 @@ function data()
 				for _, bay in pairs(lorryBayModelIndexesBase0) do
 					table.insert(
 						result.terminalGroups,
-						{tag = bayIndexBase0, terminals = { { bay.base0ModelIndex, 0 }}}
+						{
+							tag = bayIndexBase0,
+							terminals = {
+								{ bay.base0ModelIndex, 0 }
+							}
+						}
 					)
 
-					local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
+					-- local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
 					-- print('LOLLO adjacentCargoAreas = ')
 					-- debugPrint(adjacentCargoAreas)
-					for _, v in pairs(adjacentCargoAreas) do
+					-- for _, v in pairs(adjacentCargoAreas) do
+					-- 	table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
+					-- end
+
+					for _, v in pairs(cargoAreaModelIndexesBase0Simple) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					end
 
@@ -453,7 +453,6 @@ function data()
 				-- }
 
 				-- print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
-				-- if #station.terminals > 0 then table.insert(result.stations, station) end
 				-- print('LOLLO result.models = ')
 				-- debugPrint(result.models)
 				-- print('LOLLO result.stations = ')
