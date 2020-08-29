@@ -1,5 +1,5 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
-local fileUtils = require('lollo_lorry_station.lolloFileUtils')
+local fileUtils = require('lollo_lorry_station.fileUtils')
 local stringUtils = require('lollo_lorry_station.stringUtils')
 
 local _lolloStreetDataBuffer = {
