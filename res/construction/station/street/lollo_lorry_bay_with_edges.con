@@ -24,6 +24,16 @@ function data()
 			yearTo = 0
 		},
 		params = {
+			{
+				key = 'isStoreCargoOnPavement',
+				name = _('Store cargo on the pavement'),
+				tooltip = _('Store some of the cargo on the pavement'),
+				values = {
+					_('No'),
+					_('Yes')
+				},
+				defaultIndex = 1
+		}
 			-- {
 			-- 	key = 'lockLayoutCentre',
 			-- 	name = _('Lock curve'),
@@ -112,7 +122,7 @@ function data()
 				groundFaces = {},
 				models = {
 					{
-						id = 'lollo_models/lorry_bay_streetside_15x5.mdl',
+						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelFileName or _constants.lorryBayStreetsideEntrance15x5ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.leftLorryBaySlotIdBase),
 						tag = _constants.lorryBayStreetside15x5ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
@@ -328,21 +338,23 @@ function data()
 			debugPrint(_slotXYsFlat)
 
 			-- add streetside cargo area slots, only along the road
-			for _, v in pairs(_slotXYsFlat[2]) do
-				-- print('LOLLO v.y =', v.y, 'its type =', type(v.y))
-				if (v.y == '0' or v.y == 0)
-				-- and not(_isSlotBarred(v.x - 1, v.y))
-				and _isSlotOpen(2, v.x, v.y)
-				-- and not(_isSlotBarred(v.x + 1, v.y))
-				then
-					table.insert(result.slots, {
-						-- height = 1,
-						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside15x5SlotId),
-						-- shape 1 2 3 4
-						spacing = _constants.anyStreetsideSpacing,
-						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
-						type = _constants.cargoAreaStreetside15x5ModuleType,
-					})
+			if params.isStoreCargoOnPavement == 1 then
+				for _, v in pairs(_slotXYsFlat[2]) do
+					-- print('LOLLO v.y =', v.y, 'its type =', type(v.y))
+					if (v.y == '0' or v.y == 0)
+					-- and not(_isSlotBarred(v.x - 1, v.y))
+					and _isSlotOpen(2, v.x, v.y)
+					-- and not(_isSlotBarred(v.x + 1, v.y))
+					then
+						table.insert(result.slots, {
+							-- height = 1,
+							id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside15x5SlotId),
+							-- shape 1 2 3 4
+							spacing = _constants.anyStreetsideSpacing,
+							transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
+							type = _constants.cargoAreaStreetside15x5ModuleType,
+						})
+					end
 				end
 			end
 
