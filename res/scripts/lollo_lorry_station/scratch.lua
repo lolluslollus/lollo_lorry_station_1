@@ -4,8 +4,8 @@ local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
 
 local _modConstants = require('lollo_lorry_station/constants')
-local edgeUtils = require('lollo_lorry_station/edgeHelper')
-local slotUtils = require('lollo_lorry_station/slotHelpers')
+-- local edgeUtils = require('lollo_lorry_station/edgeHelper')
+-- local slotUtils = require('lollo_lorry_station/slotHelpers')
 
 local transfStr = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
 local function _getTransfFromApiResult(transfStr)

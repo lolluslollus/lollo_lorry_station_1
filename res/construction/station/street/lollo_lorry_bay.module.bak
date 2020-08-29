@@ -72,9 +72,9 @@ return {
 		-- 	model = #result.models - 1,
 		-- 	terminal = 0,
 		-- }
-		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then result.coord2terminalInfo[edgeUtils.getXKey(x)] = {} end
-		print('LOLLO setting coord2TerminalInfo in cargo path module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
-		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
+		if not result.coord2terminalInfo[tostring(x)] then result.coord2terminalInfo[tostring(x)] = {} end
+		print('LOLLO setting coord2TerminalInfo in cargo path module, x = ', tostring(x), ' and y = ', tostring(y))
+		result.coord2terminalInfo[tostring(x)][tostring(y)] = {
 			model = #result.models - 1,
 			terminal = 0
 		}

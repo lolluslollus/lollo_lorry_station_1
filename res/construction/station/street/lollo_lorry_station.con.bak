@@ -74,14 +74,14 @@ function data()
 			local _occupiedSlots = {}
 			local _isSlotOccupied = function(x, y)
 				return slotUtils.getValueFromNestedTable(_occupiedSlots, x, y) == true
-				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then return false end
-				-- if _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] then return true end
+				-- if _occupiedSlots[tostring(x)] == nil then return false end
+				-- if _occupiedSlots[tostring(x)][tostring(y)] then return true end
 				-- return false
 			end
 			local _setSlotOccupied = function(x, y)
 				slotUtils.setValueInNestedTable(_occupiedSlots, true, x, y)
-				-- if _occupiedSlots[edgeUtils.getXKey(x)] == nil then _occupiedSlots[edgeUtils.getXKey(x)] = {} end
-				-- _occupiedSlots[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = true
+				-- if _occupiedSlots[tostring(x)] == nil then _occupiedSlots[tostring(x)] = {} end
+				-- _occupiedSlots[tostring(x)][tostring(y)] = true
 			end
 
 			local _addModel = function(fileName, transf, tag)

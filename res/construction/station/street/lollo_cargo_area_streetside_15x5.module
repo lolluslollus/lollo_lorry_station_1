@@ -2,8 +2,6 @@ local transf = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
-local edgeUtils = require('lollo_lorry_station/edgeHelper')
-local slotUtils = require('lollo_lorry_station/slotHelpers')
 local _constants = require('lollo_lorry_station/constants')
 
 function data()
@@ -64,11 +62,11 @@ return {
 			}
 		}
 
-		if not result.coord2terminalInfo[edgeUtils.getXKey(x)] then
-			result.coord2terminalInfo[edgeUtils.getXKey(x)] = {}
+		if not result.coord2terminalInfo[tostring(x)] then
+			result.coord2terminalInfo[tostring(x)] = {}
 		end
-		-- print('LOLLO setting coord2TerminalInfo in streetside cargo area module, x = ', edgeUtils.getXKey(x), ' and y = ', edgeUtils.getYKey(y))
-		result.coord2terminalInfo[edgeUtils.getXKey(x)][edgeUtils.getYKey(y)] = {
+		-- print('LOLLO setting coord2TerminalInfo in streetside cargo area module, x = ', tostring(x), ' and y = ', tostring(y))
+		result.coord2terminalInfo[tostring(x)][tostring(y)] = {
 			model = #result.models - 1,
 			terminal = 0
 		}
