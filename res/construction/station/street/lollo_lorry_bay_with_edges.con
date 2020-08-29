@@ -11,6 +11,9 @@ function data()
 		-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
 	end
 
+	-- local _streetFileName = 'standard/country_medium_new.lua'
+	local _streetFileName = 'standard/country_medium_one_way_new.lua'
+
 	return {
 		type = 'STREET_STATION_CARGO',
 		-- type = 'STREET_STATION',
@@ -58,72 +61,67 @@ function data()
 					{
 						type = 'STREET',
 						params = {
-							-- skipCollision = true,
-							type = 'standard/country_medium_new.lua',
+							skipCollision = true,
+							type = _streetFileName,
 							tramTrackType = 'NO' --_getTramTrackType(params)
 						},
 						edges = {
 							{
-								{-11, -6 + _constants.anyStreetsideYShift, 0},
-								{10, 0, 0},
+								{11, -6 + _constants.anyStreetsideYShift, 0},
+								{-10, 0, 0}
 							},
 							{
-								{-1, -6 + _constants.anyStreetsideYShift, 0},
-								{10, 0, 0},
+								{1, -6 + _constants.anyStreetsideYShift, 0},
+								{-10, 0, 0}
 							},
 						},
 						freeNodes = {},
-						snapNodes = {0}, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
-						-- skipCollision = true,
+						snapNodes = { 0 },
 					},
 					{
 						type = 'STREET',
 						params = {
-							-- skipCollision = true,
-							type = 'standard/country_medium_new.lua',
+							type = _streetFileName,
 							tramTrackType = 'NO' --_getTramTrackType(params)
 						},
 						edges = {
 							{
-								{-1, -6 + _constants.anyStreetsideYShift, 0},
-								{2, 0, 0},
+								{1, -6 + _constants.anyStreetsideYShift, 0},
+								{-2, 0, 0}
 							},
 							{
-								{1, -6 + _constants.anyStreetsideYShift, 0},
-								{2, 0, 0}
+								{-1, -6 + _constants.anyStreetsideYShift, 0},
+								{-2, 0, 0},
 							},
 						},
 						freeNodes = {},
 						snapNodes = {},
-						-- skipCollision = true,
 					},
 					{
 						type = 'STREET',
 						params = {
-							skipCollision = true,
-							type = 'standard/country_medium_new.lua',
+							type = _streetFileName,
 							tramTrackType = 'NO' --_getTramTrackType(params)
 						},
 						edges = {
 							{
-								{1, -6 + _constants.anyStreetsideYShift, 0},
-								{10, 0, 0}
+								{-1, -6 + _constants.anyStreetsideYShift, 0},
+								{-10, 0, 0},
 							},
 							{
-								{11, -6 + _constants.anyStreetsideYShift, 0},
-								{10, 0, 0}
-							}
+								{-11, -6 + _constants.anyStreetsideYShift, 0},
+								{-10, 0, 0},
+							},
 						},
 						freeNodes = {},
-						snapNodes = {1},
-					 skipCollision = true,
+						snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
 					},
 				},
 				groundFaces = {},
 				models = {
 					{
 						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelFileName or _constants.lorryBayStreetsideEntrance15x5ModelFileName,
-						slotId = slotUtils.mangleId(0, 0, _constants.idBases.leftLorryBaySlotIdBase),
+						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
 						tag = _constants.lorryBayStreetside15x5ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 					},
