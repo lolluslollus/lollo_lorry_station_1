@@ -3,7 +3,8 @@
         "*.con": "lua",
         "*.mdl": "lua",
         "*.module": "lua",
-        "*.mtl": "lua"
+        "*.mtl": "lua",
+        "*.script": "lua",
     },
     "Lua.diagnostics.globals": [
         "_",

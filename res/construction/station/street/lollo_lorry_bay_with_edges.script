@@ -5,35 +5,8 @@ local vec3 = require "vec3"
 
 function data()
 	return {
-		type = 'STREET_STATION_CARGO',
-		description = {
-			name = _("Lollo roadside lorry bay"),
-			description = _("Lollo roadside lorry bay."),
-		},
-		availability = {
-			yearFrom = 1925, -- -1, -- 1925,
-			yearTo = 0, -- -1, -- 0
-		},
-		order = 5005,
-		soundConfig = {
-			soundSet = { name = "lollo_lorry_bay" }
-		},
-		autoRemovable = false,
-		skipCollision = true,
-		params = {
-			{
-				key = 'isStoreCargoOnPavement',
-				name = _('Store cargo on the pavement'),
-				tooltip = _('Store some of the cargo on the pavement'),
-				values = {
-					_('No'),
-					_('Yes')
-				},
-				defaultIndex = 1
-			}
-		},
 		updateFn = function(params, two)
-			-- local streetData = two.globalStreetData[params.streetType_ + 1]
+			local streetData = two.globalStreetData[params.streetType_ + 1]
 			local function _getTramTrackType(params)
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
@@ -472,12 +445,30 @@ function data()
 
 			return result
 		end,
-		upgradeFn = function(_)
+        getModelsFn = function(variant, closureParams)
+            print('LOLLO getModelsFn') -- never fires
+            debugPrint(variant)
+            debugPrint(closureParams)
+            return {}
+        end,
+        preProcessFn = function(one, two, three)
+            print('LOLLO preProcessFn') -- never fires
+            debugPrint(one)
+            debugPrint(two)
+            debugPrint(three)
+        end,
+        upgradeFn = function(_)
             print('LOLLO upgradeFn') -- never fires
             -- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
             -- If you leave it out, adding and removing tram tracks won't work.
             -- (Bus lanes don't work anyway.)
             return {}
+        end,
+        createTemplateFn = function(one, two, three)
+            print('LOLLO createTemplateFn') -- never fires
+            debugPrint(one)
+            debugPrint(two)
+            debugPrint(three)
         end,
 	}
 end

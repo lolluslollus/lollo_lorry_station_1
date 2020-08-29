@@ -1,52 +1,12 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
--- local fileUtils = require('lollo_lorry_station/lolloFileUtils')
-local stringUtils = require('lollo_lorry_station/stringUtils')
 
 local _lolloStreetDataBuffer = {
     data = {},
     filterId = nil
 }
+
 local helper = {}
 -- --------------- global street data ------------------------
---[[ local function _getGameStreetDirPath()
-    local gamePath = fileUtils.getGamePath()
-    -- print('LOLLO gamePath is')
-    -- dump(true)(gamePath)
-
-    if stringUtils.isNullOrEmptyString(gamePath) then
-        return '', ''
-    end
-
-    if stringUtils.stringEndsWith(gamePath, '/') then
-        return gamePath .. 'res/config/street/standard', 'standard/'
-    else
-        return gamePath .. '/res/config/street/standard', 'standard/'
-    end
-end ]]
-
---[[ local function _getMyStreetDirPath()
-    local currPath = fileUtils.getCurrentPath()
-    -- print('LOLLO currPath is')
-    -- dump(true)(currPath)
-    if stringUtils.isNullOrEmptyString(currPath) then
-        return '', ''
-    end
-
-    local resDir = fileUtils.getResDirFromPath(currPath)
-    -- print('LOLLO resDir is')
-    -- dump(true)(resDir)
-    if stringUtils.isNullOrEmptyString(resDir) then
-        return '', ''
-    end
-
-    local streetDirPath = resDir .. '/config/street'
-    -- print('LOLLO streetDirPath is')
-    -- dump(true)(streetDirPath)
-
-    return streetDirPath, ''
-end ]]
-
-
 local function _getStandardStreetData()
     -- I could read this from the files, but Linux won't allow it.
     -- This is also more efficient, even if less interesting.
@@ -152,99 +112,6 @@ local function _getStandardStreetData()
     }
 end
 
---[[ local function _getStreetFilesContents(streetDirPath, fileNamePrefix)
-    -- print('LOLLO current path = ')
-    -- dump(true)(fileUtils.getCurrentPath())
-    -- print('LOLLO package.loaded = ')
-    -- --dump(true)(package.loaded) huge
-    -- for key, value in pairs(package.loaded) do
-    --     print(key, value)
-    -- end
-    -- print('LOLLO streetDirPath = ', streetDirPath)
-    local results = {}
-
-    local streetFiles = fileUtils.getFilesInDirWithExtension(streetDirPath, 'lua')
-    -- print('LOLLO streetfiles are')
-    -- dump(true)(streetFiles)
-    if type(streetFiles) ~= 'table' then
-        return results
-    end
-
-    for i = 1, #streetFiles do
-        local isOk, fileData = fileUtils.readGameDataFile(streetFiles[i])
-        -- print('LOLLO streetFiles[i] = ')
-        -- dump(true)(streetFiles[i])
-        if isOk then
-            local newRecord = {
-                categories = fileData.categories or {},
-                fileName = (fileNamePrefix or '') .. fileUtils.getFileNameFromPath(streetFiles[i]),
-                name = fileData.name or '',
-                sidewalkWidth = fileData.sidewalkWidth or 0.2,
-                streetWidth = fileData.streetWidth or 0.2,
-                upgrade = fileData.upgrade or true, -- true means, do not show this street in the menu
-                yearTo = fileData.yearTo or 1925
-            }
-            if type(newRecord.fileName) == 'string' and newRecord.fileName:len() > 0
-            and type(newRecord.name) == 'string' and newRecord.name:len() > 0 then
-                table.insert(
-                    results,
-                    #results + 1,
-                    newRecord
-                )
-            end
-        end
-    end
-    -- print('LOLLO _getStreetFilesContents is about to return: ')
-    -- for i = 1, #results do
-    --     dump(true)(results[i])
-    -- end
-
-    if #results > 0 then
-        arrayUtils.concatValues(results, _getStandardStreetData())
-    end
-
-    return results
-
-    -- LOLLO NOTE very useful to see what is going on
-    -- print('LOLLO debug.getregistry() = ')
-    -- debugPring(debug.getregistry())
-
-    -- LOLLO NOTE you can save the global var in game or in _G
-    -- print('LOLLO game.config = ')
-    -- -- dump(true)(game)
-    -- for key, value in pairs(game.config) do
-    --     print(key, value)
-    -- end
-    -- print('LOLLO game.res = ')
-    -- for key, value in pairs(game.res) do
-    --     print(key, value)
-    -- end
-    -- this fails coz game.interface is not on this thread, and it has probably nothing to do with file paths anyway
-    -- local func = function()
-    --     return game.interface.findPath('lollo_medium_4_lane_street')
-    -- end
-    -- local ok, fc = pcall(func)
-    -- if ok then
-    --     print('LOLLO test 4 findPath succeeded')
-    --     dump(true)(fc)
-    --     dump(true)(fc())
-    -- else
-    --     print('Execution error:', fc)
-    -- end
-
-    -- You can change package.path (not with ?.lua but with the whole file name) and then require a street file,
-    -- but the required file does not return anything,
-    -- because this is how street files are designed. So I need to read the file and parse it somehow.
-    -- local modPath
-    -- if string.ends(info.source, 'mod.lua') then
-    --     modPath = string.gsub(info.source, "@(.*/)mod[.]lua", "%1")
-    -- elseif string.ends(info.source, '.mdl') then
-    --     modPath = string.gsub(info.source, "@(.*/)res/models/model/.+[.]mdl", "%1")
-    -- elseif string.ends(info.source, '.lua') then
-    --     modPath = string.gsub(info.source, "@(.*/)res/config/street/.+[.]lua", "%1")
-    -- end
-end ]]
-
 local function _getStreetDataFiltered_Stock(streetDataTable)
     if type(streetDataTable) ~= 'table' then return {} end
 
@@ -340,17 +207,6 @@ local function _initLolloStreetDataWithApi(filter)
     end
 end
 
---[[ local function _initLolloStreetDataWithFiles(filter)
-    if _lolloStreetDataBuffer.filterId ~= filter.id
-    or type(_lolloStreetDataBuffer.data) ~= 'table'
-    or #_lolloStreetDataBuffer.data < 1 then
-        _lolloStreetDataBuffer.data = filter.func(_getStreetFilesContents(_getMyStreetDirPath()))
-        arrayUtils.sort(_lolloStreetDataBuffer.data, 'name')
-
-        -- print('LOLLO street data initialised with files, it has', #(_lolloStreetData.data or {}), 'records and type = ', type(_lolloStreetData.data))
-    end
-end ]]
-
 helper.getStreetCategories = function()
     return {
         COUNTRY = 'country',
@@ -400,7 +256,6 @@ end
 helper.getGlobalStreetData = function(filter)
     if filter == nil then filter = helper.getStreetDataFilters().STOCK end
     _initLolloStreetDataWithApi(filter)
-    -- _initLolloStreetDataWithFiles(filter)
     return _lolloStreetDataBuffer.data
 end
 
