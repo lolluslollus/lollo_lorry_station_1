@@ -99,13 +99,9 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     end
     return results
 end
--- LOLLO TODO make this and its siblings constants
-helpers.getCargoAreaModelTag = function()
-    return 'cargoArea'
-end
 
 helpers.getIsCargoArea = function(tag)
-    if type(tag) == 'string' and tag:find(helpers.getCargoAreaModelTag()) then
+    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner15x15ModelTag) then
         -- return tag:sub(('cargoArea_slotId_'):len() + 1) or false
         return true
     else
@@ -113,12 +109,8 @@ helpers.getIsCargoArea = function(tag)
     end
 end
 
-helpers.getSmallCargoAreaModelTag = function()
-    return 'smallCargoArea'
-end
-
 helpers.getIsSmallCargoArea = function(tag)
-    if type(tag) == 'string' and tag:find(helpers.getSmallCargoAreaModelTag()) then
+    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner5x5ModelTag) then
         -- return tag:sub(('smallCargoArea_slotId_'):len() + 1) or false
         return true
     else
@@ -126,12 +118,8 @@ helpers.getIsSmallCargoArea = function(tag)
     end
 end
 
-helpers.getStreetsideCargoAreaModelTag = function()
-    return 'streetsideCargoArea'
-end
-
 helpers.getIsStreetsideCargoArea = function(tag)
-    if type(tag) == 'string' and tag:find(helpers.getStreetsideCargoAreaModelTag()) then
+    if type(tag) == 'string' and tag:find(_constants.cargoAreaStreetside15x5ModelTag) then
         -- return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
         return true
     else
@@ -139,12 +127,8 @@ helpers.getIsStreetsideCargoArea = function(tag)
     end
 end
 
-helpers.getLorryBayModelTag = function()
-    return 'lorryBay'
-end
-
 helpers.getIsLorryBay = function(tag)
-    if type(tag) == 'string' and tag:find(helpers.getLorryBayModelTag()) then
+    if type(tag) == 'string' and tag:find(_constants.lorryBayStreetside15x5ModelTag) then
         -- return tag:sub(('lorryBay_slotId_'):len() + 1) or false
         return true
     else

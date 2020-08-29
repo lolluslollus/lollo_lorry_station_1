@@ -41,13 +41,12 @@ return {
 		-- print('LOLLO result =')
 		-- debugPrint(result)
 
-		local modelTag = slotUtils.getCargoAreaModelTag()
 		-- addModelFn(_constants.cargoAreaInner15x15ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
 			id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = modelTag
+			tag = _constants.cargoAreaInner15x15ModelTag
 		}
 
 		-- if params.modules[result.MangleId({x, right and y + 1 or y - 1, 1})] == nil then

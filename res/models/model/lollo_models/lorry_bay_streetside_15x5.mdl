@@ -102,7 +102,16 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 5
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
+							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
+						},
+						speedLimit = 30,
+						transportModes = { 'CARGO' },
+					},
+					{
+						linkable = false,
+						nodes = {
+							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 7
 							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 5, -2, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -111,17 +120,8 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 6
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 8
 							{{ -2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, 2, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
-							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },

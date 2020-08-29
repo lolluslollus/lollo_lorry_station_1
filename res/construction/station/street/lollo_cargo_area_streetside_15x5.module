@@ -41,13 +41,12 @@ return {
 		-- print('LOLLO result =')
 		-- debugPrint(result)
 
-		local modelTag = slotUtils.getStreetsideCargoAreaModelTag()
 		-- addModelFn(_constants.cargoAreaStreetside15x5ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
 			id = _constants.cargoAreaStreetside15x5ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = modelTag
+			tag = _constants.cargoAreaStreetside15x5ModelTag
 		}
 
 		local faces = {
