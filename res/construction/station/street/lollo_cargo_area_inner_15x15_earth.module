@@ -41,7 +41,7 @@ return {
 
 		-- addModelFn(_constants.cargoAreaInner15x15ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = 'lollo_models/cargo_area_inner_15x15_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
+			id = 'lollo_lorry_station/cargo_area_inner_15x15_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
 			tag = _constants.cargoAreaInner15x15ModelTag
@@ -90,7 +90,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = 'lollo_models/cargo_area_inner_15x15_earth.mdl',
+				id = 'lollo_lorry_station/cargo_area_inner_15x15_earth.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

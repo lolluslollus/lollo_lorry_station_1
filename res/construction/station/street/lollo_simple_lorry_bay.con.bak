@@ -66,7 +66,7 @@ function data()
 				transf = _idTransf,
 			})
 			-- table.insert(result.models, {
-			-- 	id = 'lollo_models/dsd_road_station2_freight_only_sbend.mdl',
+			-- 	id = 'lollo_lorry_station/dsd_road_station2_freight_only_sbend.mdl',
 			-- 	transf = _idTransf,
 			-- })
 

@@ -180,7 +180,7 @@ local function _replaceEdgeRemovingObject(oldEdgeId, objectToRemoveId, isAddNewO
     --     cargo = true,
     -- },
     -- and that would automatically delete the cargo paths
-    -- newObject.model = 'lollo_models/dsd_road_station3_cargo.mdl'
+    -- newObject.model = 'lollo_lorry_station/dsd_road_station3_cargo.mdl'
     newObject.playerEntity = game.interface.getPlayer()
     newObject.oneWay = true
     newObject.param = 0.5

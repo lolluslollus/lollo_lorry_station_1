@@ -21,27 +21,27 @@ function data()
 			{
 				node = {
 					children = {
-						{
-							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
-							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
-							transf = { 0, 1.65, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, -2.05, -0.02, 1, },
-						},
-						{
-							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
-							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-							transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, -2.5, -2.05, -0.02, 1}
-						},
-						{
-							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
-							mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-							transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, 2.5, -2.05, -0.02, 1}
-						},
-						{
-							materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
-							transf = { 0, 1.65, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -2.05, -0.02, 1, },
-						},
+						-- {
+						-- 	-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
+						-- 	materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+						-- 	mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+						-- 	transf = { 0, 1.65, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, -2.05, -0.02, 1, },
+						-- },
+						-- {
+						-- 	materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+						-- 	mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
+						-- 	transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, -2.5, -2.05, -0.02, 1}
+						-- },
+						-- {
+						-- 	materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+						-- 	mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
+						-- 	transf = {1, 0, 0, 0, 0, -1.65, 0, 0, 0, 0, 1, 0, 2.5, -2.05, -0.02, 1}
+						-- },
+						-- {
+						-- 	materials = { "street/new_medium_sidewalk.mtl", "street/new_medium_sidewalk.mtl", },
+						-- 	mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+						-- 	transf = { 0, 1.65, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -2.05, -0.02, 1, },
+						-- },
 						-- waypoint post, just for testing.
 						-- transf[15] = -0.3 puts the height level with the stock waypoint
 						-- {
