@@ -26,8 +26,6 @@ return {
 	},
 	metadata = {
 		cargo = true,
-		xSlotsTaken = 2,
-		ySlotsTaken = 2,
 	},
 	order = {
 		value = 7,
@@ -43,7 +41,7 @@ return {
 
 		-- addModelFn(_constants.cargoAreaInner15x15ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
+			id = 'lollo_models/cargo_area_inner_15x15_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
 			tag = _constants.cargoAreaInner15x15ModelTag
@@ -63,10 +61,10 @@ return {
 		-- }
 
 		local faces = {
-			{-5, -5, 0, 1},
-			{-5, 5, 0, 1},
-			{5, 5, 0, 1},
-			{5, -5, 0, 1},
+			{-7.5, -7.5, 0, 1},
+			{-7.5, 7.5, 0, 1},
+			{7.5, 7.5, 0, 1},
+			{7.5, -7.5, 0, 1},
 		}
 		modulesutil.TransformFaces(transform, faces)
 		result.groundFaces[#result.groundFaces + 1] = {
@@ -92,7 +90,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = 'lollo_models/lollo_simple_cargo_area_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
+				id = 'lollo_models/cargo_area_inner_15x15_earth.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

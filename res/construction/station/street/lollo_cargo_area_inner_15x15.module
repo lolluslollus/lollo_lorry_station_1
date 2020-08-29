@@ -26,8 +26,6 @@ return {
 	},
 	metadata = {
 		cargo = true,
-		xSlotsTaken = 3,
-		ySlotsTaken = 3,
 	},
 	order = {
 		value = 7,
