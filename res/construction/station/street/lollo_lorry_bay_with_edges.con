@@ -381,11 +381,11 @@ function data()
 				-- print('LOLLO result.models =')
 				-- debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
-				local cargoAreaModelIndexesBase0Simple = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
+				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
 				-- debugPrint(cargoAreaModelIndexesBase0)
-				print('LOLLO cargoAreaModelIndexesBase0Simple =')
-				debugPrint(cargoAreaModelIndexesBase0Simple)
+				print('LOLLO allCargoAreaModelIndexesBase0 =')
+				debugPrint(allCargoAreaModelIndexesBase0)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 				-- print('LOLLO lorryBayModelIndexesBase0 =')
@@ -417,7 +417,7 @@ function data()
 					-- 	table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					-- end
 
-					for _, v in pairs(cargoAreaModelIndexesBase0Simple) do
+					for _, v in pairs(allCargoAreaModelIndexesBase0) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					end
 

@@ -87,11 +87,10 @@ helpers.getCargoAreaModelIndexesBase0Simple = function(models)
     local results = {}
     local base0ModelIndex = 0
     for _, model in pairs(models) do
-        if helpers.getIsCargoAreaInner15x15(model.tag) then
-            results[#results+1] = base0ModelIndex
-        elseif helpers.getIsCargoAreaInner5x5(model.tag) then
-            results[#results+1] = base0ModelIndex
-        elseif helpers.getIsCargoAreaStreetside15x5(model.tag) then
+        if helpers.getIsCargoAreaInner15x15(model.tag)
+        or helpers.getIsCargoAreaInner5x5(model.tag)
+        or helpers.getIsCargoAreaStreetside15x5(model.tag)
+        then
             results[#results+1] = base0ModelIndex
         end
         base0ModelIndex = base0ModelIndex + 1
