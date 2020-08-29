@@ -154,28 +154,28 @@ function data()
 			-- set default slot locations
 			local _slotXYsNested = {
 				{ -- slots for 5x5 modules
-					['-1'] = {
-						['1'] = true,
-					},
-					['0'] = {
-						['1'] = true,
-					},
-					['1'] = {
-						['1'] = true,
-					},
+					-- ['-1'] = {
+					-- 	['1'] = true,
+					-- },
+					-- ['0'] = {
+					-- 	['1'] = true,
+					-- },
+					-- ['1'] = {
+					-- 	['1'] = true,
+					-- },
 				},
 				{ -- slots for 15x5 modules
-					['-3'] = {
-						['0'] = true,
-					},
-					['3'] = {
-						['0'] = true,
-					},
+					-- ['-3'] = {
+					-- 	['0'] = true,
+					-- },
+					-- ['3'] = {
+					-- 	['0'] = true,
+					-- },
 				},
 				{ -- slots for 15x15 modules
-					['0'] = {
-						['2'] = true,
-					},
+					-- ['0'] = {
+					-- 	['2'] = true,
+					-- },
 				},
 			}
 			local _isSlotOpen = function(level, x, y)
@@ -200,7 +200,11 @@ function data()
 			_setSlotBarred(1, 1, 0)
 			_trySetSlotOpen(1, 1, 1)
 
-			_trySetSlotOpen(2, -3, 0)
+			if params.isStoreCargoOnPavement == 1 then
+				_trySetSlotOpen(2, -3, 0)
+			else
+				_setSlotBarred(2, -3, 0)
+			end
 			_setSlotBarred(2, -2, -1)
 			_setSlotBarred(2, -2, 0)
 			_setSlotBarred(2, -2, 1)
@@ -216,7 +220,11 @@ function data()
 			_setSlotBarred(2, 2, -1)
 			_setSlotBarred(2, 2, 0)
 			_setSlotBarred(2, 2, 1)
-			_trySetSlotOpen(2, 3, 0)
+			if params.isStoreCargoOnPavement == 1 then
+				_trySetSlotOpen(2, 3, 0)
+			else
+				_setSlotBarred(2, 3, 0)
+			end
 
 			_setSlotBarred(3, -2, -2)
 			_setSlotBarred(3, -2, -1)
