@@ -61,29 +61,29 @@ function data()
 			transportNetworkProvider = {
 				laneLists = {
 					-- in the middle of the road
-					{
-						linkable = false,
-						nodes = {
-							{{ 1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
+					-- {
+					-- 	linkable = false,
+					-- 	nodes = {
+					-- 		{{ 1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
+					-- 		{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
 
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
-							{{ -1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
-						},
-						speedLimit = 30,
-						transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
-					},
+					-- 		{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
+					-- 		{{ -1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
+					-- 	},
+					-- 	speedLimit = 30,
+					-- 	transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
+					-- },
 					-- on the pavement
 					{
 						linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
 						nodes = {
-							{{ 7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
+							{{ 7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 0
 							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
 
-							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 3
+							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 1
 							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3},
 
-							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 4
+							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
 							{{ -7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -93,7 +93,7 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 5
+							{{ 7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 3
 							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 0, -2, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -102,7 +102,7 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 4
 							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -111,7 +111,7 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 7
+							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 5
 							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 5, -2, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -120,7 +120,7 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 8
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 6
 							{{ -2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, 2, 0, }, 3},
 						},
 						speedLimit = 30,
@@ -130,9 +130,12 @@ function data()
 				runways = { },
 				terminals = {
 					{
-						personEdges = { 3 },
-						personNodes = { 6, 7 },
-						vehicleNode = 2,
+						personEdges = { 1 },
+						personNodes = { 2, 3 },
+						-- vehicleNode = 2,
+						-- personEdges = { 3 },
+						-- personNodes = { 6, 7 },
+						-- -- vehicleNode = 2,
 					},
 				},
 			},

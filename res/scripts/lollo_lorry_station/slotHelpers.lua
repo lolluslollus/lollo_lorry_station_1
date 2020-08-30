@@ -70,9 +70,9 @@ helpers.getCargoAreaModelIndexesBase0 = function(models)
             local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
             helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         elseif helpers.getIsCargoAreaInner5x5(model.tag) then
-                local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
-                local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
-                helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
+            local x = tostring((model.transf[13]  - _constants.anyInnerXShift) / _constants.xTransfFactor)
+            local y = tostring((model.transf[14]  - _constants.anyInnerYShift) / _constants.yTransfFactor)
+            helpers.setValueInNestedTable(results, base0ModelIndex, x, y)
         elseif helpers.getIsCargoAreaStreetside15x5(model.tag) then
             local x = tostring((model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor)
             local y = tostring((model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor)
@@ -103,12 +103,31 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     local base0ModelIndex = 0
     for _, model in pairs(models) do
         if helpers.getIsLorryBay(model.tag) then
-            results[#results+1] = {
-                    x = (model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor,
-                    y = (model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor,
-                    z = model.transf[15],
-                    base0ModelIndex = base0ModelIndex
-                }
+            -- results[#results+1] = {
+            --         x = (model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor,
+            --         y = (model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor,
+            --         z = model.transf[15],
+            --         base0ModelIndex = base0ModelIndex
+            --     }
+            results[#results+1] = base0ModelIndex
+        end
+        base0ModelIndex = base0ModelIndex + 1
+    end
+    return results
+end
+
+helpers.getVehicleEdgeModelIndexesBase0 = function(models)
+    local results = {}
+    local base0ModelIndex = 0
+    for _, model in pairs(models) do
+        if helpers.getIsVehicleEdge(model.tag) then
+            -- results[#results+1] = {
+            --         x = (model.transf[13]  - _constants.anyStreetsideXShift) / _constants.xTransfFactor,
+            --         y = (model.transf[14]  - _constants.anyStreetsideYShift) / _constants.yTransfFactor,
+            --         z = model.transf[15],
+            --         base0ModelIndex = base0ModelIndex
+            --     }
+            results[#results+1] = base0ModelIndex
         end
         base0ModelIndex = base0ModelIndex + 1
     end
@@ -145,6 +164,14 @@ end
 helpers.getIsLorryBay = function(tag)
     if type(tag) == 'string' and tag:find(_constants.lorryBayStreetside15x5ModelTag) then
         -- return tag:sub(('lorryBay_slotId_'):len() + 1) or false
+        return true
+    else
+        return false
+    end
+end
+
+helpers.getIsVehicleEdge = function(tag)
+    if type(tag) == 'string' and tag:find(_constants.lorryBayVehicleEdgeModelTag) then
         return true
     else
         return false

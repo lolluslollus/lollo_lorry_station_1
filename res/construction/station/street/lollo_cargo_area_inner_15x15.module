@@ -33,7 +33,7 @@ return {
         local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		-- print('LOLLO cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
+		print('LOLLO cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
 
@@ -83,6 +83,9 @@ return {
 			model = #result.models - 1,
 			terminal = 0
 		}
+
+		print('LOLLO result =')
+		debugPrint(result)
 	end,
 
 	getModelsFn = function()
