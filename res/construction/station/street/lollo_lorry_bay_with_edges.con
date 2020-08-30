@@ -1,6 +1,6 @@
 local _constants = require('lollo_lorry_station/constants')
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
-local fileUtils = require('lollo_lorry_station.fileUtils')
+local fileUtils = require('lollo_lorry_station.lolloFileUtils')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
 local transf = require "transf"
 local vec3 = require "vec3"

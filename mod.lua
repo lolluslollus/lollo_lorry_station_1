@@ -1,6 +1,6 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
-local fileUtils = require('lollo_lorry_station.fileUtils')
-local streetUtils = require('lollo_lorry_station.streetUtils')
+local fileUtils = require('lollo_lorry_station.lolloFileUtils')
+local streetUtils = require('lollo_lorry_station.lolloStreetUtils')
 local _constants = require('lollo_lorry_station.constants')
 
 function data()
