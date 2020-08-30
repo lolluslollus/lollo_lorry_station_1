@@ -1,22 +1,21 @@
-local _constants = require('lollo_lorry_station/constants')
-local arrayUtils = require('lollo_lorry_station.arrayUtils')
-local fileUtils = require('lollo_lorry_station.fileUtils')
-local slotUtils = require('lollo_lorry_station/slotHelpers')
+local _allStreetData = require('lollo_lorry_station._allStreetData')
+local _constants = require('lollo_lorry_station.constants')
+-- local arrayUtils = require('lollo_lorry_station.arrayUtils')
+-- local fileUtils = require('lollo_lorry_station.fileUtils')
+local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transf = require "transf"
 local vec3 = require "vec3"
 
 function data()
-	local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
-	-- print('LOLLO currentDir in con =')
-	-- debugPrint(currentDir)
-	local _globalStreetData = fileUtils.loadTable(currentDir .. _constants.streetDataFileName)
-	-- print('LOLLO streetData in con =')
-	-- debugPrint(streetData)
+	-- print('LOLLO _allStreetData in con =')
+	-- debugPrint(_allStreetData)
 
-	local defaultStreetTypeIndex = arrayUtils.findIndex(_globalStreetData or {}, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
-	if defaultStreetTypeIndex < 0 then
-		defaultStreetTypeIndex = arrayUtils.findIndex(_globalStreetData or {}, 'fileName', 'standard/country_small_one_way_new.lua') - 1
-	end
+	-- local _getDefaultStreetTypeIndex = function()
+	-- 	local result = arrayUtils.findIndex(_allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+	-- 	if result < 0 then
+	-- 		result = arrayUtils.findIndex(_allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+	-- 	end
+	-- end
 
 	return {
 		type = 'STREET_STATION_CARGO',
@@ -35,20 +34,20 @@ function data()
 		autoRemovable = false,
 		skipCollision = true,
 		params = {
-			{
-				key = 'streetType_',
-				name = _('Street type'),
-				values = arrayUtils.map(
-					_globalStreetData,
-					function(str)
-						return str.name
-					end
-				),
-				uiType = 'COMBOBOX',
-				defaultIndex = defaultStreetTypeIndex
-				-- yearFrom = 1925,
-				-- yearTo = 0
-			},
+			-- {
+			-- 	key = 'streetType_',
+			-- 	name = _('Street type'),
+			-- 	values = arrayUtils.map(
+			-- 		_allStreetData,
+			-- 		function(str)
+			-- 			return str.name
+			-- 		end
+			-- 	),
+			-- 	uiType = 'COMBOBOX',
+			-- 	defaultIndex = _getDefaultStreetTypeIndex()
+			-- 	-- yearFrom = 1925,
+			-- 	-- yearTo = 0
+			-- },
 			{
 				key = 'isStoreCargoOnPavement',
 				name = _('Store cargo on the pavement'),
@@ -67,7 +66,8 @@ function data()
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
 			end
-			local _selectedStreetData = _globalStreetData[params.streetType_ + 1]
+			-- local _selectedStreetData = _allStreetData[params.streetType_ + 1]
+			local _selectedStreetData = _allStreetData[15]
 			-- print('LOLLO _selectedStreetData =')
 			-- debugPrint(_selectedStreetData)
 			-- local _streetYOffset = -(_selectedStreetData.sidewalkWidth + _selectedStreetData.rightLaneWidth) * 0.5
@@ -82,63 +82,63 @@ function data()
 				coord2terminalInfo = {},
 				cost = 1000,
 				edgeLists = {
-					-- {
-					-- 	type = 'STREET',
-					-- 	params = {
-					-- 		type = _streetFileName,
-					-- 		tramTrackType = 'NO' --_getTramTrackType(params)
-					-- 	},
-					-- 	edges = {
-					-- 		{
-					-- 			{11, _streetYOffset, 0},
-					-- 			{-10, 0, 0}
-					-- 		},
-					-- 		{
-					-- 			{1, _streetYOffset, 0},
-					-- 			{-10, 0, 0}
-					-- 		},
-					-- 	},
-					-- 	freeNodes = {},
-					-- 	snapNodes = { 0 },
-					-- },
-					-- {
-					-- 	type = 'STREET',
-					-- 	params = {
-					-- 		type = _streetFileName,
-					-- 		tramTrackType = 'NO' --_getTramTrackType(params)
-					-- 	},
-					-- 	edges = {
-					-- 		{
-					-- 			{1, _streetYOffset, 0},
-					-- 			{-2, 0, 0}
-					-- 		},
-					-- 		{
-					-- 			{-1, _streetYOffset, 0},
-					-- 			{-2, 0, 0},
-					-- 		},
-					-- 	},
-					-- 	freeNodes = {},
-					-- 	snapNodes = {},
-					-- },
-					-- {
-					-- 	type = 'STREET',
-					-- 	params = {
-					-- 		type = _streetFileName,
-					-- 		tramTrackType = 'NO' --_getTramTrackType(params)
-					-- 	},
-					-- 	edges = {
-					-- 		{
-					-- 			{-1, _streetYOffset, 0},
-					-- 			{-10, 0, 0},
-					-- 		},
-					-- 		{
-					-- 			{-11, _streetYOffset, 0},
-					-- 			{-10, 0, 0},
-					-- 		},
-					-- 	},
-					-- 	freeNodes = {},
-					-- 	snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
-					-- },
+					{
+						type = 'STREET',
+						params = {
+							type = _streetFileName,
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
+							{
+								{11, _streetYOffset, 0},
+								{-10, 0, 0}
+							},
+							{
+								{1, _streetYOffset, 0},
+								{-10, 0, 0}
+							},
+						},
+						freeNodes = {},
+						snapNodes = { 0 },
+					},
+					{
+						type = 'STREET',
+						params = {
+							type = _streetFileName,
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
+							{
+								{1, _streetYOffset, 0},
+								{-2, 0, 0}
+							},
+							{
+								{-1, _streetYOffset, 0},
+								{-2, 0, 0},
+							},
+						},
+						freeNodes = {},
+						snapNodes = {},
+					},
+					{
+						type = 'STREET',
+						params = {
+							type = _streetFileName,
+							tramTrackType = 'NO' --_getTramTrackType(params)
+						},
+						edges = {
+							{
+								{-1, _streetYOffset, 0},
+								{-10, 0, 0},
+							},
+							{
+								{-11, _streetYOffset, 0},
+								{-10, 0, 0},
+							},
+						},
+						freeNodes = {},
+						snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
+					},
 				},
 				groundFaces = {},
 				models = {
@@ -156,16 +156,16 @@ function data()
 					},
 				},
 				slotConfig = {
-					[_constants.cargoAreaInner15x15ModuleType] = {
-						maxModules = -1,
-						message = nil, --'LOLLO slotConfig message',
-						skipCollisionCheck = true,
-					},
-					-- [_constants.cargoAreaStreetside15x5ModuleType] = {
+					-- [_constants.cargoAreaInner15x15ModuleType] = {
 					-- 	maxModules = -1,
 					-- 	message = nil, --'LOLLO slotConfig message',
 					-- 	skipCollisionCheck = true,
-					-- }
+					-- },
+					[_constants.cargoAreaStreetside15x5ModuleType] = {
+						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
+					}
 				},
 				slots = {},
 				stations = {},
@@ -424,7 +424,7 @@ function data()
 			end
 
 			-- join terminals together
-			result.terminateConstructionHookLOLLO = function()
+			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
 				print('LOLLO starting terminateConstructionHook')
 				print('LOLLO result.models =')
@@ -519,19 +519,42 @@ function data()
 			end
 
 			-- force join terminals together if no modules present
-			-- if type(params.modules) ~= 'table' or #params.modules == 0 then
-			-- 	result.terminateConstructionHook()
-			-- end
+			if type(params.modules) ~= 'table' or #params.modules == 0 then
+				result.terminateConstructionHook()
+			end
 			-- print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
 			-- debugPrint(result)
 
 			return result
 		end,
-		preProcessFn = function(one, two, three)
-            print('LOLLO preProcessFn') -- never fires
-            debugPrint(one)
-            debugPrint(two)
-            debugPrint(three)
+		preProcessFn = function(modules, change, three)
+			print('LOLLO preProcessFn') -- never fires
+			print('modules =')
+			debugPrint(modules)
+			print('change =')
+			debugPrint(change)
+			-- default behaviour
+			if change.added then
+				modules[change.slotId] = change.module
+			else
+				modules[change.slotId] = nil
+			end
+			-- airport behaviour
+			-- if change.added then
+			-- 	if change.slotId == landingSlotId + 1 then
+			-- 		modules[landingSlotId + 0] = nil
+			-- 	elseif change.slotId == landingSlotId + 0 then
+			-- 		modules[landingSlotId + 1] = nil
+			-- 	elseif change.slotId == landingSlotId + 2 then
+			-- 		modules[landingSlotId + 3] = nil
+			-- 	elseif change.slotId == landingSlotId + 3 then
+			-- 		modules[landingSlotId + 2] = nil
+			-- 	end
+			-- 	modules[change.slotId] = change.module
+			-- else
+			-- 	modules[change.slotId] = nil
+			-- end
+			return modules
         end,
 		upgradeFn = function(_)
             print('LOLLO upgradeFn') -- never fires

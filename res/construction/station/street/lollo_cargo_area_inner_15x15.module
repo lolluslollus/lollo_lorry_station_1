@@ -30,10 +30,10 @@ return {
 	},
 	type = _constants.cargoAreaInner15x15ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
-        local x, y, baseId = result.DemangleId(slotId)
+		local x, y, baseId = result.DemangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		print('LOLLO cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
+		-- print('LOLLO cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
 

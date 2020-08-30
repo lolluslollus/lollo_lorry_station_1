@@ -60,19 +60,6 @@ function data()
 		metadata = {
 			transportNetworkProvider = {
 				laneLists = {
-					-- in the middle of the road
-					-- {
-					-- 	linkable = false,
-					-- 	nodes = {
-					-- 		{{ 1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
-					-- 		{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
-
-					-- 		{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
-					-- 		{{ -1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
-					-- 	},
-					-- 	speedLimit = 30,
-					-- 	transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
-					-- },
 					-- on the pavement
 					{
 						linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
@@ -132,10 +119,6 @@ function data()
 					{
 						personEdges = { 1 },
 						personNodes = { 2, 3 },
-						-- vehicleNode = 2,
-						-- personEdges = { 3 },
-						-- personNodes = { 6, 7 },
-						-- -- vehicleNode = 2,
 					},
 				},
 			},
