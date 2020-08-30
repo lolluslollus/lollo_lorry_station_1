@@ -2,6 +2,7 @@ local _constants = require('lollo_lorry_station/constants')
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local fileUtils = require('lollo_lorry_station.lolloFileUtils')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
+local streetUtils = require('lollo_lorry_station.lolloStreetUtils')
 local transf = require "transf"
 local vec3 = require "vec3"
 
@@ -9,13 +10,13 @@ function data()
 	local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
 	-- print('LOLLO currentDir in con =')
 	-- debugPrint(currentDir)
-	local streetData = fileUtils.loadTable(currentDir .. _constants.streetDataFileName)
+	local streetData = fileUtils.loadTable(currentDir .. _constants.streetDataFileName) or {}
 	-- print('LOLLO streetData in con =')
 	-- debugPrint(streetData)
 
-	local defaultStreetTypeIndex = arrayUtils.findIndex(streetData or {}, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+	local defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
 	if defaultStreetTypeIndex < 0 then
-		defaultStreetTypeIndex = arrayUtils.findIndex(streetData or {}, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+		defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
 	end
 
 	return {
