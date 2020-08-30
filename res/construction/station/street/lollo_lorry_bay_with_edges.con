@@ -1,9 +1,24 @@
 local _constants = require('lollo_lorry_station/constants')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local fileUtils = require('lollo_lorry_station.lolloFileUtils')
 local slotUtils = require('lollo_lorry_station/slotHelpers')
+local streetUtils = require('lollo_lorry_station.lolloStreetUtils')
 local transf = require "transf"
 local vec3 = require "vec3"
 
 function data()
+	local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
+	-- print('LOLLO currentDir in con =')
+	-- debugPrint(currentDir)
+	local streetData = fileUtils.loadTable(currentDir .. _constants.streetDataFileName) or {}
+	-- print('LOLLO streetData in con =')
+	-- debugPrint(streetData)
+
+	local defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+	if defaultStreetTypeIndex < 0 then
+		defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+	end
+
 	return {
 		type = 'STREET_STATION_CARGO',
 		description = {
@@ -21,6 +36,20 @@ function data()
 		autoRemovable = false,
 		skipCollision = true,
 		params = {
+			{
+				key = 'streetType_',
+				name = _('Street type'),
+				values = arrayUtils.map(
+					streetData,
+					function(str)
+						return str.name
+					end
+				),
+				uiType = 'COMBOBOX',
+				defaultIndex = defaultStreetTypeIndex
+				-- yearFrom = 1925,
+				-- yearTo = 0
+			},
 			{
 				key = 'isStoreCargoOnPavement',
 				name = _('Store cargo on the pavement'),
@@ -472,6 +501,12 @@ function data()
 
 			return result
 		end,
+		preProcessFn = function(one, two, three)
+            print('LOLLO preProcessFn') -- never fires
+            debugPrint(one)
+            debugPrint(two)
+            debugPrint(three)
+        end,
 		upgradeFn = function(_)
             print('LOLLO upgradeFn') -- never fires
             -- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
