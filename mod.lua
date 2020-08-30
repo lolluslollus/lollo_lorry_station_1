@@ -1,7 +1,5 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
-local fileUtils = require('lollo_lorry_station.lolloFileUtils')
 local streetUtils = require('lollo_lorry_station.lolloStreetUtils')
-local _constants = require('lollo_lorry_station.constants')
 
 function data()
     local function _getUiTypeNumber(uiTypeStr)
@@ -14,7 +12,7 @@ function data()
         end
     end
 
-    local function _addAvailableConstruction(oldFileName, newFileName, scriptFileName, availability, params, streetData)
+    local function _addAvailableConstruction(oldFileName, newFileName, scriptFileName, availability, params)
         local staticCon = api.res.constructionRep.get(api.res.constructionRep.find(oldFileName))
         local newCon = api.type.ConstructionDesc.new()
         newCon.fileName = newFileName
@@ -42,7 +40,7 @@ function data()
         end
         newCon.updateScript.fileName = scriptFileName .. '.updateFn'
         newCon.updateScript.params = {
-            globalStreetData = streetData
+            globalStreetData = streetUtils.getGlobalStreetData()
         }
         newCon.preProcessScript.fileName = scriptFileName .. '.preProcessFn'
         newCon.upgradeScript.fileName = scriptFileName .. '.upgradeFn'
@@ -74,23 +72,11 @@ function data()
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
         postRunFn = function(settings, params)
-            local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
-            -- print('LOLLO currentDir in postRunFn =')
-            -- debugPrint(currentDir)
-
-            local streetData = streetUtils.getGlobalStreetData() or {}
-            -- print('LOLLO streetData in postRunFn =')
-            -- debugPrint(streetData)
-            -- print('LOLLO about to save')
-            fileUtils.saveTable(streetData, currentDir .. _constants.streetDataFileName)
-
             if true then return end
-            -- LOLLO NOTE the following works with non-modular constructions, but this one is modular.
-            -- Waiting for a fix or documentation.
 
-            local defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+            local defaultStreetTypeIndex = arrayUtils.findIndex(streetUtils.getGlobalStreetData(), 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
             if defaultStreetTypeIndex < 0 then
-                defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+                defaultStreetTypeIndex = arrayUtils.findIndex(streetUtils.getGlobalStreetData(), 'fileName', 'standard/country_small_one_way_new.lua') - 1
             end
 
             _addAvailableConstruction(
@@ -103,7 +89,7 @@ function data()
                         key = 'streetType_',
                         name = _('Street type'),
                         values = arrayUtils.map(
-                            streetData,
+                            streetUtils.getGlobalStreetData(),
                             function(str)
                                 return str.name
                             end
@@ -123,8 +109,7 @@ function data()
                         },
                         defaultIndex = 1
                     },
-                },
-                streetData
+                }
             )
         end
     }
