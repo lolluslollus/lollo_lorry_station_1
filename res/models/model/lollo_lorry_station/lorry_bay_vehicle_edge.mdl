@@ -1,7 +1,5 @@
 function data()
-	local _cargoNodeY = 0
-	local _cargoNodeZ = 0.3
-	local _vehicleNodeY = 0
+	local _cargoNodeZ = -4 -- 0.3
 	local _vehicleNodeZ = 0
 
 	return {
@@ -35,21 +33,21 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
+							{{ 1, 0, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
+							{{ 0, 0, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
 
-							{{ 0, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
-							{{ -1, _vehicleNodeY, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
+							{{ 0, 0, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
+							{{ -1, 0, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
 						},
 						speedLimit = 30,
 						transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
 					},
-					-- anywhere out of the way, we need it to avoid crashes
+					-- anywhere out of the way, we only need it to avoid crashes
 					{
 						linkable = false,
 						nodes = {
-							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 2
-							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3},
+							{{ 7, 4, _cargoNodeZ, },{ -0.2, 0, 0, }, 3}, -- edge 2
+							{{ 6.8, 4, _cargoNodeZ, },{ -0.2, 0, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },
@@ -60,7 +58,7 @@ function data()
 					{
 						-- order = 999,
 						personEdges = { 2 },
-						personNodes = { 4 },
+						personNodes = { 5 },
 						vehicleNode = 2,
 					},
 				},

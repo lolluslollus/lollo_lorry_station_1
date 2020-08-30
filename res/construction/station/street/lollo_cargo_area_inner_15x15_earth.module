@@ -85,7 +85,7 @@ return {
 		}
 	end,
 
-	getModelsFn = function()
+	getModelsFn = function(params)
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_15x15_earth.mdl',

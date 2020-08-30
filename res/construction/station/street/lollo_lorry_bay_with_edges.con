@@ -1,21 +1,21 @@
 local _allStreetData = require('lollo_lorry_station._allStreetData')
 local _constants = require('lollo_lorry_station.constants')
--- local arrayUtils = require('lollo_lorry_station.arrayUtils')
--- local fileUtils = require('lollo_lorry_station.fileUtils')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
-local transf = require "transf"
-local vec3 = require "vec3"
+local transf = require 'transf'
+local vec3 = require 'vec3'
 
 function data()
 	-- print('LOLLO _allStreetData in con =')
 	-- debugPrint(_allStreetData)
 
-	-- local _getDefaultStreetTypeIndex = function()
-	-- 	local result = arrayUtils.findIndex(_allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
-	-- 	if result < 0 then
-	-- 		result = arrayUtils.findIndex(_allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
-	-- 	end
-	-- end
+	local _getDefaultStreetTypeIndex = function()
+		local result = arrayUtils.findIndex(_allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+		if result < 0 then
+			result = arrayUtils.findIndex(_allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+		end
+		return result
+	end
 
 	return {
 		type = 'STREET_STATION_CARGO',
@@ -34,20 +34,20 @@ function data()
 		autoRemovable = false,
 		skipCollision = true,
 		params = {
-			-- {
-			-- 	key = 'streetType_',
-			-- 	name = _('Street type'),
-			-- 	values = arrayUtils.map(
-			-- 		_allStreetData,
-			-- 		function(str)
-			-- 			return str.name
-			-- 		end
-			-- 	),
-			-- 	uiType = 'COMBOBOX',
-			-- 	defaultIndex = _getDefaultStreetTypeIndex()
-			-- 	-- yearFrom = 1925,
-			-- 	-- yearTo = 0
-			-- },
+			{
+				key = 'streetType_',
+				name = _('Street type'),
+				values = arrayUtils.map(
+					_allStreetData,
+					function(str)
+						return str.name
+					end
+				),
+				uiType = 'COMBOBOX',
+				defaultIndex = _getDefaultStreetTypeIndex()
+				-- yearFrom = 1925,
+				-- yearTo = 0
+			},
 			{
 				key = 'isStoreCargoOnPavement',
 				name = _('Store cargo on the pavement'),
@@ -61,16 +61,15 @@ function data()
 		},
 		updateFn = function(params, two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
-			-- local streetData = two.globalStreetData[params.streetType_ + 1]
 			local function _getTramTrackType(params)
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
 			end
-			-- local _selectedStreetData = _allStreetData[params.streetType_ + 1]
-			local _selectedStreetData = _allStreetData[15]
+			-- local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
+			local _selectedStreetData = _allStreetData[params.streetType_ + 1]
+			-- local _selectedStreetData = _allStreetData[15]
 			-- print('LOLLO _selectedStreetData =')
 			-- debugPrint(_selectedStreetData)
-			-- local _streetYOffset = -(_selectedStreetData.sidewalkWidth + _selectedStreetData.rightLaneWidth) * 0.5
 			local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
 			local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
 			-- print('LOLLO _streetYOffset =', _streetYOffset)
@@ -151,7 +150,7 @@ function data()
 					{
 						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelFileName or _constants.lorryBayStreetsideEntrance15x5ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
-						tag = _constants.lorryBayStreetside15x5ModelTag,
+						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelTag or _constants.lorryBayStreetsideEntrance15x5ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 					},
 				},

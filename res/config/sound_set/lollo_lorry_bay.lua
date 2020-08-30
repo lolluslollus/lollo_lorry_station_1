@@ -13,8 +13,8 @@ function data()
 
 local data = soundsetutil.makeSoundSet()
 
-soundsetutil.addTrackParam01(data, "car_horn.wav", 25.0,
-		{ { .0, .5 } }, { { .0, 0.7 } }, "cargo01")
+-- soundsetutil.addTrackParam01(data, "car_horn.wav", 25.0,
+-- 		{ { .0, .5 } }, { { .0, 0.7 } }, "cargo01")
 		
 soundsetutil.addEventParam01(data, "random32", randomEventNames, 50.0,
 		{ { .33, 1.0 }, { .34, .0 } }, { { .0, 1.0 } }, "cargo01")

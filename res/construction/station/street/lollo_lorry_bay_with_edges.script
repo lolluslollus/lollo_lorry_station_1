@@ -1,19 +1,27 @@
-local _constants = require('lollo_lorry_station/constants')
-local slotUtils = require('lollo_lorry_station/slotHelpers')
-local transf = require "transf"
-local vec3 = require "vec3"
+local _constants = require('lollo_lorry_station.constants')
+local slotUtils = require('lollo_lorry_station.slotHelpers')
+local transf = require 'transf'
+local vec3 = require 'vec3'
 
 function data()
 	return {
 		updateFn = function(params, two)
-			local streetData = two.globalStreetData[params.streetType_ + 1]
+			-- LOLLO NOTE I cannot call the api from here, sigh.
 			local function _getTramTrackType(params)
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
 			end
-			-- local _streetFileName = 'standard/country_medium_new.lua'
-			local _streetFileName = 'standard/country_medium_one_way_new.lua'
-			-- LOLLO NOTE I cannot call the api from here, sigh.
+			local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
+			-- local _selectedStreetData = _allStreetData[params.streetType_ + 1]
+			-- local _selectedStreetData = _allStreetData[15]
+			print('LOLLO _selectedStreetData =')
+			debugPrint(_selectedStreetData)
+			local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
+			local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
+			-- print('LOLLO _streetYOffset =', _streetYOffset)
+			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
+			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
+			local _streetFileName = _selectedStreetData.fileName
 			local result = {
 				colliders = {},
 				coord2terminalInfo = {},
@@ -22,17 +30,16 @@ function data()
 					{
 						type = 'STREET',
 						params = {
-							skipCollision = true,
 							type = _streetFileName,
 							tramTrackType = 'NO' --_getTramTrackType(params)
 						},
 						edges = {
 							{
-								{11, -6 + _constants.anyStreetsideYShift, 0},
+								{11, _streetYOffset, 0},
 								{-10, 0, 0}
 							},
 							{
-								{1, -6 + _constants.anyStreetsideYShift, 0},
+								{1, _streetYOffset, 0},
 								{-10, 0, 0}
 							},
 						},
@@ -47,11 +54,11 @@ function data()
 						},
 						edges = {
 							{
-								{1, -6 + _constants.anyStreetsideYShift, 0},
+								{1, _streetYOffset, 0},
 								{-2, 0, 0}
 							},
 							{
-								{-1, -6 + _constants.anyStreetsideYShift, 0},
+								{-1, _streetYOffset, 0},
 								{-2, 0, 0},
 							},
 						},
@@ -66,11 +73,11 @@ function data()
 						},
 						edges = {
 							{
-								{-1, -6 + _constants.anyStreetsideYShift, 0},
+								{-1, _streetYOffset, 0},
 								{-10, 0, 0},
 							},
 							{
-								{-11, -6 + _constants.anyStreetsideYShift, 0},
+								{-11, _streetYOffset, 0},
 								{-10, 0, 0},
 							},
 						},
@@ -81,9 +88,15 @@ function data()
 				groundFaces = {},
 				models = {
 					{
+						id = _constants.lorryBayVehicleEdgeModelFileName,
+						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
+						tag = _constants.lorryBayVehicleEdgeModelTag,
+						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
+					},
+					{
 						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelFileName or _constants.lorryBayStreetsideEntrance15x5ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
-						tag = _constants.lorryBayStreetside15x5ModelTag,
+						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelTag or _constants.lorryBayStreetsideEntrance15x5ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 					},
 				},
@@ -211,6 +224,8 @@ function data()
 			-- debugPrint(_slotXYsNested)
 			-- fill slots on and around modules, if present
 			if type(params.modules) == 'table' then
+				print('LOLLO params.modules =')
+				debugPrint(params.modules)
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
 					if moduleBaseId == _constants.idBases.cargoAreaInner5x5SlotId then
@@ -354,11 +369,11 @@ function data()
 			end
 
 			-- join terminals together
-			result.terminateConstructionHook = function(one, two)
+			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
-				-- print('LOLLO starting terminateConstructionHook')
-				-- print('LOLLO result.models =')
-				-- debugPrint(result.models)
+				print('LOLLO starting terminateConstructionHook')
+				print('LOLLO result.models =')
+				debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
@@ -367,8 +382,11 @@ function data()
 				debugPrint(allCargoAreaModelIndexesBase0)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
-				-- print('LOLLO lorryBayModelIndexesBase0 =')
-				-- debugPrint(lorryBayModelIndexesBase0)
+				local vehicleEdgeModelIndexesBase0 = slotUtils.getVehicleEdgeModelIndexesBase0(result.models)
+				print('LOLLO lorryBayModelIndexesBase0 =')
+				debugPrint(lorryBayModelIndexesBase0)
+				print('LOLLO vehicleEdgeModelIndexesBase0 =')
+				debugPrint(vehicleEdgeModelIndexesBase0)
 
 				result.stations = {
 					{
@@ -377,31 +395,36 @@ function data()
 					}
 				}
 				result.terminalGroups = {}
-				local bayIndexBase0 = 0
-				for _, bay in pairs(lorryBayModelIndexesBase0) do
+				local vehicleEdgeModelIndexBase0_Counter = 0
+				-- for _, vehicleEdge in pairs(lorryBayModelIndexesBase0) do
+				for _, vehicleEdgeModelIndex in pairs(vehicleEdgeModelIndexesBase0) do
 					table.insert(
 						result.terminalGroups,
 						{
-							tag = bayIndexBase0,
+							tag = vehicleEdgeModelIndexBase0_Counter,
 							terminals = {
-								{ bay.base0ModelIndex, 0 }
+								{ vehicleEdgeModelIndex, 0 }
 							}
 						}
 					)
 
-					-- local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, bay.x, bay.y)
+					-- local adjacentCargoAreas = slotUtils.getAdjacentValues(cargoAreaModelIndexesBase0, vehicleEdge.x, vehicleEdge.y)
 					-- print('LOLLO adjacentCargoAreas = ')
 					-- debugPrint(adjacentCargoAreas)
 					-- for _, v in pairs(adjacentCargoAreas) do
 					-- 	table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					-- end
 
-					for _, v in pairs(allCargoAreaModelIndexesBase0) do
-						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
+					for _, modelIndex in pairs(lorryBayModelIndexesBase0) do
+						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
 					end
 
-					table.insert(result.stations[1].terminals, bayIndexBase0)
-					bayIndexBase0 = bayIndexBase0 + 1
+					for _, modelIndex in pairs(allCargoAreaModelIndexesBase0) do
+						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
+					end
+
+					table.insert(result.stations[1].terminals, vehicleEdgeModelIndexBase0_Counter)
+					vehicleEdgeModelIndexBase0_Counter = vehicleEdgeModelIndexBase0_Counter + 1
 				end
 
 				-- for lorryBayCounter = 1, tagCounterBase0 do
@@ -440,6 +463,10 @@ function data()
 				debugPrint(result.terminalGroups)
 			end
 
+			-- force join terminals together if no modules present
+			if type(params.modules) ~= 'table' or #params.modules == 0 then
+				result.terminateConstructionHook()
+			end
 			-- print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ')
 			-- debugPrint(result)
 
@@ -451,11 +478,34 @@ function data()
             debugPrint(closureParams)
             return {}
         end,
-        preProcessFn = function(one, two, three)
-            print('LOLLO preProcessFn') -- never fires
-            debugPrint(one)
-            debugPrint(two)
-            debugPrint(three)
+		preProcessFn = function(modules, change, three)
+			print('LOLLO preProcessFn') -- never fires
+			print('modules =')
+			debugPrint(modules)
+			print('change =')
+			debugPrint(change)
+			-- default behaviour
+			if change.added then
+				modules[change.slotId] = change.module
+			else
+				modules[change.slotId] = nil
+			end
+			-- airport behaviour
+			-- if change.added then
+			-- 	if change.slotId == landingSlotId + 1 then
+			-- 		modules[landingSlotId + 0] = nil
+			-- 	elseif change.slotId == landingSlotId + 0 then
+			-- 		modules[landingSlotId + 1] = nil
+			-- 	elseif change.slotId == landingSlotId + 2 then
+			-- 		modules[landingSlotId + 3] = nil
+			-- 	elseif change.slotId == landingSlotId + 3 then
+			-- 		modules[landingSlotId + 2] = nil
+			-- 	end
+			-- 	modules[change.slotId] = change.module
+			-- else
+			-- 	modules[change.slotId] = nil
+			-- end
+			return modules
         end,
         upgradeFn = function(_)
             print('LOLLO upgradeFn') -- never fires

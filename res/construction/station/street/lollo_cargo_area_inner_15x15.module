@@ -84,11 +84,11 @@ return {
 			terminal = 0
 		}
 
-		print('LOLLO result =')
-		debugPrint(result)
+		-- print('LOLLO result =')
+		-- debugPrint(result)
 	end,
 
-	getModelsFn = function()
+	getModelsFn = function(params)
 		return {
 			{
 				id = _constants.cargoAreaInner15x15ModelFileName,

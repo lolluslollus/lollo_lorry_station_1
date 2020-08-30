@@ -1,8 +1,6 @@
 function data()
 	local _cargoNodeY = 0
 	local _cargoNodeZ = 0.3
-	local _vehicleNodeY = -4 -- this depends on the street size
-	local _vehicleNodeZ = 0 -- -0.3
 
 	return {
 		boundingInfo = {
@@ -41,13 +39,6 @@ function data()
 							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
 							transf = { 0, 1.65, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -2.05, -0.02, 1, },
 						},
-						-- waypoint post, just for testing.
-						-- transf[15] = -0.3 puts the height level with the stock waypoint
-						-- {
-						-- 	materials = { "street/signal_waypoint_road/signal_waypoint_road.mtl", },
-						-- 	mesh = "street/signal_waypoint_road/signal_waypoint_road_lod0.msh",
-						-- 	transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1.1000000238419, -0.3, 1, },
-						-- },
 					},
 					name = "RootNode",
 					transf = { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1, },

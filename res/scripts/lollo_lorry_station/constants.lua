@@ -27,6 +27,7 @@ local constants = {
 	lorryBayStreetside15x5ModelTag = 'lorryBayStreetside15x5',
 	lorryBayStreetside15x5ModuleType = 'lorry_bay_streetside_15x5',
 	lorryBayStreetsideEntrance15x5ModelFileName = 'lollo_lorry_station/lorry_bay_streetside_entrance_15x5.mdl',
+	lorryBayStreetsideEntrance15x5ModelTag = 'lorryBayStreetsideEntrance15x5',
 	lorryBayVehicleEdgeModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge.mdl',
 	lorryBayVehicleEdgeModelTag = 'lorryBayVehicleEdge',
 	-- markModelFileName = 'lollo_lorry_station/lollo_mark.mdl',

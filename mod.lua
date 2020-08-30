@@ -1,7 +1,5 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
-local fileUtils = require('lollo_lorry_station.fileUtils')
 local streetUtils = require('lollo_lorry_station.streetUtils')
-local _constants = require('lollo_lorry_station.constants')
 
 function data()
     local function _getUiTypeNumber(uiTypeStr)
@@ -20,6 +18,7 @@ function data()
         newCon.fileName = newFileName
         newCon.type = staticCon.type
         newCon.description = staticCon.description
+        newCon.description.name = 'Lollo roadside lorry bay with postRunFn'
         -- newCon.availability = { yearFrom = 1925, yearTo = 0 } -- this dumps, the api wants it different
         newCon.availability.yearFrom = availability.yearFrom
         newCon.availability.yearTo = availability.yearTo
@@ -75,7 +74,7 @@ function data()
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
         postRunFn = function(settings, params)
-            local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
+            -- local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
             -- print('LOLLO currentDir in postRunFn =')
             -- debugPrint(currentDir)
 
@@ -83,13 +82,15 @@ function data()
             -- print('LOLLO streetData in postRunFn =')
             -- debugPrint(streetData)
             -- print('LOLLO about to save')
-            local saveResult = fileUtils.saveTable(streetData or {}, currentDir .. _constants.streetDataFileName)
+            -- local saveResult = fileUtils.saveTable(streetData or {}, currentDir .. _constants.streetDataFileName)
             -- print('LOLLO saveResult =')
             -- debugPrint(saveResult)
 
-            if true then return end
+            -- if true then return end
             -- LOLLO NOTE the following works with non-modular constructions, but this one is modular.
             -- Waiting for a fix or documentation.
+            -- The program dumps when plopping a module:
+            -- "key not found: name"
             -- In the meantime, we write to a file here and read it in the .con
             -- The trouble is, first .con is called twice, then postRunFn, then again .con twice.
             -- If the file does not exist, even if it written correctly here, the .con will dump
@@ -97,9 +98,9 @@ function data()
             -- The first time you run this mod, only its data will take effect;
             -- The next game start will read the correct data.
 
-            local defaultStreetTypeIndex = arrayUtils.findIndex(streetData or {}, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+            local defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
             if defaultStreetTypeIndex < 0 then
-                defaultStreetTypeIndex = arrayUtils.findIndex(streetData or {}, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+                defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
             end
 
             _addAvailableConstruction(
@@ -112,7 +113,7 @@ function data()
                         key = 'streetType_',
                         name = _('Street type'),
                         values = arrayUtils.map(
-                            streetData or {},
+                            streetData,
                             function(str)
                                 return str.name
                             end
@@ -133,7 +134,7 @@ function data()
                         defaultIndex = 1
                     },
                 },
-                streetData or {}
+                streetData
             )
         end
     }
