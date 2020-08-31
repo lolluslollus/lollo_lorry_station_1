@@ -1,5 +1,5 @@
 local _cargoNodeZ = 0.3
-local _materials = { "street/country_old_large_paving.mtl", "street/country_old_large_paving.mtl", }
+local _materials = { 'street/country_old_large_paving.mtl', 'street/country_old_large_paving.mtl', }
 
 function data()
     return {
@@ -12,16 +12,16 @@ function data()
                 halfExtents = { 7.4, 7.4, 1.0, },
             },
             transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-            type = "BOX",
+            type = 'BOX',
         },
         lods = {
             {
                 node = {
                     children = {
 						{
-							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
+							-- materials = { 'street/new_medium_sidewalk_border_inner.mtl', 'street/new_medium_sidewalk.mtl', },
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, -7.5, -0.02, 1, },
 						},
 						{
@@ -36,13 +36,13 @@ function data()
 						},
 						{
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -7.5, -0.02, 1, },
                         },
 
                         {
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, -2.5, -0.02, 1, },
 						},
 						{
@@ -57,13 +57,13 @@ function data()
 						},
 						{
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, -2.5, -0.02, 1, },
                         },
 
                         {
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -7.5, 2.5, -0.02, 1, },
 						},
 						{
@@ -78,11 +78,11 @@ function data()
 						},
 						{
 							materials = _materials,
-							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
+							mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
 							transf = { 0, 2.05, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 7.5, 2.5, -0.02, 1, },
 						},
 					},
-                    name = "RootNode",
+                    name = 'RootNode',
                     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
                 },
                 static = false,
@@ -467,13 +467,13 @@ function data()
                                 3,
                             },
                         },
-                        transportModes = { "CARGO", },
+                        transportModes = { 'CARGO', },
                         speedLimit = 30,
                     },
 
                     -- laneutil.createLanes(
-                    --     generatedData["lanes_terminal"], -- curves
-                    --     { "CARGO" }, -- transport means
+                    --     generatedData['lanes_terminal'], -- curves
+                    --     { 'CARGO' }, -- transport means
                     --     20, -- max speed
                     --     4, -- lane width
                     --     true -- linkable

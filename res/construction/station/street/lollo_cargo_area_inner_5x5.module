@@ -18,8 +18,8 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Lollo small cargo area"),
-		description = _("Lollo small platform for waiting cargo."),
+		name = _("Cargo area, 5 x 5 m"),
+		description = _("Area for waiting cargo, 5 x 5 m."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	},
 	metadata = {

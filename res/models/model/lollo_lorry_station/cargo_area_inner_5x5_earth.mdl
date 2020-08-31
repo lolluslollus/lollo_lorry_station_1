@@ -1,5 +1,5 @@
 local _cargoNodeZ = 0.3
-local _materials = { 'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl', }
+local _materials = { 'street/country_old_large_paving.mtl', 'street/country_old_large_paving.mtl', }
 
 function data()
     return {
