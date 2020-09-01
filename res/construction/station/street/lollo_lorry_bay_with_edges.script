@@ -125,30 +125,9 @@ function data()
 
 			-- set default slot locations
 			local _slotXYsNested = {
-				{ -- slots for 5x5 modules
-					-- ['-1'] = {
-					-- 	['1'] = true,
-					-- },
-					-- ['0'] = {
-					-- 	['1'] = true,
-					-- },
-					-- ['1'] = {
-					-- 	['1'] = true,
-					-- },
-				},
-				{ -- slots for 15x5 modules
-					-- ['-3'] = {
-					-- 	['0'] = true,
-					-- },
-					-- ['3'] = {
-					-- 	['0'] = true,
-					-- },
-				},
-				{ -- slots for 15x15 modules
-					-- ['0'] = {
-					-- 	['2'] = true,
-					-- },
-				},
+				{}, -- slots for 5x5 inner modules
+				{}, -- slots for 15x5 streetside modules
+				{}, -- slots for 15x15 inner modules
 			}
 			local _isSlotOpen = function(level, x, y)
 				return slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == true
@@ -161,7 +140,6 @@ function data()
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
 
-			-- bar slots for main slot, the one with the vehicle loading bay
 			_setSlotBarred(1, -1, -1)
 			_setSlotBarred(1, -1, 0)
 			_trySetSlotOpen(1, -1, 1)
@@ -177,21 +155,21 @@ function data()
 			else
 				_setSlotBarred(2, -3, 0)
 			end
-			_setSlotBarred(2, -2, -1)
-			_setSlotBarred(2, -2, 0)
-			_setSlotBarred(2, -2, 1)
-			_setSlotBarred(2, -1, -1)
-			_setSlotBarred(2, -1, 0)
-			_setSlotBarred(2, -1, 1)
-			_setSlotBarred(2, 0, -1)
-			_setSlotBarred(2, 0, 0)
-			_setSlotBarred(2, 0, 1)
-			_setSlotBarred(2, 1, -1)
-			_setSlotBarred(2, 1, 0)
-			_setSlotBarred(2, 1, 1)
-			_setSlotBarred(2, 2, -1)
-			_setSlotBarred(2, 2, 0)
-			_setSlotBarred(2, 2, 1)
+			-- _setSlotBarred(2, -2, -1)
+			-- _setSlotBarred(2, -2, 0)
+			-- _setSlotBarred(2, -2, 1)
+			-- _setSlotBarred(2, -1, -1)
+			-- _setSlotBarred(2, -1, 0)
+			-- _setSlotBarred(2, -1, 1)
+			-- _setSlotBarred(2, 0, -1)
+			-- _setSlotBarred(2, 0, 0)
+			-- _setSlotBarred(2, 0, 1)
+			-- _setSlotBarred(2, 1, -1)
+			-- _setSlotBarred(2, 1, 0)
+			-- _setSlotBarred(2, 1, 1)
+			-- _setSlotBarred(2, 2, -1)
+			-- _setSlotBarred(2, 2, 0)
+			-- _setSlotBarred(2, 2, 1)
 			if params.isStoreCargoOnPavement == 1 then
 				_trySetSlotOpen(2, 3, 0)
 			else
@@ -202,10 +180,12 @@ function data()
 			_setSlotBarred(3, -2, -1)
 			_setSlotBarred(3, -2, 0)
 			_setSlotBarred(3, -2, 1)
+			_trySetSlotOpen(3, -2, 2)
 			_setSlotBarred(3, -1, -2)
 			_setSlotBarred(3, -1, -1)
 			_setSlotBarred(3, -1, 0)
 			_setSlotBarred(3, -1, 1)
+			_trySetSlotOpen(3, -1, 2)
 			_setSlotBarred(3, 0, -2)
 			_setSlotBarred(3, 0, -1)
 			_setSlotBarred(3, 0, 0)
@@ -215,10 +195,12 @@ function data()
 			_setSlotBarred(3, 1, -1)
 			_setSlotBarred(3, 1, 0)
 			_setSlotBarred(3, 1, 1)
+			_trySetSlotOpen(3, 1, 2)
 			_setSlotBarred(3, 2, -2)
 			_setSlotBarred(3, 2, -1)
 			_setSlotBarred(3, 2, 0)
 			_setSlotBarred(3, 2, 1)
+			_trySetSlotOpen(3, 2, 2)
 
 			-- print('LOLLO _slotXYsNested before beginning =')
 			-- debugPrint(_slotXYsNested)
@@ -251,14 +233,15 @@ function data()
 						_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
 						_trySetSlotOpen(2, moduleX - 3, moduleY)
 						_trySetSlotOpen(2, moduleX + 3, moduleY)
-						-- _trySetSlotOpen(2, moduleX, moduleY)
 						_trySetSlotOpen(3, moduleX - 2, moduleY + 2)
 						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
 						_trySetSlotOpen(3, moduleX, moduleY + 2)
 						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
 						_trySetSlotOpen(3, moduleX + 2, moduleY + 2)
 						for i = -1, 1 do
-							_setSlotBarred(1, moduleX + i, moduleY)
+							if i ~= 0 then
+								_setSlotBarred(1, moduleX + i, moduleY)
+							end
 						end
 						for i = -2, 2 do
 							if i ~= 0 then
@@ -267,7 +250,9 @@ function data()
 						end
 						for i = -2, 2 do
 							for j = -1, 1 do
-								_setSlotBarred(3, moduleX + i, moduleY + j)
+								if i ~= 0 or j ~= 0 then
+									_setSlotBarred(3, moduleX + i, moduleY + j)
+								end
 							end
 						end
 					elseif moduleBaseId == _constants.idBases.cargoAreaInner15x15SlotId then
@@ -285,18 +270,24 @@ function data()
 						_trySetSlotOpen(1, moduleX - 1, moduleY + 2)
 						_trySetSlotOpen(1, moduleX, moduleY + 2)
 						_trySetSlotOpen(1, moduleX + 1, moduleY + 2)
-						_trySetSlotOpen(3, moduleX + 3, moduleY)
-						_trySetSlotOpen(3, moduleX - 3, moduleY)
-						_trySetSlotOpen(3, moduleX, moduleY + 3)
-						_trySetSlotOpen(3, moduleX, moduleY - 3)
+						for ij = -2, 2 do
+							_trySetSlotOpen(3, moduleX - 3, moduleY + ij)
+							_trySetSlotOpen(3, moduleX + 3, moduleY + ij)
+							_trySetSlotOpen(3, moduleX + ij, moduleY - 3)
+							_trySetSlotOpen(3, moduleX + ij, moduleY + 3)
+						end
 						for i = -1, 1 do
 							for j = -1, 1 do
-								_setSlotBarred(1, moduleX + i, moduleY + j)
+								if i ~= 0 or j ~= 0 then
+									_setSlotBarred(1, moduleX + i, moduleY + j)
+								end
 							end
 						end
 						for i = -2, 2 do
 							for j = -1, 1 do
-								_setSlotBarred(2, moduleX + i, moduleY + j)
+								if i ~= 0 or j ~= 0 then
+									_setSlotBarred(2, moduleX + i, moduleY + j)
+								end
 							end
 						end
 						for i = -2, 2 do
