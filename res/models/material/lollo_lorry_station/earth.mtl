@@ -26,8 +26,8 @@ function data()
                 wrapT = "REPEAT",
             },
             map_normal = {
-                -- fileName = "streets/country_old_medium_paving_normal.dds",
-                fileName = "ground_texture/farmland_brown_01_nrml.dds",
+                fileName = "streets/country_old_medium_paving_normal.dds",
+                -- fileName = "ground_texture/farmland_brown_01_nrml.dds",
                 redGreen = true,
                 type = "TWOD",
                 wrapS = "REPEAT",
@@ -46,7 +46,7 @@ function data()
                 wrapT = "REPEAT",
             },
             normal_scale = {
-                normalScale = 0.36,
+                normalScale = 0.3,
             },
             operation_1 = {
                 mode = "WORLD_XY",
