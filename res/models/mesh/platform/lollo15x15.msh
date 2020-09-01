@@ -1,0 +1,54 @@
+function data()
+return {
+	matConfigs = {
+		{ 0, }, 
+	},
+	subMeshes = {
+		{
+			indices = {
+				normal = {
+					count = 204,
+					offset = 796,
+				},
+				position = {
+					count = 204,
+					offset = 1204,
+				},
+				tangent = {
+					count = 204,
+					offset = 592,
+				},
+				uv0 = {
+					count = 204,
+					offset = 1000,
+				},
+			},
+			materials = {
+				"station/road/streetstation/streetstation_perron_base_old.mtl", 
+			},
+		}, 
+	},
+	vertexAttr = {
+		normal = {
+			count = 132,
+			numComp = 3,
+			offset = 192,
+		},
+		position = {
+			count = 156,
+			numComp = 3,
+			offset = 436,
+		},
+		tangent = {
+			count = 192,
+			numComp = 4,
+			offset = 0,
+		},
+		uv0 = {
+			count = 112,
+			numComp = 2,
+			offset = 324,
+		},
+	},
+}
+end

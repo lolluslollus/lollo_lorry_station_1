@@ -3,6 +3,7 @@
         "*.con": "lua",
         "*.mdl": "lua",
         "*.module": "lua",
+        "*.msh": "lua",
         "*.mtl": "lua",
         "*.script": "lua",
     },
