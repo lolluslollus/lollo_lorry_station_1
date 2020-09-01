@@ -3,6 +3,7 @@ local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
 local _constants = require('lollo_lorry_station/constants')
+local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 
 function data()
 
@@ -58,24 +59,15 @@ return {
 		-- 	terminal = 0,
 		-- }
 
-		local faces = {
+		local face = {
 			{-8.5, -8.5, 0, 1},
 			{-8.5, 8.5, 0, 1},
 			{8.5, 8.5, 0, 1},
 			{8.5, -8.5, 0, 1},
 		}
-		modulesutil.TransformFaces(transform, faces)
-		result.groundFaces[#result.groundFaces + 1] = {
-			face = faces,
-			loop = true,
-			modes = {
-				{
-					type = 'FILL',
-					key = 'shared/dirt.gtex.lua'
-				}
-			}
-		}
-
+		modulesutil.TransformFaces(transform, face)
+		result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/dirt.gtex.lua')
+		result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 		-- if not result.coord2terminalInfo[tostring(x)] then
 		-- 	result.coord2terminalInfo[tostring(x)] = {}
 		-- end
