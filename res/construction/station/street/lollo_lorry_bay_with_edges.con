@@ -78,7 +78,7 @@ function data()
 			local _streetFileName = _selectedStreetData.fileName
 			local result = {
 				colliders = {},
-				coord2terminalInfo = {},
+				-- coord2terminalInfo = {},
 				cost = 1000,
 				edgeLists = {
 					{

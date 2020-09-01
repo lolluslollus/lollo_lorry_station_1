@@ -18,8 +18,8 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Cargo area with earth, 15 x 15 m"),
-		description = _("Area for waiting cargo, 15 x 15 m, with earth."),
+		name = _("Cargo area with gravel, 15 x 15 m"),
+		description = _("Area for waiting cargo, 15 x 15 m, with gravel."),
 		icon = "ui/construction/station/street/platform_cargo.tga"
 	},
 	metadata = {
@@ -39,7 +39,7 @@ return {
 
 		-- addModelFn(_constants.cargoAreaInner15x15ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
-			id = 'lollo_lorry_station/cargo_area_inner_15x15_earth.mdl', --_constants.cargoAreaInner15x15ModelFileName,
+			id = 'lollo_lorry_station/cargo_area_inner_15x15_gravel.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
 			tag = _constants.cargoAreaInner15x15ModelTag
@@ -88,7 +88,7 @@ return {
 	getModelsFn = function(params)
 		return {
 			{
-				id = 'lollo_lorry_station/cargo_area_inner_15x15_earth.mdl',
+				id = 'lollo_lorry_station/cargo_area_inner_15x15_gravel.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

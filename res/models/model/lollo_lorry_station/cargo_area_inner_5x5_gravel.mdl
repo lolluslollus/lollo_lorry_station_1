@@ -3,7 +3,7 @@ function data()
     return {
         boundingInfo = mdlHelpers.getCargoAreaInner5x5BoundingInfo(),
         collider = mdlHelpers.getCargoAreaInner5x5Collider(),
-        lods = mdlHelpers.getCargoAreaInner5x5Lods(),
+        lods = mdlHelpers.getCargoAreaInner5x5GravelLods(),
         metadata = mdlHelpers.getCargoAreaInner5x5Metadata(),
         version = 1
     }
