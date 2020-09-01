@@ -59,14 +59,15 @@ return {
 		-- }
 
 		local faces = {
-			{-7.5, -7.5, 0, 1},
-			{-7.5, 7.5, 0, 1},
-			{7.5, 7.5, 0, 1},
-			{7.5, -7.5, 0, 1},
+			{-8.5, -8.5, 0, 1},
+			{-8.5, 8.5, 0, 1},
+			{8.5, 8.5, 0, 1},
+			{8.5, -8.5, 0, 1},
 		}
 		modulesutil.TransformFaces(transform, faces)
 		result.groundFaces[#result.groundFaces + 1] = {
 			face = faces,
+			loop = true,
 			modes = {
 				{
 					type = 'FILL',
