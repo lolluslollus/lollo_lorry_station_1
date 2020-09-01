@@ -190,7 +190,9 @@ function data()
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], false, x, y)
 			end
 			local _trySetSlotOpen = function(level, x, y)
-				if slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == false then return end
+                if slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == false then return end
+                -- LOLLO TODO make sure x and y are inside their bounds: check this
+                if x < _constants.xMin or x > _constants.xMax or y < _constants.yMin or y > _constants.yMax then return end
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
 
