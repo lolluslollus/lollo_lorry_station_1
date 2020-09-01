@@ -71,7 +71,7 @@ return {
 			modes = {
 				{
 					type = 'FILL',
-					key = 'shared/gravel_03.gtex.lua' -- 'asphalt_like_street.lua', -- 'shared/asphalt_01.gtex.lua' --'shared/gravel_03.gtex.lua'
+					key = 'shared/dirt.gtex.lua'
 				}
 			}
 		}
