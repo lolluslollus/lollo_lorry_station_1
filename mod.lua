@@ -73,7 +73,7 @@ function data()
         -- It is the only place where we can define a dynamic construction,
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
-        postRunFn = function(settings, params)
+        postRunFnBAK = function(settings, params)
             -- local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
             -- print('LOLLO currentDir in postRunFn =')
             -- debugPrint(currentDir)
