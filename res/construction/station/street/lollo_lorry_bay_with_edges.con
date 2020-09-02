@@ -69,7 +69,19 @@ function data()
                     _('ELECTRIC')
                 },
                 defaultIndex = 0
-            },
+			},
+			{
+				key = 'extraLength',
+				name = _('Extra Length'),
+				-- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
+				values = arrayUtils.map(
+					moduleHelpers.getLengths(),
+					function(length)
+						return tostring(length) .. 'm'
+					end
+				),
+				defaultIndex = 0
+			},
 		},
 		updateFn = function(params, two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
@@ -88,6 +100,7 @@ function data()
 			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			local _streetFileName = _selectedStreetData.fileName
+			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
 			local result = {
 				colliders = {},
 				-- coord2terminalInfo = {},
@@ -101,12 +114,12 @@ function data()
 						},
 						edges = {
 							{
-								{11, _streetYOffset, 0},
-								{-10, 0, 0}
+								{11 + _halfExtraLength, _streetYOffset, 0},
+								{-10 -_halfExtraLength, 0, 0}
 							},
 							{
 								{1, _streetYOffset, 0},
-								{-10, 0, 0}
+								{-10 -_halfExtraLength, 0, 0}
 							},
 						},
 						freeNodes = {},
@@ -140,11 +153,11 @@ function data()
 						edges = {
 							{
 								{-1, _streetYOffset, 0},
-								{-10, 0, 0},
+								{-10 -_halfExtraLength, 0, 0},
 							},
 							{
-								{-11, _streetYOffset, 0},
-								{-10, 0, 0},
+								{-11 - _halfExtraLength, _streetYOffset, 0},
+								{-10 -_halfExtraLength, 0, 0},
 							},
 						},
 						freeNodes = {},

@@ -31,4 +31,18 @@ helpers.getTerrainAlignmentList = function(face)
     }
 end
 
+local _lengthMultiplier = 10
+local _lengths = {}
+for i = 0, 12 do -- watch out, the parameters have base 0
+    table.insert(_lengths, i * _lengthMultiplier)
+end
+
+helpers.getLengthMultiplier = function()
+    return _lengthMultiplier
+end
+
+helpers.getLengths = function()
+    return _lengths
+end
+
 return helpers
