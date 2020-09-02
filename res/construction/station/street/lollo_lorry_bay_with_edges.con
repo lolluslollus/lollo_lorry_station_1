@@ -1,6 +1,7 @@
 local _allStreetData = require('lollo_lorry_station._allStreetData')
 local _constants = require('lollo_lorry_station.constants')
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transf = require 'transf'
 local vec3 = require 'vec3'
@@ -173,6 +174,15 @@ function data()
 				demangleId = slotUtils.demangleId,
 				mangleId = slotUtils.mangleId,
 			}
+
+			local face = {
+				{-8.5, -2.5, 0, 1},
+				{-8.5, 3, 0, 1},
+				{8.5, 3, 0, 1},
+				{8.5, -2.5, 0, 1},
+			}
+			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
+			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
