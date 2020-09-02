@@ -58,7 +58,18 @@ function data()
 					_('Yes')
 				},
 				defaultIndex = 1
-			}
+			},
+			{
+                key = 'tramTrack',
+                name = _('Tram track type'),
+                values = {
+                    -- must be in this sequence
+                    _('NO'),
+                    _('YES'),
+                    _('ELECTRIC')
+                },
+                defaultIndex = 0
+            },
 		},
 		updateFn = function(params, two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
@@ -86,7 +97,7 @@ function data()
 						type = 'STREET',
 						params = {
 							type = _streetFileName,
-							tramTrackType = 'NO' --_getTramTrackType(params)
+							tramTrackType = _getTramTrackType(params)
 						},
 						edges = {
 							{
@@ -105,7 +116,7 @@ function data()
 						type = 'STREET',
 						params = {
 							type = _streetFileName,
-							tramTrackType = 'NO' --_getTramTrackType(params)
+							tramTrackType = _getTramTrackType(params)
 						},
 						edges = {
 							{
@@ -124,7 +135,7 @@ function data()
 						type = 'STREET',
 						params = {
 							type = _streetFileName,
-							tramTrackType = 'NO' --_getTramTrackType(params)
+							tramTrackType = _getTramTrackType(params)
 						},
 						edges = {
 							{
@@ -137,7 +148,7 @@ function data()
 							},
 						},
 						freeNodes = {},
-						snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non free, to avoid collisions when configuring a finalised station
+						snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non-free, to avoid collisions when configuring a finalised station
 					},
 				},
 				groundFaces = {},
