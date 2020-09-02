@@ -170,8 +170,8 @@ function data()
 				stations = {},
 				terminalGroups = {},
 				terrainAlignmentLists = {},
-				DemangleId = slotUtils.demangleId,
-				MangleId = slotUtils.mangleId,
+				demangleId = slotUtils.demangleId,
+				mangleId = slotUtils.mangleId,
 			}
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
@@ -191,7 +191,6 @@ function data()
 			end
 			local _trySetSlotOpen = function(level, x, y)
                 if slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == false then return end
-                -- LOLLO TODO make sure x and y are inside their bounds: check this
                 if x < _constants.xMin or x > _constants.xMax or y < _constants.yMin or y > _constants.yMax then return end
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
@@ -212,19 +211,19 @@ function data()
 				_setSlotBarred(2, -3, 0)
 			end
 			-- _setSlotBarred(2, -2, -1)
-			-- _setSlotBarred(2, -2, 0)
+			_setSlotBarred(2, -2, 0)
 			-- _setSlotBarred(2, -2, 1)
 			-- _setSlotBarred(2, -1, -1)
-			-- _setSlotBarred(2, -1, 0)
+			_setSlotBarred(2, -1, 0)
 			-- _setSlotBarred(2, -1, 1)
 			-- _setSlotBarred(2, 0, -1)
-			-- _setSlotBarred(2, 0, 0)
+			_setSlotBarred(2, 0, 0)
 			-- _setSlotBarred(2, 0, 1)
 			-- _setSlotBarred(2, 1, -1)
-			-- _setSlotBarred(2, 1, 0)
+			_setSlotBarred(2, 1, 0)
 			-- _setSlotBarred(2, 1, 1)
 			-- _setSlotBarred(2, 2, -1)
-			-- _setSlotBarred(2, 2, 0)
+			_setSlotBarred(2, 2, 0)
 			-- _setSlotBarred(2, 2, 1)
 			if params.isStoreCargoOnPavement == 1 then
 				_trySetSlotOpen(2, 3, 0)
@@ -265,7 +264,7 @@ function data()
 				print('LOLLO params.modules =')
 				debugPrint(params.modules)
 				for moduId, _ in pairs(params.modules) do
-					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
+					local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
 					if moduleBaseId == _constants.idBases.cargoAreaInner5x5SlotId then
 						_trySetSlotOpen(1, moduleX - 1, moduleY)
 						_trySetSlotOpen(1, moduleX + 1, moduleY)
@@ -377,7 +376,7 @@ function data()
 					then
 						table.insert(result.slots, {
 							-- height = 1,
-							id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside15x5SlotId),
+							id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside15x5SlotId),
 							-- shape 1 2 3 4
 							spacing = _constants.anyStreetsideSpacing,
 							transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
@@ -392,7 +391,7 @@ function data()
 				if _isSlotOpen(3, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
@@ -406,7 +405,7 @@ function data()
 				if _isSlotOpen(1, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaInner5x5SlotId),
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner5x5SlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),

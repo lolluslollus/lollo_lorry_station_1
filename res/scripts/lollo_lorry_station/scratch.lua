@@ -92,11 +92,11 @@ local dummy = 0
 -- end
 -- arrayUtils.sort(_idBasesSortedDesc, 'id', false)
 
--- local MangleId = function(x, y, baseId)
+-- local mangleId = function(x, y, baseId)
 -- 	return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 -- end
 
--- -- result.DemangleId = function(slotId)
+-- -- result.demangleId = function(slotId)
 -- -- 	local rem = slotId % 100
 -- -- 	local variant = rem
 -- -- 	slotId = (slotId - rem) / 100
@@ -106,7 +106,7 @@ local dummy = 0
 -- -- 	return coordI, slotId - 100, variant
 -- -- end
 
--- local DemangleId = function(slotId)
+-- local demangleId = function(slotId)
 -- 	local function _getIdBase(slotId)
 -- 		local baseId = 0
 -- 		for _, v in pairs(_idBasesSortedDesc) do
@@ -131,13 +131,13 @@ local dummy = 0
 -- local mangledIds = {}
 -- for x = _constants.xMin, _constants.xMax do
 -- 	for y = _constants.yMin, _constants.yMax do
--- 		mangledIds[#mangledIds + 1] = MangleId(x, y, _constants.idBases.cargoAreaInner15x15SlotId)
+-- 		mangledIds[#mangledIds + 1] = mangleId(x, y, _constants.idBases.cargoAreaInner15x15SlotId)
 -- 	end
 -- end
 
 -- local demangledIds = {}
 -- for i = 1, #mangledIds do
--- 	local x, y, baseId = DemangleId(mangledIds[i])
+-- 	local x, y, baseId = demangleId(mangledIds[i])
 -- 	demangledIds[#demangledIds + 1] = {x, y, baseId}
 -- end
 -- game = {

@@ -56,8 +56,8 @@ function data()
 				stations = {},
 				terminalGroups = {},
 				terrainAlignmentLists = {},
-				DemangleId = nil,
-				MangleId = nil,
+				demangleId = nil,
+				mangleId = nil,
 			}
 			print('LOLLO starting updateFn, params = ')
 			debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
@@ -92,11 +92,11 @@ function data()
 				})
 			end
 
-			result.MangleId = function(x, y, baseId)
+			result.mangleId = function(x, y, baseId)
 				return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 			end
 
-			result.DemangleId = function(slotId)
+			result.demangleId = function(slotId)
 				local function _getIdBase(slotId)
 					local baseId = 0
 					for _, v in pairs(_constants.idBasesSortedDesc) do
@@ -202,7 +202,7 @@ function data()
 			}
 			if type(params.modules) == 'table' then
 				for moduId, _ in pairs(params.modules) do
-					local moduleX, moduleY, moduleBaseId = result.DemangleId(moduId)
+					local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
 					if moduleBaseId == _constants.idBases.cargoAreaInner15x15SlotId 
 					or moduleBaseId == _constants.idBases.rightLorryBaySlotIdBase
 					or moduleBaseId == _constants.idBases.leftLorryBaySlotIdBase then
@@ -220,7 +220,7 @@ function data()
 			for _, v in pairs(adjacentXYs) do
 				_setSlotOccupied(v.x, v.y)
 				table.insert(result.slots, {
-					id = result.MangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
+					id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
 					transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor, 0.0)),
 					-- type = "street_terminal_passenger",
 					type = _constants.cargoAreaInner15x15ModuleType,
@@ -251,7 +251,7 @@ function data()
 
 					local tangents = nodeGroup[2][2]
 					-- _setSlotOccupied(x, y)
-					local slotId = result.MangleId(
+					local slotId = result.mangleId(
 						math.floor(relativePosition[1] / _constants.xTransfFactor),
 						math.floor(relativePosition[2] / _constants.yTransfFactor),
 						_constants.idBases.leftLorryBaySlotIdBase
@@ -281,7 +281,7 @@ function data()
 						node1 = nodeGroup[3],
 						nodeMid = nodeGroup[2]
 					}
-					local slotId = result.MangleId(
+					local slotId = result.mangleId(
 						math.floor(relativePosition[1] / _constants.xTransfFactor),
 						math.floor(relativePosition[2] / _constants.yTransfFactor),
 						_constants.idBases.rightLorryBaySlotIdBase
@@ -431,10 +431,10 @@ debugPrint(adjacentCargoAreas)
 					isNoLorryBays = false
 				end
 			end
-			-- if params.modules[result.MangleId({0, 0, 0})] == nil and params.modules[result.MangleId({-1, 0, 0})] == nil
-			-- and params.modules[result.MangleId({0, 0, 1})] == nil and params.modules[result.MangleId({-1, 0, 1})] == nil
-			-- and params.modules[result.MangleId({55, 0, 3})] == nil and params.modules[result.MangleId({55, 0, 4})] == nil and params.modules[result.MangleId({55, 0, 5})] == nil
-			-- and params.modules[result.MangleId({55, 1, 3})] == nil and params.modules[result.MangleId({55, 1, 4})] == nil and params.modules[result.MangleId({55, 1, 5})] == nil then
+			-- if params.modules[result.mangleId({0, 0, 0})] == nil and params.modules[result.mangleId({-1, 0, 0})] == nil
+			-- and params.modules[result.mangleId({0, 0, 1})] == nil and params.modules[result.mangleId({-1, 0, 1})] == nil
+			-- and params.modules[result.mangleId({55, 0, 3})] == nil and params.modules[result.mangleId({55, 0, 4})] == nil and params.modules[result.mangleId({55, 0, 5})] == nil
+			-- and params.modules[result.mangleId({55, 1, 3})] == nil and params.modules[result.mangleId({55, 1, 4})] == nil and params.modules[result.mangleId({55, 1, 5})] == nil then
 			if isNoLorryBays then
 				table.insert(result.models, {
 					-- id = "asset/icon/marker_exclamation.mdl",

@@ -46,8 +46,8 @@ function data()
 				-- stations = {},
 				-- terminalGroups = {},
 				terrainAlignmentLists = {},
-				-- DemangleId = nil,
-				-- MangleId = nil,
+				-- demangleId = nil,
+				-- mangleId = nil,
 			}
 
 			print('LOLLO starting updateFn, params = ')
