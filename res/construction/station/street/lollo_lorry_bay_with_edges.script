@@ -137,6 +137,7 @@ function data()
 			end
 			local _trySetSlotOpen = function(level, x, y)
 				if slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == false then return end
+				if x < _constants.xMin or x > _constants.xMax or y < _constants.yMin or y > _constants.yMax then return end
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
 
@@ -156,19 +157,19 @@ function data()
 				_setSlotBarred(2, -3, 0)
 			end
 			-- _setSlotBarred(2, -2, -1)
-			-- _setSlotBarred(2, -2, 0)
+			_setSlotBarred(2, -2, 0)
 			-- _setSlotBarred(2, -2, 1)
 			-- _setSlotBarred(2, -1, -1)
-			-- _setSlotBarred(2, -1, 0)
+			_setSlotBarred(2, -1, 0)
 			-- _setSlotBarred(2, -1, 1)
 			-- _setSlotBarred(2, 0, -1)
-			-- _setSlotBarred(2, 0, 0)
+			_setSlotBarred(2, 0, 0)
 			-- _setSlotBarred(2, 0, 1)
 			-- _setSlotBarred(2, 1, -1)
-			-- _setSlotBarred(2, 1, 0)
+			_setSlotBarred(2, 1, 0)
 			-- _setSlotBarred(2, 1, 1)
 			-- _setSlotBarred(2, 2, -1)
-			-- _setSlotBarred(2, 2, 0)
+			_setSlotBarred(2, 2, 0)
 			-- _setSlotBarred(2, 2, 1)
 			if params.isStoreCargoOnPavement == 1 then
 				_trySetSlotOpen(2, 3, 0)
