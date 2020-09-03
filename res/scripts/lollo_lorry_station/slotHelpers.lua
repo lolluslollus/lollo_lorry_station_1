@@ -171,7 +171,7 @@ helpers.getIsLorryBay = function(tag)
 end
 
 helpers.getIsVehicleEdge = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.lorryBayVehicleEdgeRightModelTag) then
+    if type(tag) == 'string' and (tag:find(_constants.lorryBayVehicleEdgeRightModelTag) or tag:find(_constants.lorryBayVehicleEdgeLeftModelTag)) then
         return true
     else
         return false
