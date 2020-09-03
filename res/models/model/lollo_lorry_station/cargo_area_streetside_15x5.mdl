@@ -75,7 +75,7 @@ function data()
 						speedLimit = 30,
 						transportModes = { 'CARGO' },
 					},
-					-- behind the pavement
+					-- behind the pavement, away from the road
 					{
 						linkable = false,
 						nodes = {
@@ -108,6 +108,25 @@ function data()
 						nodes = {
 							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
 							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
+						},
+						speedLimit = 30,
+						transportModes = { 'CARGO' },
+					},
+					-- behind the pavement, toward the road
+					{
+						linkable = false,
+						nodes = {
+							{{ 7, _cargoNodeY, _cargoNodeZ, }, { -5, -3, 0, }, 3},
+							{{ 2, _cargoNodeY - 3, _cargoNodeZ, }, { -5, -3, 0, }, 3}, -- edge 5
+						},
+						speedLimit = 30,
+						transportModes = { 'CARGO' },
+					},
+					{
+						linkable = false,
+						nodes = {
+							{{ -2, _cargoNodeY - 3, _cargoNodeZ, }, { -5, 3, 0, }, 3},
+							{{ -7, _cargoNodeY, _cargoNodeZ, }, { -5, 3, 0, }, 3}, -- edge 6
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },

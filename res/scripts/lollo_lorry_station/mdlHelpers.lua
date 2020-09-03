@@ -66,6 +66,20 @@ helpers.getCargoAreaInner5x5EarthLods = function()
     }
 end
 
+helpers.getCargoLinks5x5 = function()
+    return {
+        {
+            node = {
+                -- name = 'RootNode',
+                -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            },
+            static = false,
+            visibleFrom = 0,
+            visibleTo = 1000,
+        },
+    }
+end
+
 helpers.getCargoAreaInner5x5GravelLods = function()
     local _materials = { 'lollo_lorry_station/gravel.mtl' }
     return {

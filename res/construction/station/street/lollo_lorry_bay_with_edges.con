@@ -71,6 +71,15 @@ function data()
                 defaultIndex = 0
 			},
 			{
+				key = 'direction',
+				name = _('Direction'),
+				values = {
+					_('↑'),
+					_('↓')
+				},
+				defaultIndex = 0
+			},	
+			{
 				key = 'extraLength',
 				name = _('Extra Length'),
 				-- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
@@ -112,7 +121,8 @@ function data()
 							type = _streetFileName,
 							tramTrackType = _getTramTrackType(params)
 						},
-						edges = {
+						edges = params.direction == 0
+						and {
 							{
 								{11 + _halfExtraLength, _streetYOffset, 0},
 								{-10 -_halfExtraLength, 0, 0}
@@ -121,17 +131,6 @@ function data()
 								{1, _streetYOffset, 0},
 								{-10 -_halfExtraLength, 0, 0}
 							},
-						},
-						freeNodes = {},
-						snapNodes = { 0 },
-					},
-					{
-						type = 'STREET',
-						params = {
-							type = _streetFileName,
-							tramTrackType = _getTramTrackType(params)
-						},
-						edges = {
 							{
 								{1, _streetYOffset, 0},
 								{-2, 0, 0}
@@ -140,17 +139,6 @@ function data()
 								{-1, _streetYOffset, 0},
 								{-2, 0, 0},
 							},
-						},
-						freeNodes = {},
-						snapNodes = {},
-					},
-					{
-						type = 'STREET',
-						params = {
-							type = _streetFileName,
-							tramTrackType = _getTramTrackType(params)
-						},
-						edges = {
 							{
 								{-1, _streetYOffset, 0},
 								{-10 -_halfExtraLength, 0, 0},
@@ -159,9 +147,35 @@ function data()
 								{-11 - _halfExtraLength, _streetYOffset, 0},
 								{-10 -_halfExtraLength, 0, 0},
 							},
+						}
+						or {
+							{
+								{-11 - _halfExtraLength, _streetYOffset, 0},
+								{10 + _halfExtraLength, 0, 0}
+							},
+							{
+								{-1, _streetYOffset, 0},
+								{10 + _halfExtraLength, 0, 0}
+							},
+							{
+								{-1, _streetYOffset, 0},
+								{2, 0, 0}
+							},
+							{
+								{1, _streetYOffset, 0},
+								{2, 0, 0},
+							},
+							{
+								{1, _streetYOffset, 0},
+								{10 + _halfExtraLength, 0, 0},
+							},
+							{
+								{11 + _halfExtraLength, _streetYOffset, 0},
+								{10 + _halfExtraLength, 0, 0},
+							},
 						},
 						freeNodes = {},
-						snapNodes = { 1 }, -- LOLLO NOTE all edge nodes must be non-free, to avoid collisions when configuring a finalised station
+						snapNodes = { 0, 5 },
 					},
 				},
 				groundFaces = {},
@@ -216,6 +230,7 @@ function data()
 				{}, -- slots for 5x5 inner modules
 				{}, -- slots for 15x5 streetside modules
 				{}, -- slots for 15x15 inner modules
+				{}, -- slots for 5x5 link modules
 			}
 			local _isSlotOpen = function(level, x, y)
 				return slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == true
@@ -291,6 +306,16 @@ function data()
 			_setSlotBarred(3, 2, 1)
 			_trySetSlotOpen(3, 2, 2)
 
+			_trySetSlotOpen(4, -1, -1)
+			_trySetSlotOpen(4, -1, 0)
+			_trySetSlotOpen(4, -1, 1)
+			_trySetSlotOpen(4, 0, -1)
+			_trySetSlotOpen(4, 0, 0)
+			_trySetSlotOpen(4, 0, 1)
+			_trySetSlotOpen(4, 1, -1)
+			_trySetSlotOpen(4, 1, 0)
+			_trySetSlotOpen(4, 1, 1)
+
 			-- print('LOLLO _slotXYsNested before beginning =')
 			-- debugPrint(_slotXYsNested)
 			-- fill slots on and around modules, if present
@@ -316,6 +341,10 @@ function data()
 						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
 						_trySetSlotOpen(3, moduleX, moduleY + 2)
 						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
+						_trySetSlotOpen(4, moduleX - 1, moduleY)
+						_trySetSlotOpen(4, moduleX + 1, moduleY)
+						_trySetSlotOpen(4, moduleX, moduleY - 1)
+						_trySetSlotOpen(4, moduleX, moduleY + 1)
 					elseif moduleBaseId == _constants.idBases.cargoAreaStreetside15x5SlotId then
 						_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
 						_trySetSlotOpen(1, moduleX, moduleY + 1)
@@ -344,6 +373,9 @@ function data()
 								end
 							end
 						end
+						_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
+						_trySetSlotOpen(4, moduleX, moduleY + 1)
+						_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
 					elseif moduleBaseId == _constants.idBases.cargoAreaInner15x15SlotId then
 						-- print('LOLLO _slotXYsNested before reading module 15x15 =')
 						-- debugPrint(_slotXYsNested)
@@ -386,8 +418,41 @@ function data()
 								end
 							end
 						end
+						_trySetSlotOpen(4, moduleX - 2, moduleY - 1)
+						_trySetSlotOpen(4, moduleX - 2, moduleY)
+						_trySetSlotOpen(4, moduleX - 2, moduleY + 1)
+						_trySetSlotOpen(4, moduleX + 2, moduleY - 1)
+						_trySetSlotOpen(4, moduleX + 2, moduleY)
+						_trySetSlotOpen(4, moduleX + 2, moduleY + 1)
+						_trySetSlotOpen(4, moduleX - 1, moduleY - 2)
+						_trySetSlotOpen(4, moduleX, moduleY - 2)
+						_trySetSlotOpen(4, moduleX + 1, moduleY - 2)
+						_trySetSlotOpen(4, moduleX - 1, moduleY + 2)
+						_trySetSlotOpen(4, moduleX, moduleY + 2)
+						_trySetSlotOpen(4, moduleX + 1, moduleY + 2)
 						-- print('LOLLO _slotXYsNested after reading module 15x15 =')
 						-- debugPrint(_slotXYsNested)
+					elseif moduleBaseId == _constants.idBases.cargoLink5x5SlotId then
+						_trySetSlotOpen(1, moduleX - 1, moduleY)
+						_trySetSlotOpen(1, moduleX + 1, moduleY)
+						_trySetSlotOpen(1, moduleX, moduleY - 1)
+						_trySetSlotOpen(1, moduleX, moduleY + 1)
+						_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
+						_trySetSlotOpen(3, moduleX - 2, moduleY)
+						_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
+						_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
+						_trySetSlotOpen(3, moduleX + 2, moduleY)
+						_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
+						_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
+						_trySetSlotOpen(3, moduleX, moduleY - 2)
+						_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
+						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
+						_trySetSlotOpen(3, moduleX, moduleY + 2)
+						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
+						_trySetSlotOpen(4, moduleX - 1, moduleY)
+						_trySetSlotOpen(4, moduleX + 1, moduleY)
+						_trySetSlotOpen(4, moduleX, moduleY - 1)
+						_trySetSlotOpen(4, moduleX, moduleY + 1)
 					end
 				end
 			end
@@ -395,6 +460,7 @@ function data()
 				slotUtils.getFlatTable(_slotXYsNested[1]),
 				slotUtils.getFlatTable(_slotXYsNested[2]),
 				slotUtils.getFlatTable(_slotXYsNested[3]),
+				slotUtils.getFlatTable(_slotXYsNested[4]),
 			}
 			-- print('LOLLO _slotXYsFlat = ')
 			-- debugPrint(_slotXYsFlat)
@@ -444,6 +510,20 @@ function data()
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoAreaInner5x5ModuleType,
+					})
+				end
+			end
+
+			-- add 5x5 inner link slots
+			for _, v in pairs(_slotXYsFlat[4]) do
+				if _isSlotOpen(4, v.x, v.y) then
+					table.insert(result.slots, {
+						-- height = 1,
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink5x5SlotId),
+						-- shape 1 2 3 4
+						spacing = _constants.anyInnerSpacing,
+						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						type = _constants.cargoLinks5x5ModuleType,
 					})
 				end
 			end
@@ -534,13 +614,13 @@ function data()
 				-- 	}
 				-- }
 
-				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
-				print('LOLLO result.models = ')
-				debugPrint(result.models)
-				print('LOLLO result.stations = ')
-				debugPrint(result.stations)
-				print('LOLLO result.terminalGroups = ')
-				debugPrint(result.terminalGroups)
+				-- print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
+				-- print('LOLLO result.models = ')
+				-- debugPrint(result.models)
+				-- print('LOLLO result.stations = ')
+				-- debugPrint(result.stations)
+				-- print('LOLLO result.terminalGroups = ')
+				-- debugPrint(result.terminalGroups)
 			end
 
 			-- force join terminals together if no modules present
