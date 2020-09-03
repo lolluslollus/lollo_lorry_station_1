@@ -203,6 +203,11 @@ function data()
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
+					},
+					[_constants.cargoLinks5x5ModuleType] = {
+						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
 					}
 				},
 				slots = {},

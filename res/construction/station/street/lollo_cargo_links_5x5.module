@@ -46,15 +46,6 @@ return {
 			tag = _constants.cargoLinks5x5ModelTag
 		}
 
-		local face = {
-			{-3.5, -3.5, 0, 1},
-			{-3.5, 3.5, 0, 1},
-			{3.5, 3.5, 0, 1},
-			{3.5, -3.5, 0, 1},
-		}
-		modulesutil.TransformFaces(transform, face)
-		result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-		result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 		-- if not result.coord2terminalInfo[tostring(x)] then
 		-- 	result.coord2terminalInfo[tostring(x)] = {}
 		-- end

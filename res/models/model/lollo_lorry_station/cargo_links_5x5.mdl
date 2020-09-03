@@ -1,8 +1,8 @@
 function data()
     local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
     return {
-        boundingInfo = mdlHelpers.getCargoAreaInner5x5BoundingInfo(),
-        collider = mdlHelpers.getCargoAreaInner5x5Collider(),
+        boundingInfo = mdlHelpers.getCargoLinks5x5BoundingInfo(),
+        collider = mdlHelpers.getCargoLinks5x5Collider(),
         lods = mdlHelpers.getCargoLinks5x5(),
         metadata = mdlHelpers.getCargoAreaInner5x5Metadata(),
         version = 1

@@ -17,6 +17,24 @@ helpers.getCargoAreaInner5x5Collider = function()
     }
 end
 
+helpers.getCargoLinks5x5BoundingInfo = function()
+    return {
+        -- bbMax = { 2.4, 2.4, 2 },
+        -- bbMin = { -2.4, -2.4, 0 },
+    }
+end
+
+helpers.getCargoLinks5x5Collider = function()
+    return {
+        -- params = {
+        --     halfExtents = { 2.4, 2.4, 1.0, },
+        -- },
+        -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        -- type = 'BOX',
+        type = 'NONE'
+    }
+end
+
 helpers.getCargoAreaInner5x5Lods = function()
     local _materials = { 'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl' }
     return {
