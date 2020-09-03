@@ -33,11 +33,11 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 1, 0, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- edge 0 -- node 0
-							{{ 0, 0, _vehicleNodeZ }, { -2, 0, 0, }, 3}, -- node 1
+							{{ -1, 0, _vehicleNodeZ }, { 1, 0, 0, }, 3}, -- edge 0 -- node 0
+							{{ 0, 0, _vehicleNodeZ }, { 1, 0, 0, }, 3}, -- node 1
 
-							{{ 0, 0, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- edge 1 -- node 2
-							{{ -1, 0, _vehicleNodeZ }, { -2, 0, 0 }, 3}, -- node 3
+							{{ 0, 0, _vehicleNodeZ }, { 1, 0, 0 }, 3}, -- edge 1 -- node 2
+							{{ 1, 0, _vehicleNodeZ }, { 1, 0, 0 }, 3}, -- node 3
 						},
 						speedLimit = 30,
 						transportModes = { 'BUS', 'ELECTRIC_TRAM', 'TRAM', 'TRUCK' },
@@ -46,8 +46,8 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ 7, 4, _cargoNodeZ, },{ -0.2, 0, 0, }, 3}, -- edge 2
-							{{ 6.8, 4, _cargoNodeZ, },{ -0.2, 0, 0, }, 3},
+							{{ -7, -4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3}, -- edge 2
+							{{ -6.8, -4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },

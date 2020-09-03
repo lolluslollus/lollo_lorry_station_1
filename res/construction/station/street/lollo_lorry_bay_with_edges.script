@@ -89,9 +89,9 @@ function data()
 				groundFaces = {},
 				models = {
 					{
-						id = _constants.lorryBayVehicleEdgeModelFileName,
+						id = _constants.lorryBayVehicleEdgeRightModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
-						tag = _constants.lorryBayVehicleEdgeModelTag,
+						tag = _constants.lorryBayVehicleEdgeRightModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{

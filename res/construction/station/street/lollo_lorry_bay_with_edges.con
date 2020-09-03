@@ -125,53 +125,53 @@ function data()
 						and {
 							{
 								{11 + _halfExtraLength, _streetYOffset, 0},
-								{-10 -_halfExtraLength, 0, 0}
+								{-1, 0, 0}
 							},
 							{
 								{1, _streetYOffset, 0},
-								{-10 -_halfExtraLength, 0, 0}
+								{-1, 0, 0}
 							},
 							{
 								{1, _streetYOffset, 0},
-								{-2, 0, 0}
+								{-1, 0, 0}
 							},
 							{
 								{-1, _streetYOffset, 0},
-								{-2, 0, 0},
+								{-1, 0, 0},
 							},
 							{
 								{-1, _streetYOffset, 0},
-								{-10 -_halfExtraLength, 0, 0},
+								{-1, 0, 0},
 							},
 							{
 								{-11 - _halfExtraLength, _streetYOffset, 0},
-								{-10 -_halfExtraLength, 0, 0},
+								{-1, 0, 0},
 							},
 						}
 						or {
 							{
 								{-11 - _halfExtraLength, _streetYOffset, 0},
-								{10 + _halfExtraLength, 0, 0}
+								{1, 0, 0}
 							},
 							{
 								{-1, _streetYOffset, 0},
-								{10 + _halfExtraLength, 0, 0}
+								{1, 0, 0}
 							},
 							{
 								{-1, _streetYOffset, 0},
-								{2, 0, 0}
+								{1, 0, 0}
 							},
 							{
 								{1, _streetYOffset, 0},
-								{2, 0, 0},
+								{1, 0, 0},
 							},
 							{
 								{1, _streetYOffset, 0},
-								{10 + _halfExtraLength, 0, 0},
+								{1, 0, 0},
 							},
 							{
 								{11 + _halfExtraLength, _streetYOffset, 0},
-								{10 + _halfExtraLength, 0, 0},
+								{1, 0, 0},
 							},
 						},
 						freeNodes = {},
@@ -181,9 +181,9 @@ function data()
 				groundFaces = {},
 				models = {
 					{
-						id = _constants.lorryBayVehicleEdgeModelFileName,
+						id = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelFileName or _constants.lorryBayVehicleEdgeLeftModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
-						tag = _constants.lorryBayVehicleEdgeModelTag,
+						tag = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelTag or _constants.lorryBayVehicleEdgeLeftModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{
