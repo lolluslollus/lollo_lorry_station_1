@@ -52,7 +52,7 @@ function data()
 			{
 				key = 'isStoreCargoOnPavement',
 				name = _('Store cargo on the pavement'),
-				tooltip = _('Store some of the cargo on the pavement'),
+				-- tooltip = _('Store some of the cargo on the pavement'),
 				values = {
 					_('No'),
 					_('Yes')
@@ -311,6 +311,7 @@ function data()
 			_setSlotBarred(3, 2, 1)
 			_trySetSlotOpen(3, 2, 2)
 
+			-- _trySetSlotOpen(4, -2, 0)
 			_trySetSlotOpen(4, -1, -1)
 			_setSlotBarred(4, -1, 0)
 			_trySetSlotOpen(4, -1, 1)
@@ -320,6 +321,7 @@ function data()
 			_trySetSlotOpen(4, 1, -1)
 			_setSlotBarred(4, 1, 0)
 			_trySetSlotOpen(4, 1, 1)
+			-- _trySetSlotOpen(4, 2, 0)
 
 			-- print('LOLLO _slotXYsNested before beginning =')
 			-- debugPrint(_slotXYsNested)
@@ -378,12 +380,14 @@ function data()
 								end
 							end
 						end
+						-- _trySetSlotOpen(4, moduleX - 2, moduleY)
 						_trySetSlotOpen(4, moduleX - 1, moduleY - 1)
 						_trySetSlotOpen(4, moduleX, moduleY - 1)
 						_trySetSlotOpen(4, moduleX + 1, moduleY - 1)
 						_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
 						_trySetSlotOpen(4, moduleX, moduleY + 1)
 						_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
+						-- _trySetSlotOpen(4, moduleX + 2, moduleY)
 					elseif moduleBaseId == _constants.idBases.cargoAreaInner15x15SlotId then
 						-- print('LOLLO _slotXYsNested before reading module 15x15 =')
 						-- debugPrint(_slotXYsNested)

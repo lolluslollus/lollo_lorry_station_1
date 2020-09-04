@@ -1,6 +1,5 @@
 function data()
-	local _cargoNodeY = 0
-	local _cargoNodeZ = 0.3
+	local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
 	local _cargoPlatformZ = -0.03
 
 	return {
@@ -58,103 +57,12 @@ function data()
 		},
 		metadata = {
 			transportNetworkProvider = {
-				laneLists = {
-					-- on the pavement
-					{
-						linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
-						nodes = {
-							{{ 7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
-							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
-
-							{{ 7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 3
-							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -14, 0, 0, }, 3},
-
-							{{ -7, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 4
-							{{ -7.5, _cargoNodeY, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					-- behind the pavement, away from the road
-					{
-						linkable = false,
-						nodes = {
-							{{ 7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 5
-							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 0, -2, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ 2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 5
-							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 5, -2, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 6
-							{{ -2, _cargoNodeY + 2, _cargoNodeZ, }, { 5, 2, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 6
-							{{ -7, _cargoNodeY + 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					-- behind the pavement, toward the road
-					{
-						linkable = false,
-						nodes = {
-							{{ 7, _cargoNodeY, _cargoNodeZ, }, { 0, -3, 0, }, 3}, -- edge 3
-							{{ 7, _cargoNodeY - 3, _cargoNodeZ, }, { 0, -3, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ -7, _cargoNodeY - 3, _cargoNodeZ, }, { 0, 3, 0, }, 3}, -- edge 4
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { 0, 3, 0, }, 3},
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ 7, _cargoNodeY, _cargoNodeZ, }, { -5, -3, 0, }, 3},
-							{{ 2, _cargoNodeY - 3, _cargoNodeZ, }, { -5, -3, 0, }, 3}, -- edge 5
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-					{
-						linkable = false,
-						nodes = {
-							{{ -2, _cargoNodeY - 3, _cargoNodeZ, }, { -5, 3, 0, }, 3},
-							{{ -7, _cargoNodeY, _cargoNodeZ, }, { -5, 3, 0, }, 3}, -- edge 6
-						},
-						speedLimit = 30,
-						transportModes = { 'CARGO' },
-					},
-				},
+				laneLists = mdlHelpers.getLaneLists15x5NormalCapacity(),
 				runways = { },
 				terminals = {
 					{
-						personEdges = { 1 },
-						personNodes = { 2, 3 },
+						personEdges = { 1, 4 },
+						personNodes = { 2, 3, 8, 9 },
 						-- vehicleNode = 2,
 					},
 				},

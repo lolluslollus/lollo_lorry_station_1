@@ -833,4 +833,196 @@ helpers.getCargoAreaInner15x15Metadata = function()
     }
 end
 
+helpers.getLaneLists15x5HighCapacity = function()
+    local _cargoNodeZ = 0.3
+    return {
+        -- on the pavement
+        {
+            linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
+            nodes = {
+                {{ 7.5, -1.25, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 0
+                {{ 7, -1.25, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
+
+                {{ 7, -1.25, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 1
+                {{ -7, -1.25, _cargoNodeZ, },{ -14, 0, 0, }, 3},
+
+                {{ -7, -1.25, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
+                {{ -7.5, -1.25, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
+
+
+                {{ -7.5, 1.25, _cargoNodeZ, },{ 0.5, 0, 0, }, 3}, -- edge 3
+                {{ -7, 1.25, _cargoNodeZ, },{ 0.5, 0, 0, }, 3},
+
+                {{ -7, 1.25, _cargoNodeZ, },{ 14, 0, 0, }, 3}, -- edge 4
+                {{ 7, 1.25, _cargoNodeZ, },{ 14, 0, 0, }, 3},
+
+                {{ 7, 1.25, _cargoNodeZ, },{ 0.5, 0, 0, }, 3}, -- edge 5
+                {{ 7.5, 1.25, _cargoNodeZ, },{ 0.5, 0, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        -- along y axis
+        {
+            linkable = false,
+            nodes = {
+                {{ 7, 2, _cargoNodeZ, }, { 0, -0.75, 0, }, 3},
+                {{ 7, 1.25, _cargoNodeZ, }, { 0, -0.75, 0, }, 3},
+                {{ 7, 1.25, _cargoNodeZ, }, { 0, -2.5, 0, }, 3},
+                {{ 7, -1.25, _cargoNodeZ, }, { 0, -2.5, 0, }, 3},
+                {{ 7, -1.25, _cargoNodeZ, }, { 0, -1.75, 0, }, 3},
+                {{ 7, -3, _cargoNodeZ, }, { 0, -1.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -7, - 3, _cargoNodeZ, }, { 0, 1.75, 0, }, 3},
+                {{ -7, - 1.25, _cargoNodeZ, }, { 0, 1.75, 0, }, 3},
+                {{ -7, - 1.25, _cargoNodeZ, }, { 0, 2.5, 0, }, 3},
+                {{ -7, 1.25, _cargoNodeZ, }, { 0, 2.5, 0, }, 3},
+                {{ -7, 1.25, _cargoNodeZ, }, { 0, 0.75, 0, }, 3},
+                {{ -7, 2, _cargoNodeZ, }, { 0, 0.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        -- diagonals to fit 5x5 items
+        {
+            linkable = false,
+            nodes = {
+                {{ 2, 2, _cargoNodeZ, }, { 5, -0.75, 0, }, 3},
+                {{ 7, 1.25, _cargoNodeZ, }, { 5, -0.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -7, 1.25, _cargoNodeZ, }, { 5, 0.75, 0, }, 3},
+                {{ -2, 2, _cargoNodeZ, }, { 5, 0.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ 7, -1.25, _cargoNodeZ, }, { -5, -1.75, 0, }, 3},
+                {{ 2, - 3, _cargoNodeZ, }, { -5, -1.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -2, - 3, _cargoNodeZ, }, { -5, 1.75, 0, }, 3},
+                {{ -7, -1.25, _cargoNodeZ, }, { -5, 1.75, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+    }
+end
+
+helpers.getLaneLists15x5NormalCapacity = function()
+    local _cargoNodeZ = 0.3
+    return {
+        -- on the pavement
+        {
+            linkable = true, -- LOLLO NOTE this is useful to connect the station to the industry
+            nodes = {
+                {{ 7.5, 0, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 0
+                {{ 7, 0, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
+
+                {{ 7, 0, _cargoNodeZ, },{ -14, 0, 0, }, 3}, -- edge 1
+                {{ -7, 0, _cargoNodeZ, },{ -14, 0, 0, }, 3},
+
+                {{ -7, 0, _cargoNodeZ, },{ -0.5, 0, 0, }, 3}, -- edge 2
+                {{ -7.5, 0, _cargoNodeZ, },{ -0.5, 0, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        -- behind the pavement, away from the road
+        {
+            linkable = false,
+            nodes = {
+                {{ 7, 2, _cargoNodeZ, }, { 0, -2, 0, }, 3}, -- edge 3
+                {{ 7, 0, _cargoNodeZ, }, { 0, -2, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -7, 0, _cargoNodeZ, }, { 0, 2, 0, }, 3}, -- edge 4
+                {{ -7, 2, _cargoNodeZ, }, { 0, 2, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ 2, 2, _cargoNodeZ, }, { 5, -2, 0, }, 3}, -- edge 5
+                {{ 7, 0, _cargoNodeZ, }, { 5, -2, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -7, 0, _cargoNodeZ, }, { 5, 2, 0, }, 3}, -- edge 6
+                {{ -2, 2, _cargoNodeZ, }, { 5, 2, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        -- behind the pavement, toward the road
+        {
+            linkable = false,
+            nodes = {
+                {{ 7, 0, _cargoNodeZ, }, { 0, -3, 0, }, 3}, -- edge 3
+                {{ 7, -3, _cargoNodeZ, }, { 0, -3, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -7, -3, _cargoNodeZ, }, { 0, 3, 0, }, 3}, -- edge 4
+                {{ -7, 0, _cargoNodeZ, }, { 0, 3, 0, }, 3},
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ 7, 0, _cargoNodeZ, }, { -5, -3, 0, }, 3},
+                {{ 2, -3, _cargoNodeZ, }, { -5, -3, 0, }, 3}, -- edge 5
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+        {
+            linkable = false,
+            nodes = {
+                {{ -2, -3, _cargoNodeZ, }, { -5, 3, 0, }, 3},
+                {{ -7, 0, _cargoNodeZ, }, { -5, 3, 0, }, 3}, -- edge 6
+            },
+            speedLimit = 30,
+            transportModes = { 'CARGO' },
+        },
+    }
+end
+
 return helpers

@@ -9,6 +9,9 @@ local constants = {
 	yTransfFactor = 5, -- each grid slot has this y size
 	anyInnerSpacing = {2, 2, 2, 2}, -- the smaller, the less the risk of collision. Too small, problems removing the module.
 	anyInnerXShift = 0,
+	-- LOLLO NOTE streetside elements have a visible width of 4, the other elements 5 or 15. (4 - 5) / 2 is -0.5 .
+	-- The cargo graphics are 4x4 m and many street pavements are 4 m wide,
+	-- so 4x4, 12x4, 12x12 would be smarter module sizes.
 	anyInnerYShift = -0.5,
 	anyStreetsideSpacing = {2, 2, 2, 2},
 	anyStreetsideXShift = 0,
