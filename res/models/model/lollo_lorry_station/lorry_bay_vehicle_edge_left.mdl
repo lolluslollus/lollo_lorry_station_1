@@ -46,8 +46,8 @@ function data()
 					{
 						linkable = false,
 						nodes = {
-							{{ -7, -4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3}, -- edge 2
-							{{ -6.8, -4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3},
+							{{ -7, 4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3}, -- edge 2
+							{{ -6.8, 4, _cargoNodeZ, },{ 0.2, 0, 0, }, 3},
 						},
 						speedLimit = 30,
 						transportModes = { 'CARGO' },

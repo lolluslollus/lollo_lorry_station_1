@@ -325,8 +325,8 @@ function data()
 			-- debugPrint(_slotXYsNested)
 			-- fill slots on and around modules, if present
 			if type(params.modules) == 'table' then
-				print('LOLLO params.modules =')
-				debugPrint(params.modules)
+				-- print('LOLLO params.modules =')
+				-- debugPrint(params.modules)
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
 					if moduleBaseId == _constants.idBases.cargoAreaInner5x5SlotId then
@@ -536,22 +536,22 @@ function data()
 			-- join terminals together
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
-				print('LOLLO starting terminateConstructionHook')
-				print('LOLLO result.models =')
-				debugPrint(result.models)
+				-- print('LOLLO starting terminateConstructionHook')
+				-- print('LOLLO result.models =')
+				-- debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
 				-- debugPrint(cargoAreaModelIndexesBase0)
-				print('LOLLO allCargoAreaModelIndexesBase0 =')
-				debugPrint(allCargoAreaModelIndexesBase0)
+				-- print('LOLLO allCargoAreaModelIndexesBase0 =')
+				-- debugPrint(allCargoAreaModelIndexesBase0)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
 				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
 				local vehicleEdgeModelIndexesBase0 = slotUtils.getVehicleEdgeModelIndexesBase0(result.models)
-				print('LOLLO lorryBayModelIndexesBase0 =')
-				debugPrint(lorryBayModelIndexesBase0)
-				print('LOLLO vehicleEdgeModelIndexesBase0 =')
-				debugPrint(vehicleEdgeModelIndexesBase0)
+				-- print('LOLLO lorryBayModelIndexesBase0 =')
+				-- debugPrint(lorryBayModelIndexesBase0)
+				-- print('LOLLO vehicleEdgeModelIndexesBase0 =')
+				-- debugPrint(vehicleEdgeModelIndexesBase0)
 
 				result.stations = {
 					{
@@ -638,11 +638,11 @@ function data()
 			return result
 		end,
 		preProcessFn = function(modules, change, three)
-			print('LOLLO preProcessFn') -- never fires
-			print('modules =')
-			debugPrint(modules)
-			print('change =')
-			debugPrint(change)
+			-- print('LOLLO preProcessFn')
+			-- print('modules =')
+			-- debugPrint(modules)
+			-- print('change =')
+			-- debugPrint(change)
 			-- default behaviour
 			if change.added then
 				modules[change.slotId] = change.module
