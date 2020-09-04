@@ -14,6 +14,8 @@ function data()
 				If you want to force something into a station catchment area, use the ultrathin paths.
 
 				At the current state of the game, I could not find a way to make this station entirely non-destructive: if you have buildings around, some will have to go. They should regrow though, let me know.
+
+				WORD OF WARNING: the first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
 				]],
 			["_NAME"] = "Modular streetside lorry station"
 		},
