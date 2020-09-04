@@ -539,9 +539,9 @@ function data()
 			-- join terminals together
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
-				print('LOLLO starting terminateConstructionHook')
-				print('LOLLO result.models =')
-				debugPrint(result.models)
+				-- print('LOLLO starting terminateConstructionHook')
+				-- print('LOLLO result.models =')
+				-- debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
@@ -622,9 +622,9 @@ function data()
 				-- 	}
 				-- }
 
-				print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
-				print('LOLLO result.models = ')
-				debugPrint(result.models)
+				-- print('LOLLO lollo_lorry_station leaving terminateConstructionHook')
+				-- print('LOLLO result.models = ')
+				-- debugPrint(result.models)
 				-- print('LOLLO result.stations = ')
 				-- debugPrint(result.stations)
 				-- print('LOLLO result.terminalGroups = ')
