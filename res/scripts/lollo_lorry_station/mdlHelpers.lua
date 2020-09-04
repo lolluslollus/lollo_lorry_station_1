@@ -85,7 +85,7 @@ helpers.getCargoAreaInner5x5EarthLods = function()
 end
 
 helpers.getCargoLinks5x5Lods = function()
-    local _materials = { 'lollo_lorry_station/gravel.mtl' }
+    local _materials = { 'lollo_lorry_station/links.mtl' }
     return {
         {
             -- node = {
