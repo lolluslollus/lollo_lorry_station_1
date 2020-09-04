@@ -84,16 +84,35 @@ helpers.getCargoAreaInner5x5EarthLods = function()
     }
 end
 
-helpers.getCargoLinks5x5 = function()
+helpers.getCargoLinks5x5Lods = function()
+    local _materials = { 'lollo_lorry_station/gravel.mtl' }
     return {
         {
+            -- node = {
+            --     children = {
+			-- 		{
+			-- 			materials = { "asset/tram_pole.mtl", },
+			-- 			mesh = "asset/lod_0_cable_junction.msh",
+			-- 			transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+			-- 		},
+			-- 	},
+            --     name = 'RootNode',
+            --     transf = { 10, 0, 0, 0,  0, 10, 0, 0,  0, 0, 10, 0, 0, 0, 0, 1, },
+            -- },
             node = {
-                -- name = 'RootNode',
-                -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                children = {
+                    {
+                        materials = _materials,
+                        mesh = 'platform/lollo5x5.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2.5, -2.5, -0.02, 1, },
+                    },
+                },
+                name = 'RootNode',
+                transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
             static = false,
             visibleFrom = 0,
-            visibleTo = 1000,
+            visibleTo = 50,
         },
     }
 end

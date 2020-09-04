@@ -20,8 +20,8 @@ helpers.getTerrainAlignmentList = function(face)
         raisedFace[i] = face[i]
         raisedFace[i][3] = raisedFace[i][3] + _raiseBy
     end
-    print('LOLLO raisedFaces =')
-    debugPrint(raisedFace)
+    -- print('LOLLO raisedFaces =')
+    -- debugPrint(raisedFace)
     return {
         faces = {raisedFace},
         optional = true,
