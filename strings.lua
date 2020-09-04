@@ -6,7 +6,8 @@ function data()
 
 				You can combine several of these to make a complex lorry station, with full control on the paths and the capacities.
 				
-				To place one, make the streets first and leave some empty space for the station.
+				To place one, make the streets first and leave some empty space for the station. Help yourself with the slicer, you will find it in the street construction menu.
+				Streetside cargo areas are designed to overlap with the roadside. If you want to alter the road, you must remove them, alter the road and plop them back in, to avoid the collision warning.
 
 				This mod requires the street fine tuning, which provides extra street types, junctions and a slicer tool to avoid destroying too many buildings.
 				
