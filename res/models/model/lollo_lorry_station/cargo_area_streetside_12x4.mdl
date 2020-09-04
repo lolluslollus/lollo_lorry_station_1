@@ -56,8 +56,8 @@ function data()
 				runways = { },
 				terminals = {
 					{
-						personEdges = { 1, 4 },
-						personNodes = { 2, 3, 8, 9 },
+						personEdges = { 0 },
+						personNodes = { 0, 1 },
 						-- vehicleNode = 2,
 					},
 				},

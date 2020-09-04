@@ -1,9 +1,9 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 
 local constants = {
-	xMax = 10,
+	xMax = 16,
 	yMax = 10,
-	xMin = -10,
+	xMin = -16,
     yMin = -10,
 	-- xTransfFactor = 5, -- each grid slot has this x size
 	-- yTransfFactor = 5, -- each grid slot has this y size
