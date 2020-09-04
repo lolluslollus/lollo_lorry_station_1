@@ -249,6 +249,7 @@ function data()
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
 
+			_trySetSlotOpen(1, -2, 0)
 			_setSlotBarred(1, -1, -1)
 			_setSlotBarred(1, -1, 0)
 			_trySetSlotOpen(1, -1, 1)
@@ -258,6 +259,7 @@ function data()
 			_setSlotBarred(1, 1, -1)
 			_setSlotBarred(1, 1, 0)
 			_trySetSlotOpen(1, 1, 1)
+			_trySetSlotOpen(1, 2, 0)
 
 			if params.isStoreCargoOnPavement == 1 then
 				_trySetSlotOpen(2, -3, 0)
@@ -353,9 +355,11 @@ function data()
 						_trySetSlotOpen(4, moduleX, moduleY - 1)
 						_trySetSlotOpen(4, moduleX, moduleY + 1)
 					elseif moduleBaseId == _constants.idBases.cargoAreaStreetside12x4SlotId then
+						_trySetSlotOpen(1, moduleX - 2, moduleY)
 						_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
 						_trySetSlotOpen(1, moduleX, moduleY + 1)
 						_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
+						_trySetSlotOpen(1, moduleX + 2, moduleY)
 						_trySetSlotOpen(2, moduleX - 3, moduleY)
 						_trySetSlotOpen(2, moduleX + 3, moduleY)
 						_trySetSlotOpen(3, moduleX - 2, moduleY + 2)
