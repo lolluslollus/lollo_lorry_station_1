@@ -108,44 +108,44 @@ helpers.getCargoAreaInner4x4Metadata = function()
                         },
                         -- lanes across 1
                         {
-                            { 2, 2, _cargoNodeZ }, -- edge 1
-                            { -0.2, -2, 0 },
-                            3,
-                        },
-                        {
-                            { 1.8, 0, _cargoNodeZ },
-                            { -0.2, -2, 0 },
-                            3,
-                        },
-                        {
-                            { 1.8, 0, _cargoNodeZ }, -- edge 2
+                            { 1.8, 2, _cargoNodeZ }, -- edge 1
                             { 0.2, -2, 0 },
                             3,
                         },
                         {
-                            { 2, -2, _cargoNodeZ },
+                            { 2, 0, _cargoNodeZ },
                             { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 2, 0, _cargoNodeZ }, -- edge 2
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 1.8, -2, _cargoNodeZ },
+                            { -0.2, -2, 0 },
                             3,
                         },
                         -- lanes across 2
                         {
-                            { -2, -2, _cargoNodeZ }, -- edge 3
-                            { 0.2, 2, 0 },
-                            3,
-                        },
-                        {
-                            { -1.8, 0, _cargoNodeZ },
-                            { 0.2, 2, 0 },
-                            3,
-                        },
-                        {
-                            { -1.8, 0, _cargoNodeZ }, -- edge 10
+                            { -1.8, -2, _cargoNodeZ }, -- edge 3
                             { -0.2, 2, 0 },
                             3,
                         },
                         {
-                            { -2, 2, _cargoNodeZ },
+                            { -2, 0, _cargoNodeZ },
                             { -0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -2, 0, _cargoNodeZ }, -- edge 10
+                            { 0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -1.8, 2, _cargoNodeZ },
+                            { 0.2, 2, 0 },
                             3,
                         },
                     },
@@ -668,84 +668,124 @@ helpers.getCargoAreaInner12x12Metadata = function()
                         },
                         -- lanes across 1
                         {
-                            { 6, 6, _cargoNodeZ }, -- edge 18
-                            { -0.2, -1.25, 0 },
-                            3,
-                        },
-                        {
-                            { 5.8, 4, _cargoNodeZ },
-                            { -0.2, -2, 0 },
-                            3,
-                        },
-                        {
-                            { 5.8, 4, _cargoNodeZ }, -- edge 19
-                            { 0.2, -4, 0 },
-                            3,
-                        },
-                        {
-                            { 6, 0, _cargoNodeZ },
-                            { 0.2, -4, 0 },
-                            3,
-                        },
-                        {
-                            { 6, 0, _cargoNodeZ }, -- edge 20
-                            { -0.2, -4, 0 },
-                            3,
-                        },
-                        {
-                            { 5.8, -4, _cargoNodeZ },
-                            { -0.2, -4, 0 },
-                            3,
-                        },
-                        {
-                            { 5.8, -4, _cargoNodeZ }, -- edge 22
+                            { 5.8, 6, _cargoNodeZ },
                             { 0.2, -2, 0 },
                             3,
                         },
                         {
-                            { 6, -6, _cargoNodeZ },
-                            { 0.2, -2.5, 0 },
+                            { 6, 4, _cargoNodeZ },
+                            { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 6, 4, _cargoNodeZ },
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 5.8, 2, _cargoNodeZ },
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 5.8, 2, _cargoNodeZ },
+                            { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 6, 0, _cargoNodeZ },
+                            { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 6, 0, _cargoNodeZ },
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 5.8, -2, _cargoNodeZ },
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 5.8, -2, _cargoNodeZ },
+                            { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 6, -4, _cargoNodeZ },
+                            { 0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 6, -4, _cargoNodeZ },
+                            { -0.2, -2, 0 },
+                            3,
+                        },
+                        {
+                            { 5.8, -6, _cargoNodeZ },
+                            { -0.2, -2, 0 },
                             3,
                         },
                         -- lanes across 2
                         {
-                            { -6, -6, _cargoNodeZ }, -- edge 26
+                            { -5.8, -6, _cargoNodeZ },
+                            { -0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -6, -4, _cargoNodeZ },
+                            { -0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -6, -4, _cargoNodeZ },
                             { 0.2, 2, 0 },
                             3,
                         },
                         {
-                            { -5.8, -4, _cargoNodeZ },
+                            { -5.8, -2, _cargoNodeZ },
                             { 0.2, 2, 0 },
                             3,
                         },
                         {
-                            { -5.8, -4, _cargoNodeZ }, -- edge 27
-                            { -0.2, 4, 0 },
+                            { -5.8, -2, _cargoNodeZ },
+                            { -0.2, 2, 0 },
                             3,
                         },
                         {
                             { -6, 0, _cargoNodeZ },
-                            { -0.2, 4, 0 },
-                            3,
-                        },
-                        {
-                            { -6, 0, _cargoNodeZ }, -- edge 28
-                            { 0.2, 4, 0 },
-                            3,
-                        },
-                        {
-                            { -5.8, 4, _cargoNodeZ },
-                            { 0.2, 4, 0 },
-                            3,
-                        },
-                        {
-                            { -5.8, 4, _cargoNodeZ }, -- edge 29
                             { -0.2, 2, 0 },
                             3,
                         },
                         {
-                            { -6, 6, _cargoNodeZ },
+                            { -6, 0, _cargoNodeZ },
+                            { 0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -5.8, 2, _cargoNodeZ },
+                            { 0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -5.8, 2, _cargoNodeZ },
                             { -0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -6, 4, _cargoNodeZ },
+                            { -0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -6, 4, _cargoNodeZ },
+                            { 0.2, 2, 0 },
+                            3,
+                        },
+                        {
+                            { -5.8, 6, _cargoNodeZ },
+                            { 0.2, 2, 0 },
                             3,
                         },
                         -- diagonal lanes to match small cargo area

@@ -187,24 +187,24 @@ function data()
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{
-						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
+						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelFileName or _constants.lorryBayStreetsideEntrance15x5ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
-						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
+						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside15x5ModelTag or _constants.lorryBayStreetsideEntrance15x5ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 					},
 				},
 				slotConfig = {
-					-- [_constants.cargoAreaInner12x12ModuleType] = {
+					-- [_constants.cargoAreaInner15x15ModuleType] = {
 					-- 	maxModules = -1,
 					-- 	message = nil, --'LOLLO slotConfig message',
 					-- 	skipCollisionCheck = true,
 					-- },
-					[_constants.cargoAreaStreetside12x4ModuleType] = {
+					[_constants.cargoAreaStreetside15x5ModuleType] = {
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
 					},
-					[_constants.cargoLinks4x4ModuleType] = {
+					[_constants.cargoLinks5x5ModuleType] = {
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
@@ -219,10 +219,10 @@ function data()
 			}
 
 			local face = {
-				{-7, -2.5, 0, 1},
-				{-7, 2.5, 0, 1},
-				{7, 2.5, 0, 1},
-				{7, -2.5, 0, 1},
+				{-8.5, -2.5, 0, 1},
+				{-8.5, 3, 0, 1},
+				{8.5, 3, 0, 1},
+				{8.5, -2.5, 0, 1},
 			}
 			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
 			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
@@ -232,10 +232,10 @@ function data()
 
 			-- set default slot locations
 			local _slotXYsNested = {
-				{}, -- slots for 4x4 inner modules
-				{}, -- slots for 12x4 streetside modules
-				{}, -- slots for 12x12 inner modules
-				{}, -- slots for 4x4 link modules
+				{}, -- slots for 5x5 inner modules
+				{}, -- slots for 15x5 streetside modules
+				{}, -- slots for 15x15 inner modules
+				{}, -- slots for 5x5 link modules
 			}
 			local _isSlotOpen = function(level, x, y)
 				return slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == true
@@ -311,7 +311,7 @@ function data()
 			_setSlotBarred(3, 2, 1)
 			_trySetSlotOpen(3, 2, 2)
 
-			_trySetSlotOpen(4, -2, 0)
+			-- _trySetSlotOpen(4, -2, 0)
 			_trySetSlotOpen(4, -1, -1)
 			_setSlotBarred(4, -1, 0)
 			_trySetSlotOpen(4, -1, 1)
@@ -321,7 +321,7 @@ function data()
 			_trySetSlotOpen(4, 1, -1)
 			_setSlotBarred(4, 1, 0)
 			_trySetSlotOpen(4, 1, 1)
-			_trySetSlotOpen(4, 2, 0)
+			-- _trySetSlotOpen(4, 2, 0)
 
 			-- print('LOLLO _slotXYsNested before beginning =')
 			-- debugPrint(_slotXYsNested)
@@ -331,7 +331,7 @@ function data()
 				-- debugPrint(params.modules)
 				for moduId, _ in pairs(params.modules) do
 					local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
-					if moduleBaseId == _constants.idBases.cargoAreaInner4x4SlotId then
+					if moduleBaseId == _constants.idBases.cargoAreaInner5x5SlotId then
 						_trySetSlotOpen(1, moduleX - 1, moduleY)
 						_trySetSlotOpen(1, moduleX + 1, moduleY)
 						_trySetSlotOpen(1, moduleX, moduleY - 1)
@@ -352,7 +352,7 @@ function data()
 						_trySetSlotOpen(4, moduleX + 1, moduleY)
 						_trySetSlotOpen(4, moduleX, moduleY - 1)
 						_trySetSlotOpen(4, moduleX, moduleY + 1)
-					elseif moduleBaseId == _constants.idBases.cargoAreaStreetside12x4SlotId then
+					elseif moduleBaseId == _constants.idBases.cargoAreaStreetside15x5SlotId then
 						_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
 						_trySetSlotOpen(1, moduleX, moduleY + 1)
 						_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
@@ -380,16 +380,16 @@ function data()
 								end
 							end
 						end
-						_trySetSlotOpen(4, moduleX - 2, moduleY)
+						-- _trySetSlotOpen(4, moduleX - 2, moduleY)
 						_trySetSlotOpen(4, moduleX - 1, moduleY - 1)
 						_trySetSlotOpen(4, moduleX, moduleY - 1)
 						_trySetSlotOpen(4, moduleX + 1, moduleY - 1)
 						_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
 						_trySetSlotOpen(4, moduleX, moduleY + 1)
 						_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
-						_trySetSlotOpen(4, moduleX + 2, moduleY)
-					elseif moduleBaseId == _constants.idBases.cargoAreaInner12x12SlotId then
-						-- print('LOLLO _slotXYsNested before reading module 12x12 =')
+						-- _trySetSlotOpen(4, moduleX + 2, moduleY)
+					elseif moduleBaseId == _constants.idBases.cargoAreaInner15x15SlotId then
+						-- print('LOLLO _slotXYsNested before reading module 15x15 =')
 						-- debugPrint(_slotXYsNested)
 						_trySetSlotOpen(1, moduleX - 2, moduleY - 1)
 						_trySetSlotOpen(1, moduleX - 2, moduleY)
@@ -442,9 +442,9 @@ function data()
 						_trySetSlotOpen(4, moduleX - 1, moduleY + 2)
 						_trySetSlotOpen(4, moduleX, moduleY + 2)
 						_trySetSlotOpen(4, moduleX + 1, moduleY + 2)
-						-- print('LOLLO _slotXYsNested after reading module 12x12 =')
+						-- print('LOLLO _slotXYsNested after reading module 15x15 =')
 						-- debugPrint(_slotXYsNested)
-					elseif moduleBaseId == _constants.idBases.cargoLink4x4SlotId then
+					elseif moduleBaseId == _constants.idBases.cargoLink5x5SlotId then
 						_trySetSlotOpen(1, moduleX - 1, moduleY)
 						_trySetSlotOpen(1, moduleX + 1, moduleY)
 						_trySetSlotOpen(1, moduleX, moduleY - 1)
@@ -488,54 +488,54 @@ function data()
 					then
 						table.insert(result.slots, {
 							-- height = 1,
-							id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside12x4SlotId),
+							id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside15x5SlotId),
 							-- shape 1 2 3 4
 							spacing = _constants.anyStreetsideSpacing,
 							transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
-							type = _constants.cargoAreaStreetside12x4ModuleType,
+							type = _constants.cargoAreaStreetside15x5ModuleType,
 						})
 					end
 				end
 			end
 
-			-- add 12x12 inner cargo area slots
+			-- add 15x15 inner cargo area slots
 			for _, v in pairs(_slotXYsFlat[3]) do
 				if _isSlotOpen(3, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner12x12SlotId),
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
-						type = _constants.cargoAreaInner12x12ModuleType,
+						type = _constants.cargoAreaInner15x15ModuleType,
 					})
 				end
 			end
 
-			-- add 4x4 inner cargo area slots
+			-- add 5x5 inner cargo area slots
 			for _, v in pairs(_slotXYsFlat[1]) do
 				if _isSlotOpen(1, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner4x4SlotId),
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner5x5SlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
-						type = _constants.cargoAreaInner4x4ModuleType,
+						type = _constants.cargoAreaInner5x5ModuleType,
 					})
 				end
 			end
 
-			-- add 4x4 inner link slots
+			-- add 5x5 inner link slots
 			for _, v in pairs(_slotXYsFlat[4]) do
 				if _isSlotOpen(4, v.x, v.y) then
 					table.insert(result.slots, {
 						-- height = 1,
-						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink4x4SlotId),
+						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink5x5SlotId),
 						-- shape 1 2 3 4
 						spacing = _constants.anyInnerSpacing,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
-						type = _constants.cargoLinks4x4ModuleType,
+						type = _constants.cargoLinks5x5ModuleType,
 					})
 				end
 			end
