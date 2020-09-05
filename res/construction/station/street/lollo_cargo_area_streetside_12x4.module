@@ -20,7 +20,7 @@ return {
 	},
 	description = {
 		name = _("Streetside cargo area"),
-		description = _("Streetside area for waiting cargo."),
+		description = _("Streetside area for waiting cargo, remove it before altering the underlying street, then plop it back."),
 		icon = "ui/construction/station/street/cargo_area_streetside_12x4.tga"
 	},
 	metadata = {
