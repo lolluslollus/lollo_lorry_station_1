@@ -52,13 +52,31 @@ function data()
 			{
 				key = 'isStoreCargoOnPavement',
 				name = _('Store cargo on the pavement'),
-				-- tooltip = _('Store some of the cargo on the pavement'),
+				tooltip = _('Store some of the cargo on the pavement or leave it clear for pedestrians'),
 				values = {
 					_('No'),
 					_('Yes')
 				},
 				defaultIndex = 1
+            },
+			{
+				key = 'direction',
+				name = _('Direction'),
+				values = {
+					_('↑'),
+					_('↓')
+				},
+				defaultIndex = 0
 			},
+            {
+                key = 'snapNodes',
+                name = _('Snap to neighbours'),
+                values = {
+                    _('No'),
+                    _('Yes')
+                },
+                defaultIndex = 0
+            },
 			{
                 key = 'tramTrack',
                 name = _('Tram track type'),
@@ -70,15 +88,6 @@ function data()
                 },
                 defaultIndex = 0
 			},
-			{
-				key = 'direction',
-				name = _('Direction'),
-				values = {
-					_('↑'),
-					_('↓')
-				},
-				defaultIndex = 0
-			},	
 			{
 				key = 'extraLength',
 				name = _('Extra Length'),
@@ -109,7 +118,7 @@ function data()
 			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			local _streetFileName = _selectedStreetData.fileName
-			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
+            local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
 			local result = {
 				colliders = {},
 				-- coord2terminalInfo = {},
@@ -123,59 +132,61 @@ function data()
 						},
 						edges = params.direction == 0
 						and {
-							{
-								{11 + _halfExtraLength, _streetYOffset, 0},
-								{-1, 0, 0}
-							},
-							{
-								{1, _streetYOffset, 0},
-								{-1, 0, 0}
-							},
-							{
-								{1, _streetYOffset, 0},
-								{-1, 0, 0}
-							},
-							{
-								{-1, _streetYOffset, 0},
-								{-1, 0, 0},
-							},
-							{
-								{-1, _streetYOffset, 0},
-								{-1, 0, 0},
-							},
-							{
-								{-11 - _halfExtraLength, _streetYOffset, 0},
-								{-1, 0, 0},
-							},
-						}
+                                {
+                                    {11 + _halfExtraLength, _streetYOffset, 0},
+                                    {-5, 0, 0}
+                                },
+                                {
+                                    {6, _streetYOffset, 0},
+                                    {-5, 0, 0}
+                                },
+                                -- this edge is as long as the main lorry bay                                
+                                {
+                                    {6, _streetYOffset, 0},
+                                    {-12, 0, 0}
+                                },
+                                {
+                                    {-6, _streetYOffset, 0},
+                                    {-12, 0, 0},
+                                },
+                                {
+                                    {-6, _streetYOffset, 0},
+                                    {-5, 0, 0},
+                                },
+                                {
+                                    {-11 - _halfExtraLength, _streetYOffset, 0},
+                                    {-5, 0, 0},
+                                },
+                            }
 						or {
 							{
 								{-11 - _halfExtraLength, _streetYOffset, 0},
-								{1, 0, 0}
+								{5, 0, 0}
 							},
 							{
-								{-1, _streetYOffset, 0},
-								{1, 0, 0}
+								{-6, _streetYOffset, 0},
+								{5, 0, 0}
+                            },
+                            -- this edge is as long as the main lorry bay
+							{
+								{-6, _streetYOffset, 0},
+								{12, 0, 0}
 							},
 							{
-								{-1, _streetYOffset, 0},
-								{1, 0, 0}
+								{6, _streetYOffset, 0},
+								{12, 0, 0},
 							},
 							{
-								{1, _streetYOffset, 0},
-								{1, 0, 0},
-							},
-							{
-								{1, _streetYOffset, 0},
-								{1, 0, 0},
+								{6, _streetYOffset, 0},
+								{5, 0, 0},
 							},
 							{
 								{11 + _halfExtraLength, _streetYOffset, 0},
-								{1, 0, 0},
+								{5, 0, 0},
 							},
 						},
-						freeNodes = {},
-						snapNodes = { 0, 5 },
+						freeNodes = {0, 5},
+						snapNodes = params.snapNodes == 1 and { 0, 5 } or {},
 					},
 				},
 				groundFaces = {},
