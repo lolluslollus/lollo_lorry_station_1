@@ -183,14 +183,14 @@ helpers.getCargoAreaInner5x5Collider = function()
     }
 end
 
-helpers.getCargoLinksBoundingInfo = function()
+helpers.getVoidBoundingInfo = function()
     return {
         -- bbMax = { 2.4, 2.4, 2 },
         -- bbMin = { -2.4, -2.4, 0 },
     }
 end
 
-helpers.getCargoLinksCollider = function()
+helpers.getVoidCollider = function()
     return {
         -- params = {
         --     halfExtents = { 2.4, 2.4, 1.0, },
@@ -1397,6 +1397,23 @@ helpers.getCargoAreaInner15x15Metadata = function()
                 },
             },
         },
+    }
+end
+
+helpers.getAnythingStreetside12x4BoundingInfo = function ()
+    return {
+        bbMax = { 5.9, 1.9, 5, },
+        bbMin = { -5.9, -1.9, 0, },
+    }
+end
+
+helpers.getAnythingStreetside12x4Collider = function ()
+    return {
+        params = {
+            halfExtents = { 5.9, 1.9, 2.5, },
+        },
+        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        type = "BOX",
     }
 end
 

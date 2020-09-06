@@ -3,17 +3,8 @@ function data()
 	local _cargoPlatformZ = -0.03
 
 	return {
-		boundingInfo = {
-			bbMax = { 5.9, 1.9, 5, },
-			bbMin = { -5.9, -1.9, 0, },
-		},
-		collider = {
-            params = {
-                halfExtents = { 5.9, 1.9, 2.5, },
-            },
-            transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-            type = "BOX",
-        },
+        boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
+		collider = mdlHelpers.getAnythingStreetside12x4Collider(),
 		lods = {
 			{
 				node = {
