@@ -1410,7 +1410,8 @@ end
 helpers.getAnythingStreetside12x4Collider = function ()
     return {
         params = {
-            halfExtents = { 5.9, 1.9, 2.5, },
+            -- halfExtents = { 5.9, 1.9, 2.5, },
+            halfExtents = { 0.8, 1.9, 2.5, },
         },
         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
         type = "BOX",

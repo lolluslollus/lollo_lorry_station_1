@@ -4,7 +4,8 @@ function data()
 
 	return {
 		boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
-		collider = mdlHelpers.getAnythingStreetside12x4Collider(),
+		-- collider = mdlHelpers.getAnythingStreetside12x4Collider(),
+		collider = mdlHelpers.getVoidCollider(),
 		lods = {
 			{
 				node = {

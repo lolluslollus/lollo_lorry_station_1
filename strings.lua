@@ -11,8 +11,6 @@ function data()
 				You can use the pavement to store cargo or leave it clear for pedestrians.
                 
 				TIPS AND TRICKS
-				Streetside cargo areas are designed to overlap with the street side. If you want to alter the underlying road, you must remove them, alter the road and plop them back in, to avoid the collision warning.
-
 				If you want to force something into a station catchment area, use the ultrathin paths.
                 
 				Use the categories in the street menu so you don't go bananas selecting road types.
