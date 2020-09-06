@@ -104,6 +104,8 @@ function data()
 		},
 		updateFn = function(params, two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
+			-- this parameter was added later: initialise it
+			if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
 			local function _getTramTrackType(params)
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
@@ -119,7 +121,8 @@ function data()
 			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			local _streetFileName = _selectedStreetData.fileName
-            local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
+			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
+			local _x0 = 5
 			local result = {
 				colliders = {},
 				-- coord2terminalInfo = {},
@@ -134,7 +137,7 @@ function data()
 						edges = params.direction == 0
 						and {
                                 {
-                                    {11 + _halfExtraLength, _streetYOffset, 0},
+                                    {_x0 + _halfExtraLength, _streetYOffset, 0},
                                     {-1, 0, 0}
                                 },
                                 {
@@ -155,13 +158,13 @@ function data()
                                     {-1, 0, 0},
                                 },
                                 {
-                                    {-11 - _halfExtraLength, _streetYOffset, 0},
+                                    {-_x0 - _halfExtraLength, _streetYOffset, 0},
                                     {-1, 0, 0},
                                 },
                             }
 						or {
 							{
-								{-11 - _halfExtraLength, _streetYOffset, 0},
+								{-_x0 - _halfExtraLength, _streetYOffset, 0},
 								{1, 0, 0}
 							},
 							{
@@ -182,7 +185,7 @@ function data()
 								{1, 0, 0},
 							},
 							{
-								{11 + _halfExtraLength, _streetYOffset, 0},
+								{_x0 + _halfExtraLength, _streetYOffset, 0},
 								{1, 0, 0},
 							},
 						},
