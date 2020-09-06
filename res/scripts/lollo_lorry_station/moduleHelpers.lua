@@ -60,8 +60,8 @@ helpers.getCollider = function(sidewalkWidth, model)
 				model.transf,
 				{ 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, sidewalkWidth * 0.5, 0, 1 }
 			)
-			print('LOLLO transfRes =')
-			debugPrint(transfRes)
+			-- print('LOLLO transfRes =')
+			-- debugPrint(transfRes)
 			result = {
 				params = {
 					halfExtents = { 5.9, 1.9 - sidewalkWidth * 0.5, 1.0 },
@@ -71,10 +71,10 @@ helpers.getCollider = function(sidewalkWidth, model)
 			}
 		end
 
-		print('LOLLO model =')
-		debugPrint(model)
-		print('LOLLO collider =')
-		debugPrint(result)
+		-- print('LOLLO model =')
+		-- debugPrint(model)
+		-- print('LOLLO collider =')
+		-- debugPrint(result)
 	end
 
 	return result

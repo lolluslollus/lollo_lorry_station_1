@@ -46,6 +46,8 @@ return {
 			tag = _constants.cargoAreaStreetside12x4ModelTag
 		}
 
+		-- table.insert(result.colliders, moduleHelpers.getCollider(2, result.models[#result.models]))
+
 		local face = {
 			{-7, -2.5, 0, 1},
 			{-7, 2.5, 0, 1},

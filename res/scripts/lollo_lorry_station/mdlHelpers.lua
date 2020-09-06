@@ -184,19 +184,22 @@ helpers.getCargoAreaInner5x5Collider = function()
 end
 
 helpers.getVoidBoundingInfo = function()
-    return {
-        -- bbMax = { 2.4, 2.4, 2 },
-        -- bbMin = { -2.4, -2.4, 0 },
-    }
+    return {} -- this seems the same as the following
+    -- return {
+    --     bbMax = { 0, 0, 0 },
+    --     bbMin = { 0, 0, 0 },
+    -- }
 end
 
 helpers.getVoidCollider = function()
+    -- return {
+    --     params = {
+    --         halfExtents = { 0, 0, 0, },
+    --     },
+    --     transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+    --     type = 'BOX',
+    -- }
     return {
-        -- params = {
-        --     halfExtents = { 2.4, 2.4, 1.0, },
-        -- },
-        -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
-        -- type = 'BOX',
         type = 'NONE'
     }
 end
