@@ -122,6 +122,19 @@ helpers.getLorryBayModelIndexesBase0 = function(models)
     return results
 end
 
+helpers.getStreetsideModelIndexesBase0 = function(models)
+    local results = {}
+    local base0ModelIndex = 0
+    for _, model in pairs(models) do
+        if helpers.getIsStreetside(model.tag) then
+            results[#results+1] = base0ModelIndex
+        end
+        base0ModelIndex = base0ModelIndex + 1
+    end
+    return results
+end
+
+
 helpers.getVehicleEdgeModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
@@ -194,6 +207,18 @@ end
 helpers.getIsLorryBay = function(tag)
     -- if type(tag) == 'string' and (tag:find(_constants.lorryBayStreetside15x5ModelTag) or tag:find(_constants.lorryBayStreetside12x4ModelTag)) then
     if type(tag) == 'string' and tag:find(_constants.lorryBayStreetside12x4ModelTag) then
+        return true
+    else
+        return false
+    end
+end
+
+helpers.getIsStreetside = function(tag)
+    if type(tag) == 'string' and (
+        tag:find(_constants.cargoAreaStreetside12x4ModelTag)
+        or tag:find(_constants.lorryBayStreetside12x4ModelTag)
+        or tag:find(_constants.lorryBayStreetsideEntrance12x4ModelTag)
+    ) then
         return true
     else
         return false

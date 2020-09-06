@@ -1,3 +1,6 @@
+local slotUtils = require('lollo_lorry_station.slotHelpers')
+local transf = require 'transf'
+
 local helpers = {}
 
 helpers.getGroundFace = function(face, key)
@@ -43,6 +46,43 @@ end
 
 helpers.getLengths = function()
     return _lengths
+end
+
+-- LOLLO NOTE adding colliders with this seems correct, but it will result in no colliders at all being active
+helpers.getCollider = function(sidewalkWidth, model)
+	local result = nil
+	if sidewalkWidth < 3.8 then
+		if slotUtils.getIsStreetside(model.tag) then
+			local transfRes = transf.mul(
+				model.transf,
+				{ 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, sidewalkWidth * 0.5, 0, 1 }
+			)
+			print('LOLLO transfRes =')
+			debugPrint(transfRes)
+			result = {
+				params = {
+					halfExtents = { 5.9, 1.9 - sidewalkWidth * 0.5, 1.0 },
+				},
+				transf = transfRes,
+				type = 'BOX',
+			}
+		end
+
+		print('LOLLO model =')
+		debugPrint(model)
+		print('LOLLO collider =')
+		debugPrint(result)
+	end
+
+	return result
+end
+
+helpers.getColliders = function(sidewalkWidth, models)
+	local result = {}
+	for _, model in pairs(models) do
+		table.insert(result, helpers.getCollider(sidewalkWidth, model))
+	end
+	return result
 end
 
 return helpers
