@@ -48,7 +48,10 @@ helpers.getLengths = function()
     return _lengths
 end
 
--- LOLLO NOTE adding colliders with this seems correct, but it will result in no colliders at all being active
+-- LOLLO NOTE adding colliders with this seems correct,
+-- but calling it from con.updateFn or from a module.updateFn or terminateConstructionHook
+-- will result in no colliders at all being active,
+-- except for the edge colliders
 helpers.getCollider = function(sidewalkWidth, model)
 	local result = nil
 	if sidewalkWidth < 3.8 then
