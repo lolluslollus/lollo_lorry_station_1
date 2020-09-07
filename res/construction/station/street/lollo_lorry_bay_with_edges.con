@@ -71,7 +71,8 @@ function data()
 			},
             {
                 key = 'snapNodes',
-                name = _('Snap to neighbours'),
+				name = _('Snap to neighbours'),
+				tooltip = _('No snap can cause collisions when configuring but it is easier to place'),
                 values = {
                     _('No'),
                     _('Yes')
@@ -122,7 +123,7 @@ function data()
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			local _streetFileName = _selectedStreetData.fileName
 			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
-			local _x0 = 5
+			local _x0 = 10
 			local result = {
 				colliders = {},
 				-- coord2terminalInfo = {},
