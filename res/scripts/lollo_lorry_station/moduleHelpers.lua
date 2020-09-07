@@ -1,3 +1,4 @@
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transf = require 'transf'
 
@@ -86,6 +87,78 @@ helpers.getColliders = function(sidewalkWidth, models)
 		table.insert(result, helpers.getCollider(sidewalkWidth, model))
 	end
 	return result
+end
+
+helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
+    return {
+        {
+            key = 'streetType_',
+            name = _('Street type'),
+            values = arrayUtils.map(
+                allStreetData,
+                function(str)
+                    return str.name
+                end
+            ),
+            uiType = 'COMBOBOX',
+            defaultIndex = defaultStreetTypeIndex
+            -- yearFrom = 1925,
+            -- yearTo = 0
+        },
+        {
+            key = 'isStoreCargoOnPavement',
+            name = _('Store cargo on the pavement'),
+            tooltip = _('Store some of the cargo on the pavement or leave it clear for pedestrians'),
+            values = {
+                _('No'),
+                _('Yes')
+            },
+            defaultIndex = 1
+        },
+        {
+            key = 'direction',
+            name = _('Direction'),
+            tooltip = _('Place the station right or left. You cannot have both'),
+            values = {
+                _('↑'),
+                _('↓')
+            },
+            defaultIndex = 0
+        },
+        {
+            key = 'snapNodes',
+            name = _('Snap to neighbours'),
+            tooltip = _('No snap can cause collisions when configuring but it is easier to place'),
+            values = {
+                _('No'),
+                _('Yes')
+            },
+            defaultIndex = 1
+        },
+        {
+            key = 'tramTrack',
+            name = _('Tram track type'),
+            values = {
+                -- must be in this sequence
+                _('NO'),
+                _('YES'),
+                _('ELECTRIC')
+            },
+            defaultIndex = 0
+        },
+        {
+            key = 'extraLength',
+            name = _('Extra Length'),
+            -- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
+            values = arrayUtils.map(
+                helpers.getLengths(),
+                function(length)
+                    return tostring(length) .. 'm'
+                end
+            ),
+            defaultIndex = 0
+        },
+    }
 end
 
 return helpers

@@ -1,4 +1,5 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local streetUtils = require('lollo_lorry_station.streetUtils')
 
 function data()
@@ -78,7 +79,7 @@ function data()
             -- print('LOLLO currentDir in postRunFn =')
             -- debugPrint(currentDir)
 
-            local streetData = streetUtils.getGlobalStreetData()
+            local allStreetData = streetUtils.getGlobalStreetData()
             -- print('LOLLO streetData in postRunFn =')
             -- debugPrint(streetData)
             -- print('LOLLO about to save')
@@ -98,9 +99,9 @@ function data()
             -- The first time you run this mod, only its data will take effect;
             -- The next game start will read the correct data.
 
-            local defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+            local defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
             if defaultStreetTypeIndex < 0 then
-                defaultStreetTypeIndex = arrayUtils.findIndex(streetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+                defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
             end
 
             _addAvailableConstruction(
@@ -108,33 +109,8 @@ function data()
                 'station/street/lollo_lorry_bay_with_edges_2.con',
                 'construction/station/street/lollo_lorry_bay_with_edges',
                 {yearFrom = 1925, yearTo = 0},
-                {
-                    {
-                        key = 'streetType_',
-                        name = _('Street type'),
-                        values = arrayUtils.map(
-                            streetData,
-                            function(str)
-                                return str.name
-                            end
-                        ),
-                        uiType = 'COMBOBOX',
-                        defaultIndex = defaultStreetTypeIndex
-                        -- yearFrom = 1925,
-                        -- yearTo = 0
-                    },
-                    {
-                        key = 'isStoreCargoOnPavement',
-                        name = _('Store cargo on the pavement'),
-                        tooltip = _('Store some of the cargo on the pavement'),
-                        values = {
-                            _('No'),
-                            _('Yes')
-                        },
-                        defaultIndex = 1
-                    },
-                },
-                streetData
+                moduleHelpers.getParams(allStreetData, defaultStreetTypeIndex),
+                allStreetData
             )
         end
     }
