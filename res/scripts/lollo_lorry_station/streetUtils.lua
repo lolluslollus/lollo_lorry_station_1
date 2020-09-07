@@ -1,4 +1,4 @@
-local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local fileUtils = require('lollo_lorry_station.fileUtils')
 local stringUtils = require('lollo_lorry_station.stringUtils')
 
@@ -314,18 +314,19 @@ local function _getStreetTypesWithApi()
     local results = {}
     local streetTypes = api.res.streetTypeRep.getAll()
     for ii, fileName in pairs(streetTypes) do
-        local streetParams = api.res.streetTypeRep.get(ii)
+        local streetProperties = api.res.streetTypeRep.get(ii)
         results[#results+1] = {
-            categories = _cloneCategories(streetParams.categories),
+            categories = _cloneCategories(streetProperties.categories),
             fileName = fileName,
-            icon = streetParams.icon,
-            laneCount = #(streetParams.laneConfigs),
-            name = streetParams.name,
-            rightLaneWidth = (streetParams.laneConfigs[2] or {}).width or 0,
-            sidewalkWidth = streetParams.sidewalkWidth,
-            streetWidth = streetParams.streetWidth,
-            upgrade = streetParams.upgrade,
-            yearTo = streetParams.yearTo
+            icon = streetProperties.icon,
+            isAllTramTracks = helper.getIsStreetAllTramTracks(streetProperties),
+            laneCount = #(streetProperties.laneConfigs),
+            name = streetProperties.name,
+            rightLaneWidth = (streetProperties.laneConfigs[2] or {}).width or 0,
+            sidewalkWidth = streetProperties.sidewalkWidth,
+            streetWidth = streetProperties.streetWidth,
+            upgrade = streetProperties.upgrade,
+            yearTo = streetProperties.yearTo
         }
     end
     return results
@@ -351,6 +352,24 @@ local function _initLolloStreetDataWithFiles(filter)
 
         -- print('LOLLO street data initialised with files, it has', #(_lolloStreetData.data or {}), 'records and type = ', type(_lolloStreetData.data))
     end
+end
+
+helper.getIsStreetAllTramTracks = function(streetProperties)
+    for i = 2, #streetProperties.laneConfigs - 2 do
+        local forward1 = streetProperties.laneConfigs[i].forward
+        local transportModeTram11 = streetProperties.laneConfigs[i].transportModes[6]
+        local transportModeTram12 = streetProperties.laneConfigs[i].transportModes[7]
+        local forward2 = streetProperties.laneConfigs[i + 1].forward
+        local transportModeTram21 = streetProperties.laneConfigs[i + 1].transportModes[6]
+        local transportModeTram22 = streetProperties.laneConfigs[i + 1].transportModes[7]
+        if forward1 == forward2
+        and transportModeTram11 == transportModeTram21
+        and transportModeTram12 == transportModeTram22
+        and (transportModeTram11 > 0 or transportModeTram12 > 0) then
+            return true
+        end
+    end
+    return false
 end
 
 helper.getStreetCategories = function()
