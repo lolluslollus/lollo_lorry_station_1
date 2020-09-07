@@ -123,7 +123,7 @@ function data()
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			local _streetFileName = _selectedStreetData.fileName
 			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
-			local _x0 = 10
+			local _x0 = 10 -- if this is too short and snap is true, edges will try to snap to themselves while configuring
 			local result = {
 				colliders = {},
 				-- coord2terminalInfo = {},
