@@ -13,6 +13,19 @@ return {
     yearTo = 0,
   },
   {
+    categories = { "country", },
+    fileName = "lollo_x_large_6_tram_tracks_country_road.lua",
+    icon = "ui/streets/lollo_x_large_6_tram_tracks_country_road.tga",
+    isAllTramTracks = true,
+    laneCount = 8,
+    name = "Extra-large country road - 6 lanes - 6 tram tracks",
+    rightLaneWidth = 4,
+    sidewalkWidth = 4,
+    streetWidth = 24,
+    upgrade = true,
+    yearTo = 0,
+  },
+  {
     categories = { "urban", },
     fileName = "standard/town_x_large_new.lua",
     icon = "ui/streets/standard/town_x_large_new.tga",
@@ -35,7 +48,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 24,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -74,7 +87,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -100,7 +113,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -114,6 +127,19 @@ return {
     sidewalkWidth = 4,
     streetWidth = 12,
     upgrade = false,
+    yearTo = 0,
+  },
+  {
+    categories = { "highway", },
+    fileName = "lollo_large_1_way_3_lane_3_tram_tracks_country_road.lua",
+    icon = "ui/streets/lollo_large_1_way_3_lane_3_tram_tracks_country_road.tga",
+    isAllTramTracks = true,
+    laneCount = 5,
+    name = "Large highway - 3 lanes - 3 tram tracks",
+    rightLaneWidth = 4,
+    sidewalkWidth = 4,
+    streetWidth = 12,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -139,7 +165,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -165,7 +191,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -191,7 +217,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -230,7 +256,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -256,7 +282,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -282,7 +308,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -308,7 +334,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -321,7 +347,7 @@ return {
     rightLaneWidth = 6,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -360,7 +386,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -386,7 +412,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
@@ -438,7 +464,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    upgrade = true,
     yearTo = 0,
   },
   {
