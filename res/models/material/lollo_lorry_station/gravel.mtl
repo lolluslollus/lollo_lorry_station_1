@@ -19,8 +19,9 @@ function data()
                 wrapT = "REPEAT",
             },
             map_normal = {
-                fileName = "ground_texture/farmland_brown_01_nrml.dds",
+                -- fileName = "ground_texture/farmland_brown_01_nrml.dds",
                 -- fileName = "terrain/scree_nrml.dds",
+                fileName = "terrain/ballast_nrml.dds",
                 -- fileName = "terrain/soil_01_nrml.dds",
                 redGreen = true,
                 type = "TWOD",
@@ -40,19 +41,19 @@ function data()
                 wrapT = "REPEAT",
             },
             normal_scale = {
-                normalScale = 0.36,
+                normalScale = 1,
             },
             operation_1 = {
                 mode = "WORLD_XY",
                 op = "OVERLAY",
                 opacity = 0.30000001192093,
-                scale = { 0.00062499998603016, 0.00062499998603016, },
+                scale = { 0.1, 0.1, },
             },
             operation_2 = {
                 mode = "WORLD_XY",
                 op = "OVERLAY",
                 opacity = 0.30000001192093,
-                scale = { 0.0049999998882413, 0.0049999998882413, },
+                scale = { 0.1, 0.1, },
             },
             polygon_offset = {
                 factor = -1,
