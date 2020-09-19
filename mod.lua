@@ -99,7 +99,7 @@ function data()
             -- The first time you run this mod, only its data will take effect;
             -- The next game start will read the correct data.
 
-            local defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street.lua') - 1
+            local defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street_narrow_sidewalk.lua') - 1
             if defaultStreetTypeIndex < 0 then
                 defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
             end
