@@ -28,18 +28,19 @@ end
 
 local function _replaceStation(oldConstructionId)
     -- print('oldConstructionId =', oldConstructionId)
-    if not(oldConstructionId) then return end
+    if type(oldConstructionId) ~= 'number' or oldConstructionId < 0 then return end
 
     local oldConstruction = api.engine.getComponent(oldConstructionId, api.type.ComponentType.CONSTRUCTION)
     -- print('oldConstruction =')
     -- debugPrint(oldConstruction)
-    if not(oldConstruction) or not(oldConstruction.params)
+    if not(oldConstruction)
+    or not(oldConstruction.params)
     or oldConstruction.params.snapNodes == 1
     or oldConstruction.fileName ~= 'station/street/lollo_lorry_bay_with_edges.con' then return end
 
     local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
     newConstruction.fileName = oldConstruction.fileName
-    -- local newParams = arrayUtils.cloneOmittingFields(oldConstruction.params, {'seed', 'snapNodes'})
+    -- cannot clone this userdata dynamically, coz it won't take pairs and ipairs
     newConstruction.params = {
         streetType_ = oldConstruction.params.streetType_,
         isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
@@ -89,7 +90,7 @@ local function _replaceStation(oldConstructionId)
     context.gatherFields = true -- default is true
     context.player = api.engine.util.getPlayer()
 
-	local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd params is "ignore errors"
+	local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd param is "ignore errors"
 	api.cmd.sendCommand(cmd, callback)
 end
 
