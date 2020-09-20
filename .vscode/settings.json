@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "*.bak": "lua",
         "*.con": "lua",
         "*.mdl": "lua",
         "*.module": "lua",

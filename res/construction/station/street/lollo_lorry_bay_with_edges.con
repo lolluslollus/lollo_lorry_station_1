@@ -36,9 +36,13 @@ function data()
 		skipCollision = true,
 		params = moduleHelpers.getParams(_allStreetData, _getDefaultStreetTypeIndex()),
 		updateFn = function(params, two)
+			-- print('updateFn starting, params =')
+			-- debugPrint(params)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 			-- this parameter was added later: initialise it
 			if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
+			-- force snap once station is built
+			if params.upgrade then params.snapNodes = 1 end
 			local function _getTramTrackType(params)
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'

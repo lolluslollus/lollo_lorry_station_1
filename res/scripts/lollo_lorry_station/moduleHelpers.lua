@@ -127,8 +127,8 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'snapNodes',
-            name = _('Snap to neighbours'),
-            tooltip = _('No snap can cause trouble but it is easier to place. Set this to snap after placing the station.'),
+            name = _('Snap to neighbours while placing'),
+            tooltip = _('No snap can be easier to place. It will be ignored once the station is built.'),
             values = {
                 _('No'),
                 _('Yes')
