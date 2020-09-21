@@ -57,6 +57,9 @@ local function _replaceStation(oldConstructionId)
 
     local proposal = api.type.SimpleProposal.new()
     proposal.constructionsToAdd[1] = newConstruction
+    -- LOLLO NOTE there are asymmetries how different tables are handled.
+    -- This one requires this system, UG says they will document it or amend it.
+    proposal.constructionsToRemove = { oldConstructionId }
     -- proposal.constructionsToRemove[1] = oldConstructionId -- fails to add
     -- proposal.constructionsToRemove:add(oldConstructionId) -- fails to add
     -- proposal.old2new = { -- expected number, received table
@@ -70,7 +73,7 @@ local function _replaceStation(oldConstructionId)
     -- }
 
     -- if I bulldoze here, the station will inherit the old name
-    game.interface.bulldoze(oldConstructionId)
+    -- game.interface.bulldoze(oldConstructionId)
 
     local callback = function(res, success)
         -- print('LOLLO _buildStation res = ')
