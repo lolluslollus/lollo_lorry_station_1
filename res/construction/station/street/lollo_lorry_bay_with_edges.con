@@ -445,7 +445,7 @@ function data()
 						table.insert(result.slots, {
 							-- height = 1,
 							id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside12x4SlotId),
-							-- shape 1 2 3 4
+							-- shape 0 1 2 3
 							spacing = _constants.anyStreetsideSpacing,
 							transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
 							type = _constants.cargoAreaStreetside12x4ModuleType,
@@ -460,8 +460,8 @@ function data()
 					table.insert(result.slots, {
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner12x12SlotId),
-						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						-- shape 0 1 2 3
+						spacing = _constants.innerSpacing12x12,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoAreaInner12x12ModuleType,
 					})
@@ -474,8 +474,8 @@ function data()
 					table.insert(result.slots, {
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner4x4SlotId),
-						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						-- shape 0 1 2 3
+						spacing = _constants.innerSpacing4x4,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoAreaInner4x4ModuleType,
 					})
@@ -488,8 +488,8 @@ function data()
 					table.insert(result.slots, {
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink4x4SlotId),
-						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						-- shape 0 1 2 3
+						spacing = _constants.innerSpacing4x4,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoLinks4x4ModuleType,
 					})

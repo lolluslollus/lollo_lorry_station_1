@@ -49,6 +49,13 @@ helpers.getCargoAreaInner4x4EarthLods = function()
     return {
         {
             node = {
+                -- children = {
+                --     {
+                --         materials = _materials,
+                --         mesh = 'platform/lollo4x4.msh',
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
+                --     },
+                -- },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -64,6 +71,13 @@ helpers.getCargoAreaInner4x4GravelLods = function()
     return {
         {
             node = {
+                -- children = {
+                --     {
+                --         materials = _materials,
+                --         mesh = 'platform/lollo4x4.msh',
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
+                --     },
+                -- },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -578,6 +592,13 @@ helpers.getCargoAreaInner12x12EarthLods = function()
     return {
         {
             node = {
+                -- children = {
+                --     {
+                --         materials = _materials,
+                --         mesh = 'platform/lollo12x12.msh',
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, -0.02, 1, },
+                --     },
+                -- },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -593,6 +614,13 @@ helpers.getCargoAreaInner12x12GravelLods = function()
     return {
         {
             node = {
+                -- children = {
+                --     {
+                --         materials = _materials,
+                --         mesh = 'platform/lollo12x12.msh',
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, -0.02, 1, },
+                --     },
+                -- },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },

@@ -71,7 +71,7 @@ local dummy = 0
 
 -- local _constants = arrayUtils.addProps(
 -- 	{
--- 		anyInnerSpacing = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
+-- 		innerSpacing4x4 = {0.0, 0.0, 0.0, 0.0}, -- {5, 5, 5, 5},
 -- 		-- the smaller these guys, the closer to the road I can fill a slot without it turning red.
 -- 		-- negative values don't matter, the api takes up the abs value
 -- 		-- anyStreetsideSpacing = {0.1, 0.1, 0.1, 0.1},

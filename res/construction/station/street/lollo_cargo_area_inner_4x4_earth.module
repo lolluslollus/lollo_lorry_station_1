@@ -65,9 +65,15 @@ return {
 	end,
 
 	getModelsFn = function()
+		-- LOLLO TODO across the app, make elements easz to remove, even if thez are slightly under the ground
+		-- maybe use dedicated models with something tall on these getModelsFn's ? Nope.
+		-- or maybe use the same models but raise them? Nope.
+		-- or maybe use height? Nope.
+		-- or maybe reintroduce a mesh? Nope.
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,
+				-- id = 'lollo_lorry_station/cargo_area_inner_4x4_visual_aid.mdl', --_constants.cargoAreaInner4x4ModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

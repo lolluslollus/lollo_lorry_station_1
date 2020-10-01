@@ -505,7 +505,7 @@ function data()
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner15x15SlotId),
 						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						spacing = _constants.innerSpacing4x4,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoAreaInner15x15ModuleType,
 					})
@@ -519,7 +519,7 @@ function data()
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner5x5SlotId),
 						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						spacing = _constants.innerSpacing4x4,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoAreaInner5x5ModuleType,
 					})
@@ -533,7 +533,7 @@ function data()
 						-- height = 1,
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink5x5SlotId),
 						-- shape 1 2 3 4
-						spacing = _constants.anyInnerSpacing,
+						spacing = _constants.innerSpacing4x4,
 						transf = transf.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 						type = _constants.cargoLinks5x5ModuleType,
 					})
