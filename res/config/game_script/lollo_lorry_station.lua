@@ -2,7 +2,7 @@ local arrayUtils = require('lollo_lorry_station.arrayUtils')
 
 -- LOLLO TODO try and get rid of all game. dependencies
 
-local function _isBuildingOneOfMine(param, fileName)
+local function _isBuildingConstructionWithFileName(param, fileName)
     local toAdd =
         type(param) == 'table' and type(param.proposal) == 'userdata' and type(param.proposal.toAdd) == 'userdata' and
         param.proposal.toAdd
@@ -19,7 +19,7 @@ local function _isBuildingOneOfMine(param, fileName)
 end
 
 local function _isBuildingLorryBayWithEdges(param)
-    return _isBuildingOneOfMine(param, 'station/street/lollo_lorry_bay_with_edges.con')
+    return _isBuildingConstructionWithFileName(param, 'station/street/lollo_lorry_bay_with_edges.con')
 end
 
 local function _myErrorHandler(err)
