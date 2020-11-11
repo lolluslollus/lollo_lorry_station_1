@@ -20,7 +20,7 @@ return {
 	},
 	description = {
 		name = _("Cargo links, 4 x 4 m"),
-		description = _("Links for waiting cargo, 4 x 4 m, invisible and collision free. Place them across obstacles to connect more cargo areas."),
+		description = _("Links for waiting cargo, 4 x 4 m, collision free. Place them across obstacles to connect more cargo areas."),
 		icon = "ui/construction/station/street/cargo_links_4x4.tga"
 	},
 	metadata = {
@@ -34,7 +34,7 @@ return {
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		-- print('LOLLO small cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
+		-- print('LOLLO cargo_links_4x4 module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
 
@@ -50,7 +50,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = _constants.cargoLinks4x4ModelFileName,
+				id = _constants.cargoLinksEnhanced4x4ModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

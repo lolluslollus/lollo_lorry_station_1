@@ -65,7 +65,7 @@ return {
 	end,
 
 	getModelsFn = function()
-		-- LOLLO TODO across the app, make elements easz to remove, even if thez are slightly under the ground
+		-- LOLLO TODO across the app, make elements easy to remove, even if they are slightly under the ground
 		-- maybe use dedicated models with something tall on these getModelsFn's ? Nope.
 		-- or maybe use the same models but raise them? Nope.
 		-- or maybe use height? Nope.

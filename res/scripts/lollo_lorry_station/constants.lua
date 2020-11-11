@@ -31,6 +31,7 @@ local constants = {
 	cargoAreaStreetside12x4ModelTag = 'cargoAreaStreetside12x4',
 	cargoAreaStreetside12x4ModuleType = 'cargo_area_streetside_12x4',
 	cargoLinks4x4ModelFileName = 'lollo_lorry_station/cargo_links_4x4.mdl',
+	cargoLinksEnhanced4x4ModelFileName = 'lollo_lorry_station/cargo_links_enhanced_4x4.mdl',
 	cargoLinks4x4ModelTag = 'cargoLinks4x4',
 	cargoLinks4x4ModuleType = 'cargo_links_4x4',
 	lorryBayStreetside12x4ModelFileName = 'lollo_lorry_station/lorry_bay_streetside_12x4.mdl',

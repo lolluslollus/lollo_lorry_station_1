@@ -482,7 +482,7 @@ function data()
 				end
 			end
 
-			-- add 4x4 inner link slots
+			-- add 4x4 link slots
 			for _, v in pairs(_slotXYsFlat[4]) do
 				if _isSlotOpen(4, v.x, v.y) then
 					table.insert(result.slots, {
@@ -504,6 +504,7 @@ function data()
 				-- debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
 				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
+				local allCargoLinkIndexesBase0 = slotUtils.getCargoLinksModelIndexesBase0Simple(result.models)
 				-- print('LOLLO cargoAreaModelIndexesBase0 =')
 				-- debugPrint(cargoAreaModelIndexesBase0)
 				-- print('LOLLO allCargoAreaModelIndexesBase0 =')
@@ -548,6 +549,10 @@ function data()
 					end
 
 					for _, modelIndex in pairs(allCargoAreaModelIndexesBase0) do
+						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
+					end
+
+					for _, modelIndex in pairs(allCargoLinkIndexesBase0) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
 					end
 

@@ -104,6 +104,18 @@ helpers.getCargoAreaModelIndexesBase0Simple = function(models)
     return results
 end
 
+helpers.getCargoLinksModelIndexesBase0Simple = function(models)
+    local results = {}
+    local base0ModelIndex = 0
+    for _, model in pairs(models) do
+        if helpers.getIsCargoLink4x4(model.tag) then
+            results[#results+1] = base0ModelIndex
+        end
+        base0ModelIndex = base0ModelIndex + 1
+    end
+    return results
+end
+
 helpers.getLorryBayModelIndexesBase0 = function(models)
     local results = {}
     local base0ModelIndex = 0
@@ -198,6 +210,14 @@ end
 helpers.getIsCargoAreaStreetside15x5 = function(tag)
     if type(tag) == 'string' and tag:find(_constants.cargoAreaStreetside15x5ModelTag) then
         -- return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
+        return true
+    else
+        return false
+    end
+end
+
+helpers.getIsCargoLink4x4 = function(tag)
+    if type(tag) == 'string' and tag:find(_constants.cargoLinks4x4ModelTag) then
         return true
     else
         return false

@@ -57,7 +57,7 @@ local function _replaceStation(oldConstructionId)
 
     local proposal = api.type.SimpleProposal.new()
     proposal.constructionsToAdd[1] = newConstruction
-    -- LOLLO NOTE there are asymmetries how different tables are handled.
+    -- LOLLO NOTE different tables are handled differently.
     -- This one requires this system, UG says they will document it or amend it.
     proposal.constructionsToRemove = { oldConstructionId }
     -- proposal.constructionsToRemove[1] = oldConstructionId -- fails to add
