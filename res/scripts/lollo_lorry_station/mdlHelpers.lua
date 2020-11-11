@@ -49,13 +49,18 @@ helpers.getCargoAreaInner4x4EarthLods = function()
     return {
         {
             node = {
-                -- children = {
+                children = {
                 --     {
                 --         materials = _materials,
                 --         mesh = 'platform/lollo4x4.msh',
                 --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
                 --     },
-                -- },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
+                    },
+                },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -71,13 +76,18 @@ helpers.getCargoAreaInner4x4GravelLods = function()
     return {
         {
             node = {
-                -- children = {
+                children = {
                 --     {
                 --         materials = _materials,
                 --         mesh = 'platform/lollo4x4.msh',
                 --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
                 --     },
-                -- },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
+                    },
+                },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -164,6 +174,21 @@ helpers.getCargoAreaInner4x4Metadata = function()
             },
         },
     }
+end
+
+helpers.getCargoLinks4x4Metadata = function()
+    local result = helpers.getCargoAreaInner4x4Metadata()
+    result.transportNetworkProvider.terminals = {
+        {
+            -- order = 0,
+            -- personEdges = { 0 },
+            personEdges = { },
+            -- personNodes = { 0, 1 },
+            personNodes = { },
+            -- vehicleNode = -1, -- 0,
+        },
+    }
+    return result
 end
 
 helpers.getCargoAreaInner5x5BoundingInfo = function()
@@ -265,7 +290,7 @@ helpers.getCargoLinksEnhanced4x4Lods = function()
                     },
                     {
                         materials = { 'street/new_medium_sidewalk.mtl' },
-                        mesh = 'platform/tyre-tracks-4x4.msh',
+                        mesh = 'platform/tyre-tracks-4x4x01.msh',
                         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.00, 1, },
                     },
                 },
@@ -286,7 +311,7 @@ helpers.getCargoLinks4x4Lods = function()
                 children = {
                     {
                         materials = { 'street/new_medium_sidewalk.mtl' },
-                        mesh = 'platform/tyre-tracks-4x4.msh',
+                        mesh = 'platform/tyre-tracks-4x4x01.msh',
                         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.00, 1, },
                     },
                 },
@@ -602,17 +627,63 @@ helpers.getCargoAreaInner12x12Lods = function()
 end
 
 helpers.getCargoAreaInner12x12EarthLods = function()
-    local _materials = { 'lollo_lorry_station/earth.mtl' }
+    -- local _materials = { 'lollo_lorry_station/earth.mtl' }
+    local _z = -0.02
     return {
         {
             node = {
-                -- children = {
+                children = {
                 --     {
                 --         materials = _materials,
                 --         mesh = 'platform/lollo12x12.msh',
-                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, -0.02, 1, },
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, _z, 1, },
                 --     },
-                -- },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, 2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, 2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, 2, _z, 1, },
+                    },
+                },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
@@ -624,17 +695,63 @@ helpers.getCargoAreaInner12x12EarthLods = function()
 end
 
 helpers.getCargoAreaInner12x12GravelLods = function()
-    local _materials = { 'lollo_lorry_station/gravel.mtl' }
+    -- local _materials = { 'lollo_lorry_station/gravel.mtl' }
+    local _z = -0.02
     return {
         {
             node = {
-                -- children = {
+                children = {
                 --     {
                 --         materials = _materials,
                 --         mesh = 'platform/lollo12x12.msh',
-                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, -0.02, 1, },
+                --         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, _z, 1, },
                 --     },
-                -- },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, 2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, 2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -6, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -2, _z, 1, },
+                    },
+                    {
+                        materials = { 'street/new_medium_sidewalk.mtl' },
+                        mesh = 'platform/tyre-tracks-4x4x03.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, 2, _z, 1, },
+                    },
+                },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
