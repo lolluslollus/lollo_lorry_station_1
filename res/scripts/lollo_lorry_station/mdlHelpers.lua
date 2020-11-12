@@ -34,7 +34,7 @@ helpers.getCargoAreaInner4x4Lods = function()
                         transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 2, -2, -0.02, 1, },
                     },
                     {
-                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        materials = { 'railroad/power_pole.mtl' },
                         -- materials = { 'track/sleeper.mtl' }, -- wood
                         -- LOLLO TODO the textures are shifted in the game, they look good in blender.
                         -- LOLLO TODO add the roof to the other cargo areas once the texture problem is sorted.
@@ -63,7 +63,7 @@ helpers.getCargoAreaInner4x4EarthLods = function()
                         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
                     },
                     {
-                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        materials = { 'railroad/power_pole.mtl' },
                         -- LOLLO TODO the textures are shifted in the game, they look good in blender.
                         mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
                         transf = { 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, -2, -0.02, 1, },
@@ -90,7 +90,7 @@ helpers.getCargoAreaInner4x4GravelLods = function()
                         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, -0.02, 1, },
                     },
                     {
-                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        materials = { 'railroad/power_pole.mtl' },
                         -- LOLLO TODO the textures are shifted in the game, they look good in blender.
                         mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
                         transf = { 0, 1, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 0, -2, -0.02, 1, },

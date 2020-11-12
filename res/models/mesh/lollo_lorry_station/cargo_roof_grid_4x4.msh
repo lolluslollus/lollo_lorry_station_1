@@ -8,23 +8,23 @@ return {
 			indices = {
 				normal = {
 					count = 2496,
-					offset = 12092,
+					offset = 7116,
 				},
 				position = {
 					count = 2496,
-					offset = 14588,
+					offset = 9612,
 				},
 				tangent = {
 					count = 2496,
-					offset = 9596,
+					offset = 12108,
 				},
 				uv0 = {
 					count = 2496,
-					offset = 7100,
+					offset = 14604,
 				},
 			},
 			materials = {
-				"station/road/streetstation/Material.001.mtl", 
+				"railroad/power_pole.mtl", 
 			},
 		}, 
 	},
@@ -32,22 +32,22 @@ return {
 		normal = {
 			count = 780,
 			numComp = 3,
-			offset = 4616,
+			offset = 0,
 		},
 		position = {
 			count = 1704,
 			numComp = 3,
-			offset = 5396,
+			offset = 780,
 		},
 		tangent = {
 			count = 3168,
 			numComp = 4,
-			offset = 1448,
+			offset = 2484,
 		},
 		uv0 = {
-			count = 1448,
+			count = 1464,
 			numComp = 2,
-			offset = 0,
+			offset = 5652,
 		},
 	},
 }
