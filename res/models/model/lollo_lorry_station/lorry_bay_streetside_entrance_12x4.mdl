@@ -1,6 +1,7 @@
 function data()
 	local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
-	local _labelY = 1.2
+	local _labelY = 1.52
+	local _labelZ = 2.6
 
 	return {
 		boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
@@ -11,10 +12,16 @@ function data()
 				node = {
 					children = {
 						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_portal_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, 0, 1, },
+						},
+						{
 							materials = { "station/rail/cargo/cargo_assets_1.mtl", },
-							mesh = "station/rail/asset/cargo_name_board/name_board_lod0.msh",
+							-- mesh = "station/rail/asset/cargo_name_board/name_board_lod0.msh",
+							mesh = "lollo_lorry_station/name_board_lod0.msh",
 							name = "NameBoard",
-							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _labelY, 0, 1, },
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _labelY, _labelZ, 1, },
 						},
 						{
 							animations = {
@@ -112,12 +119,12 @@ function data()
 						params = { },
 						renderMode = "STD",
 						size = { 2.6, .3 },
-						transf = { 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, -1.3, -.074 + _labelY, 2.17, 1, },
+						transf = { 1, 0, 0, 0, 0, 0, 1, 0, 0, -1, 0, 0, -1.3, -.074 + _labelY, _labelZ + 2.17, 1, },
 						type = "STATION_NAME",
 						verticalAlignment = "CENTER",
 					},
 					-- {
-					-- 	transf = { -1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1.3, .074 + _labelY, 2.17, 1, },
+					-- 	transf = { -1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1.3, .074 + _labelY, _labelZ + 2.17, 1, },
 					-- 	size = { 2.6, .3 },
 					-- 	type = "STATION_NAME",
 					-- 	alphaMode = "BLEND",
