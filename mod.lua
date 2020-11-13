@@ -67,6 +67,10 @@ function data()
                 {
                     name = 'Lollus',
                     role = 'CREATOR'
+                },
+                {
+                    name = 'Bauer33333',
+                    role = '3d models'
                 }
             }
         },
