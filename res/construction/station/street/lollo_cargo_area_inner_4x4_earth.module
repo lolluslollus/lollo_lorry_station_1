@@ -70,7 +70,7 @@ return {
 		-- or maybe use the same models but raise them? Nope.
 		-- or maybe use height? Nope.
 		-- or maybe reintroduce a mesh? That's the only way.
-		-- For now there is a low concrete track, roofs should be better.
+		-- For now there is a low concrete track and roofs, but somehow nothing turns yellow when bulldozing a module.
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,

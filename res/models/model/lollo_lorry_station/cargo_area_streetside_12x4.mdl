@@ -26,6 +26,21 @@ function data()
 							mesh = "station/road/streetstation/pedestrian_era_c/end_l_lod0.msh",
 							transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 6, -2.0, _cargoPlatformZ, 1, },
 						},
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _cargoPlatformZ, 1, },
+						},
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
+						},
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -2, _cargoPlatformZ, 1, },
+						},
 						-- waypoint post, just for testing.
 						-- transf[15] = -0.3 puts the height level with the stock waypoint
 						-- {
