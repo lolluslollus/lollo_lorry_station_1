@@ -3,7 +3,7 @@ local _cargoPlatformZ = -0.03
 
 helpers.getCargoAreaInner4x4BoundingInfo = function()
     return {
-        bbMax = { 1.9, 1.9, 2 },
+        bbMax = { 1.9, 1.9, 5 },
         bbMin = { -1.9, -1.9, 0 },
     }
 end
@@ -535,7 +535,7 @@ end
 
 helpers.getCargoAreaInner12x12BoundingInfo = function()
     return {
-        bbMax = { 5.9, 5.9, 2 },
+        bbMax = { 5.9, 5.9, 5 },
         bbMin = { -5.9, -5.9, 0 },
     }
 end
