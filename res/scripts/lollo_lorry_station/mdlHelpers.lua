@@ -11,7 +11,7 @@ end
 helpers.getCargoAreaInner4x4Collider = function()
     return {
         params = {
-            halfExtents = { 1.9, 1.9, 1.0, },
+            halfExtents = { 1.9, 1.9, 2.5, },
         },
         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
         type = 'BOX',
@@ -26,13 +26,8 @@ helpers.getCargoAreaInner4x4Lods = function()
                 children = {
                     {
                         materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 2, -2, _cargoPlatformZ, 1, },
+                        mesh = 'lollo_lorry_station/tarmac_4x4.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
                     },
                     {
                         materials = { 'lollo_lorry_station/power_pole.mtl' },
@@ -543,7 +538,7 @@ end
 helpers.getCargoAreaInner12x12Collider = function()
     return {
         params = {
-            halfExtents = { 5.9, 5.9, 1.0, },
+            halfExtents = { 5.9, 5.9, 2.5, },
         },
         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
         type = 'BOX',
@@ -557,69 +552,10 @@ helpers.getCargoAreaInner12x12Lods = function()
             node = {
                 children = {
                     {
-                        -- materials = { 'street/new_medium_sidewalk_border_inner.mtl', 'street/new_medium_sidewalk.mtl', },
                         materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -6, -6, _cargoPlatformZ, 1, },
+                        mesh = 'lollo_lorry_station/tarmac_12x12.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -6, _cargoPlatformZ, 1, },
                     },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, -2.5, -6, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, 2.5, -6, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 6, -6, _cargoPlatformZ, 1, },
-                    },
-
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -6, -2, _cargoPlatformZ, 1, },
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, -2.5, -2, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, 2.5, -2, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 6, -2, _cargoPlatformZ, 1, },
-                    },
-
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, -6, 2, _cargoPlatformZ, 1, },
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, -2.5, 2, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/straight_lod0.msh',
-                        transf = {1, 0, 0, 0, 0, -1.62, 0, 0, 0, 0, 1, 0, 2.5, 2, _cargoPlatformZ, 1}
-                    },
-                    {
-                        materials = _materials,
-                        mesh = 'station/road/streetstation/pedestrian_era_c/end_l_lod0.msh',
-                        transf = { 0, 1.62, 0, 0, -1, 0, 0, 0, 0, 0, 1, 0, 6, 2, _cargoPlatformZ, 1, },
-                    },
-
                     {
                         materials = { 'lollo_lorry_station/power_pole.mtl' },
                         mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',

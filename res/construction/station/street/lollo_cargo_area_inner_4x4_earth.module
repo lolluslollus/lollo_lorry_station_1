@@ -71,7 +71,8 @@ return {
 		-- or maybe use height? Nope.
 		-- or maybe reintroduce a mesh? That's the only way.
 		-- For now there is a low concrete track and roofs, but somehow nothing turns yellow when bulldozing a module.
-		-- Only the streetside modules turn yellow.
+		-- Only the streetside modules turn yellow. Some modules turn yellow, then you add some more modules and
+		-- they don't turn yellow anymore. Either it's a bug or an undocumented "feature".
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,
