@@ -37,7 +37,8 @@ return {
 		-- print('LOLLO small cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
--- LOLLO TODO try addModelFn
+		-- LOLLO NOTE addModelFn does the same as mine, but mine adds the slot ids on top.
+		-- Not that I use it, but you never know.
 		-- addModelFn(_constants.cargoAreaInner4x4ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
 			id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,
