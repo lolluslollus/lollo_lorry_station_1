@@ -77,7 +77,6 @@ return {
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,
-				-- id = 'lollo_lorry_station/cargo_area_inner_4x4_visual_aid.mdl', --_constants.cargoAreaInner4x4ModelFileName,
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}
