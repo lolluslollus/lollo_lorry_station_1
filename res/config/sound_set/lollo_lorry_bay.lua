@@ -2,9 +2,10 @@ local soundsetutil = require "soundsetutil"
 
 local randomEventNames = {
     "car_idle.wav",
+    "lorry_whip.wav",
     "selected_bus.wav",
     -- "selected_busdepot3.wav",
-    "selected_bus_depot.wav",
+    -- "selected_bus_depot.wav",
     -- "selected_cargotruckstation2.wav",
     "selected_industrial.wav",
 }
