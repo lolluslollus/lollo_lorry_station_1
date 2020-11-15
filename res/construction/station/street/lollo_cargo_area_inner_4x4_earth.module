@@ -37,7 +37,7 @@ return {
 		-- print('LOLLO small cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
-
+-- LOLLO TODO try addModelFn
 		-- addModelFn(_constants.cargoAreaInner4x4ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
 		result.models[#result.models + 1] = {
 			id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,
@@ -63,6 +63,7 @@ return {
 		-- 	terminal = 0
 		-- }
 	end,
+-- LOLLO TODO test colliders
 
 	getModelsFn = function()
 		-- LOLLO TODO across the app, make elements easy to remove, even if they are slightly under the ground
