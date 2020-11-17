@@ -174,83 +174,68 @@ function data()
 				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
 			end
 
-			_trySetSlotOpen(1, -2, 0)
-			_setSlotBarred(1, -1, -1)
-			_setSlotBarred(1, -1, 0)
-			_trySetSlotOpen(1, -1, 1)
-			_setSlotBarred(1, 0, -1)
-			_setSlotBarred(1, 0, 0)
-			_trySetSlotOpen(1, 0, 1)
-			_setSlotBarred(1, 1, -1)
-			_setSlotBarred(1, 1, 0)
-			_trySetSlotOpen(1, 1, 1)
-			_trySetSlotOpen(1, 2, 0)
+			local _initSlots = function()
+				local _extraLengthGridStepCount = math.ceil(_halfExtraLength / _constants.xTransfFactor)
+				-- print('_extraLengthGridStepCount =', _extraLengthGridStepCount)
+				-- 4x4 inner modules
+				local _xMin = -1 - _extraLengthGridStepCount
+				local _xMax = 1 + _extraLengthGridStepCount
+				_trySetSlotOpen(1, _xMin - 1, 0)
+				for x = _xMin, _xMax do
+					_setSlotBarred(1, x, -1)
+					_setSlotBarred(1, x, 0)
+					if x > -2 and x < 2 then
+						_trySetSlotOpen(1, x, 1)
+					end
+				end
+				_trySetSlotOpen(1, _xMax + 1, 0)
 
-			if params.isStoreCargoOnPavement == 1 then
-				_trySetSlotOpen(2, -3, 0)
-			else
-				_setSlotBarred(2, -3, 0)
+				-- 12x4 streetside modules
+				if params.isStoreCargoOnPavement == 1 then
+					_trySetSlotOpen(2, -3, 0)
+				else
+					_setSlotBarred(2, -3, 0)
+				end
+				_setSlotBarred(2, -2, 0)
+				_setSlotBarred(2, -1, 0)
+				_setSlotBarred(2, 0, 0)
+				_setSlotBarred(2, 1, 0)
+				_setSlotBarred(2, 2, 0)
+				if params.isStoreCargoOnPavement == 1 then
+					_trySetSlotOpen(2, 3, 0)
+				else
+					_setSlotBarred(2, 3, 0)
+				end
+
+				-- 12x12 inner modules
+				local _xMin = -2 - _extraLengthGridStepCount
+				local _xMax = 2 + _extraLengthGridStepCount
+				for x = _xMin, _xMax do
+					_setSlotBarred(3, x, -2)
+					_setSlotBarred(3, x, -1)
+					_setSlotBarred(3, x, 0)
+					_setSlotBarred(3, x, 1)
+					if x > -3 and x < 3 then
+						_trySetSlotOpen(3, x, 2)
+					end
+				end
+
+				-- 4x4 link modules
+				_trySetSlotOpen(4, -2, 0)
+				_trySetSlotOpen(4, -1, -1)
+				_setSlotBarred(4, -1, 0)
+				_trySetSlotOpen(4, -1, 1)
+				_trySetSlotOpen(4, 0, -1)
+				_setSlotBarred(4, 0, 0)
+				_trySetSlotOpen(4, 0, 1)
+				_trySetSlotOpen(4, 1, -1)
+				_setSlotBarred(4, 1, 0)
+				_trySetSlotOpen(4, 1, 1)
+				_trySetSlotOpen(4, 2, 0)
 			end
-			-- _setSlotBarred(2, -2, -1)
-			_setSlotBarred(2, -2, 0)
-			-- _setSlotBarred(2, -2, 1)
-			-- _setSlotBarred(2, -1, -1)
-			_setSlotBarred(2, -1, 0)
-			-- _setSlotBarred(2, -1, 1)
-			-- _setSlotBarred(2, 0, -1)
-			_setSlotBarred(2, 0, 0)
-			-- _setSlotBarred(2, 0, 1)
-			-- _setSlotBarred(2, 1, -1)
-			_setSlotBarred(2, 1, 0)
-			-- _setSlotBarred(2, 1, 1)
-			-- _setSlotBarred(2, 2, -1)
-			_setSlotBarred(2, 2, 0)
-			-- _setSlotBarred(2, 2, 1)
-			if params.isStoreCargoOnPavement == 1 then
-				_trySetSlotOpen(2, 3, 0)
-			else
-				_setSlotBarred(2, 3, 0)
-			end
+			_initSlots()
 
-			_setSlotBarred(3, -2, -2)
-			_setSlotBarred(3, -2, -1)
-			_setSlotBarred(3, -2, 0)
-			_setSlotBarred(3, -2, 1)
-			_trySetSlotOpen(3, -2, 2)
-			_setSlotBarred(3, -1, -2)
-			_setSlotBarred(3, -1, -1)
-			_setSlotBarred(3, -1, 0)
-			_setSlotBarred(3, -1, 1)
-			_trySetSlotOpen(3, -1, 2)
-			_setSlotBarred(3, 0, -2)
-			_setSlotBarred(3, 0, -1)
-			_setSlotBarred(3, 0, 0)
-			_setSlotBarred(3, 0, 1)
-			_trySetSlotOpen(3, 0, 2)
-			_setSlotBarred(3, 1, -2)
-			_setSlotBarred(3, 1, -1)
-			_setSlotBarred(3, 1, 0)
-			_setSlotBarred(3, 1, 1)
-			_trySetSlotOpen(3, 1, 2)
-			_setSlotBarred(3, 2, -2)
-			_setSlotBarred(3, 2, -1)
-			_setSlotBarred(3, 2, 0)
-			_setSlotBarred(3, 2, 1)
-			_trySetSlotOpen(3, 2, 2)
-
-			_trySetSlotOpen(4, -2, 0)
-			_trySetSlotOpen(4, -1, -1)
-			_setSlotBarred(4, -1, 0)
-			_trySetSlotOpen(4, -1, 1)
-			_trySetSlotOpen(4, 0, -1)
-			_setSlotBarred(4, 0, 0)
-			_trySetSlotOpen(4, 0, 1)
-			_trySetSlotOpen(4, 1, -1)
-			_setSlotBarred(4, 1, 0)
-			_trySetSlotOpen(4, 1, 1)
-			_trySetSlotOpen(4, 2, 0)
-
-			-- print('LOLLO _slotXYsNested before beginning =')
+			-- print('LOLLO _slotXYsNested after initialisation =')
 			-- debugPrint(_slotXYsNested)
 			-- fill slots on and around modules, if present
 			if type(params.modules) == 'table' then
