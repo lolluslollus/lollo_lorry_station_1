@@ -181,7 +181,7 @@ local function _getStreetFilesContents(streetDirPath, fileNamePrefix)
                 name = fileData.name or '',
                 sidewalkWidth = fileData.sidewalkWidth or 0.2,
                 streetWidth = fileData.streetWidth or 0.2,
-                upgrade = fileData.upgrade or true, -- true means, do not show this street in the menu
+                upgrade = fileData.upgrade, -- true means, do not show this street in the menu
                 yearTo = fileData.yearTo or 1925
             }
             if type(newRecord.fileName) == 'string' and newRecord.fileName:len() > 0
@@ -207,7 +207,7 @@ local function _getStreetFilesContents(streetDirPath, fileNamePrefix)
 
     -- LOLLO NOTE very useful to see what is going on
     -- print('LOLLO debug.getregistry() = ')
-    -- print(inspect(debug.getregistry()))
+    -- debugPrint(debug.getregistry())
 
     -- LOLLO NOTE you can save the global var in game or in _G
     -- print('LOLLO game.config = ')
@@ -250,7 +250,7 @@ local function _getStreetDataFiltered_Stock(streetDataTable)
 
     local results = {}
     for _, strDataRecord in pairs(streetDataTable) do
-        if strDataRecord.upgrade == false and strDataRecord.yearTo == 0 then
+        if strDataRecord.yearTo == 0 and (strDataRecord.upgrade == false or strDataRecord.isAllTramTracks == true) then
             if arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().COUNTRY)
             or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().HIGHWAY)
             or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().ONE_WAY)
@@ -267,7 +267,7 @@ local function _getStreetDataFiltered_StockAndReservedLanes(streetDataTable)
 
     local results = {}
     for _, strDataRecord in pairs(streetDataTable) do
-        if strDataRecord.upgrade == false and strDataRecord.yearTo == 0 then
+        if strDataRecord.yearTo == 0 and (strDataRecord.upgrade == false or strDataRecord.isAllTramTracks == true) then
             if arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().COUNTRY)
             or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().COUNTRY_BUS_RIGHT)
             or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().COUNTRY_CARGO_RIGHT)
@@ -319,7 +319,7 @@ local function _getStreetTypesWithApi()
             categories = _cloneCategories(streetProperties.categories),
             fileName = fileName,
             icon = streetProperties.icon,
-            isAllTramTracks = helper.getIsStreetAllTramTracks(streetProperties),
+            isAllTramTracks = helper.getIsStreetAllTramTracks(streetProperties.laneConfigs),
             laneCount = #(streetProperties.laneConfigs),
             name = streetProperties.name,
             rightLaneWidth = (streetProperties.laneConfigs[2] or {}).width or 0,
@@ -354,23 +354,88 @@ local function _initLolloStreetDataWithFiles(filter)
     end
 end
 
-helper.getIsStreetAllTramTracks = function(streetProperties)
-    for i = 2, #streetProperties.laneConfigs - 2 do
-        local forward1 = streetProperties.laneConfigs[i].forward
-        local transportModeTram11 = streetProperties.laneConfigs[i].transportModes[6]
-        local transportModeTram12 = streetProperties.laneConfigs[i].transportModes[7]
-        local forward2 = streetProperties.laneConfigs[i + 1].forward
-        local transportModeTram21 = streetProperties.laneConfigs[i + 1].transportModes[6]
-        local transportModeTram22 = streetProperties.laneConfigs[i + 1].transportModes[7]
-        if forward1 == forward2
-        and transportModeTram11 == transportModeTram21
-        and transportModeTram12 == transportModeTram22
-        and (transportModeTram11 > 0 or transportModeTram12 > 0) then
+helper.getIsStreetOneWay = function(laneConfigs)
+    if #laneConfigs < 2 then return false end
+
+    local lastForward = laneConfigs[2].forward
+    -- for index, laneConfig in pairs(laneConfigs) do
+    --     if index > 2 and index < #laneConfigs then
+    --         if laneConfig.forward ~= lastForward then
+    --             return false
+    --         end
+    --     end
+    -- end
+
+    for i = 3, #laneConfigs - 1 do
+        if laneConfigs[i].forward ~= lastForward then
+            return false
+        end
+    end
+
+    return true
+end
+
+helper.getIsInnerLane = function(laneConfigs, laneConfigIndex, isOneWay)
+    return laneConfigIndex > 1 and laneConfigIndex < #laneConfigs and not(helper.getIsOuterLane(laneConfigs, laneConfigIndex, isOneWay))
+end
+
+helper.getIsOuterLane = function(laneConfigs, laneConfigIndex, isOneWay)
+    return (laneConfigIndex == 2 and laneConfigIndex < #laneConfigs and not(isOneWay)) -- rightmost lane in 2-way roads, leftmost in 1-way
+    or (laneConfigIndex > 1 and laneConfigIndex == #laneConfigs - 1) -- leftmost lane in 2-way roads, rightmost in 1-way
+end
+
+helper.getIsStreetAllTramTracks = function(laneConfigs)
+    local _isOneWay = helper.getIsStreetOneWay(laneConfigs)
+
+    for i = 2, #laneConfigs - 1 do
+        if helper.getIsInnerLane(laneConfigs, i, _isOneWay)
+        and (laneConfigs[i].transportModes[6] > 0 or laneConfigs[i].transportModes[7] > 0)
+        then
             return true
         end
     end
+
     return false
 end
+
+helper.transportModes = {
+    getTargetTransportModes4Bus = function()
+        return {0, 0, 0, 1,  0, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0}
+    end,
+    getTargetTransportModes4Cargo = function()
+        return {0, 0, 0, 0,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0}
+    end,
+    getTargetTransportModes4Person = function()
+        return {0, 0, 0, 1,  0, 1, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0}
+    end,
+    getTargetTransportModes4Tram = function()
+        return {0, 0, 0, 0,  0, 1, 1, 0,  0, 0, 0, 0,  0, 0, 0, 0}
+    end,
+    getTargetTransportModes4Tyres = function()
+        return {0, 0, 0, 1,  1, 0, 0, 0,  0, 0, 0, 0,  0, 0, 0, 0}
+    end,
+    getLaneConfigToString = function(transportModes)
+        local result = ''
+        for _, value in pairs(transportModes) do
+            result = result .. tostring(value)
+        end
+        return result
+    end,
+    isTramRightBarred = function(streetTypeId)
+        -- are tram tracks in the outer lane explicitly barred?
+        if type(streetTypeId) ~= 'number' or streetTypeId < 0 then return false end
+
+        local fileName = api.res.streetTypeRep.getFileName(streetTypeId)
+        if type(fileName) ~= 'string' then return false end
+
+        if fileName:find(helper.transportModes.getLaneConfigToString(helper.transportModes.getTargetTransportModes4Bus()))
+        or fileName:find(helper.transportModes.getLaneConfigToString(helper.transportModes.getTargetTransportModes4Cargo()))
+        or fileName:find(helper.transportModes.getLaneConfigToString(helper.transportModes.getTargetTransportModes4Tyres()))
+        then return true end
+
+        return false
+    end,
+}
 
 helper.getStreetCategories = function()
     return {
