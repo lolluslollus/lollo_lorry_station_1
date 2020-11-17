@@ -1,4 +1,3 @@
-local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local streetUtils = require('lollo_lorry_station.streetUtils')
 
@@ -55,7 +54,7 @@ function data()
     end
     return {
         info = {
-            minorVersion = 11,
+            minorVersion = 12,
             severityAdd = 'NONE',
             severityRemove = 'WARNING',
             name = _('_NAME'),
@@ -78,44 +77,20 @@ function data()
         -- It is the only place where we can define a dynamic construction,
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
-        postRunFnBAK = function(settings, params)
-            -- local currentDir = fileUtils.getParentDirFromPath(fileUtils.getCurrentPath())
-            -- print('LOLLO currentDir in postRunFn =')
-            -- debugPrint(currentDir)
-
-            local allStreetData = streetUtils.getGlobalStreetData()
-            -- print('LOLLO streetData in postRunFn =')
-            -- debugPrint(streetData)
-            -- print('LOLLO about to save')
-            -- local saveResult = fileUtils.saveTable(streetData or {}, currentDir .. _constants.streetDataFileName)
-            -- print('LOLLO saveResult =')
-            -- debugPrint(saveResult)
-
-            -- if true then return end
-            -- LOLLO NOTE the following works with non-modular constructions, but this one is modular.
-            -- Waiting for a fix or documentation.
-            -- The program dumps when plopping a module:
-            -- "key not found: name"
-            -- In the meantime, we write to a file here and read it in the .con
-            -- The trouble is, first .con is called twice, then postRunFn, then again .con twice.
-            -- If the file does not exist, even if it written correctly here, the .con will dump
-            -- Solution: ship __streetData with the mod.
-            -- The first time you run this mod, only its data will take effect;
-            -- The next game start will read the correct data.
-
-            local defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street_narrow_sidewalk.lua') - 1
-            if defaultStreetTypeIndex < 0 then
-                defaultStreetTypeIndex = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
-            end
-
-            _addAvailableConstruction(
-                'station/street/lollo_lorry_bay_with_edges.con',
-                'station/street/lollo_lorry_bay_with_edges_2.con',
-                'construction/station/street/lollo_lorry_bay_with_edges',
-                {yearFrom = 1925, yearTo = 0},
-                moduleHelpers.getParams(allStreetData, defaultStreetTypeIndex),
-                allStreetData
+        postRunFn = function(settings, params)
+            local allStreetData = streetUtils.getGlobalStreetData(
+                streetUtils.getStreetDataFilters().STOCK_AND_MODS
             )
-        end
+            local staticCon = api.res.constructionRep.get(
+                api.res.constructionRep.find(
+                    'station/street/lollo_lorry_bay_with_edges.con'
+                )
+            )
+            staticCon.updateScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges.updateFn'
+            staticCon.updateScript.params = {
+                globalStreetData = allStreetData
+            }
+            moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
+        end,
     }
 end

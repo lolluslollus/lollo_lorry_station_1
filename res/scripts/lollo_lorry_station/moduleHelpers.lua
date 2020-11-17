@@ -4,6 +4,17 @@ local transf = require 'transf'
 
 local helpers = {}
 
+local function _getDummyValues(howMany)
+    if not(howMany) then howMany = 100 end
+
+    local results = {}
+    for i = 1, howMany do
+        results[#results+1] = 'dummy' .. i
+    end
+
+    return results
+end
+
 helpers.getGroundFace = function(face, key)
     return {
         face = face, -- LOLLO NOTE Z is ignored here
@@ -91,19 +102,32 @@ end
 
 helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
     return {
+        -- {
+        --     key = 'streetType_',
+        --     name = _('Street type'),
+        --     values = arrayUtils.map(
+        --         allStreetData,
+        --         function(str)
+        --             return str.name
+        --         end
+        --     ),
+        --     uiType = 'COMBOBOX',
+        --     defaultIndex = defaultStreetTypeIndex
+        --     -- yearFrom = 1925,
+        --     -- yearTo = 0
+        -- },
         {
             key = 'streetType_',
             name = _('Street type'),
-            values = arrayUtils.map(
-                allStreetData,
-                function(str)
-                    return str.name
-                end
-            ),
-            uiType = 'COMBOBOX',
-            defaultIndex = defaultStreetTypeIndex
-            -- yearFrom = 1925,
-            -- yearTo = 0
+            -- will be replaced at postRunFn
+            values = {
+                'dummy1',
+                'dummy2'
+            },
+            -- will be replaced at postRunFn
+            uiType = 'BUTTON',
+            -- will be replaced at postRunFn
+            defaultIndex = 0
         },
         {
             key = 'isStoreCargoOnPavement',
@@ -159,6 +183,34 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             defaultIndex = 0
         },
     }
+end
+
+helpers.getDefaultStreetTypeIndex = function(allStreetData)
+    if type(allStreetData) ~= 'table' then return 0 end
+
+    local result = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street_narrow_sidewalk.lua') - 1
+    if result < 0 then
+        result = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
+    end
+
+    return result > 0 and result or 0
+end
+
+helpers.updateParamValues_streetType_ = function(params, allStreetData)
+    for _, param in pairs(params) do
+        if param.key == 'streetType_' then
+            param.values = arrayUtils.map(
+                allStreetData,
+                function(str)
+                    return str.name
+                end
+            )
+            param.defaultIndex = helpers.getDefaultStreetTypeIndex(allStreetData)
+            param.uiType = 2 -- 'COMBOBOX'
+            -- print('streetType_ param =')
+            -- debugPrint(param)
+        end
+    end
 end
 
 return helpers

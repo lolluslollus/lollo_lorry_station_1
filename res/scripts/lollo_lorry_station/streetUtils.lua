@@ -262,6 +262,24 @@ local function _getStreetDataFiltered_Stock(streetDataTable)
     return results
 end
 
+local function _getStreetDataFiltered_StockAndMods(streetDataTable)
+    if type(streetDataTable) ~= 'table' then return {} end
+
+    local results = {}
+    for _, strDataRecord in pairs(streetDataTable) do
+        if strDataRecord.yearTo == 0 and (strDataRecord.upgrade == false or strDataRecord.isAllTramTracks == true) then
+            if arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().COUNTRY)
+            or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().HIGHWAY)
+            or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().ONE_WAY)
+            or arrayUtils.arrayHasValue(strDataRecord.categories, helper.getStreetCategories().URBAN)
+            or arrayUtils.arrayHasValue(strDataRecord.categories, 'mining') then
+                table.insert(results, #results + 1, strDataRecord)
+            end
+        end
+    end
+    return results
+end
+
 local function _getStreetDataFiltered_StockAndReservedLanes(streetDataTable)
     if type(streetDataTable) ~= 'table' then return {} end
 
@@ -479,6 +497,7 @@ end
 helper.getStreetDataFilters = function()
     return {
         STOCK = { id = 'stock', func = _getStreetDataFiltered_Stock },
+        STOCK_AND_MODS = { id = 'stock-and-mods', func = _getStreetDataFiltered_StockAndMods },
         STOCK_AND_RESERVED_LANES = { id = 'stock-and-reserved-lanes', func = _getStreetDataFiltered_StockAndReservedLanes },
     }
 end
