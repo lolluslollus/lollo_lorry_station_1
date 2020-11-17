@@ -11,9 +11,9 @@ end
 helpers.getCargoAreaInner4x4Collider = function()
     return {
         params = {
-            halfExtents = { 1.9, 1.9, 2.5, },
+            halfExtents = { 1.9, 1.9, 2.7, },
         },
-        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2.3, 1, },
         type = 'BOX',
     }
 end
@@ -538,9 +538,9 @@ end
 helpers.getCargoAreaInner12x12Collider = function()
     return {
         params = {
-            halfExtents = { 5.9, 5.9, 2.5, },
+            halfExtents = { 5.9, 5.9, 2.7, },
         },
-        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2.3, 1, },
         type = 'BOX',
     }
 end
@@ -1526,10 +1526,10 @@ end
 helpers.getAnythingStreetside12x4Collider = function ()
     return {
         params = {
-            -- halfExtents = { 5.9, 1.9, 2.5, },
-            halfExtents = { 0.9, 1.9, 2.5, },
+            -- halfExtents = { 5.9, 1.9, 2.7, },
+            halfExtents = { 0.9, 1.9, 2.7, },
         },
-        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 2.3, 1, },
         type = "BOX",
     }
 end

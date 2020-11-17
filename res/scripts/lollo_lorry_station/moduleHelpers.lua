@@ -92,14 +92,6 @@ helpers.getCollider = function(sidewalkWidth, model)
 	return result
 end
 
-helpers.getColliders = function(sidewalkWidth, models)
-	local result = {}
-	for _, model in pairs(models) do
-		table.insert(result, helpers.getCollider(sidewalkWidth, model))
-	end
-	return result
-end
-
 helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
     return {
         -- {

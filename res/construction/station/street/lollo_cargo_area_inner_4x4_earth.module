@@ -64,7 +64,6 @@ return {
 		-- 	terminal = 0
 		-- }
 	end,
--- LOLLO TODO fix colliders
 
 	getModelsFn = function()
 		-- LOLLO TODO across the app, make elements easy to remove, even if they are slightly under the ground
