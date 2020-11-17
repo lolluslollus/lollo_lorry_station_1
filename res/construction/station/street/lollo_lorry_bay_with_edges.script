@@ -180,7 +180,7 @@ function data()
 				-- 4x4 inner modules
 				local _xMin = -1 - _extraLengthGridStepCount
 				local _xMax = 1 + _extraLengthGridStepCount
-				_trySetSlotOpen(1, _xMin - 1, 0)
+				-- _trySetSlotOpen(1, _xMin - 1, 0)
 				for x = _xMin, _xMax do
 					_setSlotBarred(1, x, -1)
 					_setSlotBarred(1, x, 0)
@@ -188,7 +188,7 @@ function data()
 						_trySetSlotOpen(1, x, 1)
 					end
 				end
-				_trySetSlotOpen(1, _xMax + 1, 0)
+				-- _trySetSlotOpen(1, _xMax + 1, 0)
 
 				-- 12x4 streetside modules
 				if params.isStoreCargoOnPavement == 1 then
