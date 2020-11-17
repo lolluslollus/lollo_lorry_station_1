@@ -394,6 +394,8 @@ function data()
 						_trySetSlotOpen(4, moduleX + 1, moduleY)
 						_trySetSlotOpen(4, moduleX, moduleY - 1)
 						_trySetSlotOpen(4, moduleX, moduleY + 1)
+						_setSlotBarred(2, moduleX - 1, moduleY)
+						_setSlotBarred(2, moduleX + 1, moduleY)
 					end
 				end
 			end
