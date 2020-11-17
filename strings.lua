@@ -17,6 +17,11 @@ function data()
 
 				Use the categories in the street menu so you don't go bananas selecting road types.
 
+				You can use modded street types, as long as they have one of the following categories: country, highway, one-way, urban, mining. Mods can be added and removed between save games, so you have to pay a little price for flexibility: if you want to reconfigure an existing lorry station, you may have to fix its street type. Fail to do so, and you might get unwanted collision warnings.
+				The reason is, street types have a fixed string ID across games, but no numeric ID, while construction parameters are numeric only. When you load a game, the numeric IDs may be reassigned.
+
+				If you are not happy with a street mod, remove or reconfigure the modular lorry stations that use it, remove or replace all the modded streets, quit the game and reload it without the offending mod.
+
 				WORD OF WARNING
 				The first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
 			]],
