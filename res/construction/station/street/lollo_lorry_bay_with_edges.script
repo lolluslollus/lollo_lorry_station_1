@@ -493,7 +493,8 @@ function data()
 							tag = vehicleEdgeModelIndexBase0_Counter,
 							terminals = {
 								{ vehicleEdgeModelIndex, 0 }
-							}
+							},
+							-- vehicleNodeOverride = 2 -- this lands on the pavement, so you cannot use it
 						}
 					)
 
