@@ -208,6 +208,9 @@ function data()
                         -- Constructions and stations in a station group are not selected, only the station group itself,
                         -- which does not contain a lot of data: this is why we need this loop.
                         -- The API here does not help, the old game.interface is better.
+
+                        -- LOLLO NOTE try this api instead:
+                        -- api.engine.system.streetConnectorSystem.getConstructionEntityForStation(stations)
                         for _, staId in ipairs(entity.stations) do
                             for _, con in pairs(allLorryStationConstructions) do
                                 if arrayUtils.arrayHasValue(con.stations, staId) then
