@@ -28,7 +28,7 @@ local function _myErrorHandler(err)
     print('lollo lorry station ERROR: ', err)
 end
 
-local function _replaceStationWithSnapNodes(oldConstructionId)
+local function _replaceStationWithSnappyCopy(oldConstructionId)
     -- print('oldConstructionId =', oldConstructionId)
     if type(oldConstructionId) ~= 'number' or oldConstructionId < 0 then return end
 
@@ -99,7 +99,7 @@ local function _replaceStationWithSnapNodes(oldConstructionId)
 	api.cmd.sendCommand(cmd, callback)
 end
 
-local function _replaceStationWithStreetType_(oldConstructionId)
+--[[ local function _replaceStationWithStreetType_(oldConstructionId)
     -- print('oldConstructionId =', oldConstructionId)
     if type(oldConstructionId) ~= 'number' or oldConstructionId < 0 then return end
 
@@ -151,7 +151,7 @@ local function _replaceStationWithStreetType_(oldConstructionId)
 
 	local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd param is "ignore errors"
 	api.cmd.sendCommand(cmd, callback)
-end
+end ]]
 
 function data()
     return {
@@ -163,9 +163,9 @@ function data()
 
             -- print('param.constructionEntityId =', param.constructionEntityId or 'NIL')
             if name == 'lorryStationBuilt' then
-                _replaceStationWithSnapNodes(param.constructionEntityId)
-            elseif name == 'lorryStationSelected' then
-                _replaceStationWithStreetType_(param.constructionEntityId)
+                _replaceStationWithSnappyCopy(param.constructionEntityId)
+            -- elseif name == 'lorryStationSelected' then
+            --     _replaceStationWithStreetType_(param.constructionEntityId)
             end
         end,
         guiHandleEvent = function(id, name, param)
