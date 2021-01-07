@@ -9,10 +9,6 @@ local _modConstants = require('lollo_lorry_station/constants')
 -- local slotUtils = require('lollo_lorry_station/slotHelpers')
 
 local tag = '__module_121309'
-local ppp = tonumber(tag)
-local ttt = tag:find('__module_')
-local uuu = tag:gsub('__module_', '')
-local vvv = tag:gsub('__mAdule_', '')
 local kkk = slotHelpers.getIsCargoAreaInner12x12(tag)
 local tag2 = '__module_241309'
 local lll = slotHelpers.getIsCargoAreaInner12x12(tag2)

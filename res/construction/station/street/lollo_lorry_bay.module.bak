@@ -36,7 +36,8 @@ return {
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		-- tag looks like __module_121309, it has nothing to do with the slot tag
+		-- LOLLO NOTE tag looks like __module_121309, base_config.lua writes it.
+		-- set the model tags to it to have them turn yellow when configuring
 		-- params are those of the modular construction
 		-- result is that of the parent modular construction, and they contain the slots with their tags
 		print('LOLLO slotId, x, y, baseId = ', slotId, x, y, baseId)

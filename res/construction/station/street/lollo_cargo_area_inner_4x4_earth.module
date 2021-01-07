@@ -34,6 +34,9 @@ return {
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
+		-- LOLLO NOTE tag looks like __module_121309, base_config.lua writes it.
+		-- set the model tags to it to have them turn yellow when configuring
+
 		-- print('LOLLO small cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
 		-- print('LOLLO result =')
 		-- debugPrint(result)
@@ -66,14 +69,6 @@ return {
 	end,
 
 	getModelsFn = function()
-		-- LOLLO TODO across the app, make elements easy to remove, even if they are slightly under the ground
-		-- maybe use dedicated models with something tall on these getModelsFn's ? Nope.
-		-- or maybe use the same models but raise them? Nope.
-		-- or maybe use height? Nope.
-		-- or maybe reintroduce a mesh? That's the only way.
-		-- For now there is a low concrete track and roofs, but somehow nothing turns yellow when bulldozing a module.
-		-- Only the streetside modules turn yellow. Some modules turn yellow, then you add some more modules and
-		-- they don't turn yellow anymore. Either it's a bug or an undocumented "feature".
 		return {
 			{
 				id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl', --_constants.cargoAreaInner4x4ModelFileName,

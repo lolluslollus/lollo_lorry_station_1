@@ -191,12 +191,7 @@ end
 helpers.getIsCargoAreaInner15x15 = function(tag)
     return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner15x15SlotId)
 end
--- LOLLO TODO I have changed all these "getIs" estimators so they can evaluate tags
--- like "__module_121309" instead of mine.
--- Those come from base_config.lua through module.updateFn.
--- Then, in all the modules.updateFn, I have passed those tags to result.models.
--- This will allow selecting more easily since they should turn yellow.
--- check it!
+
 helpers.getIsCargoAreaInner4x4 = function(tag)
     return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner4x4SlotId)
 end
