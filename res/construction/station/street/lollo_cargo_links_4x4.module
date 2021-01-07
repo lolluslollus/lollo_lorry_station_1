@@ -43,7 +43,7 @@ return {
 			id = _constants.cargoLinks4x4ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoLinks4x4ModelTag
+			tag = tag
 		}
 	end,
 

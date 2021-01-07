@@ -43,7 +43,7 @@ return {
 			id = 'lollo_lorry_station/cargo_area_inner_15x15_gravel.mdl', --_constants.cargoAreaInner15x15ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoAreaInner15x15ModelTag
+			tag = tag
 		}
 
 		-- if params.modules[result.mangleId({x, right and y + 1 or y - 1, 1})] == nil then

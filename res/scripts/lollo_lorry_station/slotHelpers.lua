@@ -1,6 +1,25 @@
 local _constants = require('lollo_lorry_station/constants')
 local helpers = {}
 
+local function _getIdBase(slotId)
+    local baseId = 0
+    for _, v in pairs(_constants.idBasesSortedDesc) do
+        if slotId >= v.id then
+            baseId = v.id
+            break
+        end
+    end
+
+    return baseId > 0 and baseId or false
+end
+
+local _getIsWhatFromModuleTag = function(tag, what)
+    if type(tag) ~= 'string' or not(tag:find('__module_')) then return false end
+    local slotId = tonumber(tag:gsub('__module_', ''), 10)
+    if slotId == nil then return false end
+    return _getIdBase(slotId) == what
+end
+
 helpers.getFlatTable = function(nestedTable)
     local results = {}
     if type(nestedTable) == 'table' then
@@ -166,62 +185,36 @@ helpers.getVehicleEdgeModelIndexesBase0 = function(models)
 end
 
 helpers.getIsCargoAreaInner12x12 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner12x12ModelTag) then
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner12x12SlotId)
 end
 
 helpers.getIsCargoAreaInner15x15 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner15x15ModelTag) then
-        -- return tag:sub(('cargoArea_slotId_'):len() + 1) or false
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner15x15SlotId)
 end
-
+-- LOLLO TODO I have changed all these "getIs" estimators so they can evaluate tags
+-- like "__module_121309" instead of mine.
+-- Those come from base_config.lua through module.updateFn.
+-- Then, in all the modules.updateFn, I have passed those tags to result.models.
+-- This will allow selecting more easily since they should turn yellow.
+-- check it!
 helpers.getIsCargoAreaInner4x4 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner4x4ModelTag) then
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner4x4SlotId)
 end
 
 helpers.getIsCargoAreaInner5x5 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaInner5x5ModelTag) then
-        -- return tag:sub(('smallCargoArea_slotId_'):len() + 1) or false
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaInner5x5SlotId)
 end
 
 helpers.getIsCargoAreaStreetside12x4 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaStreetside12x4ModelTag) then
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaStreetside12x4SlotId)
 end
 
 helpers.getIsCargoAreaStreetside15x5 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoAreaStreetside15x5ModelTag) then
-        -- return tag:sub(('streetsideCargoArea_slotId_'):len() + 1) or false
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaStreetside15x5SlotId)
 end
 
 helpers.getIsCargoLink4x4 = function(tag)
-    if type(tag) == 'string' and tag:find(_constants.cargoLinks4x4ModelTag) then
-        return true
-    else
-        return false
-    end
+    return _getIsWhatFromModuleTag(tag, _constants.idBases.cargoLink4x4SlotId)
 end
 
 helpers.getIsLorryBay = function(tag)
@@ -235,7 +228,8 @@ end
 
 helpers.getIsStreetside = function(tag)
     if type(tag) == 'string' and (
-        tag:find(_constants.cargoAreaStreetside12x4ModelTag)
+        _getIsWhatFromModuleTag(tag, _constants.idBases.cargoAreaStreetside12x4SlotId)
+        -- tag:find(_constants.cargoAreaStreetside12x4ModelTag)
         or tag:find(_constants.lorryBayStreetside12x4ModelTag)
         or tag:find(_constants.lorryBayStreetsideEntrance12x4ModelTag)
     ) then
@@ -254,18 +248,6 @@ helpers.getIsVehicleEdge = function(tag)
 end
 
 helpers.demangleId = function(slotId)
-    local function _getIdBase(slotId)
-        local baseId = 0
-        for _, v in pairs(_constants.idBasesSortedDesc) do
-            if slotId >= v.id then
-                baseId = v.id
-                break
-            end
-        end
-
-        return baseId > 0 and baseId or false
-    end
-
     local baseId = _getIdBase(slotId)
     if not baseId then return false, false, false end
 

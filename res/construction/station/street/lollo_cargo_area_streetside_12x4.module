@@ -43,7 +43,7 @@ return {
 			id = _constants.cargoAreaStreetside12x4ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoAreaStreetside12x4ModelTag
+			tag = tag
 		}
 
 		-- table.insert(result.colliders, moduleHelpers.getCollider(2, result.models[#result.models]))

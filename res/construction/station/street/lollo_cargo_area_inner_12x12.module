@@ -43,7 +43,7 @@ return {
 			id = _constants.cargoAreaInner12x12ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoAreaInner12x12ModelTag
+			tag = tag
 		}
 
 		-- if params.modules[result.mangleId({x, right and y + 1 or y - 1, 1})] == nil then

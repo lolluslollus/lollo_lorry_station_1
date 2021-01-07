@@ -2,10 +2,21 @@ package.path = package.path .. ';res/scripts/?.lua'
 
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 local stringUtils = require('lollo_lorry_station/stringUtils')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
 local _modConstants = require('lollo_lorry_station/constants')
 -- local edgeUtils = require('lollo_lorry_station/edgeHelper')
 -- local slotUtils = require('lollo_lorry_station/slotHelpers')
+
+local tag = '__module_121309'
+local ppp = tonumber(tag)
+local ttt = tag:find('__module_')
+local uuu = tag:gsub('__module_', '')
+local vvv = tag:gsub('__mAdule_', '')
+local kkk = slotHelpers.getIsCargoAreaInner12x12(tag)
+local tag2 = '__module_241309'
+local lll = slotHelpers.getIsCargoAreaInner12x12(tag2)
+
 
 local transfStr = '((0.594247 / -0.804282 / 0 / 0)/(0.804282 / 0.594247 / 0 / 0)/(0 / 0 / 1 / 0)/(-3463.13 / 3196.42 / 55.4744 / 1))'
 local function _getTransfFromApiResult(transfStr)

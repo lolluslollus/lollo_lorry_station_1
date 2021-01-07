@@ -43,7 +43,7 @@ return {
 			id = 'lollo_lorry_station/cargo_area_inner_5x5_earth.mdl', --_constants.cargoAreaInner5x5ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoAreaInner5x5ModelTag
+			tag = tag
 		}
 
 		local face = {

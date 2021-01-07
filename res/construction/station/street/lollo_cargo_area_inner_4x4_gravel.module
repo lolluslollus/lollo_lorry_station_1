@@ -43,7 +43,7 @@ return {
 			id = 'lollo_lorry_station/cargo_area_inner_4x4_gravel.mdl', --_constants.cargoAreaInner4x4ModelFileName,
 			slotId = slotId,
 			transf = transform,
-			tag = _constants.cargoAreaInner4x4ModelTag
+			tag = tag
 		}
 
 		local face = {
