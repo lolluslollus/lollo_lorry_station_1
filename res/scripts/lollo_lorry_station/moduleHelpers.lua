@@ -165,6 +165,7 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         {
             key = 'extraLength',
             name = _('Extra Length'),
+            tooltip = _('Helps placing parallel stations that tend to snap together.'),
             -- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
             values = arrayUtils.map(
                 helpers.getLengths(),
