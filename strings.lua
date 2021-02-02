@@ -23,6 +23,8 @@ function data()
 				
 				If you are not happy with a street mod, remove or reconfigure the modular lorry stations that use it, remove or replace all the modded streets, quit the game and reload it without the offending mod.
 
+				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this.
+
 				WORD OF WARNING
 				The first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
 			]],
