@@ -175,6 +175,46 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         --     ),
         --     defaultIndex = 0
         -- },
+        {
+            key = 'baseEdge',
+            name = _('Dummy'),
+            values = {
+                'dummy1',
+                'dummy2'
+            },
+            uiType = 'BUTTON',
+            defaultIndex = 0,
+        },
+        {
+            key = 'inverseMainTransf',
+            name = _('Dummy'),
+            values = {
+                'dummy1',
+                'dummy2'
+            },
+            uiType = 'BUTTON',
+            defaultIndex = 0,
+        },
+        {
+            key = 'mainTransf',
+            name = _('Dummy'),
+            values = {
+                'dummy1',
+                'dummy2'
+            },
+            uiType = 'BUTTON',
+            defaultIndex = 0,
+        },
+        {
+            key = 'midPoint',
+            name = _('Dummy'),
+            values = {
+                'dummy1',
+                'dummy2'
+            },
+            uiType = 'BUTTON',
+            defaultIndex = 0,
+        },
     }
 end
 

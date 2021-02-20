@@ -28,6 +28,7 @@ function data()
 			-- print('LOLLO _streetYOffset =', _streetYOffset)
 			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
 			local _streetFileName = _selectedStreetData.fileName
+			print('_streetFileName =', _streetFileName or 'NIL')
 			local _x0 = 10 -- if this is too short (eg 5) and snap is true, edges will try to snap to themselves while configuring
 			local result = {
 				colliders = {},
@@ -141,24 +142,43 @@ function data()
 			}
 
 			local posTanX2 = transfUtils.getPosTanX2Transformed(
-				{
-					{
-						{
-							params.baseEdge.position0.x, params.baseEdge.position0.y, params.baseEdge.position0.z,
+				params.direction == 0
+					and {
+							{
+								{
+									params.baseEdge.position0.x, params.baseEdge.position0.y, params.baseEdge.position0.z,
+								},
+								{
+									params.baseEdge.tangent0.x, params.baseEdge.tangent0.y, params.baseEdge.tangent0.z,
+								},
+							},
+							{
+								{
+									params.baseEdge.position1.x, params.baseEdge.position1.y, params.baseEdge.position1.z,
+								},
+								{
+									params.baseEdge.tangent1.x, params.baseEdge.tangent1.y, params.baseEdge.tangent1.z,
+								},
+							},
+						}
+					or {
+							{
+								{
+									params.baseEdge.position1.x, params.baseEdge.position1.y, params.baseEdge.position1.z,
+								},
+								{
+									-params.baseEdge.tangent1.x, -params.baseEdge.tangent1.y, -params.baseEdge.tangent1.z,
+								},
+							},
+							{
+								{
+									params.baseEdge.position0.x, params.baseEdge.position0.y, params.baseEdge.position0.z,
+								},
+								{
+									-params.baseEdge.tangent0.x, -params.baseEdge.tangent0.y, -params.baseEdge.tangent0.z,
+								},
+							},
 						},
-						{
-							params.baseEdge.tangent0.x, params.baseEdge.tangent0.y, params.baseEdge.tangent0.z,
-						},
-					},
-					{
-						{
-							params.baseEdge.position1.x, params.baseEdge.position1.y, params.baseEdge.position1.z,
-						},
-						{
-							params.baseEdge.tangent1.x, params.baseEdge.tangent1.y, params.baseEdge.tangent1.z,
-						},
-					},
-				},
 				params.inverseMainTransf
 			)
 
