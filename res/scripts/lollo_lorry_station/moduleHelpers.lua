@@ -141,16 +141,16 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             },
             defaultIndex = 0
         },
-        {
-            key = 'snapNodes',
-            name = _('Snap to neighbours while placing'),
-            tooltip = _('No snap can be easier to place. It will be ignored once the station is built.'),
-            values = {
-                _('No'),
-                _('Yes')
-            },
-            defaultIndex = 1
-        },
+        -- {
+        --     key = 'snapNodes',
+        --     name = _('Snap to neighbours while placing'),
+        --     tooltip = _('No snap can be easier to place. It will be ignored once the station is built.'),
+        --     values = {
+        --         _('No'),
+        --         _('Yes')
+        --     },
+        --     defaultIndex = 1
+        -- },
         {
             key = 'tramTrack',
             name = _('Tram track type'),
@@ -162,19 +162,19 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             },
             defaultIndex = 0
         },
-        {
-            key = 'extraLength',
-            name = _('Extra Length'),
-            tooltip = _('Helps placing parallel stations that tend to snap together.'),
-            -- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
-            values = arrayUtils.map(
-                helpers.getLengths(),
-                function(length)
-                    return tostring(length) .. 'm'
-                end
-            ),
-            defaultIndex = 0
-        },
+        -- {
+        --     key = 'extraLength',
+        --     name = _('Extra Length'),
+        --     tooltip = _('Helps placing parallel stations that tend to snap together.'),
+        --     -- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
+        --     values = arrayUtils.map(
+        --         helpers.getLengths(),
+        --         function(length)
+        --             return tostring(length) .. 'm'
+        --         end
+        --     ),
+        --     defaultIndex = 0
+        -- },
     }
 end
 
