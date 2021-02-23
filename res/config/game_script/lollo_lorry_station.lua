@@ -60,36 +60,38 @@ local function _replaceStationWithCon(oldEdgeId, waypointId)
     -- print('allStreetData =') debugPrint(allStreetData)
     newConstruction.params = {
         -- extra params, not accessible to the user LOLLO TODO these params disappear after an upgrade, so the whole thing is useless
-        baseEdge = {
-            node0 = baseEdge.node0,
-            node1 = baseEdge.node1,
-            position0 = {
-                x = node0.position.x,
-                y = node0.position.y,
-                z = node0.position.z,
+        state2 = {
+            baseEdge = {
+                node0 = baseEdge.node0,
+                node1 = baseEdge.node1,
+                position0 = {
+                    x = node0.position.x,
+                    y = node0.position.y,
+                    z = node0.position.z,
+                },
+                position1 = {
+                    x = node1.position.x,
+                    y = node1.position.y,
+                    z = node1.position.z,
+                },
+                tangent0 = {
+                    x = baseEdge.tangent0.x,
+                    y = baseEdge.tangent0.y,
+                    z = baseEdge.tangent0.z,
+                },
+                tangent1 = {
+                    x = baseEdge.tangent1.x,
+                    y = baseEdge.tangent1.y,
+                    z = baseEdge.tangent1.z,
+                },
+                type = baseEdge.type,
+                typeIndex = baseEdge.typeIndex,
             },
-            position1 = {
-                x = node1.position.x,
-                y = node1.position.y,
-                z = node1.position.z,
-            },
-            tangent0 = {
-                x = baseEdge.tangent0.x,
-                y = baseEdge.tangent0.y,
-                z = baseEdge.tangent0.z,
-            },
-            tangent1 = {
-                x = baseEdge.tangent1.x,
-                y = baseEdge.tangent1.y,
-                z = baseEdge.tangent1.z,
-            },
-            type = baseEdge.type,
-            typeIndex = baseEdge.typeIndex,
+            -- busLane = baseEdgeStreet.hasBus, -- useless
+            inverseMainTransf = transfUtils.getInverseTransf(waypointTransf),
+            mainTransf = waypointTransf,
+            midPoint = edgeUtils.getNodeBetweenByPercentageShift(oldEdgeId),
         },
-        -- busLane = baseEdgeStreet.hasBus, -- useless
-        inverseMainTransf = transfUtils.getInverseTransf(waypointTransf),
-        mainTransf = waypointTransf,
-        midPoint = edgeUtils.getNodeBetweenByPercentageShift(oldEdgeId),
         seed = 123,
         -- normal params, accessible to the user
         direction = 0,

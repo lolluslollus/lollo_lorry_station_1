@@ -146,40 +146,40 @@ function data()
 					and {
 							{
 								{
-									params.baseEdge.position0.x, params.baseEdge.position0.y, params.baseEdge.position0.z,
+									params.state2.baseEdge.position0.x, params.state2.baseEdge.position0.y, params.state2.baseEdge.position0.z,
 								},
 								{
-									params.baseEdge.tangent0.x, params.baseEdge.tangent0.y, params.baseEdge.tangent0.z,
+									params.state2.baseEdge.tangent0.x, params.state2.baseEdge.tangent0.y, params.state2.baseEdge.tangent0.z,
 								},
 							},
 							{
 								{
-									params.baseEdge.position1.x, params.baseEdge.position1.y, params.baseEdge.position1.z,
+									params.state2.baseEdge.position1.x, params.state2.baseEdge.position1.y, params.state2.baseEdge.position1.z,
 								},
 								{
-									params.baseEdge.tangent1.x, params.baseEdge.tangent1.y, params.baseEdge.tangent1.z,
+									params.state2.baseEdge.tangent1.x, params.state2.baseEdge.tangent1.y, params.state2.baseEdge.tangent1.z,
 								},
 							},
 						}
 					or {
 							{
 								{
-									params.baseEdge.position1.x, params.baseEdge.position1.y, params.baseEdge.position1.z,
+									params.state2.baseEdge.position1.x, params.state2.baseEdge.position1.y, params.state2.baseEdge.position1.z,
 								},
 								{
-									-params.baseEdge.tangent1.x, -params.baseEdge.tangent1.y, -params.baseEdge.tangent1.z,
+									-params.state2.baseEdge.tangent1.x, -params.state2.baseEdge.tangent1.y, -params.state2.baseEdge.tangent1.z,
 								},
 							},
 							{
 								{
-									params.baseEdge.position0.x, params.baseEdge.position0.y, params.baseEdge.position0.z,
+									params.state2.baseEdge.position0.x, params.state2.baseEdge.position0.y, params.state2.baseEdge.position0.z,
 								},
 								{
-									-params.baseEdge.tangent0.x, -params.baseEdge.tangent0.y, -params.baseEdge.tangent0.z,
+									-params.state2.baseEdge.tangent0.x, -params.state2.baseEdge.tangent0.y, -params.state2.baseEdge.tangent0.z,
 								},
 							},
 						},
-				params.inverseMainTransf
+				params.state2.inverseMainTransf
 			)
 
 			result.edgeLists = {
