@@ -9,7 +9,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 24,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -22,7 +22,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 24,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -35,7 +35,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 24,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -48,7 +48,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 24,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -61,7 +61,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 3,
     streetWidth = 3,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -74,7 +74,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -87,7 +87,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -100,7 +100,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -113,7 +113,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -126,7 +126,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -139,7 +139,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -152,7 +152,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -165,7 +165,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -178,7 +178,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -191,7 +191,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 16,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -204,7 +204,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -217,7 +217,7 @@ return {
     rightLaneWidth = 3.3333332538605,
     sidewalkWidth = 2,
     streetWidth = 20,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -230,7 +230,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -243,7 +243,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -256,7 +256,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -269,7 +269,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -282,7 +282,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -295,7 +295,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -308,7 +308,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -321,7 +321,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -334,7 +334,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -347,7 +347,7 @@ return {
     rightLaneWidth = 6,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -360,7 +360,7 @@ return {
     rightLaneWidth = 6,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -373,7 +373,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -386,7 +386,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -399,7 +399,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -412,7 +412,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -425,7 +425,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 4,
     streetWidth = 8,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -438,7 +438,7 @@ return {
     rightLaneWidth = 6,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -451,7 +451,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -464,7 +464,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 2,
     streetWidth = 12,
-    upgrade = true,
+    aiLock = true,
     yearTo = 0,
   },
   {
@@ -477,7 +477,7 @@ return {
     rightLaneWidth = 2.4000000953674,
     sidewalkWidth = 0.80000001192093,
     streetWidth = 2.4000000953674,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -490,7 +490,7 @@ return {
     rightLaneWidth = 4,
     sidewalkWidth = 2,
     streetWidth = 4,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -503,7 +503,7 @@ return {
     rightLaneWidth = 2.4000000953674,
     sidewalkWidth = 0.80000001192093,
     streetWidth = 2.4000000953674,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -516,7 +516,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 3,
     streetWidth = 6,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -529,7 +529,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 3,
     streetWidth = 3,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
   {
@@ -542,7 +542,7 @@ return {
     rightLaneWidth = 3,
     sidewalkWidth = 3,
     streetWidth = 6,
-    upgrade = false,
+    aiLock = false,
     yearTo = 0,
   },
 }

@@ -115,7 +115,7 @@ end
     newConstruction.fileName = oldConstruction.fileName
     -- cannot clone this userdata dynamically, coz it won't take pairs and ipairs
     local newStreetTypeIndex = moduleHelpers.getDefaultStreetTypeIndex(
-        streetUtils.getGlobalStreetData(streetUtils.getStreetDataFilters().STOCK_AND_MODS)
+        streetUtils.getGlobalStreetData(streetUtils.getStreetDataFilters().STOCK)
     )
     print('newStreetTypeIndex =')
     debugPrint(newStreetTypeIndex)
@@ -217,7 +217,7 @@ function data()
                                     print('found con =')
                                     debugPrint(con)
                                     if con.id and con.params and con.params.streetType_ then
-                                        local allStreetData = streetUtils.getGlobalStreetData(streetUtils.getStreetDataFilters().STOCK_AND_MODS)
+                                        local allStreetData = streetUtils.getGlobalStreetData(streetUtils.getStreetDataFilters().STOCK)
 
                                         print('#allStreetData =', #allStreetData)
                                         if con.params.streetType_ > #allStreetData then

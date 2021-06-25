@@ -4,7 +4,7 @@ local streetUtils = require('lollo_lorry_station.streetUtils')
 function data()
     return {
         info = {
-            minorVersion = 13,
+            minorVersion = 14,
             severityAdd = 'NONE',
             severityRemove = 'WARNING',
             name = _('_NAME'),
@@ -29,7 +29,7 @@ function data()
         -- Here, the dynamic parameters are the street types.
         postRunFn = function(settings, params)
             local allStreetData = streetUtils.getGlobalStreetData(
-                streetUtils.getStreetDataFilters().STOCK_AND_MODS
+                streetUtils.getStreetDataFilters().STOCK
             )
             local staticCon = api.res.constructionRep.get(
                 api.res.constructionRep.find(
