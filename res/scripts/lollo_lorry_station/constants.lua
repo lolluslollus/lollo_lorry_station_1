@@ -70,7 +70,6 @@ local constants = {
 		leftVehicleEdgeSlotIdBase = 100000,
 	},
 	idRoundingFactor = 100,
-	streetDataFileName = '/__streetData'
 }
 
 local _idBasesSortedDesc = {}
