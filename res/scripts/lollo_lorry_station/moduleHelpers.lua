@@ -1,6 +1,6 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
-local transf = require 'transf'
+local transfUtilsUG = require 'transf'
 
 local helpers = {}
 
@@ -68,7 +68,7 @@ helpers.getCollider = function(sidewalkWidth, model)
 	local result = nil
 	if sidewalkWidth < 3.8 then
 		if slotUtils.getIsStreetside(model.tag) then
-			local transfRes = transf.mul(
+			local transfRes = transfUtilsUG.mul(
 				model.transf,
 				{ 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, sidewalkWidth * 0.5, 0, 1 }
 			)
