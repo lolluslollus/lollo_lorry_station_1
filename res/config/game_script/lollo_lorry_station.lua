@@ -89,17 +89,12 @@ local utils = {
             local edgeToAdd = proposal.streetProposal.edgesToAdd[edgeIndexBase1]
             edgeLists[#edgeLists+1] = {
                 alignTerrain = edgeToAdd.comp.type == 0 or edgeToAdd.comp.type == 2, -- only align on ground and in tunnels
-                -- edges = transfUtils.getPosTanX2Transformed(tel.posTanX2, params.inverseMainTransf),
                 edges = {
                     _getPosTan(edgeIndexBase1, 'node0', 'tangent0'),
                     _getPosTan(edgeIndexBase1, 'node1', 'tangent1'),
                 },
                 edgeType = _getEdgeType(edgeToAdd.comp.type),
                 edgeTypeName = _getEdgeTypeName(edgeToAdd.comp.type, edgeToAdd.comp.typeIndex),
-                -- LOLLO TODO freeNodes and snapNodes, never mind how I arrange them,
-                -- cause an ugly intersection.
-                -- Upgrading the edge attached to the construction fixes them.
-                -- freeNodes = {},
                 freeNodes = {edgeIndexBase1 == 1 and 0 or 1},
                 params = {
                     hasBus = edgeToAdd.params.hasBus, -- useless, UG TODO
@@ -108,7 +103,6 @@ local utils = {
                     type = _getStreetType(edgeToAdd.params.streetType),
                 },
                 snapNodes = {edgeIndexBase1 == 1 and 0 or 1},
-                -- snapNodes = {},
                 tag2nodes = {},
                 type = 'STREET'
             }
@@ -120,6 +114,8 @@ local utils = {
     end,
 
     getEdgeObjectsFromProposal = function(proposal)
+        -- LOLLO TODO check this: for now, we don't use this: it crashes the game,
+        -- and it makes no sense to have waypoints or streetside stations inside another station.
         if not(proposal) or not(proposal.streetProposal)
         or not(proposal.streetProposal.nodesToAdd)
         or #proposal.streetProposal.nodesToAdd ~= 1
@@ -249,26 +245,19 @@ local utils = {
         return result
     end,
 
-    getPosTanX2ListReversed = function(posTanX2List)
-        if type(posTanX2List) ~= 'table' then return posTanX2List end
+    getPosTanX2Reversed = function(posTanX2)
+        if type(posTanX2) ~= 'table' then return posTanX2 end
 
-        local result = {}
-        for i = #posTanX2List, 1, -1 do
-            result[#result+1] = posTanX2List[i]
-        end
-
-        for i = 1, #posTanX2List do
-            local swap = result[i].posTanX2[1]
-            result[i].posTanX2[1] = result[i].posTanX2[2]
-            result[i].posTanX2[2] = swap
-            for ii = 1, 2 do
-                for iii = 1, 3 do
-                    result[i].posTanX2[ii][2][iii] = -result[i].posTanX2[ii][2][iii]
-                end
+        local swap = posTanX2[1]
+        posTanX2[1] = posTanX2[2]
+        posTanX2[2] = swap
+        for ii = 1, 2 do
+            for iii = 1, 3 do
+                posTanX2[ii][2][iii] = -posTanX2[ii][2][iii]
             end
         end
 
-        return result
+        return posTanX2
     end
 }
 
@@ -278,8 +267,7 @@ local actions = {
 
         local edgeLists = utils.getEdgeListsFromProposal(oldProposal)
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
-        print('edgeLists =') debugPrint(edgeLists)
-        -- print('edgeObjects =') debugPrint(edgeObjects)
+        logger.print('edgeLists =') debugPrint(edgeLists)
 
         local newCon = api.type.SimpleProposal.ConstructionEntity.new()
         newCon.fileName = _eventProperties.ploppableModularCargoStationBuilt.conName
@@ -292,7 +280,7 @@ local actions = {
         end
         print('edgeLists =') debugPrint(edgeLists)
 
-        newCon.params = {
+        local newConParams = {
             -- it is not too correct to pass two parameters, one of which can be inferred from the other. However, performance matters more.
             edgeLists = edgeLists,
             -- edgeObjects = edgeObjects,
@@ -302,6 +290,10 @@ local actions = {
             -- seed = 123,
             seed = math.abs(math.ceil(stationTransf[13] * 1000)),
         }
+        -- clone these params before assigning them to newCon.params, there is magic going on
+        local paramsBak = arrayUtils.cloneDeepOmittingFields(newConParams, {'seed'})
+        newCon.params = newConParams
+
         newCon.transf = api.type.Mat4f.new(
             api.type.Vec4f.new(stationTransf[1], stationTransf[2], stationTransf[3], stationTransf[4]),
             api.type.Vec4f.new(stationTransf[5], stationTransf[6], stationTransf[7], stationTransf[8]),
@@ -326,7 +318,7 @@ local actions = {
 
         local context = api.type.Context:new()
         -- context.checkTerrainAlignment = true
-        context.cleanupStreetGraph = true
+        -- context.cleanupStreetGraph = false -- useless
         -- context.gatherBuildings = false -- default is false
         -- context.gatherFields = true -- default is true
         context.player = api.engine.util.getPlayer()
@@ -334,12 +326,25 @@ local actions = {
         api.cmd.sendCommand(
             api.cmd.make.buildProposal(newProposal, context, true), -- the 3rd param is "ignore errors"; wrong proposals will be discarded anyway
             function(result, success)
-                print('build station callback, success =', success, ' and result =')
+                print('buildStation callback, success =', success, ' and result =')
                 debugPrint(result)
                 if success then
                     -- logger.print('station proposal data = ', result.resultProposalData) -- userdata
                     -- logger.print('station entities = ', result.resultEntities) -- userdata
-                    print('stationConstructionId = ', result.resultEntities[1])
+                    logger.print('buildStation succeeded, stationConstructionId = ', result.resultEntities[1])
+                    -- LOLLO NOTE this is an ugly bodge because it uses the old game.interface.
+                    -- Without this, we get ugly intersections, never mind how I arrange freeNodes and snapNodes.
+                    -- Upgrading the edge attached to the construction fixes them, and we don't want to do it by hand.
+                    -- Note that, by hand or not, the upgrade will screw up the looks of smooth bends.
+                    -- LOLLO TODO test this: if we use this bodge and place several stations quickly in adjoining edges,
+                    -- there can be a weird crash.
+                    -- if result.resultEntities[1] and game.interface.upgradeConstruction then
+                    --     game.interface.upgradeConstruction(
+                    --         result.resultEntities[1],
+                    --         _eventProperties.ploppableModularCargoStationBuilt.conName,
+                    --         paramsBak
+                    --     )
+                    -- end
                 end
             end
         )
