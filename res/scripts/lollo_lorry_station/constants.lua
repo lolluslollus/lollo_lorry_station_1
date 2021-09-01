@@ -1,6 +1,8 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 
 local constants = {
+	isExtendedLog = true,
+
 	xMax = 16,
 	yMax = 10,
 	xMin = -16,
@@ -21,6 +23,9 @@ local constants = {
 	anyStreetsideXShift = 0,
 	anyStreetsideYShift = 0,
 	-- markTag = 'lollo_mark',
+	ploppableCargoModelId = 'lollo_lorry_station/lollo_ploppable_streetside_cargo.mdl',
+	ploppablePassengersModelId = 'lollo_lorry_station/lollo_ploppable_streetside_passengers.mdl',
+
 	cargoAreaInner12x12ModelFileName = 'lollo_lorry_station/cargo_area_inner_12x12.mdl',
 	cargoAreaInner12x12ModuleType = 'cargo_area_inner_12x12',
 	cargoAreaInner4x4ModelFileName = 'lollo_lorry_station/cargo_area_inner_4x4.mdl',

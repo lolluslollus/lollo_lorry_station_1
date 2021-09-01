@@ -41,6 +41,19 @@ function data()
                 globalStreetData = allStreetData
             }
             moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
+
+
+            local staticConPloppable = api.res.constructionRep.get(
+                api.res.constructionRep.find(
+                    'station/street/lollo_lorry_bay_with_edges_ploppable.con'
+                )
+            )
+            staticConPloppable.updateScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.updateFn'
+            staticConPloppable.updateScript.params = {
+                globalStreetData = allStreetData
+            }
+            moduleHelpers.updateParamValues_streetType_(staticConPloppable.params, allStreetData)
+            staticConPloppable.upgradeScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.upgradeFn'
         end,
     }
 end

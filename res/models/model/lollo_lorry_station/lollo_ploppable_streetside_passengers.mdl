@@ -1,28 +1,3 @@
-local laneutil = require "laneutil"
-
---Begin Generated
-local generatedData = {
-	["lanes_road"] = {
-		curves = {
-			["cargo_path_rep_road"] = {
-				{ { 0.00000, -5.00000, 0.00000 }, { 0.00000, 0.00000, 0.00000 }, },
-				{ { 0.00000, 0.00000, 0.00000 }, { 0.00000, 5.00000, 0.00000 }, },
-			},
-		},
-	},
-	["lanes_terminal"] = {
-		curves = {
-			["cargo_path_rep_cargo"] = {
-				{ { 10.00000, -5.00000, 0.34450 }, { 10.00000, 5.00000, 0.34450 }, },
-			},
-			["cargo_path_rep_cargo2"] = {
-				{ { 5.00000, -5.00000, 0.34450 }, { 5.00000, 5.00000, 0.34450 }, },
-			},
-		},
-	},
-}
---End Generated
-
 function data()
     return {
         boundingInfo = {
@@ -76,38 +51,22 @@ function data()
                 price = 1200,
             },
             description = {
-                description = _("Lollo small truck stop to unload cargo, to be placed on the sidewalk. Does not allow loading of cargo."),
-                name = _("Lollo truck unload stop"),
+                description = _("BUS_STOP_DESC"),
+                name = _("BUS_STOP_NAME"),
             },
             -- lollo = { -- useless
             --     true
             -- },
             streetTerminal = {
-                cargo = true,
+                cargo = false,
             },
             -- LOLLO added this to the stock small_cargo.mdl. It has no effect when plopping the Lollo truck unload stop,
             -- but it does when plopping the construction that contains it. By the way,.it is rotated 90^ wrong.
-            transportNetworkProvider = { -- useless
-                laneLists = {
-                    laneutil.createLanes(
-                        generatedData["lanes_road"], -- curves
-                        { "BUS", "ELECTRIC_TRAM", "TRAM", "TRUCK" }, -- means of transport
-                        20, -- max speed
-                        3, -- lane width
-                        false -- linkable
-                    ),
-                    laneutil.createLanes(generatedData["lanes_terminal"], { "CARGO" }, 20, 4, false),
-                },
-                runways = { },
-                terminals = {
-                    {
-                        -- order = 0,
-                        personEdges = { 2, 3, },
-                        personNodes = { 4, 5, },
-                        vehicleNode = 2,
-                    },
-                },
-            },
+            -- transportNetworkProvider = { -- useless
+            --     laneLists = { },
+            --     runways = { },
+            --     terminals = { },
+            -- },
         },
         version = 1,
     }
