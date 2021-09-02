@@ -681,7 +681,7 @@ function data()
                         end
                     end
                 elseif id == 'bulldozer' then
-                    logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
+                    -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
                     -- LOLLO TODO rebuild the edges without the station, it's too late here
                     -- for _, constructionId in pairs(args.proposal.toRemove) do
                     --     logger.print('about to bulldoze construction', constructionId)
@@ -695,7 +695,7 @@ function data()
                     -- end
                 end
             elseif name == 'builder.proposalCreate' then
-                logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
+                -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
                 -- if id == 'bulldozer' then
                 --     -- this is not too late to make a note of the edges
                 --     -- but it may be too late to rescue the buildings, and slow anyway.
