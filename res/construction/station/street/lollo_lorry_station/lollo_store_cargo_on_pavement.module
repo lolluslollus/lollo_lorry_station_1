@@ -15,8 +15,8 @@ function data()
 			categories = { "cargo", },
 		},
 		description = {
-			name = _("STORE_CARGO_ON_PAVEMENT_NAME"),
-			description = _("STORE_CARGO_ON_PAVEMENT_DESC"),
+			name = _("isStoreCargoOnPavementName"),
+			description = _("isStoreCargoOnPavementDesc"),
 			icon = "ui/construction/lollo_lorry_station/store-cargo-on-pavement.tga"
 		},
 		metadata = {

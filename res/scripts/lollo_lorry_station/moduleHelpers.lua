@@ -123,8 +123,8 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'isStoreCargoOnPavement',
-            name = _('Store cargo on the pavement'),
-            tooltip = _('Store some of the cargo on the pavement or leave it clear for pedestrians'),
+            name = _('isStoreCargoOnPavementName'),
+            tooltip = _('isStoreCargoOnPavementDesc'),
             values = {
                 _('No'),
                 _('Yes')
@@ -133,8 +133,8 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'direction',
-            name = _('Direction'),
-            tooltip = _('Place the station right or left. You cannot have both'),
+            name = _('directionName'),
+            tooltip = _('directionDesc'),
             values = {
                 _('↑'),
                 _('↓')
@@ -143,8 +143,8 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'snapNodes',
-            name = _('Snap to neighbours while placing'),
-            tooltip = _('No snap can be easier to place. It will be ignored once the station is built.'),
+            name = _('snapNodesName'),
+            tooltip = _('snapNodesDesc'),
             values = {
                 _('No'),
                 _('Yes')
@@ -153,7 +153,7 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'tramTrack',
-            name = _('Tram track type'),
+            name = _('Tram track'),
             values = {
                 -- must be in this sequence
                 _('NO'),
@@ -164,8 +164,8 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
         },
         {
             key = 'extraLength',
-            name = _('Extra Length'),
-            tooltip = _('Helps placing parallel stations that tend to snap together.'),
+            name = _('extraLengthName'),
+            tooltip = _('extraLengthDesc'),
             -- values = {_('0m'), _('1m'), _('2m'), _('3m'), _('4m')},
             values = arrayUtils.map(
                 helpers.getLengths(),
