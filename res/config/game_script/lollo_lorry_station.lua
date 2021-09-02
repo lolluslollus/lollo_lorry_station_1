@@ -633,7 +633,7 @@ function data()
 
             -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
             -- if name ~= 'builder.proposalCreate' then
-            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
+            --  logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
             -- end
 
             -- xpcall(

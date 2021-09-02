@@ -61,6 +61,8 @@ local constants = {
 	lorryBayVehicleEdgeLeftModelTag = 'lorryBayVehicleEdgeLeft',
 	lorryBayVehicleEdgeRightModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge_right.mdl',
 	lorryBayVehicleEdgeRightModelTag = 'lorryBayVehicleEdgeRight',
+	lorryBayVehicleEdge4PloppableModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge_4_ploppable.mdl',
+	lorryBayVehicleEdge4PloppableModelTag = 'lorryBayVehicleEdge4Ploppable',
 	-- constructionFileName = 'station/street/lollo_lorry_station/lollo_lorry_station.con',
 
 	idBases = {

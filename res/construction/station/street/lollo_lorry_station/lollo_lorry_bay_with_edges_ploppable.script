@@ -14,7 +14,7 @@ function data()
 			-- logger.print('two =') logger.debugPrint(two)
 
 			if not params.modules then params.modules = {} end
-			logger.print('params.modules =') logger.debugPrint(params.modules)
+			-- logger.print('params.modules =') logger.debugPrint(params.modules)
 			-- removeAll module added: return free edges and nothing else
 			-- LOLLO NOTE we have no beforeBulldoze event,
 			-- and we cannot catch the click on the bulldozer confirm button,
@@ -59,27 +59,21 @@ function data()
 					-- 	transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
 					-- },
 					{
-						-- id = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelFileName or _constants.lorryBayVehicleEdgeLeftModelFileName,
-						id = _constants.lorryBayVehicleEdgeRightModelFileName,
+						-- id = _constants.lorryBayVehicleEdgeRightModelFileName,
+						id = _constants.lorryBayVehicleEdge4PloppableModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
-						-- tag = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelTag or _constants.lorryBayVehicleEdgeLeftModelTag,
-						tag = _constants.lorryBayVehicleEdgeRightModelTag,
+						-- tag = _constants.lorryBayVehicleEdgeRightModelTag,
+						tag = _constants.lorryBayVehicleEdge4PloppableModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{
 						id = _isStoreCargoOnPavement and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
 						tag = _isStoreCargoOnPavement and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
-						-- transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift + _yOffset, 0, 1},
 					},
 				},
 				slotConfig = {
-					-- [_constants.cargoAreaInner12x12ModuleType] = {
-					-- 	maxModules = -1,
-					-- 	message = nil, --'LOLLO slotConfig message',
-					-- 	skipCollisionCheck = true,
-					-- },
 					[_constants.cargoAreaStreetside12x4ModuleType] = {
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
@@ -96,7 +90,7 @@ function data()
 						skipCollisionCheck = true,
 					},
 					[_constants.storeCargoOnPavementModuleType] = {
-						maxModules = -1,
+						maxModules = 1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
 					},
@@ -124,14 +118,14 @@ function data()
 			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
 			-- local _x0 = 10 -- if this is too short (eg 5) and snap is true, edges will try to snap to themselves while configuring
 
-			-- local face = {
-			-- 	{-7, -2.5, 0, 1},
-			-- 	{-7, 2.5, 0, 1},
-			-- 	{7, 2.5, 0, 1},
-			-- 	{7, -2.5, 0, 1},
-			-- }
-			-- result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-			-- result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
+			local face = {
+				{-7, -2.5, 0, 1},
+				{-7, 2.5, 0, 1},
+				{7, 2.5, 0, 1},
+				{7, -2.5, 0, 1},
+			}
+			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
+			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
@@ -504,7 +498,8 @@ function data()
 							terminals = {
 								{ vehicleEdgeModelIndex, 0 }
 							},
-							-- vehicleNodeOverride = 2 -- this lands on the pavement, so you cannot use it
+							vehicleNodeOverride = 1 -- LOLLO TODO UG TODO this lands on the pavement, so you cannot use it
+							-- the whole concept falls apart because of this
 						}
 					)
 
