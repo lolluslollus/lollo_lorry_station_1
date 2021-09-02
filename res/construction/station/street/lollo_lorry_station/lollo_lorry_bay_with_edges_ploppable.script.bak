@@ -125,7 +125,7 @@ function data()
 				{7, -2.5, 0, 1},
 			}
 			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
+			-- result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))

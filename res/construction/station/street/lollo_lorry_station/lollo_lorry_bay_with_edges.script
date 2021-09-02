@@ -7,10 +7,8 @@ local vec3 = require 'vec3'
 function data()
 	return {
 		updateFn = function(params, two)
-			-- print('updateFn starting, params =')
-			-- debugPrint(params)
-			-- print('two =')
-			-- debugPrint(two)
+			-- print('updateFn starting, params =') debugPrint(params)
+			-- print('two =') debugPrint(two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 
 			if not params.modules then params.modules = {} end
@@ -181,7 +179,7 @@ function data()
 				{7, -2.5, 0, 1},
 			}
 			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
+			-- result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
