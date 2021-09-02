@@ -18,6 +18,11 @@ function data()
 			soundSet = { name = "lollo_lorry_bay" }
 		},
 		autoRemovable = false,
+		-- snapping = { -- useless
+		-- 	rail = true,
+		-- 	road = true,
+		-- 	water = false
+		-- },
 		skipCollision = true, -- we need this to change the street type when reconfiguring
 		params = moduleHelpers.getParams(),
 		updateFn = function(params, two) -- this is overwritten by the .script file
