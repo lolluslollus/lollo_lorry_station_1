@@ -1,4 +1,6 @@
 local _constants = require('lollo_lorry_station.constants')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local logger = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transfUtilsUG = require 'transf'
@@ -7,11 +9,28 @@ local vec3 = require 'vec3'
 function data()
 	return {
 		updateFn = function(params, two)
-			-- print('updateFn starting')
-			-- print('updateFn starting, params =') debugPrint(params)
-			print('two =') debugPrint(two)
+			-- logger.print('updateFn starting')
+			-- logger.debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
+			-- logger.print('two =') logger.debugPrint(two)
 
 			if not params.modules then params.modules = {} end
+			-- logger.print('params.modules =') logger.debugPrint(params.modules)
+			-- removeAll module added: return free edges and nothing else
+			-- LOLLO NOTE we have no beforeBulldoze event,
+			-- and we cannot catch the click on the bulldozer confirm button,
+			-- so this is the easy way out
+			if params.modules[301016] then
+				local newEdgeLists = {}
+				for _, edgeList in pairs(params.edgeLists) do
+					edgeList.freeNodes = {0, 1}
+					edgeList.tag2nodes = nil
+					newEdgeLists[#newEdgeLists+1] = edgeList
+				end
+				return {
+					edgeLists = newEdgeLists,
+					models = { },
+				}
+			end
 
 			local _streetTypeName = params.edgeLists[1].params.type
 			local _selectedStreetData = nil
@@ -72,7 +91,12 @@ function data()
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
-					}
+					},
+					[_constants.removeAllModuleType] = {
+						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
+					},
 				},
 				slots = {},
 				stations = {},
@@ -90,8 +114,8 @@ function data()
 			-- local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
 			-- local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
 			-- local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
-			-- print('LOLLO _streetYOffset =', _streetYOffset)
-			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
+			-- logger.print('LOLLO _streetYOffset =', _streetYOffset)
+			-- logger.print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
 			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
 			-- local _streetFileName = _selectedStreetData.fileName
 			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
@@ -414,6 +438,18 @@ function data()
 				end
 			end
 
+			-- add removeAll
+			table.insert(result.slots, {
+				-- height = 1,
+				id = result.mangleId(0, 0, _constants.idBases.removeAllSlotId),
+				-- shape 0 1 2 3
+				shape  = 1,
+				spacing = _constants.innerSpacing12x12,
+				-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+				transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
+				type = _constants.removeAllModuleType,
+			})
+
 			-- join terminals together
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
@@ -527,17 +563,15 @@ function data()
 			return result
 		end,
 		upgradeFn = function(one, two)
-			print('upgradeFn starting, one =') debugPrint(one)
-			print('two =') debugPrint(two)
+			logger.print('upgradeFn starting, one =') logger.debugPrint(one)
+			logger.print('two =') logger.debugPrint(two)
 			return {}
 		end,
-		preProcessFn = function(modules, change, three)
+--[[ 		preProcessFn = function(modules, change, three)
 			-- this fires when the user adds or removes a module
-			-- print('LOLLO preProcessFn')
-			-- print('modules =')
-			-- debugPrint(modules)
-			-- print('change =')
-			-- debugPrint(change)
+			logger.print('LOLLO preProcessFn firing from script')
+			-- logger.print('modules =') logger.debugPrint(modules)
+			-- logger.print('change =') logger.debugPrint(change)
 			-- default behaviour
 			if change.added then
 				modules[change.slotId] = change.module
@@ -560,6 +594,6 @@ function data()
 			-- 	modules[change.slotId] = nil
 			-- end
 			return modules
-        end,
+        end, ]]
 	}
 end

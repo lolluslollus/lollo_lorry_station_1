@@ -54,6 +54,7 @@ function data()
             moduleHelpers.updateParamValues_streetType_(staticConPloppable.params, allStreetData)
             staticConPloppable.upgradeScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.upgradeFn'
             -- LOLLO TODO when preProcessFn fires, the game throws "key not found: name"
+            -- when it fires from con, it's fine instead.
             -- staticConPloppable.preProcessScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.preProcessFn'
             api.res.constructionRep.setVisible(ploppableConId, false)
         end,

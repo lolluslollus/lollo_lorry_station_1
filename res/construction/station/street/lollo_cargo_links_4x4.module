@@ -21,7 +21,7 @@ return {
 	description = {
 		name = _("Cargo links, 4 x 4 m"),
 		description = _("Links for waiting cargo, 4 x 4 m, collision free. Place them across obstacles, eg roads, to connect more cargo areas."),
-		icon = "ui/construction/station/street/cargo_links_4x4.tga"
+		icon = "ui/construction/lollo_lorry_station/cargo_links_4x4.tga"
 	},
 	metadata = {
 		cargo = true,

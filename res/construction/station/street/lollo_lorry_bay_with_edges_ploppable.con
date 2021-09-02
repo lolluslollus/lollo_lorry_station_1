@@ -25,7 +25,7 @@ function data()
 		end,
 --[[ 		preProcessFn = function(modules, change, three)
 			-- this fires when the user adds or removes a module
-			-- print('LOLLO preProcessFn')
+			print('LOLLO preProcessFn firing from con')
 			-- print('modules =')
 			-- debugPrint(modules)
 			-- print('change =')

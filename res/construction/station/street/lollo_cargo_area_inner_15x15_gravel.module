@@ -21,7 +21,7 @@ return {
 	description = {
 		name = _("Cargo area with gravel, 15 x 15 m"),
 		description = _("Area for waiting cargo, 15 x 15 m, with gravel."),
-		icon = "ui/construction/station/street/cargo_area_inner_15x15_gravel.tga"
+		icon = "ui/construction/lollo_lorry_station/cargo_area_inner_15x15_gravel.tga"
 	},
 	metadata = {
 		cargo = true,
