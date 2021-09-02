@@ -40,6 +40,7 @@ local constants = {
 	lorryBayStreetside12x4ModuleType = 'lorry_bay_streetside_12x4',
 	lorryBayStreetsideEntrance12x4ModelFileName = 'lollo_lorry_station/lorry_bay_streetside_entrance_12x4.mdl',
 	lorryBayStreetsideEntrance12x4ModelTag = 'lorryBayStreetsideEntrance12x4',
+	removeAllModuleType = 'lorry_bay_remove_all',
 
 	cargoAreaInner15x15ModelFileName = 'lollo_lorry_station/cargo_area_inner_15x15.mdl',
 	cargoAreaInner15x15ModuleType = 'cargo_area_inner_15x15',
@@ -61,6 +62,7 @@ local constants = {
 	-- markModelFileName = 'lollo_lorry_station/lollo_mark.mdl',
 	-- constructionFileName = 'station/street/lollo_lorry_station.con',
 	idBases = {
+		removeAllSlotId = 300000,
 		cargoLink4x4SlotId = 270000,
 		cargoAreaStreetside12x4SlotId = 260000,
 		cargoAreaInner4x4SlotId = 250000,
