@@ -96,13 +96,15 @@ local utils = {
                 edgeType = _getEdgeType(edgeToAdd.comp.type),
                 edgeTypeName = _getEdgeTypeName(edgeToAdd.comp.type, edgeToAdd.comp.typeIndex),
                 freeNodes = {edgeIndexBase1 == 1 and 0 or 1},
+                -- freeNodes = {0, 1}, -- this crashes and it makes no sense anyway
                 params = {
                     hasBus = edgeToAdd.params.hasBus, -- useless, UG TODO
                     -- skipCollision = true, -- LOLLO TODO do we need this?
                     tramTrackType = _getTramTrackType(edgeToAdd.params.tramTrackType),
                     type = _getStreetType(edgeToAdd.params.streetType),
                 },
-                snapNodes = {edgeIndexBase1 == 1 and 0 or 1},
+                snapNodes = {edgeIndexBase1 == 1 and 0 or 1}, -- we need this
+                -- snapNodes = {}, -- with this, the ugly intersections cannot be fixed with an upgrade
                 tag2nodes = {},
                 type = 'STREET'
             }
@@ -269,6 +271,19 @@ local actions = {
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
         logger.print('edgeLists =') debugPrint(edgeLists)
 
+        -- local reversedEdgeLists = {edgeLists[2], edgeLists[1]}
+        -- for _, edgeList in pairs(reversedEdgeLists) do
+        --     edgeList.edges = utils.getPosTanX2Reversed(edgeList.edges)
+        --     if edgeList.freeNodes[1] == 0 then edgeList.freeNodes[1] = 1
+        --     elseif edgeList.freeNodes[1] == 1 then edgeList.freeNodes[1] = 0
+        --     end
+        --     if edgeList.snapNodes[1] == 0 then edgeList.snapNodes[1] = 1
+        --     elseif edgeList.snapNodes[1] == 1 then edgeList.snapNodes[1] = 0
+        --     end
+        -- end
+        -- print('reversedEdgeLists =') debugPrint(reversedEdgeLists)
+        -- edgeLists = reversedEdgeLists
+
         local newCon = api.type.SimpleProposal.ConstructionEntity.new()
         newCon.fileName = _eventProperties.ploppableModularCargoStationBuilt.conName
 
@@ -318,7 +333,7 @@ local actions = {
 
         local context = api.type.Context:new()
         -- context.checkTerrainAlignment = true
-        -- context.cleanupStreetGraph = false -- useless
+        -- context.cleanupStreetGraph = true -- default is false, useless
         -- context.gatherBuildings = false -- default is false
         -- context.gatherFields = true -- default is true
         context.player = api.engine.util.getPlayer()
@@ -331,20 +346,21 @@ local actions = {
                 if success then
                     -- logger.print('station proposal data = ', result.resultProposalData) -- userdata
                     -- logger.print('station entities = ', result.resultEntities) -- userdata
-                    logger.print('buildStation succeeded, stationConstructionId = ', result.resultEntities[1])
+                    local stationId = result.resultEntities[1]
+                    logger.print('buildStation succeeded, stationConstructionId = ', stationId)
                     -- LOLLO NOTE this is an ugly bodge because it uses the old game.interface.
                     -- Without this, we get ugly intersections, never mind how I arrange freeNodes and snapNodes.
                     -- Upgrading the edge attached to the construction fixes them, and we don't want to do it by hand.
                     -- Note that, by hand or not, the upgrade will screw up the looks of smooth bends.
                     -- LOLLO TODO test this: if we use this bodge and place several stations quickly in adjoining edges,
-                    -- there can be a weird crash.
-                    -- if result.resultEntities[1] and game.interface.upgradeConstruction then
-                    --     game.interface.upgradeConstruction(
-                    --         result.resultEntities[1],
-                    --         _eventProperties.ploppableModularCargoStationBuilt.conName,
-                    --         paramsBak
-                    --     )
-                    -- end
+                    -- there can be a weird crash. It only happened once.
+                    if result.resultEntities[1] and game.interface.upgradeConstruction then
+                        game.interface.upgradeConstruction(
+                            stationId,
+                            _eventProperties.ploppableModularCargoStationBuilt.conName,
+                            paramsBak
+                        )
+                    end
                 end
             end
         )
@@ -599,69 +615,106 @@ function data()
         end,
         guiHandleEvent = function(id, name, args)
             -- LOLLO NOTE param can have different types, even boolean, depending on the event id and name
-            if (name ~= 'builder.apply') then return end
+            -- if (name ~= 'builder.apply') then return end
 
             -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
 
             -- xpcall(
             --     function()
-            if (id == 'constructionBuilder') then
-                -- modular lorry station has been built
-                if (not(args.result) or not(args.result[1])) then return end
+            if name == 'builder.apply' then
+                -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
+                if (id == 'constructionBuilder') then
+                    -- modular lorry station has been built
+                    if (not(args.result) or not(args.result[1])) then return end
 
-                if _isBuildingLorryBayWithEdges(args) then
-                    api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
-                        string.sub(debug.getinfo(1, 'S').source, 1),
-                        _eventId,
-                        _eventProperties.lorryStationBuilt.eventName,
-                        {
-                            constructionEntityId = args.result[1]
-                        }
-                    ))
-                end
-            elseif id == 'streetTerminalBuilder' then
-                -- waypoint or streetside stations have been built
-                if (args and args.proposal and args.proposal.proposal
-                and args.proposal.proposal.edgeObjectsToAdd
-                and args.proposal.proposal.edgeObjectsToAdd[1]
-                and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
-                then
-                    local _ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
-                    local _ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
-                    if args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _ploppableCargoModelId then
-                        local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
-                        logger.print('stationId =') logger.debugPrint(stationId)
-                        local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
-                        logger.print('edgeId =') logger.debugPrint(edgeId)
-                        if not(edgeId) or not(stationId) then return end
-
+                    if _isBuildingLorryBayWithEdges(args) then
                         api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
                             string.sub(debug.getinfo(1, 'S').source, 1),
                             _eventId,
-                            _eventProperties.ploppableStreetsideCargoStationBuilt.eventName,
+                            _eventProperties.lorryStationBuilt.eventName,
                             {
-                                edgeId = edgeId,
-                                stationId = stationId,
-                            }
-                        ))
-                    elseif args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _ploppablePassengersModelId then
-                        local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
-                        logger.print('stationId =') logger.debugPrint(stationId)
-                        local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
-                        logger.print('edgeId =') logger.debugPrint(edgeId)
-                        if not(edgeId) or not(stationId) then return end
-
-                        api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
-                            string.sub(debug.getinfo(1, 'S').source, 1),
-                            _eventId,
-                            _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName,
-                            {
-                                edgeId = edgeId,
-                                stationId = stationId,
+                                constructionEntityId = args.result[1]
                             }
                         ))
                     end
+                elseif id == 'streetTerminalBuilder' then
+                    -- waypoint or streetside stations have been built
+                    if (args and args.proposal and args.proposal.proposal
+                    and args.proposal.proposal.edgeObjectsToAdd
+                    and args.proposal.proposal.edgeObjectsToAdd[1]
+                    and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
+                    then
+                        local _ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
+                        local _ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
+                        if args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _ploppableCargoModelId then
+                            local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
+                            logger.print('stationId =') logger.debugPrint(stationId)
+                            local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
+                            logger.print('edgeId =') logger.debugPrint(edgeId)
+                            if not(edgeId) or not(stationId) then return end
+
+                            api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
+                                string.sub(debug.getinfo(1, 'S').source, 1),
+                                _eventId,
+                                _eventProperties.ploppableStreetsideCargoStationBuilt.eventName,
+                                {
+                                    edgeId = edgeId,
+                                    stationId = stationId,
+                                }
+                            ))
+                        elseif args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _ploppablePassengersModelId then
+                            local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
+                            logger.print('stationId =') logger.debugPrint(stationId)
+                            local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
+                            logger.print('edgeId =') logger.debugPrint(edgeId)
+                            if not(edgeId) or not(stationId) then return end
+
+                            api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
+                                string.sub(debug.getinfo(1, 'S').source, 1),
+                                _eventId,
+                                _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName,
+                                {
+                                    edgeId = edgeId,
+                                    stationId = stationId,
+                                }
+                            ))
+                        end
+                    end
+                elseif id == 'bulldozer' then
+                    -- LOLLO TODO rebuild the edges without the station, it's too late here
+                    -- for _, constructionId in pairs(args.proposal.toRemove) do
+                    --     logger.print('about to bulldoze construction', constructionId)
+                    --     if edgeUtils.isValidId(constructionId) then
+                    --         local con = api.engine.getComponent(constructionId, api.type.ComponentType.CONSTRUCTION)
+                    --         print('con details =') debugPrint(con)
+                    --         if con ~= nil and type(con.fileName) == 'string' and con.fileName == _eventProperties.ploppableModularCargoStationBuilt.conName then
+                    --             logger.print('it is one of mine')
+                    --         end
+                    --     end
+                    -- end
                 end
+            elseif name == 'builder.proposalCreate' then
+                logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
+                -- if id == 'bulldozer' then
+                --     -- this is not too late to make a note of the edges
+                --     -- but it may be too late to rescue the buildings, and slow anyway.
+                --     -- try something else, like preProcessFn - no it doesn't work
+                --     -- maybe then a special module that, when added, destroys the station and leaves the buildings?
+                --      -- the best here would be a beforeBulldoze event, but it does not exist UG TODO
+                --     for _, constructionId in pairs(args.proposal.toRemove) do
+                --         logger.print('about to bulldoze construction', constructionId)
+                --         if edgeUtils.isValidId(constructionId) then
+                --             local con = api.engine.getComponent(constructionId, api.type.ComponentType.CONSTRUCTION)
+                --             print('con details =') debugPrint(con)
+                --             if con ~= nil and type(con.fileName) == 'string' and con.fileName == _eventProperties.ploppableModularCargoStationBuilt.conName then
+                --                 logger.print('it is one of mine')
+                --                 local removedNodes = args.proposal.proposal.removedNodes
+                --                 local removedSegments = args.proposal.proposal.removedSegments
+
+                --             end
+                --         end
+                --     end
+                -- end
             end
             --     end,
             --     _myErrorHandler

@@ -31,6 +31,7 @@ function data()
             local allStreetData = streetUtils.getGlobalStreetData(
                 streetUtils.getStreetDataFilters().STOCK
             )
+
             local staticCon = api.res.constructionRep.get(
                 api.res.constructionRep.find(
                     'station/street/lollo_lorry_bay_with_edges.con'
@@ -42,18 +43,18 @@ function data()
             }
             moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
 
-
-            local staticConPloppable = api.res.constructionRep.get(
-                api.res.constructionRep.find(
-                    'station/street/lollo_lorry_bay_with_edges_ploppable.con'
-                )
+            local ploppableConId = api.res.constructionRep.find(
+                'station/street/lollo_lorry_bay_with_edges_ploppable.con'
             )
+            local staticConPloppable = api.res.constructionRep.get(ploppableConId)
             staticConPloppable.updateScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.updateFn'
             staticConPloppable.updateScript.params = {
                 globalStreetData = allStreetData
             }
             moduleHelpers.updateParamValues_streetType_(staticConPloppable.params, allStreetData)
             staticConPloppable.upgradeScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.upgradeFn'
+            staticConPloppable.preProcessScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.preProcessFn'
+            api.res.constructionRep.setVisible(ploppableConId, false)
         end,
     }
 end
