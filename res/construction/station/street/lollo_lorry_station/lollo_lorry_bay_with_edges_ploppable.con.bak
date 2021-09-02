@@ -1,8 +1,8 @@
-local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
+-- LOLLO NOTE this whole thing works except for the vehicleNodeOverride
+-- It is a documented game fault.
+-- LOLLO TODO activate it as soon as the game is fixed.
 
 function data()
-	-- print('old con, params are set =')
-	-- debugPrint(moduleHelpers.getParams())
 	return {
 		type = 'STREET_STATION_CARGO',
 		description = {

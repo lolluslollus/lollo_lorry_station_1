@@ -4,7 +4,6 @@ local edgeUtils = require('lollo_lorry_station.edgeUtils')
 local logger = require('lollo_lorry_station.logger')
 local slotHelpers = require('lollo_lorry_station.slotHelpers')
 local transfUtils = require('lollo_lorry_station.transfUtils')
-local transfUtilsUG = require('transf')
 
 
 local _eventId = '__lolloLorryStationEvent__'
