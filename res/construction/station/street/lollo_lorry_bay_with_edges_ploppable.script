@@ -19,7 +19,7 @@ function data()
 			-- LOLLO NOTE we have no beforeBulldoze event,
 			-- and we cannot catch the click on the bulldozer confirm button,
 			-- so this is the easy way out
-			if params.modules[301016] then
+			if params.modules[slotUtils.mangleId(0, 0, _constants.idBases.removeAllSlotId)] then
 				local newEdgeLists = {}
 				for _, edgeList in pairs(params.edgeLists) do
 					edgeList.freeNodes = {0, 1}
