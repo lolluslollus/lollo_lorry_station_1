@@ -300,6 +300,7 @@ local actions = {
             edgeLists = edgeLists,
             -- edgeObjects = edgeObjects,
             inverseMainTransf = _inverseMainTransf,
+            isStoreCargoOnPavement = 1,
             mainTransf = _mainTransf,
             modules = { },
             -- seed = 123,
@@ -618,10 +619,12 @@ function data()
             -- if (name ~= 'builder.apply') then return end
 
             -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
+            -- if name ~= 'builder.proposalCreate' then
+            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
+            -- end
 
             -- xpcall(
             --     function()
-            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
             if name == 'builder.apply' then
                 -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
                 if (id == 'constructionBuilder') then
@@ -730,7 +733,7 @@ function data()
                 -- What if I try to add not edges, but invisible lanes?
             elseif name == 'idAdded' then -- or name == 'visibilityChange'  
                 -- id =	temp.view.entity_25789	name =	idAdded where 25789 is the id of my con
-                logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') --logger.debugPrint(args) always nil
+                -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args) --always nil
                 -- id == menu.bulldozer
                 --[[ api.gui.util.getById('menu.bulldozer')
                 returns

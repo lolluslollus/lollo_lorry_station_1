@@ -9,9 +9,23 @@ function data()
 		updateFn = function(params, two)
 			-- print('updateFn starting')
 			-- print('updateFn starting, params =') debugPrint(params)
-			-- print('two =') debugPrint(two)
+			print('two =') debugPrint(two)
 
 			if not params.modules then params.modules = {} end
+
+			local _streetTypeName = params.edgeLists[1].params.type
+			local _selectedStreetData = nil
+			for _, value in pairs(two.globalStreetData) do
+				if value.fileName == _streetTypeName then
+					_selectedStreetData = value
+					break
+				end
+			end
+			-- local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
+			-- local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
+			local _vehicleEdgeYOffset = _selectedStreetData.rightLaneWidth * 0.5
+			local _yOffset = _vehicleEdgeYOffset
+
 
 			local result = {
 				colliders = {},
@@ -24,157 +38,23 @@ function data()
 					{
 						id = 'lollo_lorry_station/icon/blue.mdl',
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1},
-					}
-					-- {
-					-- 	id = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelFileName or _constants.lorryBayVehicleEdgeLeftModelFileName,
-					-- 	slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
-					-- 	tag = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelTag or _constants.lorryBayVehicleEdgeLeftModelTag,
-					-- 	transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
-					-- },
-					-- {
-					-- 	id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
-					-- 	slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
-					-- 	tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
-					-- 	transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
-					-- },
-				},
-				slotConfig = {
-					-- [_constants.cargoAreaInner12x12ModuleType] = {
-					-- 	maxModules = -1,
-					-- 	message = nil, --'LOLLO slotConfig message',
-					-- 	skipCollisionCheck = true,
-					-- },
-					[_constants.cargoAreaStreetside12x4ModuleType] = {
-						maxModules = -1,
-						message = nil, --'LOLLO slotConfig message',
-						skipCollisionCheck = true,
 					},
-					[_constants.cargoLinks4x4ModuleType] = {
-						maxModules = -1,
-						message = nil, --'LOLLO slotConfig message',
-						skipCollisionCheck = true,
-					}
-				},
-				slots = {},
-				stations = {},
-				terminalGroups = {},
-				terrainAlignmentLists = {},
-				demangleId = slotUtils.demangleId,
-				mangleId = slotUtils.mangleId,
-			}
-
-			if true then return result end
-
-
-
-			-- LOLLO NOTE I cannot call the api from here, sigh.
-			-- this parameter was added later: initialise it
-			if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
-			-- force snap once station is built
-			if params.upgrade then params.snapNodes = 1 end
-			local function _getTramTrackType(params)
-				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
-				-- return params.tramTrack and (({'NO', 'YES', 'ELECTRIC'})[params.tramTrack + 1]) or 'NO'
-			end
-			local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
-			-- local _selectedStreetData = _allStreetData[params.streetType_ + 1]
-			-- local _selectedStreetData = _allStreetData[15]
-			-- print('LOLLO _selectedStreetData =')
-			-- debugPrint(_selectedStreetData)
-			local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
-			local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
-			-- print('LOLLO _streetYOffset =', _streetYOffset)
-			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
-			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
-			local _streetFileName = _selectedStreetData.fileName
-			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
-			local _x0 = 10 -- if this is too short (eg 5) and snap is true, edges will try to snap to themselves while configuring
-			local result = {
-				colliders = {},
-				-- coord2terminalInfo = {},
-				cost = 1000,
-				edgeLists = {
 					{
-						type = 'STREET',
-						params = {
-							type = _streetFileName,
-							tramTrackType = _getTramTrackType(params)
-						},
-						edges = params.direction == 0
-						and {
-								{
-									{_x0 + _halfExtraLength, _streetYOffset, 0},
-									{-1, 0, 0}
-								},
-								{
-									{1, _streetYOffset, 0},
-									{-1, 0, 0}
-								},
-								-- this edge is as long as the main lorry bay collider box
-								{
-									{1, _streetYOffset, 0},
-									{-1, 0, 0}
-								},
-								{
-									{-1, _streetYOffset, 0},
-									{-1, 0, 0},
-								},
-								{
-									{-1, _streetYOffset, 0},
-									{-1, 0, 0},
-								},
-								{
-									{-_x0 - _halfExtraLength, _streetYOffset, 0},
-									{-1, 0, 0},
-								},
-							}
-						or {
-							{
-								{-_x0 - _halfExtraLength, _streetYOffset, 0},
-								{1, 0, 0}
-							},
-							{
-								{-1, _streetYOffset, 0},
-								{1, 0, 0}
-							},
-							-- this edge is as long as the main lorry bay collider box
-							{
-								{-1, _streetYOffset, 0},
-								{1, 0, 0}
-							},
-							{
-								{1, _streetYOffset, 0},
-								{1, 0, 0},
-							},
-							{
-								{1, _streetYOffset, 0},
-								{1, 0, 0},
-							},
-							{
-								{_x0 + _halfExtraLength, _streetYOffset, 0},
-								{1, 0, 0},
-							},
-						},
-						freeNodes = params.snapNodes == 0 and { 0, 5 } or {},
-                        snapNodes = params.snapNodes == 1 and { 0, 5 } or {},
-                        tag2nodes = {} -- LOLLO TODO see if populating this,
-                        -- or merely adding it, allows turning on the collision detection
-                        -- without issues when upgrading the road et al.
-					},
-				},
-				groundFaces = {},
-				models = {
-					{
-						id = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelFileName or _constants.lorryBayVehicleEdgeLeftModelFileName,
+						-- id = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelFileName or _constants.lorryBayVehicleEdgeLeftModelFileName,
+						id = _constants.lorryBayVehicleEdgeRightModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightVehicleEdgeSlotIdBase),
-						tag = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelTag or _constants.lorryBayVehicleEdgeLeftModelTag,
+						-- tag = params.direction == 0 and _constants.lorryBayVehicleEdgeRightModelTag or _constants.lorryBayVehicleEdgeLeftModelTag,
+						tag = _constants.lorryBayVehicleEdgeRightModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{
 						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
+						-- id = _constants.lorryBayStreetside12x4ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
 						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
-						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
+						-- tag = _constants.lorryBayStreetside12x4ModelTag,
+						-- transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
+						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift + _yOffset, 0, 1},
 					},
 				},
 				slotConfig = {
@@ -202,14 +82,29 @@ function data()
 				mangleId = slotUtils.mangleId,
 			}
 
-			local face = {
-				{-7, -2.5, 0, 1},
-				{-7, 2.5, 0, 1},
-				{7, 2.5, 0, 1},
-				{7, -2.5, 0, 1},
-			}
-			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
+			-- if true then return result end
+
+
+
+			-- LOLLO NOTE I cannot call the api from here, sigh.
+			-- local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
+			-- local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
+			-- local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
+			-- print('LOLLO _streetYOffset =', _streetYOffset)
+			-- print('LOLLO _vehicleEdgeYOffset =', _vehicleEdgeYOffset)
+			-- local _streetFileName = 'standard/country_medium_one_way_new.lua'
+			-- local _streetFileName = _selectedStreetData.fileName
+			local _halfExtraLength = (params.extraLength or 0.0) * 0.5 * moduleHelpers.getLengthMultiplier()
+			-- local _x0 = 10 -- if this is too short (eg 5) and snap is true, edges will try to snap to themselves while configuring
+
+			-- local face = {
+			-- 	{-7, -2.5, 0, 1},
+			-- 	{-7, 2.5, 0, 1},
+			-- 	{7, 2.5, 0, 1},
+			-- 	{7, -2.5, 0, 1},
+			-- }
+			-- result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
+			-- result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 
 			-- print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
 			-- debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
@@ -466,7 +361,8 @@ function data()
 							id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaStreetside12x4SlotId),
 							-- shape 0 1 2 3
 							spacing = _constants.anyStreetsideSpacing,
-							transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
+							-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift, 0.0)),
+							transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyStreetsideYShift + _yOffset, 0.0)),
 							type = _constants.cargoAreaStreetside12x4ModuleType,
 						})
 					end
@@ -481,7 +377,8 @@ function data()
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner12x12SlotId),
 						-- shape 0 1 2 3
 						spacing = _constants.innerSpacing12x12,
-						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift + _yOffset, 0.0)),
 						type = _constants.cargoAreaInner12x12ModuleType,
 					})
 				end
@@ -495,7 +392,8 @@ function data()
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoAreaInner4x4SlotId),
 						-- shape 0 1 2 3
 						spacing = _constants.innerSpacing4x4,
-						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift + _yOffset, 0.0)),
 						type = _constants.cargoAreaInner4x4ModuleType,
 					})
 				end
@@ -509,7 +407,8 @@ function data()
 						id = result.mangleId(v.x, v.y, _constants.idBases.cargoLink4x4SlotId),
 						-- shape 0 1 2 3
 						spacing = _constants.innerSpacing4x4,
-						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+						transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift + _yOffset, 0.0)),
 						type = _constants.cargoLinks4x4ModuleType,
 					})
 				end
@@ -633,15 +532,34 @@ function data()
 			return {}
 		end,
 		preProcessFn = function(modules, change, three)
-			print('preProcessFn starting')
+			-- this fires when the user adds or removes a module
+			-- print('LOLLO preProcessFn')
+			-- print('modules =')
+			-- debugPrint(modules)
+			-- print('change =')
+			-- debugPrint(change)
 			-- default behaviour
 			if change.added then
 				modules[change.slotId] = change.module
 			else
 				modules[change.slotId] = nil
 			end
-
+			-- airport behaviour
+			-- if change.added then
+			-- 	if change.slotId == landingSlotId + 1 then
+			-- 		modules[landingSlotId + 0] = nil
+			-- 	elseif change.slotId == landingSlotId + 0 then
+			-- 		modules[landingSlotId + 1] = nil
+			-- 	elseif change.slotId == landingSlotId + 2 then
+			-- 		modules[landingSlotId + 3] = nil
+			-- 	elseif change.slotId == landingSlotId + 3 then
+			-- 		modules[landingSlotId + 2] = nil
+			-- 	end
+			-- 	modules[change.slotId] = change.module
+			-- else
+			-- 	modules[change.slotId] = nil
+			-- end
 			return modules
-		end,
+        end,
 	}
 end
