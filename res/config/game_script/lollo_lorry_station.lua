@@ -621,6 +621,7 @@ function data()
 
             -- xpcall(
             --     function()
+            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') -- logger.debugPrint(args)
             if name == 'builder.apply' then
                 -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
                 if (id == 'constructionBuilder') then
@@ -703,6 +704,14 @@ function data()
                 --     -- maybe then a special module that, when added, destroys the station and leaves the buildings?
                 --     -- the best here would be a beforeBulldoze event, but it does not exist UG TODO
                 --     -- but perhaps I can check if the bulldoze confirmation dialogue is open and then steal its click?
+                -- they are:
+                -- comp 0000027CD0B1DD20
+                -- Name: BuildControlComp::BuildButton::Icon
+                -- Classes: bulldoze-confirm-button 
+
+                -- comp 0000027CD0B1D710
+                -- Name: BuildControlComp::CancelButton::Icon
+                -- Classes: bulldoze-cancel-button 
                 --     for _, constructionId in pairs(args.proposal.toRemove) do
                 --         logger.print('about to bulldoze construction', constructionId)
                 --         if edgeUtils.isValidId(constructionId) then
@@ -717,6 +726,79 @@ function data()
                 --         end
                 --     end
                 -- end
+                -- not very much.
+                -- What if I try to add not edges, but invisible lanes?
+            elseif name == 'idAdded' then -- or name == 'visibilityChange'  
+                -- id =	temp.view.entity_25789	name =	idAdded where 25789 is the id of my con
+                logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') --logger.debugPrint(args) always nil
+                -- id == menu.bulldozer
+                --[[ api.gui.util.getById('menu.bulldozer')
+                returns
+                {
+                    new = nil,
+                    setId = <function>,
+                    setName = <function>,
+                    getName = <function>,
+                    setVisible = <function>,
+                    setTransparent = <function>,
+                    setHighlighted = <function>,
+                    setLayout = <function>,
+                    setFocus = <function>,
+                    hasFocus = <function>,
+                    getParent = <function>,
+                    getContentRect = <function>,
+                    calcMinimumSize = <function>,
+                    getLayout = <function>,
+                    setTooltip = <function>,
+                    setStyleClassList = <function>,
+                    addStyleClass = <function>,
+                    removeStyleClass = <function>,
+                    addLifeTimeChecker = <function>,
+                    setEnabled = <function>,
+                    setGravity = <function>,
+                    isEnabled = <function>,
+                    isVisible = <function>,
+                    setMaximumSize = <function>,
+                    setMinimumSize = <function>,
+                    invokeLater = <function>,
+                    onDestroy = <function>,
+                    onStep = <function>,
+                    onVisibilityChange = <function>,
+                    __doc__ = {
+                      setLayout = "(Component self, ILayout layout) -> Component",
+                      new = "(String name) -> Component",
+                      isEnabled = "(Component self) -> Bool",
+                      setId = "(Component self, String id) -> Nil",
+                      setHighlighted = "(Component self, Bool highlighted) -> Nil",
+                      setName = "(Component self, String name) -> Nil",
+                      getName = "(Component self) -> String",
+                      setTransparent = "(Component self, Bool transparent) -> Nil",
+                      setVisible = "(Component self, Bool visible, Bool emitSignal) -> Nil",
+                      destroy = "(ILayoutItem self) -> Nil",
+                      setFocus = "(Component self) -> Bool",
+                      hasFocus = "(Component self) -> Bool",
+                      getParent = "(Component self) -> Object",
+                      getContentRect = "(Component self) -> Rect",
+                      calcMinimumSize = "(Component self) -> Size",
+                      getLayout = "(Component self) -> Object",
+                      setMaximumSize = "(Component self, Size size) -> Component",
+                      addLifeTimeChecker = "(Component self) -> LifetimeChecker",
+                      setTooltip = "(Component self, String text) -> Component",
+                      setStyleClassList = "(Component self, Vector[String] list) -> Component",
+                      addStyleClass = "(Component self, String class) -> Nil",
+                      removeStyleClass = "(Component self, String class) -> Nil",
+                      setEnabled = "(Component self, Bool enabled) -> Component",
+                      setGravity = "(Component self, Number horizontal, Number vertical) -> Component",
+                      invokeLater = "(Component self, Function callback) -> Nil",
+                      isVisible = "(Component self) -> Bool",
+                      setMinimumSize = "(Component self, Size size) -> Component",
+                      onDestroy = "(Component self, Function callback) -> Connection",
+                      onStep = "(Component self, Function callback[Number, Number]) -> Nil",
+                      onVisibilityChange = "(Component self, Function callback) -> Connection",
+                      getId = "(ILayoutItem self) -> String",
+                    },
+                  } ]]
+
             end
             --     end,
             --     _myErrorHandler
