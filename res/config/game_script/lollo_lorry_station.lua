@@ -150,11 +150,10 @@ local utils = {
 
     getWhichEdgeGetsEdgeObjectAfterSplit = function(edgeObjPosition, node0pos, node1pos, nodeBetween)
         local result = {
-            -- assignToFirstEstimate = nil,
             assignToSecondEstimate = nil,
         }
-        -- print('LOLLO attempting to place edge object with position =')
-        -- debugPrint(edgeObjPosition)
+        -- logger.print('LOLLO attempting to place edge object with position =')
+        -- logger.debugPrint(edgeObjPosition)
         -- print('wholeEdge.node0pos =')
         -- debugPrint(node0pos)
         -- print('nodeBetween.position =')
@@ -163,30 +162,7 @@ local utils = {
         -- debugPrint(nodeBetween.tangent)
         -- print('wholeEdge.node1pos =')
         -- debugPrint(node1pos)
-        -- first estimator
-        -- local nodeBetween_Node0_Distance = edgeUtils.getVectorLength({
-        --     nodeBetween.position.x - node0pos[1],
-        --     nodeBetween.position.y - node0pos[2]
-        -- })
-        -- local nodeBetween_Node1_Distance = edgeUtils.getVectorLength({
-        --     nodeBetween.position.x - node1pos[1],
-        --     nodeBetween.position.y - node1pos[2]
-        -- })
-        -- local edgeObj_Node0_Distance = edgeUtils.getVectorLength({
-        --     edgeObjPosition.x - node0pos[1],
-        --     edgeObjPosition.y - node0pos[2]
-        -- })
-        -- local edgeObj_Node1_Distance = edgeUtils.getVectorLength({
-        --     edgeObjPosition.x - node1pos[1],
-        --     edgeObjPosition.y - node1pos[2]
-        -- })
-        -- if edgeObj_Node0_Distance < nodeBetween_Node0_Distance then
-        --     result.assignToFirstEstimate = 0
-        -- elseif edgeObj_Node1_Distance < nodeBetween_Node1_Distance then
-        --     result.assignToFirstEstimate = 1
-        -- end
 
-        -- second estimator
         local edgeObjPosition_assignTo = nil
         local node0_assignTo = nil
         local node1_assignTo = nil
@@ -269,7 +245,7 @@ local actions = {
 
         local edgeLists = utils.getEdgeListsFromProposal(oldProposal)
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
-        logger.print('edgeLists before transf =') debugPrint(edgeLists)
+        logger.print('edgeLists before transf =') logger.debugPrint(edgeLists)
 
         -- local reversedEdgeLists = {edgeLists[2], edgeLists[1]}
         -- for _, edgeList in pairs(reversedEdgeLists) do
@@ -281,7 +257,7 @@ local actions = {
         --     elseif edgeList.snapNodes[1] == 1 then edgeList.snapNodes[1] = 0
         --     end
         -- end
-        -- print('reversedEdgeLists =') debugPrint(reversedEdgeLists)
+        -- logger.print('reversedEdgeLists =') logger.debugPrint(reversedEdgeLists)
         -- edgeLists = reversedEdgeLists
 
         local newCon = api.type.SimpleProposal.ConstructionEntity.new()
@@ -293,7 +269,7 @@ local actions = {
         for _, edgeList in pairs(edgeLists) do
             edgeList.edges = transfUtils.getPosTanX2Transformed(edgeList.edges, _inverseMainTransf)
         end
-        print('edgeLists after transf =') debugPrint(edgeLists)
+        logger.print('edgeLists after transf =') logger.debugPrint(edgeLists)
 
         local newConParams = {
             -- it is not too correct to pass two parameters, one of which can be inferred from the other. However, performance matters more.
@@ -354,8 +330,8 @@ local actions = {
         api.cmd.sendCommand(
             api.cmd.make.buildProposal(newProposal, context, true), -- the 3rd param is "ignore errors"; wrong proposals will be discarded anyway
             function(result, success)
-                print('buildStation callback, success =', success, ' and result =')
-                debugPrint(result)
+                logger.print('buildStation callback, success =', success, ' and result =')
+                logger.debugPrint(result)
                 if success then
                     -- logger.print('station proposal data = ', result.resultProposalData) -- userdata
                     -- logger.print('station entities = ', result.resultEntities) -- userdata
@@ -457,9 +433,9 @@ local actions = {
             for _, edgeObj in pairs(oldBaseEdge.objects) do
                 if edgeObj[1] ~= objectIdToRemove then
                     local edgeObjPosition = edgeUtils.getObjectPosition(edgeObj[1])
-                    -- print('edge object position: old and new way')
-                    -- debugPrint(edgeObjPositionOld)
-                    -- debugPrint(edgeObjPosition)
+                    -- logger.print('edge object position: old and new way')
+                    -- logger.debugPrint(edgeObjPositionOld)
+                    -- logger.debugPrint(edgeObjPosition)
                     if type(edgeObjPosition) ~= 'table' then return end -- change nothing and leave
                     local assignment = utils.getWhichEdgeGetsEdgeObjectAfterSplit(
                         edgeObjPosition,
@@ -467,14 +443,12 @@ local actions = {
                         {node1.position.x, node1.position.y, node1.position.z},
                         nodeBetween
                     )
-                    -- if assignment.assignToFirstEstimate == 0 then
                     if assignment.assignToSecondEstimate == 0 then
                         table.insert(edge0Objects, { edgeObj[1], edgeObj[2] })
                         -- local stationGroupId = api.engine.system.stationGroupSystem.getStationGroup(edgeObj[1])
                         -- LOLLO TODO do we really need this check? Now we know that the crash happens with removed mod stations!
                         -- if arrayUtils.arrayHasValue(edge1StationGroups, stationGroupId) then return end -- don't split station groups
                         -- if type(stationGroupId) == 'number' and stationGroupId > 0 then table.insert(edge0StationGroups, stationGroupId) end
-                    -- elseif assignment.assignToFirstEstimate == 1 then
                     elseif assignment.assignToSecondEstimate == 1 then
                         table.insert(edge1Objects, { edgeObj[1], edgeObj[2] })
                         -- local stationGroupId = api.engine.system.stationGroupSystem.getStationGroup(edgeObj[1])
@@ -482,9 +456,8 @@ local actions = {
                         -- if arrayUtils.arrayHasValue(edge0StationGroups, stationGroupId) then return end -- don't split station groups
                         -- if type(stationGroupId) == 'number' and stationGroupId > 0 then table.insert(edge1StationGroups, stationGroupId) end
                     else
-                        -- print('don\'t change anything and leave')
-                        -- print('LOLLO error, assignment.assignToFirstEstimate =', assignment.assignToFirstEstimate)
-                        -- print('LOLLO error, assignment.assignToSecondEstimate =', assignment.assignToSecondEstimate)
+                        -- logger.print('don\'t change anything and leave')
+                        -- logger.print('LOLLO error, assignment.assignToSecondEstimate =', assignment.assignToSecondEstimate)
                         return -- change nothing and leave
                     end
                 end
@@ -507,7 +480,7 @@ local actions = {
         -- context.gatherFields = true -- default is true
         context.player = api.engine.util.getPlayer() -- default is -1
 
-        -- logger.print('context =') debugPrint(context)
+        -- logger.print('context =') logger.debugPrint(context)
         local expectedResult = api.engine.util.proposal.makeProposalData(proposal, context)
         if expectedResult.errorState.critical then
             logger.print('expectedResult =') logger.debugPrint(expectedResult)
@@ -520,18 +493,18 @@ local actions = {
         -- api.cmd.sendCommand(
         --     api.cmd.make.buildProposal(proposal, context, true), -- the 3rd param is "ignore errors"; wrong proposals will be discarded anyway
         --     function(result, success)
-        --         -- print('LOLLO street splitter callback returned result = ')
-        --         -- debugPrint(result)
-        --         -- print('LOLLO street splitter callback returned success = ', success)
+        --         -- logger.print('LOLLO street splitter callback returned result = ')
+        --         -- logger.debugPrint(result)
+        --         -- logger.print('LOLLO street splitter callback returned success = ', success)
         --         if not(success) then
-        --             print('Warning: streetTuning.splitEdge failed, proposal = ') debugPrint(proposal)
+        --             logger.print('Warning: streetTuning.splitEdge failed, proposal = ') logger.debugPrint(proposal)
         --         end
         --     end
         -- )
     end,
 
     replaceStationWithSnappyCopy = function(oldConstructionId)
-        -- print('oldConstructionId =', oldConstructionId)
+        logger.print('replaceStationWithSnappyCopy starting, oldConstructionId =', oldConstructionId)
         if not(edgeUtils.isValidAndExistingId(oldConstructionId)) then return end
 
         local oldConstruction = api.engine.getComponent(oldConstructionId, api.type.ComponentType.CONSTRUCTION)
@@ -575,18 +548,6 @@ local actions = {
         --     oldConstructionId,
         -- }
 
-        -- if I bulldoze here, the station will inherit the old name
-
-        local callback = function(res, success)
-            -- print('LOLLO _replaceStationWithSnappyCopy res = ')
-            -- debugPrint(res)
-            --for _, v in pairs(res.entities) do print(v) end
-            logger.print('LOLLO _replaceStationWithSnappyCopy success = ') logger.debugPrint(success)
-            -- if success then
-                -- if I bulldoze here, the station will get the new name
-            -- end
-        end
-
         local context = api.type.Context:new()
         context.checkTerrainAlignment = false -- true gives smoother z, default is false
         context.cleanupStreetGraph = false -- default is false
@@ -595,7 +556,16 @@ local actions = {
         context.player = api.engine.util.getPlayer()
 
         local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd param is "ignore errors"
-        api.cmd.sendCommand(cmd, callback)
+        api.cmd.sendCommand(cmd, function(res, success)
+            -- if I bulldoze here, the station will inherit the old name
+            -- logger.print('LOLLO _replaceStationWithSnappyCopy res = ')
+            -- logger.debugPrint(res)
+            --for _, v in pairs(res.entities) do logger.print(v) end
+            logger.print('LOLLO _replaceStationWithSnappyCopy success = ') logger.debugPrint(success)
+            -- if success then
+                -- if I bulldoze here, the station will get the new name
+            -- end
+        end)
     end,
 }
 
@@ -605,6 +575,7 @@ function data()
         -- end,
         handleEvent = function(src, id, name, args)
             if (id ~= _eventId) then return end
+            logger.print('handleEvent starting, src =', src, ', id =', id, ', name =', name, ', args =') logger.debugPrint(args)
             if type(args) ~= 'table' then return end
 
             if name == _eventProperties.lorryStationBuilt.eventName then
@@ -612,12 +583,12 @@ function data()
             elseif name == _eventProperties.ploppableStreetsideCargoStationBuilt.eventName then
                 if edgeUtils.isValidAndExistingId(args.edgeId) and edgeUtils.isValidAndExistingId(args.stationId) and not(edgeUtils.isEdgeFrozen(args.edgeId)) then
                     local stationTransf = edgeUtils.getObjectTransf(args.stationId)
-                    -- print('stationTransf =') debugPrint(stationTransf)
+                    -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
                     local nodeBetween = edgeUtils.getNodeBetweenByPosition(
                         args.edgeId,
                         {stationTransf[13], stationTransf[14], stationTransf[15]}
                     )
-                    print('nodeBetween =') debugPrint(nodeBetween)
+                    logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
                     local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
                     if proposal then
                         actions.buildStation(proposal, stationTransf)
@@ -630,7 +601,7 @@ function data()
             -- LOLLO NOTE param can have different types, even boolean, depending on the event id and name
             -- if (name ~= 'builder.apply') then return end
 
-            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
+            -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
             -- if name ~= 'builder.proposalCreate' then
             --  logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
             -- end
@@ -638,7 +609,7 @@ function data()
             -- xpcall(
             --     function()
             if name == 'builder.apply' then
-                -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') debugPrint(args)
+                -- logger.print('guiHandleEvent caught id =', id, 'name =', name, 'args =') logger.debugPrint(args)
                 if (id == 'constructionBuilder') then
                     -- modular lorry station has been built
                     if (not(args.result) or not(args.result[1])) then return end
