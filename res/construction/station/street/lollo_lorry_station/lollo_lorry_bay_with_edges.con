@@ -6,8 +6,8 @@ function data()
 	return {
 		type = 'STREET_STATION_CARGO',
 		description = {
-			name = _("Roadside lorry bay"),
-			description = _("Roadside lorry loading / unloading bay."),
+			name = _("LORRY_STOP_NAME"),
+			description = _("LORRY_STOP_DESC"),
 		},
 		availability = {
 			yearFrom = 1925, -- -1, -- 1925,

@@ -51,8 +51,8 @@ function data()
                 price = 1200,
             },
             description = {
-                description = _("LORRY_STOP_DESC"),
-                name = _("LORRY_STOP_NAME"),
+                description = _("LORRY_STOP_PLOPPABLE_DESC"),
+                name = _("LORRY_STOP_PLOPPABLE_NAME"),
             },
             -- lollo = { -- useless
             --     true

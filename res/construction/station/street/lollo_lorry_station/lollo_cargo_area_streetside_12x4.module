@@ -27,7 +27,7 @@ return {
 		cargo = true,
 	},
 	order = {
-		value = 7,
+		value = 5,
 	},
 	type = _constants.cargoAreaStreetside12x4ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)

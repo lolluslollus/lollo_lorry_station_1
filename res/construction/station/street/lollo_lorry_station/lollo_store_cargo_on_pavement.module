@@ -15,24 +15,20 @@ function data()
 			categories = { "cargo", },
 		},
 		description = {
-			name = _("Remove All"),
-			description = _("Remove all rebuilding the road"),
-			-- icon = "ui/button/small/bulldoze.tga"
-			-- icon = "ui/button/small/bulldoze@2x.tga"
-			-- icon = "ui/button/large/bulldozer.tga"
-			-- icon = "ui/icons/game-menu/bulldozer@2x.tga"
-			icon = "ui/construction/lollo_lorry_station/remove-all.tga"
+			name = _("STORE_CARGO_ON_PAVEMENT_NAME"),
+			description = _("STORE_CARGO_ON_PAVEMENT_DESC"),
+			icon = "ui/construction/lollo_lorry_station/store-cargo-on-pavement.tga"
 		},
 		metadata = {
 			cargo = true,
 		},
 		order = {
-			value = 0,
+			value = 2,
 		},
-		type = _constants.removeAllModuleType,
+		type = _constants.storeCargoOnPavementModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
 			local x, y, baseId = result.demangleId(slotId)
-			print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
+			print('storeCargoOnPavement placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,
 

@@ -34,28 +34,28 @@ function data()
 
             local staticCon = api.res.constructionRep.get(
                 api.res.constructionRep.find(
-                    'station/street/lollo_lorry_bay_with_edges.con'
+                    'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.con'
                 )
             )
-            staticCon.updateScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges.updateFn'
+            staticCon.updateScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.updateFn'
             staticCon.updateScript.params = {
                 globalStreetData = allStreetData
             }
             moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
 
             local ploppableConId = api.res.constructionRep.find(
-                'station/street/lollo_lorry_bay_with_edges_ploppable.con'
+                'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges_ploppable.con'
             )
             local staticConPloppable = api.res.constructionRep.get(ploppableConId)
-            staticConPloppable.updateScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.updateFn'
+            staticConPloppable.updateScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges_ploppable.updateFn'
             staticConPloppable.updateScript.params = {
                 globalStreetData = allStreetData
             }
             moduleHelpers.updateParamValues_streetType_(staticConPloppable.params, allStreetData)
-            staticConPloppable.upgradeScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.upgradeFn'
+            staticConPloppable.upgradeScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges_ploppable.upgradeFn'
             -- LOLLO TODO when preProcessFn fires, the game throws "key not found: name"
             -- when it fires from con, it's fine instead.
-            -- staticConPloppable.preProcessScript.fileName = 'construction/station/street/lollo_lorry_bay_with_edges_ploppable.preProcessFn'
+            -- staticConPloppable.preProcessScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges_ploppable.preProcessFn'
             api.res.constructionRep.setVisible(ploppableConId, false)
         end,
     }

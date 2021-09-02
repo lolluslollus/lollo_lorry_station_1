@@ -2,14 +2,15 @@ local _constants = require('lollo_lorry_station.constants')
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local edgeUtils = require('lollo_lorry_station.edgeUtils')
 local logger = require('lollo_lorry_station.logger')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 local transfUtils = require('lollo_lorry_station.transfUtils')
 local transfUtilsUG = require('transf')
 
 
 local _eventId = '__lolloLorryStationEvent__'
 local _eventProperties = {
-    lorryStationBuilt = { conName = 'station/street/lollo_lorry_bay_with_edges.con', eventName = 'lorryStationBuilt' },
-    ploppableModularCargoStationBuilt = { conName = 'station/street/lollo_lorry_bay_with_edges_ploppable.con', eventName = 'ploppableModularCargoStationBuilt' },
+    lorryStationBuilt = { conName = 'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.con', eventName = 'lorryStationBuilt' },
+    ploppableModularCargoStationBuilt = { conName = 'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges_ploppable.con', eventName = 'ploppableModularCargoStationBuilt' },
     ploppableStreetsideCargoStationBuilt = { conName = nil, eventName = 'ploppableStreetsideCargoStationBuilt' },
     ploppableStreetsidePassengerStationBuilt = { conName = nil, eventName = 'ploppableStreetsidePassengerStationBuilt' },
 }
@@ -269,7 +270,7 @@ local actions = {
 
         local edgeLists = utils.getEdgeListsFromProposal(oldProposal)
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
-        logger.print('edgeLists =') debugPrint(edgeLists)
+        logger.print('edgeLists before transf =') debugPrint(edgeLists)
 
         -- local reversedEdgeLists = {edgeLists[2], edgeLists[1]}
         -- for _, edgeList in pairs(reversedEdgeLists) do
@@ -293,7 +294,7 @@ local actions = {
         for _, edgeList in pairs(edgeLists) do
             edgeList.edges = transfUtils.getPosTanX2Transformed(edgeList.edges, _inverseMainTransf)
         end
-        print('edgeLists =') debugPrint(edgeLists)
+        print('edgeLists after transf =') debugPrint(edgeLists)
 
         local newConParams = {
             -- it is not too correct to pass two parameters, one of which can be inferred from the other. However, performance matters more.
@@ -302,7 +303,19 @@ local actions = {
             inverseMainTransf = _inverseMainTransf,
             isStoreCargoOnPavement = 1,
             mainTransf = _mainTransf,
-            modules = { },
+            modules = {
+                [slotHelpers.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId)] = {
+                    metadata = {
+                      cargo = true,
+                    },
+                    name = _constants.storeCargoOnPavementModuleName,
+                    updateScript = {
+                      fileName = "",
+                      params = { },
+                    },
+                    variant = 0,
+                  }
+            },
             -- seed = 123,
             seed = math.abs(math.ceil(stationTransf[13] * 1000)),
         }
