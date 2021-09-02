@@ -343,6 +343,7 @@ local actions = {
                     -- Note that, by hand or not, the upgrade will screw up the looks of smooth bends.
                     -- LOLLO TODO test this: if we use this bodge and place several stations quickly in adjoining edges,
                     -- there can be a weird crash. It only happened once.
+                    -- To avoid this, you could try destroying and rebuilding once again, with the same parameters.
                     if result.resultEntities[1] and game.interface.upgradeConstruction then
                         game.interface.upgradeConstruction(
                             stationId,
