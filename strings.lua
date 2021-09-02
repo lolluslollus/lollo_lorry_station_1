@@ -28,7 +28,18 @@ function data()
 				WORD OF WARNING
 				The first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
 			]],
-			["_NAME"] = "Modular streetside lorry station"
+			["_NAME"] = "Modular streetside lorry station",
+			["BUS_STOP_NAME"] = "Modular bus load/unload stop",
+			["BUS_STOP_DESC"] = "Bus stop to be placed on the pavement. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
+			["LORRY_STOP_NAME"] = "Modular lorry load/unload station",
+			["LORRY_STOP_DESC"] = "Modular lorry station. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
+			["LORRY_STOP_PLOPPABLE_NAME"] = "Ploppable modular lorry load/unload station",
+			["LORRY_STOP_PLOPPABLE_DESC"] = "Modular lorry station to be placed on the pavement. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
+			["REMOVE_ALL_NAME"] = "Remove All",
+			["REMOVE_ALL_DESC"] = "Remove all rebuilding the road",
+			["STORE_CARGO_ON_PAVEMENT_NAME"] = "Pavement Storage",
+			["STORE_CARGO_ON_PAVEMENT_DESC"] = "Store cargo on pavement",
+			["NewStationName"] = "New Station",
 		},
 	}
 end

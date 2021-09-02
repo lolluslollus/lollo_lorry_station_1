@@ -1,0 +1,39 @@
+local transfUtilsUG = require "transf"
+local vec3 = require "vec3"
+local _constants = require('lollo_lorry_station/constants')
+
+function data()
+	return {
+		availability = {
+			yearFrom = 0,
+			yearTo = 0
+		},
+		cost = {
+			price = 0,
+		},
+		category = {
+			categories = { "cargo", },
+		},
+		description = {
+			name = _("REMOVE_ALL_NAME"),
+			description = _("REMOVE_ALL_DESC"),
+			icon = "ui/construction/lollo_lorry_station/remove-all.tga"
+		},
+		metadata = {
+			cargo = true,
+		},
+		order = {
+			value = 0,
+		},
+		type = _constants.removeAllModuleType,
+		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
+			local x, y, baseId = result.demangleId(slotId)
+			-- print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
+			-- if not x or not y or not baseId then return end
+		end,
+
+		getModelsFn = function()
+			return {}
+		end
+	}
+end
