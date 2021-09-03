@@ -1,4 +1,5 @@
 local _constants = require('lollo_lorry_station.constants')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
 local logger  = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
@@ -8,7 +9,7 @@ local vec3 = require 'vec3'
 function data()
 	return {
 		updateFn = function(params, two)
-			logger.print('updateFn starting, params =') debugPrint(params)
+			logger.print('updateFn starting, params without state =') debugPrint(arrayUtils.cloneDeepOmittingFields(params, {'state'}))
 			-- print('two =') debugPrint(two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 
