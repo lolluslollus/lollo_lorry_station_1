@@ -1,4 +1,5 @@
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local pitchHelpers = require('lollo_lorry_station.pitchHelper')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transfUtilsUG = require 'transf'
 
@@ -186,6 +187,13 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             ),
             defaultIndex = 0
         },
+        {
+            key = 'pitch',
+            name = _('Pitch (adjust it with O and P while building)'),
+            values = pitchHelpers.getPitchParamValues(),
+            defaultIndex = pitchHelpers.getDefaultPitchParamValue(),
+            uiType = 'SLIDER'
+        }
     }
 end
 
