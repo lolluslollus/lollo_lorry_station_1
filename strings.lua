@@ -42,11 +42,11 @@ function data()
 			["snapNodesName"] = "Snap to neighbours while placing",
 			["snapNodesDesc"] = "\"No snap\" can be easier to place. It will be ignored once the station is built.",
 			["directionName"] = "Direction",
-			["directionDesc"] = "Place the station right or left. You cannot have both.",
+			["directionDesc"] = "Place the station right or left, you cannot have both.",
 			["extraLengthName"] = "Extra Length",
 			["extraLengthDesc"] = "Helps placing parallel stations that tend to snap together.",
-			["isStoreCargoOnPavementName"] = "Store cargo on the pavement",
-			["isStoreCargoOnPavementDesc"] = "Store some of the cargo on the pavement or leave it clear.",
+			["isStoreCargoOnPavementName"] = "Pavement cargo storage",
+			["isStoreCargoOnPavementDesc"] = "Store some of the cargo on the pavement.",
 		},
 	}
 end

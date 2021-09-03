@@ -116,7 +116,8 @@ function data()
 				}
 			end
 
-			logger.print('not removing all')
+			local _isStoreCargoOnPavement = not(not(params.modules[slotUtils.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId)]))
+			logger.print('_isStoreCargoOnPavement =', _isStoreCargoOnPavement)
 
 			local result = {
 				colliders = {},
@@ -146,9 +147,9 @@ function data()
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1},
 					},
 					{
-						id = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
+						id = _isStoreCargoOnPavement and _constants.lorryBayStreetside12x4ModelFileName or _constants.lorryBayStreetsideEntrance12x4ModelFileName,
 						slotId = slotUtils.mangleId(0, 0, _constants.idBases.rightLorryBaySlotIdBase),
-						tag = params.isStoreCargoOnPavement == 1 and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
+						tag = _isStoreCargoOnPavement and _constants.lorryBayStreetside12x4ModelTag or _constants.lorryBayStreetsideEntrance12x4ModelTag,
 						transf = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _constants.anyStreetsideYShift, 0, 1},
 					},
 				},
@@ -165,6 +166,11 @@ function data()
 					},
 					[_constants.removeAllModuleType] = {
 						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
+					},
+					[_constants.storeCargoOnPavementModuleType] = {
+						maxModules = 1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
 					},
@@ -225,7 +231,7 @@ function data()
 				_trySetSlotOpen(1, _xMax + 1, 0)
 
 				-- 12x4 streetside modules
-				if params.isStoreCargoOnPavement == 1 then
+				if _isStoreCargoOnPavement then
 					_trySetSlotOpen(2, -3, 0)
 				else
 					_setSlotBarred(2, -3, 0)
@@ -235,7 +241,7 @@ function data()
 				_setSlotBarred(2, 0, 0)
 				_setSlotBarred(2, 1, 0)
 				_setSlotBarred(2, 2, 0)
-				if params.isStoreCargoOnPavement == 1 then
+				if _isStoreCargoOnPavement then
 					_trySetSlotOpen(2, 3, 0)
 				else
 					_setSlotBarred(2, 3, 0)
@@ -428,7 +434,7 @@ function data()
 			-- debugPrint(_slotXYsFlat)
 
 			-- add streetside cargo area slots, only along the road
-			if params.isStoreCargoOnPavement == 1 then
+			if _isStoreCargoOnPavement then
 				for _, v in pairs(_slotXYsFlat[2]) do
 					-- print('LOLLO v.y =', v.y, 'its type =', type(v.y))
 					if (v.y == '0' or v.y == 0)
@@ -501,6 +507,19 @@ function data()
 				-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 				transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
 				type = _constants.removeAllModuleType,
+			})
+
+			-- add storeCargoOnPavement
+			table.insert(result.slots, {
+				-- height = 1,
+				id = result.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId),
+				-- shape 0 1 2 3
+				shape  = 1,
+				-- spacing = _constants.innerSpacing12x12,
+				spacing = { 5, 5, 0, 3},
+				-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+				transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
+				type = _constants.storeCargoOnPavementModuleType,
 			})
 
 			-- join terminals together

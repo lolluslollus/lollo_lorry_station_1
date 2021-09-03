@@ -276,7 +276,7 @@ local actions = {
             edgeLists = edgeLists,
             -- edgeObjects = edgeObjects,
             inverseMainTransf = _inverseMainTransf,
-            isStoreCargoOnPavement = 1,
+            -- isStoreCargoOnPavement = 1,
             mainTransf = _mainTransf,
             modules = {
                 [slotHelpers.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId)] = {
@@ -520,7 +520,7 @@ local actions = {
         -- cannot clone this userdata dynamically, coz it won't take pairs and ipairs
         newConstruction.params = {
             streetType_ = oldConstruction.params.streetType_,
-            isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
+            -- isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
             direction = oldConstruction.params.direction,
             snapNodes = 1,
             tramTrack = oldConstruction.params.tramTrack,
