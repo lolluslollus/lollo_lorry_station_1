@@ -516,7 +516,7 @@ function data()
 				-- shape 0 1 2 3
 				shape  = 1,
 				-- spacing = _constants.innerSpacing12x12,
-				spacing = { 5, 5, 0, 3},
+				spacing = { 4, 4, 0, 2},
 				-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
 				transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
 				type = _constants.storeCargoOnPavementModuleType,
