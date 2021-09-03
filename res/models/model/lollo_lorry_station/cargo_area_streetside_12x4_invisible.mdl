@@ -1,0 +1,36 @@
+function data()
+	local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
+	local _cargoPlatformZ = -0.03
+
+	return {
+        boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
+		-- collider = mdlHelpers.getAnythingStreetside12x4Collider(),
+        collider = mdlHelpers.getVoidCollider(),
+		lods = {
+			{
+				node = {
+					children = { },
+					name = "RootNode",
+					transf = { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1, },
+				},
+				static = false,
+				visibleFrom = 0,
+				visibleTo = 1000,
+			},
+		},
+		metadata = {
+			transportNetworkProvider = {
+				laneLists = mdlHelpers.getLaneLists12x4NormalCapacity(),
+				runways = { },
+				terminals = {
+					{
+						personEdges = { 0 },
+						personNodes = { 0, 1 },
+						-- vehicleNode = 2,
+					},
+				},
+			},
+		},
+		version = 1,
+	}
+end

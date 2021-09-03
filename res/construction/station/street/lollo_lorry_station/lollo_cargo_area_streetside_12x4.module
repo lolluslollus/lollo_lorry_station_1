@@ -1,7 +1,6 @@
 local transf = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
-local constructionutil = require "constructionutil"
 local _constants = require('lollo_lorry_station/constants')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 
@@ -20,33 +19,29 @@ return {
 	},
 	description = {
 		name = _("Streetside cargo area"),
-		description = _("Streetside area for waiting cargo."),
+		description = _("Streetside area for waiting cargo. Toggle the roof with <m> and <n>."),
 		icon = "ui/construction/lollo_lorry_station/cargo_area_streetside_12x4.tga"
 	},
 	metadata = {
 		cargo = true,
 	},
 	order = {
-		value = 5,
+		value = 10,
 	},
 	type = _constants.cargoAreaStreetside12x4ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		-- print('LOLLO streetside cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
-		-- print('LOLLO result =')
-		-- debugPrint(result)
-
-		-- addModelFn(_constants.cargoAreaStreetside12x4ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
+		local modelId = (moduleHelpers.getVariant(params, slotId) >= 0)
+			and 'lollo_lorry_station/cargo_area_streetside_12x4.mdl'
+			or 'lollo_lorry_station/cargo_area_streetside_12x4_no_roof.mdl'
 		result.models[#result.models + 1] = {
-			id = _constants.cargoAreaStreetside12x4ModelFileName,
+			id = modelId,
 			slotId = slotId,
 			transf = transform,
 			tag = tag
 		}
-
-		-- table.insert(result.colliders, moduleHelpers.getCollider(2, result.models[#result.models]))
 
 		local face = {
 			{-7, -2.5, 0, 1},
@@ -62,7 +57,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = _constants.cargoAreaStreetside12x4ModelFileName,
+				id = 'lollo_lorry_station/cargo_area_streetside_12x4.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

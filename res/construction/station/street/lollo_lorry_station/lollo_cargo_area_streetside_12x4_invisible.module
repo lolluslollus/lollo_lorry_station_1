@@ -18,46 +18,43 @@ return {
 		categories = { "cargo", },
 	},
 	description = {
-		name = _("Cargo area with gravel, 12 x 12 m"),
-		description = _("Area for waiting cargo, 12 x 12 m, with gravel. Toggle the roof with <m> and <n>. Repaint the ground with <shift>."),
-		icon = "ui/construction/lollo_lorry_station/cargo_area_inner_12x12_gravel.tga"
+		name = _("Streetside cargo area, no roof, no tarmac"),
+		description = _("Streetside area for waiting cargo, no roof, no tarmac. Repaint the ground with or without <shift>."),
+		icon = "ui/construction/lollo_lorry_station/cargo_area_streetside_12x4_invisible.tga"
 	},
 	metadata = {
 		cargo = true,
 	},
 	order = {
-		value = 32,
+		value = 12,
 	},
-	type = _constants.cargoAreaInner12x12ModuleType,
+	type = _constants.cargoAreaStreetside12x4ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		local modelId = (moduleHelpers.getVariant(params, slotId) >= 0)
-			and 'lollo_lorry_station/cargo_area_inner_12x12_gravel.mdl'
-			or 'lollo_lorry_station/cargo_area_inner_12x12_gravel_no_roof.mdl'
 		result.models[#result.models + 1] = {
-			id = modelId,
+			id = 'lollo_lorry_station/cargo_area_streetside_12x4_invisible.mdl',
 			slotId = slotId,
 			transf = transform,
 			tag = tag
 		}
 
 		local face = {
-			{-7, -7, 0, 1},
-			{-7, 7, 0, 1},
-			{7, 7, 0, 1},
-			{7, -7, 0, 1},
+			{-7, -2.5, 0, 1},
+			{-7, 2.5, 0, 1},
+			{7, 2.5, 0, 1},
+			{7, -2.5, 0, 1},
 		}
 		modulesutil.TransformFaces(transform, face)
-		result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/gravel_03.gtex.lua')
+		result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
 		result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
 	end,
 
-	getModelsFn = function(params)
+	getModelsFn = function()
 		return {
 			{
-				id = 'lollo_lorry_station/cargo_area_inner_12x12_gravel.mdl',
+				id = 'lollo_lorry_station/cargo_area_streetside_12x4_no_roof.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

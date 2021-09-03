@@ -15,11 +15,9 @@ function data()
 				TIPS AND TRICKS
 				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or use the "snap to neighbours" property.
 
-				Install the street fine tuning to have useful building tools and more roads.
+				Install the street fine tuning to have useful building tools and more roads. Use the categories in the street menu so you don't go bananas selecting road types.
 
-				If you want to force something into a station catchment area, use the ultrathin paths.
-
-				Use the categories in the street menu so you don't go bananas selecting road types.
+				If you want to force something into a station catchment area, use the ultrathin paths or the cargo links.
 
 				You can use modded street types, as long as they have one of the following categories: country, highway, one-way, urban, mining.
 
@@ -29,6 +27,7 @@ function data()
 
 				WORD OF WARNING
 				The first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
+				There was another breaking change in Seeptember 2021. Your old stations will keep working, but you will need to bulldoze and rebuild them if you want to edit them.
 			]],
 			["_NAME"] = "Modular streetside lorry station",
 			["BUS_STOP_NAME"] = "Modular bus load/unload stop",

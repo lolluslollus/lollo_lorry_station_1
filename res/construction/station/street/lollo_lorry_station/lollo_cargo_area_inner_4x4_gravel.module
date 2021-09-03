@@ -1,7 +1,6 @@
 local transf = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
-local constructionutil = require "constructionutil"
 local _constants = require('lollo_lorry_station/constants')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 
@@ -20,27 +19,25 @@ return {
 	},
 	description = {
 		name = _("Cargo area with gravel, 4 x 4 m"),
-		description = _("Area for waiting cargo, 4 x 4 m, with gravel. Repaint it with <shift>."),
+		description = _("Area for waiting cargo, 4 x 4 m, with gravel. Toggle the roof with <m> and <n>. Repaint the ground with <shift>."),
 		icon = "ui/construction/lollo_lorry_station/cargo_area_inner_4x4_gravel.tga"
 	},
 	metadata = {
 		cargo = true,
 	},
 	order = {
-		value = 7,
+		value = 22,
 	},
 	type = _constants.cargoAreaInner4x4ModuleType,
 	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		-- print('LOLLO small cargo area module received slotId, x, y, baseId = ', slotId, x, y, baseId)
-		-- print('LOLLO result =')
-		-- debugPrint(result)
-
-		-- addModelFn(_constants.cargoAreaInner4x4ModelFileName, transf.transl(vec3.new(0, 0, 0)), modelTag)
+		local modelId = (moduleHelpers.getVariant(params, slotId) >= 0)
+			and 'lollo_lorry_station/cargo_area_inner_4x4_gravel.mdl'
+			or 'lollo_lorry_station/cargo_area_inner_4x4_gravel_no_roof.mdl'
 		result.models[#result.models + 1] = {
-			id = 'lollo_lorry_station/cargo_area_inner_4x4_gravel.mdl', --_constants.cargoAreaInner4x4ModelFileName,
+			id = modelId,
 			slotId = slotId,
 			transf = transform,
 			tag = tag
@@ -60,7 +57,7 @@ return {
 	getModelsFn = function()
 		return {
 			{
-				id = 'lollo_lorry_station/cargo_area_inner_4x4_gravel.mdl', --_constants.cargoAreaInner4x4ModelFileName,
+				id = 'lollo_lorry_station/cargo_area_inner_4x4_gravel.mdl',
 				transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
 			},
 		}

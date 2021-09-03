@@ -46,6 +46,17 @@ helpers.getTerrainAlignmentList = function(face)
     }
 end
 
+helpers.getVariant = function(params, slotId)
+    local variant = 0
+    if type(params) == 'table'
+    and type(params.modules) == 'table'
+    and type(params.modules[slotId]) == 'table'
+    and type(params.modules[slotId].variant) == 'number' then
+        variant = params.modules[slotId].variant
+    end
+    return variant
+end
+
 local _lengthMultiplier = 10
 local _lengths = {}
 for i = 0, 12 do -- watch out, the parameters have base 0
