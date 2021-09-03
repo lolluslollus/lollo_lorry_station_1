@@ -132,16 +132,16 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             -- will be replaced at postRunFn
             defaultIndex = 0
         },
-        -- {
-        --     key = 'isStoreCargoOnPavement',
-        --     name = _('isStoreCargoOnPavementName'),
-        --     tooltip = _('isStoreCargoOnPavementDesc'),
-        --     values = {
-        --         _('No'),
-        --         _('Yes')
-        --     },
-        --     defaultIndex = 1
-        -- },
+        {
+            key = 'isStoreCargoOnPavement',
+            name = _('isStoreCargoOnPavementName'),
+            tooltip = _('isStoreCargoOnPavementDesc'),
+            values = {
+                _('No'),
+                _('Yes')
+            },
+            defaultIndex = 1
+        },
         {
             key = 'direction',
             name = _('directionName'),

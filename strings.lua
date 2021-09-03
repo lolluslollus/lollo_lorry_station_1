@@ -46,7 +46,7 @@ function data()
 			["directionDesc"] = "Place the station right or left, you cannot have both.",
 			["extraLengthName"] = "Extra Length",
 			["extraLengthDesc"] = "Helps placing parallel stations that tend to snap together.",
-			["isStoreCargoOnPavementName"] = "Pavement cargo storage",
+			["isStoreCargoOnPavementName"] = "Store cargo on the pavement",
 			["isStoreCargoOnPavementDesc"] = "Store some of the cargo on the pavement.",
 		},
 	}

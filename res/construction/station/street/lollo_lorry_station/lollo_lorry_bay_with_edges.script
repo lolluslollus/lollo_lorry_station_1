@@ -116,7 +116,7 @@ function data()
 				}
 			end
 
-			local _isStoreCargoOnPavement = not(not(params.modules[slotUtils.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId)]))
+			local _isStoreCargoOnPavement = params.isStoreCargoOnPavement == 1
 			logger.print('_isStoreCargoOnPavement =', _isStoreCargoOnPavement)
 
 			local result = {
@@ -169,11 +169,11 @@ function data()
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,
 					},
-					[_constants.storeCargoOnPavementModuleType] = {
-						maxModules = 1,
-						message = nil, --'LOLLO slotConfig message',
-						skipCollisionCheck = true,
-					},
+					-- [_constants.storeCargoOnPavementModuleType] = {
+					-- 	maxModules = 1,
+					-- 	message = nil, --'LOLLO slotConfig message',
+					-- 	skipCollisionCheck = true,
+					-- },
 				},
 				slots = {},
 				stations = {},
@@ -509,18 +509,18 @@ function data()
 				type = _constants.removeAllModuleType,
 			})
 
-			-- add storeCargoOnPavement
-			table.insert(result.slots, {
-				-- height = 1,
-				id = result.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId),
-				-- shape 0 1 2 3
-				shape  = 1,
-				-- spacing = _constants.innerSpacing12x12,
-				spacing = { 4, 4, 0, 2},
-				-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
-				transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
-				type = _constants.storeCargoOnPavementModuleType,
-			})
+			-- -- add storeCargoOnPavement -- this works, but there are cases when it collides, so we do it with the parameter.
+			-- table.insert(result.slots, {
+			-- 	-- height = 1,
+			-- 	id = result.mangleId(0, 0, _constants.idBases.storeCargoOnPavementSlotId),
+			-- 	-- shape 0 1 2 3
+			-- 	shape  = 1,
+			-- 	-- spacing = _constants.innerSpacing12x12,
+			-- 	spacing = { 4, 4, 0, 2},
+			-- 	-- transf = transfUtilsUG.transl(vec3.new(v.x * _constants.xTransfFactor, v.y * _constants.yTransfFactor + _constants.anyInnerYShift, 0.0)),
+			-- 	transf = transfUtilsUG.transl(vec3.new(0, _constants.anyInnerYShift, 0.0)),
+			-- 	type = _constants.storeCargoOnPavementModuleType,
+			-- })
 
 			-- join terminals together
 			result.terminateConstructionHook = function()
