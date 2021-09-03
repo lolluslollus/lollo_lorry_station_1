@@ -6,7 +6,8 @@ function data()
 
 				You can combine several of these to make a complex lorry station, with full control on the paths and the capacities. You can also combine them with the stock streetside stations, using them as unload-only points for your hub.
 				
-				To place one, make the streets first and leave some empty space for the station, which comes with its own piece of road attached. Best: help yourself with the slicer, you will find it in the street construction menu if you install the street fine tuning.
+				To place one, make the streets first and leave a gap for the station, which comes with its own piece of road attached.
+				Best: install the street fine tuning, draw your street, slice it in two points, bulldoze the segment between and replace it with this station.
                 
 				You can use the pavement to store cargo or leave it clear.
 
