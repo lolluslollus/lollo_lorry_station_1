@@ -1,6 +1,5 @@
-local transfUtilsUG = require "transf"
-local vec3 = require "vec3"
 local _constants = require('lollo_lorry_station/constants')
+local logger  = require('lollo_lorry_station.logger')
 
 function data()
 	return {
@@ -28,7 +27,7 @@ function data()
 		type = _constants.removeAllModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
 			local x, y, baseId = result.demangleId(slotId)
-			-- print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
+			logger.print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,
 

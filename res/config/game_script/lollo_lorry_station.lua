@@ -331,7 +331,7 @@ local actions = {
             api.cmd.make.buildProposal(newProposal, context, true), -- the 3rd param is "ignore errors"; wrong proposals will be discarded anyway
             function(result, success)
                 logger.print('buildStation callback, success =', success, ' and result =')
-                logger.debugPrint(result)
+                -- logger.debugPrint(result)
                 if success then
                     -- logger.print('station proposal data = ', result.resultProposalData) -- userdata
                     -- logger.print('station entities = ', result.resultEntities) -- userdata

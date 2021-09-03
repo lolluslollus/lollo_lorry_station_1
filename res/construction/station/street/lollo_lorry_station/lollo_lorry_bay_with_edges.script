@@ -1,4 +1,5 @@
 local _constants = require('lollo_lorry_station.constants')
+local logger  = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local slotUtils = require('lollo_lorry_station.slotHelpers')
 local transfUtilsUG = require 'transf'
@@ -7,7 +8,7 @@ local vec3 = require 'vec3'
 function data()
 	return {
 		updateFn = function(params, two)
-			-- print('updateFn starting, params =') debugPrint(params)
+			logger.print('updateFn starting, params =') debugPrint(params)
 			-- print('two =') debugPrint(two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 
@@ -96,6 +97,7 @@ function data()
 			-- and we cannot catch the click on the bulldozer confirm button,
 			-- so this is the easy way out
 			if params.modules[slotUtils.mangleId(0, 0, _constants.idBases.removeAllSlotId)] then
+				logger.print('removing all')
 				return {
 					edgeLists = {
 						{
@@ -112,6 +114,8 @@ function data()
 					models = { },
 				}
 			end
+
+			logger.print('not removing all')
 
 			local result = {
 				colliders = {},
