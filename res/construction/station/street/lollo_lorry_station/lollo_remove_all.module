@@ -22,7 +22,7 @@ function data()
 			cargo = true,
 		},
 		order = {
-			value = 0,
+			value = 99,
 		},
 		type = _constants.removeAllModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
