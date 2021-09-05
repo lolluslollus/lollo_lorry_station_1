@@ -41,8 +41,8 @@ helpers.getTerrainAlignmentList = function(face)
     return {
         faces = {raisedFace},
         optional = true,
-        slopeHigh = 9,
-        slopeLow = 0.01,
+        -- slopeHigh = 9,
+        -- slopeLow = 0.01,
         type = 'EQUAL',
     }
 end
