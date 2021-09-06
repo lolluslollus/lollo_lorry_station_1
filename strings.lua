@@ -2,7 +2,7 @@ function data()
 	return {
 		en = {
 			["_DESC"] = [[
-				A modular lorry station with one single terminal.
+				A modular lorry station with one single terminal, available from 1925.
 
 				You can combine several of these to make a complex lorry station, with full control on the paths and the capacities. You can also combine them with the stock streetside stations, using them as unload-only points for your hub.
 				
