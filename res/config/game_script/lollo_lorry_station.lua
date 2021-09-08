@@ -150,7 +150,7 @@ local utils = {
 
     getWhichEdgeGetsEdgeObjectAfterSplit = function(edgeObjPosition, node0pos, node1pos, nodeBetween)
         local result = {
-            assignToSecondEstimate = nil,
+            assignToSide = nil,
         }
         -- logger.print('LOLLO attempting to place edge object with position =')
         -- logger.debugPrint(edgeObjPosition)
@@ -213,9 +213,9 @@ local utils = {
         end
 
         if edgeObjPosition_assignTo == node0_assignTo then
-            result.assignToSecondEstimate = 0
+            result.assignToSide = 0
         elseif edgeObjPosition_assignTo == node1_assignTo then
-            result.assignToSecondEstimate = 1
+            result.assignToSide = 1
         end
 
         -- print('LOLLO assignment =')
@@ -444,21 +444,22 @@ local actions = {
                         {node1.position.x, node1.position.y, node1.position.z},
                         nodeBetween
                     )
-                    if assignment.assignToSecondEstimate == 0 then
-                        table.insert(edge0Objects, { edgeObj[1], edgeObj[2] })
+                    if assignment.assignToSide == 0 then
+                        -- LOLLO NOTE if we skip this check,
+                        -- one can split a road between left and right terminals of a streetside staion
+                        -- and add more terminals on the new segments.
                         -- local stationGroupId = api.engine.system.stationGroupSystem.getStationGroup(edgeObj[1])
-                        -- LOLLO TODO do we really need this check? Now we know that the crash happens with removed mod stations!
                         -- if arrayUtils.arrayHasValue(edge1StationGroups, stationGroupId) then return end -- don't split station groups
-                        -- if type(stationGroupId) == 'number' and stationGroupId > 0 then table.insert(edge0StationGroups, stationGroupId) end
-                    elseif assignment.assignToSecondEstimate == 1 then
-                        table.insert(edge1Objects, { edgeObj[1], edgeObj[2] })
+                        -- if edgeUtils.isValidId(stationGroupId) then table.insert(edge0StationGroups, stationGroupId) end
+                        table.insert(edge0Objects, { edgeObj[1], edgeObj[2] })
+                    elseif assignment.assignToSide == 1 then
                         -- local stationGroupId = api.engine.system.stationGroupSystem.getStationGroup(edgeObj[1])
-                        -- LOLLO TODO do we really need this check? Now we know that the crash happens with removed mod stations!
                         -- if arrayUtils.arrayHasValue(edge0StationGroups, stationGroupId) then return end -- don't split station groups
-                        -- if type(stationGroupId) == 'number' and stationGroupId > 0 then table.insert(edge1StationGroups, stationGroupId) end
+                        -- if edgeUtils.isValidId(stationGroupId) then table.insert(edge1StationGroups, stationGroupId) end
+                        table.insert(edge1Objects, { edgeObj[1], edgeObj[2] })
                     else
                         -- logger.print('don\'t change anything and leave')
-                        -- logger.print('LOLLO error, assignment.assignToSecondEstimate =', assignment.assignToSecondEstimate)
+                        -- logger.print('LOLLO error, assignment.assignToSide =', assignment.assignToSide)
                         return -- change nothing and leave
                     end
                 end
