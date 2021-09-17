@@ -18,11 +18,24 @@ function data()
 				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
 			end
 
-			if not params.modules then params.modules = {} end
-			-- this parameter was added later: initialise it
-			if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
-			-- force snap once station is built
-			if params.upgrade then params.snapNodes = 1 end
+			local function _initParams()
+				if not params.modules then params.modules = {} end
+				-- this parameter was added later: initialise it
+				if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
+				-- initialise this too, to be sure
+				if params.direction ~= 0 and params.direction ~= 1 then params.direction = 1 end
+				-- and this, to be sure
+				if not(params.streetType_) then
+					params.streetType_ = moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData)
+					logger.print('params.streetType_ set to') debugPrint(params.streetType_)
+				else
+					logger.print('params.streetType_ =', params.streetType_)
+					logger.print('moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData) =', moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData))
+				end
+				-- force snap once station is built
+				if params.upgrade then params.snapNodes = 1 end
+			end
+			_initParams()
 
 			local _pitchAngle = pitchHelpers.getPitchAngle(params)
 			local _pitchTransf = pitchHelpers.getIdTransfPitched(_pitchAngle)

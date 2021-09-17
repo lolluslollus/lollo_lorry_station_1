@@ -197,7 +197,7 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
     }
 end
 
-helpers.getDefaultStreetTypeIndex = function(allStreetData)
+helpers.getDefaultStreetTypeIndexBase0 = function(allStreetData)
     if type(allStreetData) ~= 'table' then return 0 end
 
     local result = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street_narrow_sidewalk.lua') - 1
@@ -217,7 +217,7 @@ helpers.updateParamValues_streetType_ = function(params, allStreetData)
                     return str.name
                 end
             )
-            param.defaultIndex = helpers.getDefaultStreetTypeIndex(allStreetData)
+            param.defaultIndex = helpers.getDefaultStreetTypeIndexBase0(allStreetData)
             param.uiType = 2 -- 'COMBOBOX'
             -- print('streetType_ param =')
             -- debugPrint(param)
