@@ -226,7 +226,7 @@ function data()
 
 			local _initSlots = function()
 				local _extraLengthGridStepCount = math.ceil(_halfExtraLength / _constants.xTransfFactor)
-				-- logger.print('_extraLengthGridStepCount =', _extraLengthGridStepCount)
+				logger.print('_extraLengthGridStepCount =', _extraLengthGridStepCount)
 				-- 4x4 inner modules
 				local _xMin = -1 - _extraLengthGridStepCount
 				local _xMax = 1 + _extraLengthGridStepCount
@@ -340,6 +340,11 @@ function data()
 								if i ~= 0 or j ~= 0 then
 									_setSlotBarred(3, moduleX + i, moduleY + j)
 								end
+							end
+						end
+						for i = -1, 1 do
+							if i ~= 0 then
+								_setSlotBarred(4, moduleX + i, moduleY)
 							end
 						end
 						_trySetSlotOpen(4, moduleX - 2, moduleY)
