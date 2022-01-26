@@ -10,7 +10,7 @@ function data()
 			description = _("LORRY_STOP_DESC"),
 		},
 		availability = {
-			yearFrom = 1925, -- -1, -- 1925,
+			yearFrom = 1925, -- same year as modern streets
 			yearTo = 0, -- -1, -- 0
 		},
 		order = 5005,
