@@ -4,7 +4,7 @@ local streetUtils = require('lollo_lorry_station.streetUtils')
 function data()
     return {
         info = {
-            minorVersion = 17,
+            minorVersion = 18,
             severityAdd = 'NONE',
             severityRemove = 'WARNING',
             name = _('_NAME'),
