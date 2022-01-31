@@ -207,7 +207,7 @@ helpers.getDefaultStreetTypeIndexBase0 = function(allStreetData)
         result = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
     end
 
-    return result >= 0 and result or 0
+    return result > 0 and result or 0
 end
 
 helpers.updateParamValues_streetType_ = function(params, allStreetData)
