@@ -14,6 +14,7 @@
         "gui",
         "data",
         "api",
-        "debugPrint"
+        "debugPrint",
+        "getCurrentModId"
     ]
 }

@@ -33,6 +33,9 @@ function data()
 				There was another breaking change in Seeptember 2021. Your old stations will keep working, but you will need to bulldoze and rebuild them if you want to edit them.
 			]],
 			["_NAME"] = "Modular streetside lorry station",
+			["GAIN"] = "Sound Effects",
+			["ON"] = "On",
+			["OFF"] = "Off",
 			["BUS_STOP_NAME"] = "Modular bus load/unload stop",
 			["BUS_STOP_DESC"] = "Bus stop to be placed on the pavement. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
 			["LORRY_STOP_NAME"] = "Modular lorry load/unload station",

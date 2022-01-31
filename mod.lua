@@ -1,7 +1,8 @@
-local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
-local streetUtils = require('lollo_lorry_station.streetUtils')
-
 function data()
+    local modSettings = require('lollo_lorry_station.settings')
+    local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
+    local streetUtils = require('lollo_lorry_station.streetUtils')
+
     return {
         info = {
             minorVersion = 18,
@@ -21,13 +22,24 @@ function data()
                     name = 'Bauer33333',
                     role = '3d models'
                 }
-            }
+            },
+            params = {
+				{
+					key = 'gain',
+					name = _('GAIN'),
+					values = { 'OFF', 'ON' },
+					defaultIndex = modSettings.paramValues.gain.defaultValueIndexBase0, -- LOLLO NOTE base 0 and base 1
+				},
+            },
         },
+        runFn = function (settings, modParams)
+            modSettings.setModParamsFromRunFn(modParams)
+        end,
         -- Unlike runFn, postRunFn runs after all resources have been loaded.
         -- It is the only place where we can define a dynamic construction,
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
-        postRunFn = function(settings, params)
+        postRunFn = function(settings, modParams)
             local allStreetData = streetUtils.getGlobalStreetData(
                 streetUtils.getStreetDataFilters().STOCK
             )
@@ -37,6 +49,7 @@ function data()
                     'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.con'
                 )
             )
+            -- it would be nice to alter the soundSet here, but there is no auitable type
             staticCon.updateScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.updateFn'
             staticCon.updateScript.params = {
                 globalStreetData = allStreetData
