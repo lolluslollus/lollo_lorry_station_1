@@ -163,7 +163,7 @@ function data()
 						-- freeNodes = params.snapNodes == 0 and { 0, 5 } or {},
                         freeNodes = { 0, 5 },
                         snapNodes = getSnapNodes(),
-                        tag2nodes = {} -- LOLLO TODO see if populating this,
+                        -- tag2nodes = {} -- LOLLO TODO see if populating this,
                         -- or merely adding it, allows turning on the collision detection
                         -- without issues when upgrading the road et al.
 					},
