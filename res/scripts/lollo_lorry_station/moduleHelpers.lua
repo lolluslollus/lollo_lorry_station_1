@@ -159,9 +159,11 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             tooltip = _('snapNodesDesc'),
             values = {
                 _('No'),
-                _('Yes')
+                _('Left'),
+                _('Right'),
+                _('Both')
             },
-            defaultIndex = 1
+            defaultIndex = 3
         },
         {
             key = 'tramTrack',

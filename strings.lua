@@ -50,6 +50,10 @@ function data()
 			["extraLengthDesc"] = "Helps placing parallel stations that tend to snap together.",
 			["isStoreCargoOnPavementName"] = "Store cargo on the pavement",
 			["isStoreCargoOnPavementDesc"] = "Store some of the cargo on the pavement.",
+			["No"] = "No",
+			["Left"] = "Left",
+			["Right"] = "Right",
+			["Both"] = "Both",
 		},
 	}
 end

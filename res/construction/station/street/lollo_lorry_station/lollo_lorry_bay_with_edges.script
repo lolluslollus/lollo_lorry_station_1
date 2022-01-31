@@ -21,7 +21,9 @@ function data()
 			local function _initParams()
 				if not params.modules then params.modules = {} end
 				-- this parameter was added later: initialise it
-				if params.snapNodes ~= 0 and params.snapNodes ~= 1 then params.snapNodes = 1 end
+				if params.snapNodes ~= 0 and params.snapNodes ~= 1 and params.snapNodes ~= 2 and params.snapNodes ~= 3 then
+					params.snapNodes = 3
+				end
 				-- initialise this too, to be sure
 				if params.direction ~= 0 and params.direction ~= 1 then params.direction = 1 end
 				-- and this, to be sure
@@ -32,8 +34,8 @@ function data()
 					logger.print('params.streetType_ =', params.streetType_)
 					logger.print('moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData) =', moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData))
 				end
-				-- force snap once station is built
-				if params.upgrade then params.snapNodes = 1 end
+				-- force snap once station is built -- NO
+				-- if params.upgrade then params.snapNodes = 1 end
 			end
 			_initParams()
 
@@ -129,9 +131,24 @@ function data()
 			local _isStoreCargoOnPavement = params.isStoreCargoOnPavement == 1
 			logger.print('_isStoreCargoOnPavement =', _isStoreCargoOnPavement)
 
+			local getSnapNodes = function()
+				if params.direction == 0 then
+					if params.snapNodes == 0 then return {}
+					elseif params.snapNodes == 1 then return { 0, }
+					elseif params.snapNodes == 2 then return { 5, }
+					elseif params.snapNodes == 3 then return { 0, 5, }
+					end
+				else
+					if params.snapNodes == 0 then return {}
+					elseif params.snapNodes == 1 then return { 5, }
+					elseif params.snapNodes == 2 then return { 0, }
+					elseif params.snapNodes == 3 then return { 0, 5, }
+					end
+				end
+				return {}
+			end
 			local result = {
 				colliders = {},
-				-- coord2terminalInfo = {},
 				cost = 1000,
 				edgeLists = {
 					{
@@ -143,7 +160,7 @@ function data()
 						edges = _getEdges(),
 						-- freeNodes = params.snapNodes == 0 and { 0, 5 } or {},
                         freeNodes = { 0, 5 },
-                        snapNodes = params.snapNodes == 1 and { 0, 5 } or {},
+                        snapNodes = getSnapNodes(),
                         tag2nodes = {} -- LOLLO TODO see if populating this,
                         -- or merely adding it, allows turning on the collision detection
                         -- without issues when upgrading the road et al.

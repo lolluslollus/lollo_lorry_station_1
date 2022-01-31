@@ -518,7 +518,7 @@ local actions = {
         logger.print('oldConstruction =') logger.debugPrint(oldConstruction)
         if not(oldConstruction)
         or not(oldConstruction.params)
-        or oldConstruction.params.snapNodes == 1
+        or oldConstruction.params.snapNodes == 3
         or oldConstruction.fileName ~= _eventProperties.lorryStationBuilt.conName then return end
 
         local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
@@ -528,7 +528,7 @@ local actions = {
             streetType_ = oldConstruction.params.streetType_,
             isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
             direction = oldConstruction.params.direction,
-            snapNodes = 1,
+            snapNodes = 3,
             tramTrack = oldConstruction.params.tramTrack,
             extraLength = oldConstruction.params.extraLength,
             seed = oldConstruction.params.seed + 1,
