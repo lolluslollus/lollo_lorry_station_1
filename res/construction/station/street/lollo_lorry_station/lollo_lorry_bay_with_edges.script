@@ -36,7 +36,8 @@ function data()
 				end
 				-- force no snap while upgrading to make it easier to change other params
 				-- game_script will be set it to snappy once done
-				if params.upgrade then params.snapNodes = 0 end
+				-- if params.upgrade then params.snapNodes = 0 end
+				-- it is not always good, better leave it to the user to toggle for maximum effectiveness
 			end
 			_initParams()
 
