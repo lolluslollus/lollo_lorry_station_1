@@ -18,6 +18,8 @@ function data()
 				
 				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or change the "snap to neighbours" property.
 
+				Once you have built your station, you can configure it. You may need to cycle through "snap to neighbours" to allow this.
+
 				Install the street fine tuning to have useful building tools and more roads. Use the categories in the street menu so you don't go bananas selecting road types.
 
 				If you want to force something into a station catchment area, use the ultrathin paths or the cargo links.
