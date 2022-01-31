@@ -200,14 +200,14 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
 end
 
 helpers.getDefaultStreetTypeIndexBase0 = function(allStreetData)
-    if type(allStreetData) ~= 'table' then return 1 end
+    if type(allStreetData) ~= 'table' then return 0 end
 
     local result = arrayUtils.findIndex(allStreetData, 'fileName', 'lollo_medium_1_way_1_lane_street_narrow_sidewalk.lua') - 1
     if result < 0 then
         result = arrayUtils.findIndex(allStreetData, 'fileName', 'standard/country_small_one_way_new.lua') - 1
     end
 
-    return result > 0 and result or 1
+    return result >= 0 and result or 0
 end
 
 helpers.updateParamValues_streetType_ = function(params, allStreetData)
