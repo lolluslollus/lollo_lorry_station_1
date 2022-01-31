@@ -16,7 +16,7 @@ function data()
 				TIPS AND TRICKS
 				Use <o> and <p> to adjust the pitch.
 				
-				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or use the "snap to neighbours" property.
+				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or change the "snap to neighbours" property.
 
 				Install the street fine tuning to have useful building tools and more roads. Use the categories in the street menu so you don't go bananas selecting road types.
 
