@@ -27,7 +27,7 @@ function data()
 				-- initialise this too, to be sure
 				if params.direction ~= 0 and params.direction ~= 1 then params.direction = 1 end
 				-- and this, to be sure
-				if not(params.streetType_) then
+				if not(params.streetType_) or not(two.globalStreetData[params.streetType_ + 1]) then
 					params.streetType_ = moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData)
 					logger.print('params.streetType_ set to') debugPrint(params.streetType_)
 				else
@@ -43,7 +43,7 @@ function data()
 
 			local _pitchAngle = pitchHelpers.getPitchAngle(params)
 			local _pitchTransf = pitchHelpers.getIdTransfPitched(_pitchAngle)
-			local _selectedStreetData = two.globalStreetData[params.streetType_ + 1]
+			local _selectedStreetData = two.globalStreetData[params.streetType_ + 1] or two.globalStreetData[1]
 			local _streetYOffset = -2 -_selectedStreetData.streetWidth * 0.5
 			local _vehicleEdgeYOffset = -2 -_selectedStreetData.rightLaneWidth * 0.5
 			local _streetFileName = _selectedStreetData.fileName
