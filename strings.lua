@@ -51,9 +51,9 @@ function data()
 			["isStoreCargoOnPavementName"] = "Store cargo on the pavement",
 			["isStoreCargoOnPavementDesc"] = "Store some of the cargo on the pavement.",
 			["No"] = "No",
-			["Left"] = "Left",
-			["Right"] = "Right",
-			["Both"] = "Both",
+			["Left"] = "End A",
+			["Right"] = "End B",
+			["Both"] = "Both Ends",
 		},
 	}
 end
