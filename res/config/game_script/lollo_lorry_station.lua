@@ -494,7 +494,7 @@ local actions = {
             return nil
         end
 
-        logger.print('proposal =') debugPrint(proposal)
+        logger.print('proposal =') logger.debugPrint(proposal)
         return proposal
 
         -- api.cmd.sendCommand(

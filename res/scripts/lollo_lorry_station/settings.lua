@@ -55,10 +55,9 @@ results.setModParamsFromRunFn = function(modParams)
     and thisModParams.gain >= 0
     and thisModParams.gain < #results.paramValues.gain.allValues
     then
-        game.config._lolloLorryStation.gain = (results.paramValues.gain.allValues[thisModParams.gain + 1] -- LOLLO NOTE base 0 and base 1
-            or _getDefaultGain())
+        game.config._lolloLorryStation.gain = thisModParams.gain -- LOLLO NOTE base 0 and base 1
     else
-        game.config._lolloLorryStation.gain = _getDefaultGain()
+        game.config._lolloLorryStation.gain = results.paramValues.gain.defaultValueIndexBase0
     end
 
     logger.print('modParams =') logger.debugPrint(modParams)

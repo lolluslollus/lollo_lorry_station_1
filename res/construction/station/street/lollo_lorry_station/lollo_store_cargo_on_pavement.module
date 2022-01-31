@@ -1,6 +1,7 @@
 local transfUtilsUG = require "transf"
 local vec3 = require "vec3"
-local _constants = require('lollo_lorry_station/constants')
+local constants = require('lollo_lorry_station.constants')
+local logger = require('lollo_lorry_station.logger')
 
 function data()
 	return {
@@ -25,10 +26,10 @@ function data()
 		order = {
 			value = 2,
 		},
-		type = _constants.storeCargoOnPavementModuleType,
+		type = constants.storeCargoOnPavementModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
 			local x, y, baseId = result.demangleId(slotId)
-			print('storeCargoOnPavement placed, x =', x, ', y =', y, ', baseId =', baseId)
+			logger.print('storeCargoOnPavement placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,
 

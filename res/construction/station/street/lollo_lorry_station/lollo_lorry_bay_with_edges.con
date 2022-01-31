@@ -59,7 +59,7 @@ function data()
 			return modules
         end, ]]
 		upgradeFn = function(_)
-            print('LOLLO upgradeFn') -- never fires
+            print('LOLLO lorry station upgradeFn') -- never fires
             -- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
             -- If you leave it out, adding and removing tram tracks won't work.
             -- (Bus lanes don't work anyway.)
