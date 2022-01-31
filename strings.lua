@@ -13,6 +13,8 @@ function data()
 
 				Cargo links connect separate areas into a single loading bay, even across obstacles.
 
+				Switch the sound effects on or off with the mod parameter.
+
 				TIPS AND TRICKS
 				Use <o> and <p> to adjust the pitch.
 				
