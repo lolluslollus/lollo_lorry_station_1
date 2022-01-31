@@ -511,6 +511,8 @@ local actions = {
     end,
 
     replaceStationWithSnappyCopy = function(oldConstructionId)
+        -- rebuild the station with the same but snappy, to prevent pointless internal conflicts
+        -- that will prevent changing properties
         logger.print('replaceStationWithSnappyCopy starting, oldConstructionId =', oldConstructionId)
         if not(edgeUtils.isValidAndExistingId(oldConstructionId)) then return end
 
@@ -528,7 +530,7 @@ local actions = {
             streetType_ = oldConstruction.params.streetType_,
             isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
             direction = oldConstruction.params.direction,
-            snapNodes = 3,
+            snapNodes = 3, -- this is what this is all about
             tramTrack = oldConstruction.params.tramTrack,
             extraLength = oldConstruction.params.extraLength,
             seed = oldConstruction.params.seed + 1,
@@ -578,30 +580,28 @@ local actions = {
 
 function data()
     return {
-        -- ini = function()
-        -- end,
         handleEvent = function(src, id, name, args)
             if (id ~= _eventId) then return end
             logger.print('handleEvent starting, src =', src, ', id =', id, ', name =', name, ', args =') logger.debugPrint(args)
             if type(args) ~= 'table' then return end
 
             if name == _eventProperties.lorryStationBuilt.eventName then
-                -- actions.replaceStationWithSnappyCopy(args.constructionEntityId)
-            elseif name == _eventProperties.ploppableStreetsideCargoStationBuilt.eventName then
-                if edgeUtils.isValidAndExistingId(args.edgeId) and edgeUtils.isValidAndExistingId(args.stationId) and not(edgeUtils.isEdgeFrozen(args.edgeId)) then
-                    local stationTransf = edgeUtils.getObjectTransf(args.stationId)
-                    -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
-                    local nodeBetween = edgeUtils.getNodeBetweenByPosition(
-                        args.edgeId,
-                        {stationTransf[13], stationTransf[14], stationTransf[15]}
-                    )
-                    logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
-                    local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
-                    if proposal then
-                        actions.buildStation(proposal, stationTransf)
-                    end
-                end
-            elseif name == _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName then
+                actions.replaceStationWithSnappyCopy(args.constructionEntityId)
+            -- elseif name == _eventProperties.ploppableStreetsideCargoStationBuilt.eventName then
+            --     if edgeUtils.isValidAndExistingId(args.edgeId) and edgeUtils.isValidAndExistingId(args.stationId) and not(edgeUtils.isEdgeFrozen(args.edgeId)) then
+            --         local stationTransf = edgeUtils.getObjectTransf(args.stationId)
+            --         -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
+            --         local nodeBetween = edgeUtils.getNodeBetweenByPosition(
+            --             args.edgeId,
+            --             {stationTransf[13], stationTransf[14], stationTransf[15]}
+            --         )
+            --         logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
+            --         local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
+            --         if proposal then
+            --             actions.buildStation(proposal, stationTransf)
+            --         end
+            --     end
+            -- elseif name == _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName then
             end
         end,
         guiHandleEvent = function(id, name, args)
@@ -631,59 +631,59 @@ function data()
                             }
                         ))
                     end
-                elseif id == 'streetTerminalBuilder' then
-                    -- waypoint or streetside stations have been built
-                    if (args and args.proposal and args.proposal.proposal
-                    and args.proposal.proposal.edgeObjectsToAdd
-                    and args.proposal.proposal.edgeObjectsToAdd[1]
-                    and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
-                    then
-                        if _guiConstants._ploppableCargoModelId
-                        and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _guiConstants._ploppableCargoModelId then
-                            local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
-                            logger.print('stationId =') logger.debugPrint(stationId)
-                            local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
-                            logger.print('edgeId =') logger.debugPrint(edgeId)
-                            if not(edgeId) or not(stationId) then return end
+                -- elseif id == 'streetTerminalBuilder' then
+                --     -- waypoint or streetside stations have been built
+                --     if (args and args.proposal and args.proposal.proposal
+                --     and args.proposal.proposal.edgeObjectsToAdd
+                --     and args.proposal.proposal.edgeObjectsToAdd[1]
+                --     and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance)
+                --     then
+                --         if _guiConstants._ploppableCargoModelId
+                --         and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _guiConstants._ploppableCargoModelId then
+                --             local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
+                --             logger.print('stationId =') logger.debugPrint(stationId)
+                --             local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
+                --             logger.print('edgeId =') logger.debugPrint(edgeId)
+                --             if not(edgeId) or not(stationId) then return end
 
-                            api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
-                                string.sub(debug.getinfo(1, 'S').source, 1),
-                                _eventId,
-                                _eventProperties.ploppableStreetsideCargoStationBuilt.eventName,
-                                {
-                                    edgeId = edgeId,
-                                    stationId = stationId,
-                                }
-                            ))
-                        elseif _guiConstants._ploppablePassengersModelId
-                        and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _guiConstants._ploppablePassengersModelId then
-                            local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
-                            logger.print('stationId =') logger.debugPrint(stationId)
-                            local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
-                            logger.print('edgeId =') logger.debugPrint(edgeId)
-                            if not(edgeId) or not(stationId) then return end
+                --             api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
+                --                 string.sub(debug.getinfo(1, 'S').source, 1),
+                --                 _eventId,
+                --                 _eventProperties.ploppableStreetsideCargoStationBuilt.eventName,
+                --                 {
+                --                     edgeId = edgeId,
+                --                     stationId = stationId,
+                --                 }
+                --             ))
+                --         elseif _guiConstants._ploppablePassengersModelId
+                --         and args.proposal.proposal.edgeObjectsToAdd[1].modelInstance.modelId == _guiConstants._ploppablePassengersModelId then
+                --             local stationId = args.proposal.proposal.edgeObjectsToAdd[1].resultEntity
+                --             logger.print('stationId =') logger.debugPrint(stationId)
+                --             local edgeId = args.proposal.proposal.edgeObjectsToAdd[1].segmentEntity
+                --             logger.print('edgeId =') logger.debugPrint(edgeId)
+                --             if not(edgeId) or not(stationId) then return end
 
-                            api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
-                                string.sub(debug.getinfo(1, 'S').source, 1),
-                                _eventId,
-                                _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName,
-                                {
-                                    edgeId = edgeId,
-                                    stationId = stationId,
-                                }
-                            ))
-                        end
-                    end
+                --             api.cmd.sendCommand(api.cmd.make.sendScriptEvent(
+                --                 string.sub(debug.getinfo(1, 'S').source, 1),
+                --                 _eventId,
+                --                 _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName,
+                --                 {
+                --                     edgeId = edgeId,
+                --                     stationId = stationId,
+                --                 }
+                --             ))
+                --         end
+                --     end
                 end
             end
             --     end,
             --     _myErrorHandler
             -- )
         end,
-        guiInit = function()
-            _guiConstants._ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
-            _guiConstants._ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
-        end,
+        -- guiInit = function()
+        --     _guiConstants._ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
+        --     _guiConstants._ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
+        -- end,
         -- update = function()
         -- end,
         -- guiUpdate = function()

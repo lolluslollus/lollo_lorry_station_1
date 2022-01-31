@@ -1,4 +1,4 @@
-local randomEventNames = {
+local _randomEventNames = {
     -- 'car_idle.wav',
     'lorry_whip.wav',
     'mimmo-1.wav',
@@ -16,19 +16,18 @@ function data()
     local soundsetutil = require('soundsetutil')
 
     local data = soundsetutil.makeSoundSet()
-    print('data =') debugPrint(data)
     if modSettings.getGain() == 0 then return data end
 
     -- soundsetutil.addTrackParam01(data, 'car_horn.wav', 25.0,
     -- 		{ { .0, .5 } }, { { .0, 0.7 } }, 'cargo01')
 
-    soundsetutil.addEventParam01(data, 'random32', randomEventNames, 25.0,
+    soundsetutil.addEventParam01(data, 'random32', _randomEventNames, 25.0,
             { { 0.33, 1.0 }, { 0.34, 0.0 } }, { { 0.0, 1.0 } }, 'cargo01')
 
-    soundsetutil.addEventParam01(data, 'random16', randomEventNames, 25.0,
+    soundsetutil.addEventParam01(data, 'random16', _randomEventNames, 25.0,
             { { 0.33, 0.0 }, { 0.34, 1.0 }, { 0.66, 1.0 }, { 0.67, 0.0 } }, { { 0.0, 1.0 } }, 'cargo01')
 
-    soundsetutil.addEventParam01(data, 'random8', randomEventNames, 25.0,
+    soundsetutil.addEventParam01(data, 'random8', _randomEventNames, 25.0,
             { { 0.66, 0.0 }, { 0.67, 1.0 } }, { { 0.0, 1.0 } }, 'cargo01')
 
     return data

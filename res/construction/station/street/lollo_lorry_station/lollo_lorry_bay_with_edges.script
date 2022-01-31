@@ -15,7 +15,7 @@ function data()
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 
 			local function _getTramTrackType()
-				return params.tramTrack == 0 and "NO" or params.tramTrack == 1 and "YES" or "ELECTRIC"
+				return params.tramTrack == 0 and 'NO' or params.tramTrack == 1 and 'YES' or 'ELECTRIC'
 			end
 
 			local function _initParams()
@@ -34,8 +34,9 @@ function data()
 					logger.print('params.streetType_ =', params.streetType_)
 					logger.print('moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData) =', moduleHelpers.getDefaultStreetTypeIndexBase0(two.globalStreetData))
 				end
-				-- force snap once station is built -- NO
-				-- if params.upgrade then params.snapNodes = 1 end
+				-- force no snap while upgrading to make it easier to change other params
+				-- game_script will be set it to snappy once done
+				if params.upgrade then params.snapNodes = 0 end
 			end
 			_initParams()
 
