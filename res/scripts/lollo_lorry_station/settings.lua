@@ -18,8 +18,6 @@ end
 results.paramValues = {
     gain = {
         allValues = { 0, 1 },
-        -- max = 1,
-        -- min = 0,
         defaultValueIndexBase0 = 1,
     }
 }
