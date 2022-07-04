@@ -1,12 +1,12 @@
 package.path = package.path .. ';res/scripts/?.lua'
 
-local arrayUtils = require('lollo_lorry_station/arrayUtils')
-local stringUtils = require('lollo_lorry_station/stringUtils')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local stringUtils = require('lollo_lorry_station.stringUtils')
 local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
-local _modConstants = require('lollo_lorry_station/constants')
--- local edgeUtils = require('lollo_lorry_station/edgeHelper')
--- local slotUtils = require('lollo_lorry_station/slotHelpers')
+local _modConstants = require('lollo_lorry_station.constants')
+-- local edgeUtils = require('lollo_lorry_station.edgeHelper')
+-- local slotUtils = require('lollo_lorry_station.slotHelpers')
 
 local tag = '__module_121309'
 local kkk = slotHelpers.getIsCargoAreaInner12x12(tag)

@@ -1,5 +1,5 @@
 local lollo = {}
-local stringUtils = require('lollo_lorry_station/stringUtils')
+local stringUtils = require('lollo_lorry_station.stringUtils')
 
 local function myErrorHandler(err)
     print('ERROR: ', err)

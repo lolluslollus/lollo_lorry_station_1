@@ -1,4 +1,4 @@
-local arrayUtils = require('lollo_lorry_station/arrayUtils')
+local arrayUtils = require('lollo_lorry_station.arrayUtils')
 
 local constants = {
 	xMax = 16,

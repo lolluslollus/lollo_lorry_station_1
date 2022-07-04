@@ -1,4 +1,4 @@
-local _constants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station.constants')
 local helpers = {}
 
 local function _getIdBase(slotId)

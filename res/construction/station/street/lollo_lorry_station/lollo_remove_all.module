@@ -1,4 +1,4 @@
-local _constants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station.constants')
 local logger  = require('lollo_lorry_station.logger')
 
 function data()

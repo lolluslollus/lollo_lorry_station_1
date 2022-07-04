@@ -2,7 +2,7 @@ local transf = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constructionutil = require "constructionutil"
-local _constants = require('lollo_lorry_station/constants')
+local _constants = require('lollo_lorry_station.constants')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 
 function data()
