@@ -1,8 +1,9 @@
+local logger = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 
 function data()
-	-- print('old con, params are set =')
-	-- debugPrint(moduleHelpers.getParams())
+	-- logger.print('old con, params are set =')
+	-- logger.debugPrint(moduleHelpers.getParams())
 	return {
 		type = 'STREET_STATION_CARGO',
 		description = {
@@ -57,13 +58,15 @@ function data()
 			-- 	modules[change.slotId] = nil
 			-- end
 			return modules
-        end, ]]
-		upgradeFn = function(_)
-            print('LOLLO lorry station upgradeFn') -- never fires
-            -- LOLLO NOTE the game wants this function to be defined, even if it returns an empty table.
-            -- If you leave it out, adding and removing tram tracks won't work.
-            -- (Bus lanes don't work anyway.)
-            return {}
         end,
+]]
+--[[
+		-- this can be overwritten by the .script file, it is useless anyway
+		upgradeFn = function(one, two) -- this is overwritten by the .script file
+			logger.print('lollo_lorry_bay_with_edges.con upgradeFn starting, one =') logger.debugPrint(one)
+			logger.print('two =') logger.debugPrint(two)
+			return {}
+        end,
+]]
 	}
 end

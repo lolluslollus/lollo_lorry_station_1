@@ -520,7 +520,7 @@ local actions = {
         logger.print('oldConstruction =') logger.debugPrint(oldConstruction)
         if not(oldConstruction)
         or not(oldConstruction.params)
-        or oldConstruction.params.snapNodes == 3
+        or oldConstruction.params.snapNodes == 3 -- leave if nothing is going to change
         or oldConstruction.fileName ~= _eventProperties.lorryStationBuilt.conName then return end
 
         local newConstruction = api.type.SimpleProposal.ConstructionEntity.new()
@@ -566,13 +566,10 @@ local actions = {
 
         local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd param is "ignore errors"
         api.cmd.sendCommand(cmd, function(res, success)
-            -- if I bulldoze here, the station will inherit the old name
             -- logger.print('LOLLO replaceStationWithSnappyCopy res = ')
             -- logger.debugPrint(res)
-            --for _, v in pairs(res.entities) do logger.print(v) end
             logger.print('LOLLO replaceStationWithSnappyCopy success = ') logger.debugPrint(success)
             -- if success then
-                -- if I bulldoze here, the station will get the new name
             -- end
         end)
     end,
@@ -580,30 +577,6 @@ local actions = {
 
 function data()
     return {
-        handleEvent = function(src, id, name, args)
-            if (id ~= _eventId) then return end
-            logger.print('handleEvent starting, src =', src, ', id =', id, ', name =', name, ', args =') logger.debugPrint(args)
-            if type(args) ~= 'table' then return end
-
-            if name == _eventProperties.lorryStationBuilt.eventName then
-                actions.replaceStationWithSnappyCopy(args.constructionEntityId)
-            -- elseif name == _eventProperties.ploppableStreetsideCargoStationBuilt.eventName then
-            --     if edgeUtils.isValidAndExistingId(args.edgeId) and edgeUtils.isValidAndExistingId(args.stationId) and not(edgeUtils.isEdgeFrozen(args.edgeId)) then
-            --         local stationTransf = edgeUtils.getObjectTransf(args.stationId)
-            --         -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
-            --         local nodeBetween = edgeUtils.getNodeBetweenByPosition(
-            --             args.edgeId,
-            --             {stationTransf[13], stationTransf[14], stationTransf[15]}
-            --         )
-            --         logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
-            --         local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
-            --         if proposal then
-            --             actions.buildStation(proposal, stationTransf)
-            --         end
-            --     end
-            -- elseif name == _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName then
-            end
-        end,
         guiHandleEvent = function(id, name, args)
             -- LOLLO NOTE param can have different types, even boolean, depending on the event id and name
             -- if (name ~= 'builder.apply') then return end
@@ -684,6 +657,30 @@ function data()
         --     _guiConstants._ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
         --     _guiConstants._ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
         -- end,
+        handleEvent = function(src, id, name, args)
+            if (id ~= _eventId) then return end
+            logger.print('handleEvent starting, src =', src, ', id =', id, ', name =', name, ', args =') logger.debugPrint(args)
+            if type(args) ~= 'table' then return end
+
+            if name == _eventProperties.lorryStationBuilt.eventName then
+                actions.replaceStationWithSnappyCopy(args.constructionEntityId)
+            -- elseif name == _eventProperties.ploppableStreetsideCargoStationBuilt.eventName then
+            --     if edgeUtils.isValidAndExistingId(args.edgeId) and edgeUtils.isValidAndExistingId(args.stationId) and not(edgeUtils.isEdgeFrozen(args.edgeId)) then
+            --         local stationTransf = edgeUtils.getObjectTransf(args.stationId)
+            --         -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
+            --         local nodeBetween = edgeUtils.getNodeBetweenByPosition(
+            --             args.edgeId,
+            --             {stationTransf[13], stationTransf[14], stationTransf[15]}
+            --         )
+            --         logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
+            --         local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
+            --         if proposal then
+            --             actions.buildStation(proposal, stationTransf)
+            --         end
+            --     end
+            -- elseif name == _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName then
+            end
+        end,
         -- update = function()
         -- end,
         -- guiUpdate = function()

@@ -49,11 +49,13 @@ function data()
                     'station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.con'
                 )
             )
-            -- it would be nice to alter the soundSet here, but there is no auitable type
+            -- UG TODO it would be nice to alter the soundSet here, but there is no suitable type
             staticCon.updateScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.updateFn'
             staticCon.updateScript.params = {
                 globalStreetData = allStreetData
             }
+            -- this is useless
+            -- staticCon.upgradeScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.upgradeFn'
             moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
 
             -- local ploppableConId = api.res.constructionRep.find(

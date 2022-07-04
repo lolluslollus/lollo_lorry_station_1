@@ -651,5 +651,13 @@ function data()
 
 			return result
 		end,
+--[[
+	 	-- useless
+		upgradeFn = function(one, two)
+			logger.print('lollo_lorry_bay_with_edges.script upgradeFn starting, one =') logger.debugPrint(one)
+			logger.print('two =') logger.debugPrint(two)
+            return {}
+        end,
+]]
 	}
 end
