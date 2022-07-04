@@ -567,10 +567,10 @@ local actions = {
         local cmd = api.cmd.make.buildProposal(proposal, context, true) -- the 3rd param is "ignore errors"
         api.cmd.sendCommand(cmd, function(res, success)
             -- if I bulldoze here, the station will inherit the old name
-            -- logger.print('LOLLO _replaceStationWithSnappyCopy res = ')
+            -- logger.print('LOLLO replaceStationWithSnappyCopy res = ')
             -- logger.debugPrint(res)
             --for _, v in pairs(res.entities) do logger.print(v) end
-            logger.print('LOLLO _replaceStationWithSnappyCopy success = ') logger.debugPrint(success)
+            logger.print('LOLLO replaceStationWithSnappyCopy success = ') logger.debugPrint(success)
             -- if success then
                 -- if I bulldoze here, the station will get the new name
             -- end

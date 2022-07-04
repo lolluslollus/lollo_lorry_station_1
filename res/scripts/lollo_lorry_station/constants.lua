@@ -1,8 +1,6 @@
 local arrayUtils = require('lollo_lorry_station/arrayUtils')
 
 local constants = {
-	isExtendedLog = false,
-
 	xMax = 16,
 	yMax = 10,
 	xMin = -16,
