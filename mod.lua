@@ -5,7 +5,7 @@ function data()
 
     return {
         info = {
-            minorVersion = 20,
+            minorVersion = 21,
             severityAdd = 'NONE',
             severityRemove = 'WARNING',
             name = _('_NAME'),
@@ -28,7 +28,8 @@ function data()
 					key = 'gain',
 					name = _('GAIN'),
 					values = { 'OFF', 'ON' },
-					defaultIndex = modSettings.paramValues.gain.defaultValueIndexBase0, -- LOLLO NOTE base 0 and base 1
+					-- defaultIndex = modSettings.paramValues.gain.defaultValueIndexBase0, -- LOLLO NOTE base 0 and base 1
+                    defaultIndex = 1, -- LOLLO NOTE set this directly to avoid crashes; keep modSettings up to date if you alter this
 				},
             },
         },
