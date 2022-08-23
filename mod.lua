@@ -41,9 +41,7 @@ function data()
         -- which is the only way we can define dynamic parameters.
         -- Here, the dynamic parameters are the street types.
         postRunFn = function(settings, modParams)
-            local allStreetData = streetUtils.getGlobalStreetData(
-                streetUtils.getStreetDataFilters().STOCK
-            )
+            local allStreetData = streetUtils.getGlobalStreetData()
 
             local staticCon = api.res.constructionRep.get(
                 api.res.constructionRep.find(
