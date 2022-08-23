@@ -1,12 +1,12 @@
 local logger = require('lollo_lorry_station.logger')
 local results = {}
 
-local function _getModSettings1()
+local function _getModSettingsFromGameConfig()
     if type(game) ~= 'table' or type(game.config) ~= 'table' then return nil end
     return game.config._lolloLorryStation
 end
 
-local function _getModSettings2()
+local function _getModSettingsFromApi()
     if type(api) ~= 'table' or type(api.res) ~= 'table' or type(api.res.getBaseConfig) ~= 'table' then return end
 
     local baseConfig = api.res.getBaseConfig()
@@ -27,7 +27,8 @@ local function _getDefaultGain()
 end
 
 results.getGain = function()
-    local modSettings = _getModSettings1() or _getModSettings2()
+    -- LOLLO NOTE try game.config first!
+    local modSettings = _getModSettingsFromGameConfig() or _getModSettingsFromApi()
     if not(modSettings) then
         print('WARNING: lollo lorry station cannot read modSettings')
         return _getDefaultGain()
