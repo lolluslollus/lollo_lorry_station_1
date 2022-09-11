@@ -213,7 +213,7 @@ end
 helpers.getStationPoolCapacities = function(modules, result)
     local extraCargoCapacity = 0
 
-    for num, slot in pairs(result.slots) do
+    for _, slot in pairs(result.slots) do
         local module = modules[slot.id]
         if module and module.metadata and module.metadata.moreCapacity then
             if type(module.metadata.moreCapacity.cargo) == 'number' then

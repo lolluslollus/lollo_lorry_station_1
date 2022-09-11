@@ -27,7 +27,7 @@ return {
 		moreCapacity = {
 			cargo = 12,
 			passenger = 0
-		}
+		},
 	},
 	order = {
 		value = 10,
