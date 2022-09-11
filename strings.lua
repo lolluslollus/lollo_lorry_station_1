@@ -18,23 +18,26 @@ function data()
 				TIPS AND TRICKS
 				Use <o> and <p> to adjust the pitch.
 				
-				Placing two stations close to each other can be a pain, because the game tries to snap things together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or change the "snap to neighbours" property.
+				Placing two stations close to each other can be a pain, because the game tries to snap roads together, fails and raises pointless error messages. Add some extra length to get past this, or leave a broader gap between your stations, or change the "snap to neighbours" property.
 
 				Once you have built your station, you can configure it. You may need to cycle through "snap to neighbours" to allow this.
 
 				Install the street fine tuning to have useful building tools and more roads. Use the categories in the street menu so you don't go bananas selecting road types.
 
-				If you want to force something into a station catchment area, use the ultrathin paths or the cargo links.
+				If you want to force something into a station catchment area, use the ultrathin paths or the cargo link module.
 
 				You can use modded street types, as long as they have one of the following categories: country, highway, one-way, urban, mining.
 
 				If you attempt to configure your station and see collision warnings, make sure the right street type is selected in the configuration menu. It is a dynamic selection and it can do that, it's a game limit.
 				
-				If you are not happy with a street mod, remove or reconfigure the modular lorry stations that use it, remove or replace all the modded streets, quit the game and reload it without the offending mod.
+				If you are not happy with a street mod, remove or reconfigure the modular lorry stations that use it, remove or replace all the modded streets, save the game and reload it without the offending mod.
 
-				WORD OF WARNING
+				KNOWN ISSUES
 				The first iteration of this mod had an awkward grid. If you have already built some of these stations, they will keep working. As soon as you configure them, the old modules will go away and you will have to plop the new ones instead. It is a one-off and a small price to pay for a decidedly better grid.
+
 				There was another breaking change in Seeptember 2021. Your old stations will keep working, but you will need to bulldoze and rebuild them if you want to edit them.
+
+				Avoid mods that replace or disable stock streets, they can break this and other mods. Chances are, you won't miss them anyway.
 			]],
 			["_NAME"] = "Modular streetside lorry station",
 			["GAIN"] = "Sound Effects",
