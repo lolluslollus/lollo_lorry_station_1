@@ -564,9 +564,10 @@ function data()
 				local vehicleEdgeModelIndexesBase0 = slotUtils.getVehicleEdgeModelIndexesBase0(result.models)
 				-- logger.print('LOLLO lorryBayModelIndexesBase0 =') logger.debugPrint(lorryBayModelIndexesBase0)
 				-- logger.print('LOLLO vehicleEdgeModelIndexesBase0 =') logger.debugPrint(vehicleEdgeModelIndexesBase0)
-
+				local extraCargoCapacity = moduleHelpers.getStationPoolCapacities(params.modules, result)
 				result.stations = {
 					{
+						pool = { moreCapacity = extraCargoCapacity },
 						tag = 0, -- in the stock station, this is 0 for cargo and 1 for passengers
 						terminals = { } -- 0 is the position of the linked terminal group, in base 0
 					}

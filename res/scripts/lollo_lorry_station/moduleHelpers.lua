@@ -210,6 +210,20 @@ helpers.getDefaultStreetTypeIndexBase0 = function(allStreetData)
     return result > 0 and result or 0
 end
 
+helpers.getStationPoolCapacities = function(modules, result)
+    local extraCargoCapacity = 0
+
+    for num, slot in pairs(result.slots) do
+        local module = modules[slot.id]
+        if module and module.metadata and module.metadata.moreCapacity then
+            if type(module.metadata.moreCapacity.cargo) == 'number' then
+                extraCargoCapacity = extraCargoCapacity + module.metadata.moreCapacity.cargo
+            end
+        end
+    end
+    return extraCargoCapacity
+end
+
 helpers.updateParamValues_streetType_ = function(params, allStreetData)
     for _, param in pairs(params) do
         if param.key == 'streetType_' then
