@@ -210,11 +210,11 @@ helpers.getDefaultStreetTypeIndexBase0 = function(allStreetData)
     return result > 0 and result or 0
 end
 
-helpers.getStationPoolCapacities = function(modules, result)
-    local extraCargoCapacity = 0
+helpers.getStationPoolCapacities = function(params, result)
+    local extraCargoCapacity = (params.isStoreCargoOnPavement == 1) and 12 or 0
 
     for _, slot in pairs(result.slots) do
-        local module = modules[slot.id]
+        local module = params.modules[slot.id]
         if module and module.metadata and module.metadata.moreCapacity then
             if type(module.metadata.moreCapacity.cargo) == 'number' then
                 extraCargoCapacity = extraCargoCapacity + module.metadata.moreCapacity.cargo
