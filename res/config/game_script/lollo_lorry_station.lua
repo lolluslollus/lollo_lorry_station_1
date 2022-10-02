@@ -350,6 +350,7 @@ local actions = {
                     -- there can be a weird crash. It only happened once.
                     -- To avoid this, you could try destroying and rebuilding once again, with the same parameters.
                     if result.resultEntities[1] and game.interface.upgradeConstruction then
+                        collectgarbage() -- LOLLO TODO this is a stab in the dark to try and avoid crashes in the following
                         game.interface.upgradeConstruction(
                             stationId,
                             _eventProperties.ploppableModularCargoStationBuilt.conName,
