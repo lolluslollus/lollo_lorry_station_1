@@ -182,13 +182,13 @@ function data()
 				models = {
 					{
 						id = params.direction == 0 and constants.lorryBayVehicleEdgeRightModelFileName or constants.lorryBayVehicleEdgeLeftModelFileName,
-						slotId = slotUtils.mangleId(0, 0, constants.idBases.rightVehicleEdgeSlotIdBase),
+						-- slotId = slotUtils.mangleId(0, 0, constants.idBases.rightVehicleEdgeSlotIdBase),
 						tag = params.direction == 0 and constants.lorryBayVehicleEdgeRightModelTag or constants.lorryBayVehicleEdgeLeftModelTag,
 						transf = transfUtilsUG.mul(_pitchTransf, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1}),
 					},
 					{
 						id = _isStoreCargoOnPavement and constants.lorryBayStreetside12x4ModelFileName or constants.lorryBayStreetsideEntrance12x4ModelFileName,
-						slotId = slotUtils.mangleId(0, 0, constants.idBases.rightLorryBaySlotIdBase),
+						-- slotId = slotUtils.mangleId(0, 0, constants.idBases.rightLorryBaySlotIdBase),
 						tag = _isStoreCargoOnPavement and constants.lorryBayStreetside12x4ModelTag or constants.lorryBayStreetsideEntrance12x4ModelTag,
 						transf = transfUtilsUG.mul(_pitchTransf, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, constants.anyStreetsideYShift, 0, 1}),
 					},
@@ -200,6 +200,11 @@ function data()
 						skipCollisionCheck = true,
 					},
 					[constants.cargoLinks4x4ModuleType] = {
+						maxModules = -1,
+						message = nil, --'LOLLO slotConfig message',
+						skipCollisionCheck = true,
+					},
+					[constants.cargoAreaInner4x4ModuleType] = {
 						maxModules = -1,
 						message = nil, --'LOLLO slotConfig message',
 						skipCollisionCheck = true,

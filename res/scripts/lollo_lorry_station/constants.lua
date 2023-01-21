@@ -17,7 +17,7 @@ local constants = {
 	-- so 4x4, 12x4, 12x12 would be smarter module sizes.
 	-- anyInnerYShift = -0.5,
 	anyInnerYShift = 0,
-	anyStreetsideSpacing = {2, 2, 2, 2},
+	anyStreetsideSpacing = {6, 6, 2, 2},
 	anyStreetsideXShift = 0,
 	anyStreetsideYShift = 0,
 	-- markTag = 'lollo_mark',
