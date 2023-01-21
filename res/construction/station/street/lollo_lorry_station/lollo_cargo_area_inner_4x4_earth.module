@@ -40,7 +40,7 @@ return {
 		-- LOLLO NOTE tag looks like __module_121309, base_config.lua writes it.
 		-- set the model tags to it to have them turn yellow when configuring
 
-		local modelId = (moduleHelpers.getVariant(params, slotId) >= 0)
+		local modelId = (moduleHelpers.getVariant(params, slotId) % 2 == 0)
 			and 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl'
 			or 'lollo_lorry_station/cargo_area_inner_4x4_earth_no_roof.mdl'
 		result.models[#result.models + 1] = {

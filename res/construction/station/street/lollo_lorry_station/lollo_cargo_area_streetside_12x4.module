@@ -37,7 +37,7 @@ return {
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 
-		local modelId = (moduleHelpers.getVariant(params, slotId) >= 0)
+		local modelId = (moduleHelpers.getVariant(params, slotId) % 2 == 0)
 			and 'lollo_lorry_station/cargo_area_streetside_12x4.mdl'
 			or 'lollo_lorry_station/cargo_area_streetside_12x4_no_roof.mdl'
 		result.models[#result.models + 1] = {
