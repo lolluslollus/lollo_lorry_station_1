@@ -30,7 +30,7 @@ return {
 		value = 7,
 	},
 	type = _constants.cargoAreaStreetside15x5ModuleType,
-	updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
+	updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
         local x, y, baseId = result.demangleId(slotId)
 		if not x or not y or not baseId then return end
 

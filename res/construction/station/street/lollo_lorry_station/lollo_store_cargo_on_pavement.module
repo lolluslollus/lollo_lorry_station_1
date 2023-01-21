@@ -27,7 +27,7 @@ function data()
 			value = 2,
 		},
 		type = constants.storeCargoOnPavementModuleType,
-		updateFn = function(result, transform, tag, slotId, addModelFn, params, callback)
+		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
 			local x, y, baseId = result.demangleId(slotId)
 			logger.print('storeCargoOnPavement placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
