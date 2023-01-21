@@ -110,7 +110,7 @@ local utils = {
                 },
                 snapNodes = {edgeIndexBase1 == 1 and 0 or 1}, -- we need this
                 -- snapNodes = {}, -- with this, the ugly intersections cannot be fixed with an upgrade
-                tag2nodes = {},
+                -- tag2nodes = {},
                 type = 'STREET'
             }
         end
@@ -248,7 +248,7 @@ local actions = {
     buildStation = function(oldProposal, stationTransf)
         if not(oldProposal) or not(stationTransf) then return end
 
-        local edgeLists = utils.getEdgeListsFromProposal(oldProposal)
+        local edgeLists = utils.getEdgeListsFromProposal(oldProposal) or {}
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
         logger.print('edgeLists before transf =') logger.debugPrint(edgeLists)
 
@@ -512,7 +512,7 @@ local actions = {
     end,
 
     replaceStationWithSnappyCopy = function(oldConstructionId)
-        -- rebuild the station with the same but snappy, to prevent pointless internal conflicts
+        -- rebuild the station with the same params but snappy, to prevent pointless internal conflicts
         -- that will prevent changing properties
         logger.print('replaceStationWithSnappyCopy starting, oldConstructionId =', oldConstructionId)
         if not(edgeUtils.isValidAndExistingId(oldConstructionId)) then return end

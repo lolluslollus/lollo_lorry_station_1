@@ -23,7 +23,7 @@ function data()
 				local newEdgeLists = {}
 				for _, edgeList in pairs(params.edgeLists) do
 					edgeList.freeNodes = {0, 1}
-					edgeList.tag2nodes = nil
+					-- edgeList.tag2nodes = nil
 					newEdgeLists[#newEdgeLists+1] = edgeList
 				end
 				return {
