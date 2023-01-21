@@ -111,7 +111,7 @@ function data()
 			-- LOLLO NOTE we have no beforeBulldoze event,
 			-- and we cannot catch the click on the bulldozer confirm button,
 			-- so this is the easy way out
-			if params.modules[slotUtils.mangleId(0, 0, constants.idBases.removeAllSlotId)] then
+			if params.modules[slotUtils.mangleId(0, 0, constants.idBases.removeAllSlotId)] ~= nil then
 				logger.print('removing all')
 				return {
 					edgeLists = {
@@ -168,7 +168,17 @@ function data()
                         -- without issues when upgrading the road et al.
 					},
 				},
-				groundFaces = {},
+				groundFaces = {
+					moduleHelpers.getGroundFace(
+						{
+							{-7, -2.5, 0, 1},
+							{-7, 2.5, 0, 1},
+							{7, 2.5, 0, 1},
+							{7, -2.5, 0, 1},
+						},
+						'shared/asphalt_01.gtex.lua'
+					)
+				},
 				models = {
 					{
 						id = params.direction == 0 and constants.lorryBayVehicleEdgeRightModelFileName or constants.lorryBayVehicleEdgeLeftModelFileName,
@@ -208,22 +218,14 @@ function data()
 				slots = {},
 				stations = {},
 				terminalGroups = {},
-				terrainAlignmentLists = {},
+				terrainAlignmentLists = { { -- LOLLO NOTE this thing with the empty faces is required , otherwise the game will make its own alignments, with spikes and all on bridges or tunnels.
+					type = "EQUAL",
+					optional = true,
+					faces =  { }
+				} },
 				demangleId = slotUtils.demangleId,
 				mangleId = slotUtils.mangleId,
 			}
-
-			local face = {
-				{-7, -2.5, 0, 1},
-				{-7, 2.5, 0, 1},
-				{7, 2.5, 0, 1},
-				{7, -2.5, 0, 1},
-			}
-			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-			-- result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
-
-			-- logger.print('LOLLO starting lollo_simple_lorry_bay_with_edges.updateFn, params = ')
-			-- logger.debugPrint(arrayUtils.cloneOmittingFields(params, {'state'}))
 
 			-- set default slot locations
 			local _slotXYsNested = {
@@ -307,154 +309,153 @@ function data()
 
 			-- logger.print('LOLLO _slotXYsNested after initialisation =') logger.debugPrint(_slotXYsNested)
 			-- fill slots on and around modules, if present
-			if type(params.modules) == 'table' then
-				-- logger.print('LOLLO params.modules =') logger.debugPrint(params.modules)
-				for moduId, _ in pairs(params.modules) do
-					local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
-					if moduleBaseId == constants.idBases.cargoAreaInner4x4SlotId then
-						_trySetSlotOpen(1, moduleX - 1, moduleY)
-						_trySetSlotOpen(1, moduleX + 1, moduleY)
-						_trySetSlotOpen(1, moduleX, moduleY - 1)
-						_trySetSlotOpen(1, moduleX, moduleY + 1)
-						_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
-						_trySetSlotOpen(3, moduleX - 2, moduleY)
-						_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
-						_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
-						_trySetSlotOpen(3, moduleX + 2, moduleY)
-						_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
-						_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
-						_trySetSlotOpen(3, moduleX, moduleY - 2)
-						_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
-						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-						_trySetSlotOpen(3, moduleX, moduleY + 2)
-						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-						_trySetSlotOpen(4, moduleX - 1, moduleY)
-						_trySetSlotOpen(4, moduleX + 1, moduleY)
-						_trySetSlotOpen(4, moduleX, moduleY - 1)
-						_trySetSlotOpen(4, moduleX, moduleY + 1)
-					elseif moduleBaseId == constants.idBases.cargoAreaStreetside12x4SlotId then
-						_trySetSlotOpen(1, moduleX - 2, moduleY)
-						_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
-						_trySetSlotOpen(1, moduleX, moduleY + 1)
-						_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
-						_trySetSlotOpen(1, moduleX + 2, moduleY)
-						_trySetSlotOpen(2, moduleX - 3, moduleY)
-						_trySetSlotOpen(2, moduleX + 3, moduleY)
-						_trySetSlotOpen(3, moduleX - 2, moduleY + 2)
-						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-						_trySetSlotOpen(3, moduleX, moduleY + 2)
-						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-						_trySetSlotOpen(3, moduleX + 2, moduleY + 2)
-						for i = -1, 1 do
-							if i ~= 0 then
-								_setSlotBarred(1, moduleX + i, moduleY)
-							end
+			-- logger.print('LOLLO params.modules =') logger.debugPrint(params.modules)
+			for moduId, _ in pairs(params.modules) do
+				local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
+				if moduleBaseId == constants.idBases.cargoAreaInner4x4SlotId then
+					_trySetSlotOpen(1, moduleX - 1, moduleY)
+					_trySetSlotOpen(1, moduleX + 1, moduleY)
+					_trySetSlotOpen(1, moduleX, moduleY - 1)
+					_trySetSlotOpen(1, moduleX, moduleY + 1)
+					_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
+					_trySetSlotOpen(3, moduleX - 2, moduleY)
+					_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
+					_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
+					_trySetSlotOpen(3, moduleX + 2, moduleY)
+					_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
+					_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
+					_trySetSlotOpen(3, moduleX, moduleY - 2)
+					_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
+					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
+					_trySetSlotOpen(3, moduleX, moduleY + 2)
+					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
+					_trySetSlotOpen(4, moduleX - 1, moduleY)
+					_trySetSlotOpen(4, moduleX + 1, moduleY)
+					_trySetSlotOpen(4, moduleX, moduleY - 1)
+					_trySetSlotOpen(4, moduleX, moduleY + 1)
+				elseif moduleBaseId == constants.idBases.cargoAreaStreetside12x4SlotId then
+					_trySetSlotOpen(1, moduleX - 2, moduleY)
+					_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
+					_trySetSlotOpen(1, moduleX, moduleY + 1)
+					_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
+					_trySetSlotOpen(1, moduleX + 2, moduleY)
+					_trySetSlotOpen(2, moduleX - 3, moduleY)
+					_trySetSlotOpen(2, moduleX + 3, moduleY)
+					_trySetSlotOpen(3, moduleX - 2, moduleY + 2)
+					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
+					_trySetSlotOpen(3, moduleX, moduleY + 2)
+					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
+					_trySetSlotOpen(3, moduleX + 2, moduleY + 2)
+					for i = -1, 1 do
+						if i ~= 0 then
+							_setSlotBarred(1, moduleX + i, moduleY)
 						end
-						for i = -2, 2 do
-							if i ~= 0 then
-								_setSlotBarred(2, moduleX + i, moduleY)
-							end
-						end
-						for i = -2, 2 do
-							for j = -1, 1 do
-								if i ~= 0 or j ~= 0 then
-									_setSlotBarred(3, moduleX + i, moduleY + j)
-								end
-							end
-						end
-						for i = -1, 1 do
-							if i ~= 0 then
-								_setSlotBarred(4, moduleX + i, moduleY)
-							end
-						end
-						_trySetSlotOpen(4, moduleX - 2, moduleY)
-						_trySetSlotOpen(4, moduleX - 1, moduleY - 1)
-						_trySetSlotOpen(4, moduleX, moduleY - 1)
-						_trySetSlotOpen(4, moduleX + 1, moduleY - 1)
-						_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
-						_trySetSlotOpen(4, moduleX, moduleY + 1)
-						_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
-						_trySetSlotOpen(4, moduleX + 2, moduleY)
-					elseif moduleBaseId == constants.idBases.cargoAreaInner12x12SlotId then
-						-- logger.print('LOLLO _slotXYsNested before reading module 12x12 =') logger.debugPrint(_slotXYsNested)
-						_trySetSlotOpen(1, moduleX - 2, moduleY - 1)
-						_trySetSlotOpen(1, moduleX - 2, moduleY)
-						_trySetSlotOpen(1, moduleX - 2, moduleY + 1)
-						_trySetSlotOpen(1, moduleX + 2, moduleY - 1)
-						_trySetSlotOpen(1, moduleX + 2, moduleY)
-						_trySetSlotOpen(1, moduleX + 2, moduleY + 1)
-						_trySetSlotOpen(1, moduleX - 1, moduleY - 2)
-						_trySetSlotOpen(1, moduleX, moduleY - 2)
-						_trySetSlotOpen(1, moduleX + 1, moduleY - 2)
-						_trySetSlotOpen(1, moduleX - 1, moduleY + 2)
-						_trySetSlotOpen(1, moduleX, moduleY + 2)
-						_trySetSlotOpen(1, moduleX + 1, moduleY + 2)
-						for ij = -2, 2 do
-							_trySetSlotOpen(3, moduleX - 3, moduleY + ij)
-							_trySetSlotOpen(3, moduleX + 3, moduleY + ij)
-							_trySetSlotOpen(3, moduleX + ij, moduleY - 3)
-							_trySetSlotOpen(3, moduleX + ij, moduleY + 3)
-						end
-						for i = -1, 1 do
-							for j = -1, 1 do
-								if i ~= 0 or j ~= 0 then
-									_setSlotBarred(1, moduleX + i, moduleY + j)
-								end
-							end
-						end
-						for i = -2, 2 do
-							for j = -1, 1 do
-								if i ~= 0 or j ~= 0 then
-									_setSlotBarred(2, moduleX + i, moduleY + j)
-								end
-							end
-						end
-						for i = -2, 2 do
-							for j = -2, 2 do
-								if i ~= 0 or j ~= 0 then
-									_setSlotBarred(3, moduleX + i, moduleY + j)
-								end
-							end
-						end
-						_trySetSlotOpen(4, moduleX - 2, moduleY - 1)
-						_trySetSlotOpen(4, moduleX - 2, moduleY)
-						_trySetSlotOpen(4, moduleX - 2, moduleY + 1)
-						_trySetSlotOpen(4, moduleX + 2, moduleY - 1)
-						_trySetSlotOpen(4, moduleX + 2, moduleY)
-						_trySetSlotOpen(4, moduleX + 2, moduleY + 1)
-						_trySetSlotOpen(4, moduleX - 1, moduleY - 2)
-						_trySetSlotOpen(4, moduleX, moduleY - 2)
-						_trySetSlotOpen(4, moduleX + 1, moduleY - 2)
-						_trySetSlotOpen(4, moduleX - 1, moduleY + 2)
-						_trySetSlotOpen(4, moduleX, moduleY + 2)
-						_trySetSlotOpen(4, moduleX + 1, moduleY + 2)
-						-- logger.print('LOLLO _slotXYsNested after reading module 12x12 =') logger.debugPrint(_slotXYsNested)
-					elseif moduleBaseId == constants.idBases.cargoLink4x4SlotId then
-						_trySetSlotOpen(1, moduleX - 1, moduleY)
-						_trySetSlotOpen(1, moduleX + 1, moduleY)
-						_trySetSlotOpen(1, moduleX, moduleY - 1)
-						_trySetSlotOpen(1, moduleX, moduleY + 1)
-						_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
-						_trySetSlotOpen(3, moduleX - 2, moduleY)
-						_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
-						_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
-						_trySetSlotOpen(3, moduleX + 2, moduleY)
-						_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
-						_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
-						_trySetSlotOpen(3, moduleX, moduleY - 2)
-						_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
-						_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-						_trySetSlotOpen(3, moduleX, moduleY + 2)
-						_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-						_trySetSlotOpen(4, moduleX - 1, moduleY)
-						_trySetSlotOpen(4, moduleX + 1, moduleY)
-						_trySetSlotOpen(4, moduleX, moduleY - 1)
-						_trySetSlotOpen(4, moduleX, moduleY + 1)
-						_setSlotBarred(2, moduleX - 1, moduleY)
-						_setSlotBarred(2, moduleX + 1, moduleY)
 					end
+					for i = -2, 2 do
+						if i ~= 0 then
+							_setSlotBarred(2, moduleX + i, moduleY)
+						end
+					end
+					for i = -2, 2 do
+						for j = -1, 1 do
+							if i ~= 0 or j ~= 0 then
+								_setSlotBarred(3, moduleX + i, moduleY + j)
+							end
+						end
+					end
+					for i = -1, 1 do
+						if i ~= 0 then
+							_setSlotBarred(4, moduleX + i, moduleY)
+						end
+					end
+					_trySetSlotOpen(4, moduleX - 2, moduleY)
+					_trySetSlotOpen(4, moduleX - 1, moduleY - 1)
+					_trySetSlotOpen(4, moduleX, moduleY - 1)
+					_trySetSlotOpen(4, moduleX + 1, moduleY - 1)
+					_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
+					_trySetSlotOpen(4, moduleX, moduleY + 1)
+					_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
+					_trySetSlotOpen(4, moduleX + 2, moduleY)
+				elseif moduleBaseId == constants.idBases.cargoAreaInner12x12SlotId then
+					-- logger.print('LOLLO _slotXYsNested before reading module 12x12 =') logger.debugPrint(_slotXYsNested)
+					_trySetSlotOpen(1, moduleX - 2, moduleY - 1)
+					_trySetSlotOpen(1, moduleX - 2, moduleY)
+					_trySetSlotOpen(1, moduleX - 2, moduleY + 1)
+					_trySetSlotOpen(1, moduleX + 2, moduleY - 1)
+					_trySetSlotOpen(1, moduleX + 2, moduleY)
+					_trySetSlotOpen(1, moduleX + 2, moduleY + 1)
+					_trySetSlotOpen(1, moduleX - 1, moduleY - 2)
+					_trySetSlotOpen(1, moduleX, moduleY - 2)
+					_trySetSlotOpen(1, moduleX + 1, moduleY - 2)
+					_trySetSlotOpen(1, moduleX - 1, moduleY + 2)
+					_trySetSlotOpen(1, moduleX, moduleY + 2)
+					_trySetSlotOpen(1, moduleX + 1, moduleY + 2)
+					for ij = -2, 2 do
+						_trySetSlotOpen(3, moduleX - 3, moduleY + ij)
+						_trySetSlotOpen(3, moduleX + 3, moduleY + ij)
+						_trySetSlotOpen(3, moduleX + ij, moduleY - 3)
+						_trySetSlotOpen(3, moduleX + ij, moduleY + 3)
+					end
+					for i = -1, 1 do
+						for j = -1, 1 do
+							if i ~= 0 or j ~= 0 then
+								_setSlotBarred(1, moduleX + i, moduleY + j)
+							end
+						end
+					end
+					for i = -2, 2 do
+						for j = -1, 1 do
+							if i ~= 0 or j ~= 0 then
+								_setSlotBarred(2, moduleX + i, moduleY + j)
+							end
+						end
+					end
+					for i = -2, 2 do
+						for j = -2, 2 do
+							if i ~= 0 or j ~= 0 then
+								_setSlotBarred(3, moduleX + i, moduleY + j)
+							end
+						end
+					end
+					_trySetSlotOpen(4, moduleX - 2, moduleY - 1)
+					_trySetSlotOpen(4, moduleX - 2, moduleY)
+					_trySetSlotOpen(4, moduleX - 2, moduleY + 1)
+					_trySetSlotOpen(4, moduleX + 2, moduleY - 1)
+					_trySetSlotOpen(4, moduleX + 2, moduleY)
+					_trySetSlotOpen(4, moduleX + 2, moduleY + 1)
+					_trySetSlotOpen(4, moduleX - 1, moduleY - 2)
+					_trySetSlotOpen(4, moduleX, moduleY - 2)
+					_trySetSlotOpen(4, moduleX + 1, moduleY - 2)
+					_trySetSlotOpen(4, moduleX - 1, moduleY + 2)
+					_trySetSlotOpen(4, moduleX, moduleY + 2)
+					_trySetSlotOpen(4, moduleX + 1, moduleY + 2)
+					-- logger.print('LOLLO _slotXYsNested after reading module 12x12 =') logger.debugPrint(_slotXYsNested)
+				elseif moduleBaseId == constants.idBases.cargoLink4x4SlotId then
+					_trySetSlotOpen(1, moduleX - 1, moduleY)
+					_trySetSlotOpen(1, moduleX + 1, moduleY)
+					_trySetSlotOpen(1, moduleX, moduleY - 1)
+					_trySetSlotOpen(1, moduleX, moduleY + 1)
+					_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
+					_trySetSlotOpen(3, moduleX - 2, moduleY)
+					_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
+					_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
+					_trySetSlotOpen(3, moduleX + 2, moduleY)
+					_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
+					_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
+					_trySetSlotOpen(3, moduleX, moduleY - 2)
+					_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
+					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
+					_trySetSlotOpen(3, moduleX, moduleY + 2)
+					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
+					_trySetSlotOpen(4, moduleX - 1, moduleY)
+					_trySetSlotOpen(4, moduleX + 1, moduleY)
+					_trySetSlotOpen(4, moduleX, moduleY - 1)
+					_trySetSlotOpen(4, moduleX, moduleY + 1)
+					_setSlotBarred(2, moduleX - 1, moduleY)
+					_setSlotBarred(2, moduleX + 1, moduleY)
 				end
 			end
+
 			local _slotXYsFlat = {
 				slotUtils.getFlatTable(_slotXYsNested[1]),
 				slotUtils.getFlatTable(_slotXYsNested[2]),
@@ -645,7 +646,8 @@ function data()
 			end
 
 			-- force join terminals together if no modules present
-			if type(params.modules) ~= 'table' or #params.modules == 0 then
+			if #params.modules == 0 then
+				logger.print('forcing terminateConstructionHook()')
 				result.terminateConstructionHook()
 			end
 			-- logger.print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ') logger.debugPrint(result)
