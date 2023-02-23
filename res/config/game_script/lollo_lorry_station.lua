@@ -671,7 +671,8 @@ function data()
             --         -- logger.print('stationTransf =') logger.debugPrint(stationTransf)
             --         local nodeBetween = edgeUtils.getNodeBetweenByPosition(
             --             args.edgeId,
-            --             {stationTransf[13], stationTransf[14], stationTransf[15]}
+            --             {stationTransf[13], stationTransf[14], stationTransf[15]},
+            --             false
             --         )
             --         logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
             --         local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
