@@ -382,8 +382,8 @@ local actions = {
         local distance1 = isNodeBetweenOrientatedLikeMyEdge and nodeBetween.refDistance1 or nodeBetween.refDistance0
         local tanSign = isNodeBetweenOrientatedLikeMyEdge and 1 or -1
 
-        local oldTan0Length = isNodeBetweenOrientatedLikeMyEdge and edgeUtils.getVectorLength(oldBaseEdge.tangent0) or edgeUtils.getVectorLength(oldBaseEdge.tangent1)
-        local oldTan1Length = isNodeBetweenOrientatedLikeMyEdge and edgeUtils.getVectorLength(oldBaseEdge.tangent1) or edgeUtils.getVectorLength(oldBaseEdge.tangent0)
+        local oldTan0Length = isNodeBetweenOrientatedLikeMyEdge and transfUtils.getVectorLength(oldBaseEdge.tangent0) or transfUtils.getVectorLength(oldBaseEdge.tangent1)
+        local oldTan1Length = isNodeBetweenOrientatedLikeMyEdge and transfUtils.getVectorLength(oldBaseEdge.tangent1) or transfUtils.getVectorLength(oldBaseEdge.tangent0)
 
         local playerOwned = api.type.PlayerOwned.new()
         playerOwned.player = api.engine.util.getPlayer()
