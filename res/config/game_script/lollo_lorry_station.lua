@@ -1,5 +1,6 @@
 local _constants = require('lollo_lorry_station.constants')
 local arrayUtils = require('lollo_lorry_station.arrayUtils')
+local comparisonUtils = require('lollo_lorry_station.comparisonUtils')
 local edgeUtils = require('lollo_lorry_station.edgeUtils')
 local logger = require('lollo_lorry_station.logger')
 local slotHelpers = require('lollo_lorry_station.slotHelpers')
@@ -374,10 +375,10 @@ local actions = {
         local node1 = api.engine.getComponent(oldBaseEdge.node1, api.type.ComponentType.BASE_NODE)
         if node0 == nil or node1 == nil then return end
 
-        if not(edgeUtils.isXYZSame(nodeBetween.refPosition0, node0.position)) and not(edgeUtils.isXYZSame(nodeBetween.refPosition0, node1.position)) then
+        if not(comparisonUtils.isXYZsSame(nodeBetween.refPosition0, node0.position)) and not(comparisonUtils.isXYZsSame(nodeBetween.refPosition0, node1.position)) then
             print('WARNING: splitEdge cannot find the nodes')
         end
-        local isNodeBetweenOrientatedLikeMyEdge = edgeUtils.isXYZSame(nodeBetween.refPosition0, node0.position)
+        local isNodeBetweenOrientatedLikeMyEdge = comparisonUtils.isXYZsSame(nodeBetween.refPosition0, node0.position)
         local distance0 = isNodeBetweenOrientatedLikeMyEdge and nodeBetween.refDistance0 or nodeBetween.refDistance1
         local distance1 = isNodeBetweenOrientatedLikeMyEdge and nodeBetween.refDistance1 or nodeBetween.refDistance0
         local tanSign = isNodeBetweenOrientatedLikeMyEdge and 1 or -1
