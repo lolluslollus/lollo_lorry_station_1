@@ -82,6 +82,9 @@ local utils = {
             posTan[2] = {tanXYZ.x, tanXYZ.y, tanXYZ.z}
             return posTan
         end
+        local _getHasBus = function (hasBus)
+            return hasBus and (({false, true})[hasBus + 1]) or false
+        end
         local _getTramTrackType = function(tramTrack)
             return tramTrack and (({'NO', 'YES', 'ELECTRIC'})[tramTrack + 1]) or 'NO'
         end
@@ -104,7 +107,7 @@ local utils = {
                 freeNodes = {edgeIndexBase1 == 1 and 0 or 1},
                 -- freeNodes = {0, 1}, -- this crashes and it makes no sense anyway
                 params = {
-                    hasBus = edgeToAdd.params.hasBus, -- useless, UG TODO
+                    hasBus = _getHasBus(edgeToAdd.params.hasBus),
                     -- skipCollision = true, -- LOLLO TODO do we need this?
                     tramTrackType = _getTramTrackType(edgeToAdd.params.tramTrackType),
                     type = _getStreetType(edgeToAdd.params.streetType),
@@ -533,6 +536,7 @@ local actions = {
             isStoreCargoOnPavement = oldConstruction.params.isStoreCargoOnPavement,
             direction = oldConstruction.params.direction,
             snapNodes = 3, -- this is what this is all about
+            hasBus = oldConstruction.params.hasBus,
             tramTrack = oldConstruction.params.tramTrack,
             extraLength = oldConstruction.params.extraLength,
             seed = oldConstruction.params.seed + 1,

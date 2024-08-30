@@ -145,6 +145,16 @@ helpers.getParams = function(allStreetData, defaultStreetTypeIndex)
             defaultIndex = 0
         },
         {
+            key = 'hasBus',
+            name = _('HasBus'),
+            values = {
+                -- must be in this sequence
+                _('NO'),
+                _('YES'),
+            },
+            defaultIndex = 0
+        },
+        {
             key = 'extraLength',
             name = _('extraLengthName'),
             tooltip = _('extraLengthDesc'),

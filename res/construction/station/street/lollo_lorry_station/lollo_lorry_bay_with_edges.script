@@ -14,6 +14,9 @@ function data()
 			-- logger.print('two =') logger.debugPrint(two)
 			-- LOLLO NOTE I cannot call the api from here, sigh.
 
+			local function _getHasBus()
+				return params.hasBus == 1
+			end
 			local function _getTramTrackType()
 				return params.tramTrack == 0 and 'NO' or params.tramTrack == 1 and 'YES' or 'ELECTRIC'
 			end
@@ -118,6 +121,7 @@ function data()
 						{
 							type = 'STREET',
 							params = {
+								hasBus = _getHasBus(),
 								type = _streetFileName,
 								tramTrackType = _getTramTrackType()
 							},
@@ -156,6 +160,7 @@ function data()
 					{
 						type = 'STREET',
 						params = {
+							hasBus = _getHasBus(),
 							type = _streetFileName,
 							tramTrackType = _getTramTrackType()
 						},

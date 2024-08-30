@@ -64,6 +64,7 @@ function data()
 			["Left"] = "End A",
 			["Right"] = "End B",
 			["Both"] = "Both Ends",
+			["HasBus"] = "Bus Lane",
 		},
 	}
 end
