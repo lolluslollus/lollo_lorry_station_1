@@ -12,7 +12,8 @@ function data()
 		updateFn = function(params, two)
 			logger.print('updateFn starting, params without state =') logger.debugPrint(arrayUtils.cloneDeepOmittingFields(params, {'state'}))
 			-- logger.print('two =') logger.debugPrint(two)
-			-- LOLLO NOTE I cannot call the api from here, sigh.
+			-- LOLLO NOTE I cannot call the api from here, sigh. UG TODO make it!
+			-- LOLLO NOTE when configuring, all elements with some waiting edges inside will light yellow.
 
 			local function _getHasBus()
 				return params.hasBus == 1
@@ -594,7 +595,7 @@ function data()
 							terminals = {
 								{ vehicleEdgeModelIndex, 0 }
 							},
-							-- vehicleNodeOverride = 2 -- this lands on the pavement, so you cannot use it
+							-- vehicleNodeOverride = 2 -- this lands on the pavement, so you cannot use it UG TODO make it work!
 						}
 					)
 
@@ -604,17 +605,17 @@ function data()
 					-- 	table.insert(result.terminalGroups[#result.terminalGroups].terminals, {v, 0})
 					-- end
 
-					for _, modelIndex in pairs(lorryBayModelIndexesBase0) do
+					for __, modelIndex in pairs(lorryBayModelIndexesBase0) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
 					end
 
-					for _, modelIndex in pairs(allCargoAreaModelIndexesBase0) do
+					for __, modelIndex in pairs(allCargoAreaModelIndexesBase0) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
 					end
 
 					-- LOLLO NOTE the following is required to make the links visible.
 					-- Missing this, their lanes will work but their models won't be displayed.
-					for _, modelIndex in pairs(allCargoLinkIndexesBase0) do
+					for __, modelIndex in pairs(allCargoLinkIndexesBase0) do
 						table.insert(result.terminalGroups[#result.terminalGroups].terminals, {modelIndex, 0})
 					end
 
