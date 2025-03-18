@@ -35,8 +35,26 @@ helpers.getCargoAreaInner4x4Lods = function(isAddRoof)
                         transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
                     } or nil,
                 },
-                name = 'RootNode',
-                transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            },
+            static = false,
+            visibleFrom = 0,
+            visibleTo = 1000,
+        },
+    }
+end
+helpers.getCargoAreaInnerRoof4x4Lods = function()
+    return {
+        {
+            node = {
+                children = {
+                    {
+                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
+                    },
+                },
+                -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
             static = false,
             visibleFrom = 0,
@@ -393,6 +411,35 @@ helpers.getCargoAreaInner12x12EarthLods = function(isAddRoof)
                 },
                 name = 'RootNode',
                 transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+            },
+            static = false,
+            visibleFrom = 0,
+            visibleTo = 1000,
+        },
+    }
+end
+helpers.getCargoAreaInnerRoof12x12Lods = function(isAddRoof)
+    return {
+        {
+            node = {
+                children = {
+                    {
+                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, 2, _cargoPlatformZ, 1, },
+                    },
+                    {
+                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, 2, _cargoPlatformZ, 1, },
+                    },
+                    {
+                        materials = { 'lollo_lorry_station/power_pole.mtl' },
+                        mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+                        transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, 2, _cargoPlatformZ, 1, },
+                    },
+                },
+                -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
             },
             static = false,
             visibleFrom = 0,

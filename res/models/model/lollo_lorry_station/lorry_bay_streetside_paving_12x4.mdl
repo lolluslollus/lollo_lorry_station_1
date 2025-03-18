@@ -1,0 +1,30 @@
+function data()
+	local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
+	local _cargoPlatformZ = -0.03
+
+	return {
+        boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
+		collider = mdlHelpers.getAnythingStreetside12x4Collider(),
+		-- collider = mdlHelpers.getVoidCollider(),
+		lods = {
+			{
+				node = {
+					children = {
+						{
+							-- materials = { "street/new_medium_sidewalk_border_inner.mtl", "street/new_medium_sidewalk.mtl", },
+							materials = {'street/new_medium_sidewalk.mtl', 'street/new_medium_sidewalk.mtl'},
+							mesh = 'lollo_lorry_station/tarmac_12x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _cargoPlatformZ, 1, },
+						},
+					},
+					-- transf = { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1, },
+				},
+				static = false,
+				visibleFrom = 0,
+				visibleTo = 1000,
+			},
+		},
+		metadata = {},
+		version = 1,
+	}
+end

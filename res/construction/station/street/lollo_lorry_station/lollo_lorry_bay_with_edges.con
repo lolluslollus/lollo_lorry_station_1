@@ -38,13 +38,23 @@ function data()
 			-- I get around that in terminateConstructionHook().
 			-- However, I could check if some modules are unconnected to the station and then remove them here.
 			-- This would be more thorough and remove leftover islands as well.
+			-- Islands do not really disturb anyway.
 			logger.print('LOLLO preProcessFn firing')
-			-- logger.print('modules =') logger.debugPrint(modules)
+			-- logger.print('modules before =') logger.debugPrint(modules)
 			logger.print('change =') logger.debugPrint(change)
 			-- logger.print('three =') logger.debugPrint(three) -- always nil
-			-- default behaviour
+			-- default behaviour plus the remover
+			local _dummySlotId = slotHelpers.mangleId(0, 0, constants.idBases.dummySlotId)
+			local _removeModulesSlotId = slotHelpers.mangleId(0, 0, constants.idBases.removeModulesSlotId)
 			if change.added then
-				modules[change.slotId] = change.module
+				if change.slotId == _removeModulesSlotId then
+					for key, _ in pairs(modules) do
+						modules[key] = nil
+					end
+					-- logger.print('modules after =') logger.debugPrint(modules)
+				else
+					modules[change.slotId] = change.module
+				end
 			else
 				modules[change.slotId] = nil
 			end
@@ -63,7 +73,6 @@ function data()
 			-- else
 			-- 	modules[change.slotId] = nil
 			-- end
-			local _dummySlotId = slotHelpers.mangleId(0, 0, constants.idBases.dummySlotId)
 			modules[_dummySlotId] = {
 				metadata = {},
 				name = "station/street/lollo_lorry_station/dummy.module",

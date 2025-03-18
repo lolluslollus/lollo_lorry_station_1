@@ -15,20 +15,20 @@ function data()
 			categories = { "cargo", },
 		},
 		description = {
-			name = _("removeAllName"),
-			description = _("removeAllDesc"),
-			icon = "ui/construction/lollo_lorry_station/remove-all.tga"
+			name = _("removeModulesName"),
+			description = _("removeModulesDesc"),
+			icon = "ui/construction/lollo_lorry_station/remove-modules.tga"
 		},
 		metadata = {
 			-- cargo = true,
 		},
 		order = {
-			value = 99,
+			value = 95,
 		},
-		type = constants.removeAllModuleType,
+		type = constants.removeModulesModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
 			local x, y, baseId = slotHelpers.demangleId(slotId)
-			logger.print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
+			logger.print('removeModules placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,
 

@@ -4,7 +4,7 @@ function data()
 			["_DESC"] = [[
 				A modular lorry station with one single terminal, available from 1925.
 
-				You can combine several of these to make a complex lorry station, with full control on the paths and the capacities. You can also combine them with the stock streetside stations, using them as unload-only points for your hub.
+				You can combine several of these to make a complex lorry station, with full control on the paths and the capacities. You can also combine them with the stock streetside stations in the same hub, using them as unload-only points.
 				
 				To place one, make the streets first and leave a gap for the station, which comes with its own piece of road attached.
 				Best: install the street fine tuning, draw your street, slice it in two points, bulldoze the segment between and replace it with this station.
@@ -49,8 +49,10 @@ function data()
 			["LORRY_STOP_DESC"] = "Modular lorry station. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
 			["LORRY_STOP_PLOPPABLE_NAME"] = "Ploppable modular lorry load/unload station",
 			["LORRY_STOP_PLOPPABLE_DESC"] = "Modular lorry station to be placed on the pavement. Plop it, select it and configure it like the other modular constructions. Remove it with its own module to preserve the roads.",
-			["removeAllName"] = "Remove All",
-			["removeAllDesc"] = "Remove all rebuilding the road",
+			["removeAllName"] = "Remove Station",
+			["removeAllDesc"] = "Remove station and rebuild the road",
+			["removeModulesName"] = "Remove Modules",
+			["removeModulesDesc"] = "Remove all modules",
 			["NewStationName"] = "New Station",
 			["snapNodesName"] = "Snap to neighbours",
 			["snapNodesDesc"] = "Cycle through these values to help configure a station once it is built",

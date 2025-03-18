@@ -1,5 +1,3 @@
-local transf = require "transf"
-local vec3 = require "vec3"
 local constants = require('lollo_lorry_station.constants')
 local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
@@ -51,7 +49,7 @@ function data()
 			return {
 				{
 					id = 'lollo_lorry_station/cargo_links_enhanced_4x4.mdl',
-					transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
+					transf = constants.idTransf,
 				},
 			}
 		end

@@ -27,9 +27,15 @@ function data()
 		},
 		type = constants.dummyModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
-			local x, y, baseId = slotHelpers.demangleId(slotId)
-			logger.print('dummy placed, x =', x, ', y =', y, ', baseId =', baseId)
+			-- local x, y, baseId = slotHelpers.demangleId(slotId)
 			-- if not x or not y or not baseId then return end
+
+			-- result.models[#result.models + 1] = {
+			-- 	id = 'lollo_lorry_station/empty.mdl',
+			-- 	slotId = slotId,
+			-- 	transf = transform,
+			-- 	tag = tag
+			-- }
 		end,
 
 		getModelsFn = function()

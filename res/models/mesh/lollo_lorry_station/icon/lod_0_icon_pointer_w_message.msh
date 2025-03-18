@@ -46,7 +46,7 @@ return {
 				},
 			},
 			materials = {
-				"lollo_freestyle_train_station/icon/black.mtl", 
+				"lollo_lorry_station/icon/black.mtl", 
 			},
 		}, 
 	},

@@ -1,9 +1,8 @@
-local transf = require "transf"
-local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
 local constants = require('lollo_lorry_station.constants')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local slotHelpers = require('lollo_lorry_station.slotHelpers')
+local transfUtils = require('lollo_lorry_station.transfUtils')
 
 function data()
 	return {
@@ -37,11 +36,16 @@ function data()
 			local x, y, baseId = slotHelpers.demangleId(slotId)
 			if not x or not y or not baseId then return end
 
-			local modelId = (moduleHelpers.getVariant(params, slotId) % 2 == 0)
-				and 'lollo_lorry_station/cargo_area_streetside_12x4.mdl'
-				or 'lollo_lorry_station/cargo_area_streetside_12x4_no_roof.mdl'
+			if (moduleHelpers.getVariant(params, slotId) % 2 == 0) then
+				result.models[#result.models + 1] = {
+					id = 'lollo_lorry_station/cargo_area_streetside_roof_12x4.mdl',
+					slotId = slotId,
+					transf = transfUtils.position2Transf(transfUtils.transf2Position(transform)),
+					tag = tag
+				}
+			end
 			result.models[#result.models + 1] = {
-				id = modelId,
+				id = 'lollo_lorry_station/cargo_area_streetside_12x4_no_roof.mdl',
 				slotId = slotId,
 				transf = transform,
 				tag = tag
@@ -70,7 +74,7 @@ function data()
 			return {
 				{
 					id = 'lollo_lorry_station/cargo_area_streetside_12x4.mdl',
-					transf = transf.transl(vec3.new(0.0, 0.0, 0.0)),
+					transf = constants.idTransf,
 				},
 			}
 		end

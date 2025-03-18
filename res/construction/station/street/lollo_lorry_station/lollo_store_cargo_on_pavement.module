@@ -37,7 +37,7 @@ function data()
 			-- return {
 			-- 	{
 			-- 		id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl',
-			-- 		transf = transfUtilsUG.transl(vec3.new(0.0, 0.0, 0.0)),
+			-- 		transf = constants.idTransf,
 			-- 	},
 			-- }
 		end

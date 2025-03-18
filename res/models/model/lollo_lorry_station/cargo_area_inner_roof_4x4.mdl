@@ -1,0 +1,12 @@
+function data()
+    local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
+    return {
+        -- boundingInfo = mdlHelpers.getCargoAreaInner4x4BoundingInfo(),
+        boundingInfo = mdlHelpers.getVoidBoundingInfo(),
+        -- collider = mdlHelpers.getCargoAreaInner4x4Collider(),
+        collider = mdlHelpers.getVoidCollider(),
+        lods = mdlHelpers.getCargoAreaInnerRoof4x4Lods(),
+        metadata = mdlHelpers.getVoidMetadata(),
+        version = 1
+    }
+end

@@ -1,0 +1,39 @@
+function data()
+	local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
+	local _cargoPlatformZ = -0.03
+
+	return {
+        -- boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
+		boundingInfo = mdlHelpers.getVoidBoundingInfo(),
+        collider = mdlHelpers.getVoidCollider(),
+		lods = {
+			{
+				node = {
+					children = {
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _cargoPlatformZ, 1, },
+						},
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -2, -2, _cargoPlatformZ, 1, },
+						},
+						{
+							materials = { 'lollo_lorry_station/power_pole.mtl' },
+							mesh = 'lollo_lorry_station/cargo_roof_grid_4x4.msh',
+							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 2, -2, _cargoPlatformZ, 1, },
+						},
+					},
+					-- transf = { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1, },
+				},
+				static = false,
+				visibleFrom = 0,
+				visibleTo = 1000,
+			},
+		},
+		metadata = mdlHelpers.getVoidMetadata(),
+		version = 1,
+	}
+end
