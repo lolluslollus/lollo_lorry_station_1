@@ -49,11 +49,14 @@ end
 
 helpers.getVariant = function(params, slotId)
     local variant = 0
+    local _modules = params.modules
+    if not(_modules) then return variant end
+
     if type(params) == 'table'
-    and type(params.modules) == 'table'
-    and type(params.modules[slotId]) == 'table'
-    and type(params.modules[slotId].variant) == 'number' then
-        variant = params.modules[slotId].variant
+    and type(_modules) == 'table'
+    and type(_modules[slotId]) == 'table'
+    and type(_modules[slotId].variant) == 'number' then
+        variant = _modules[slotId].variant
     end
     return variant
 end
@@ -190,9 +193,11 @@ end
 
 helpers.getStationPoolCapacities = function(params, result)
     local extraCargoCapacity = (params.isStoreCargoOnPavement == 1) and 12 or 0
+    local _modules = params.modules
+    if not(_modules) then return extraCargoCapacity end
 
     for _, slot in pairs(result.slots) do
-        local module = params.modules[slot.id]
+        local module = _modules[slot.id]
         if module and module.metadata and module.metadata.moreCapacity then
             if type(module.metadata.moreCapacity.cargo) == 'number' then
                 extraCargoCapacity = extraCargoCapacity + module.metadata.moreCapacity.cargo

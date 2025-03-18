@@ -4,7 +4,6 @@ function data()
 
 	return {
         boundingInfo = mdlHelpers.getAnythingStreetside12x4BoundingInfo(),
-		-- collider = mdlHelpers.getAnythingStreetside12x4Collider(),
         collider = mdlHelpers.getVoidCollider(),
 		lods = {
 			{
@@ -17,7 +16,6 @@ function data()
 							transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, -6, -2, _cargoPlatformZ, 1, },
 						},
 					},
-					name = "RootNode",
 					transf = { 1, 0, 0, 0,  0, 1, 0, 0,  0, 0, 1, 0,  0, 0, 0, 1, },
 				},
 				static = false,
@@ -25,19 +23,7 @@ function data()
 				visibleTo = 1000,
 			},
 		},
-		metadata = {
-			transportNetworkProvider = {
-				laneLists = mdlHelpers.getLaneLists12x4NormalCapacity(),
-				runways = { },
-				terminals = {
-					{
-						personEdges = { 0 },
-						personNodes = { 0, 1 },
-						-- vehicleNode = 2,
-					},
-				},
-			},
-		},
+		metadata = mdlHelpers.getVoidMetadata(),
 		version = 1,
 	}
 end

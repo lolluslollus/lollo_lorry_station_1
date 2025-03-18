@@ -3,7 +3,7 @@ local constants = require('lollo_lorry_station.constants')
 local logger  = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
 local pitchHelpers = require('lollo_lorry_station.pitchHelper')
-local slotUtils = require('lollo_lorry_station.slotHelpers')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 local transfUtilsUG = require 'transf'
 local vec3 = require 'vec3'
 
@@ -15,6 +15,8 @@ function data()
 			-- LOLLO NOTE I cannot call the api from here, sigh. UG TODO make it!
 			-- LOLLO NOTE when configuring, all elements with some waiting edges inside will light yellow.
 
+			local _modules = params.modules or {}
+
 			local function _getHasBus()
 				return params.hasBus == 1
 			end
@@ -23,7 +25,6 @@ function data()
 			end
 
 			local function _initParams()
-				if not params.modules then params.modules = {} end
 				-- this parameter was added later: initialise it
 				if params.snapNodes ~= 0 and params.snapNodes ~= 1 and params.snapNodes ~= 2 and params.snapNodes ~= 3 then
 					params.snapNodes = 3
@@ -115,7 +116,7 @@ function data()
 			-- LOLLO NOTE we have no beforeBulldoze event,
 			-- and we cannot catch the click on the bulldozer confirm button,
 			-- so this is the easy way out
-			if params.modules[slotUtils.mangleId(0, 0, constants.idBases.removeAllSlotId)] ~= nil then
+			if _modules[slotHelpers.mangleId(0, 0, constants.idBases.removeAllSlotId)] ~= nil then
 				logger.print('removing all')
 				return {
 					edgeLists = {
@@ -135,10 +136,10 @@ function data()
 				}
 			end
 
-			local _isStoreCargoOnPavement = params.isStoreCargoOnPavement == 1
+			local _isStoreCargoOnPavement = (params.isStoreCargoOnPavement == 1)
 			logger.print('_isStoreCargoOnPavement =', _isStoreCargoOnPavement)
 
-			local getSnapNodes = function()
+			local _getSnapNodes = function()
 				if params.direction == 0 then
 					if params.snapNodes == 0 then return {}
 					elseif params.snapNodes == 1 then return { 0, }
@@ -168,7 +169,10 @@ function data()
 						edges = _getEdges(),
 						-- freeNodes = params.snapNodes == 0 and { 0, 5 } or {},
                         freeNodes = { 0, 5 },
-                        snapNodes = getSnapNodes(),
+                        snapNodes = _getSnapNodes(),
+						-- tag2nodes = { -- useless
+						-- 	['0'] = {0, 1, 2, 3, 4, 5} -- list of base 0 indexes
+						-- },
                         -- tag2nodes = {} -- LOLLO TODO see if populating this,
                         -- or merely adding it, allows turning on the collision detection
                         -- without issues when upgrading the road et al.
@@ -187,18 +191,25 @@ function data()
 				},
 				models = {
 					{
-						id = params.direction == 0 and constants.lorryBayVehicleEdgeRightModelFileName or constants.lorryBayVehicleEdgeLeftModelFileName,
+						id = params.direction == 0 and 'lollo_lorry_station/lorry_bay_vehicle_edge_right.mdl' or 'lollo_lorry_station/lorry_bay_vehicle_edge_left.mdl',
 						-- slotId = slotUtils.mangleId(0, 0, constants.idBases.rightVehicleEdgeSlotIdBase),
 						tag = params.direction == 0 and constants.lorryBayVehicleEdgeRightModelTag or constants.lorryBayVehicleEdgeLeftModelTag,
 						transf = transfUtilsUG.mul(_pitchTransf, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, _vehicleEdgeYOffset, 0, 1}),
 					},
 					{
-						id = _isStoreCargoOnPavement and constants.lorryBayStreetside12x4ModelFileName or constants.lorryBayStreetsideEntrance12x4ModelFileName,
+						id = _isStoreCargoOnPavement and 'lollo_lorry_station/lorry_bay_streetside_12x4.mdl' or 'lollo_lorry_station/lorry_bay_streetside_entrance_12x4.mdl',
 						-- slotId = slotUtils.mangleId(0, 0, constants.idBases.rightLorryBaySlotIdBase),
 						tag = _isStoreCargoOnPavement and constants.lorryBayStreetside12x4ModelTag or constants.lorryBayStreetsideEntrance12x4ModelTag,
 						transf = transfUtilsUG.mul(_pitchTransf, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, constants.anyStreetsideYShift, 0, 1}),
 					},
+					{
+						id = _isStoreCargoOnPavement and 'lollo_lorry_station/lorry_bay_streetside_12x4_lanes.mdl' or 'lollo_lorry_station/lorry_bay_streetside_entrance_12x4_lanes.mdl',
+						-- no tag, so it won't turn yellow when configuring, since it contains lanes
+						tag = _isStoreCargoOnPavement and constants.modelWithCargoAreaTag or nil, -- custom tag, so the main model won't turn yellow when configuring, which models do when they contain lanes
+						transf = transfUtilsUG.mul(_pitchTransf, {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, constants.anyStreetsideYShift, 0, 1}),
+					},
 				},
+				moduleIds_ActuallyThere = {},
 				slotConfig = {
 					[constants.cargoAreaStreetside12x4ModuleType] = {
 						maxModules = -1,
@@ -234,325 +245,97 @@ function data()
 					optional = true,
 					faces =  { }
 				} },
-				demangleId = slotUtils.demangleId,
-				mangleId = slotUtils.mangleId,
 			}
 
-			-- set default slot locations
-			local _slotXYsNested = {
-				{}, -- slots for 4x4 inner modules
-				{}, -- slots for 12x4 streetside modules
-				{}, -- slots for 12x12 inner modules
-				{}, -- slots for 4x4 link modules
-			}
-			local _isSlotOpen = function(level, x, y)
-				return slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == true
-			end
-			local _setSlotBarred = function(level, x, y)
-				slotUtils.setValueInNestedTable(_slotXYsNested[level], false, x, y)
-			end
-			local _trySetSlotOpen = function(level, x, y)
-				if slotUtils.getValueFromNestedTable(_slotXYsNested[level], x, y) == false then return end
-				if x < constants.xMin or x > constants.xMax or y < constants.yMin or y > constants.yMax then return end
-				slotUtils.setValueInNestedTable(_slotXYsNested[level], true, x, y)
-			end
-
+			local _slotMap = {}
+			---initialises result.slots and _slotMap
 			local _initSlots = function()
+				result.slots = {}
+				_slotMap = slotHelpers.getEmptySlotMap()
 				local _extraLengthGridStepCount = math.ceil(_halfExtraLength / constants.xTransfFactor)
 				logger.print('_extraLengthGridStepCount =', _extraLengthGridStepCount)
 				-- 4x4 inner modules
-				local _xMin = -1 - _extraLengthGridStepCount
-				local _xMax = 1 + _extraLengthGridStepCount
-				_trySetSlotOpen(1, _xMin - 1, 0)
-				for x = _xMin, _xMax do
-					_setSlotBarred(1, x, -1)
-					_setSlotBarred(1, x, 0)
+				slotHelpers.trySetSlotOpen(1, - _extraLengthGridStepCount - 2, 0, _slotMap)
+				for x = - _extraLengthGridStepCount - 1, _extraLengthGridStepCount + 1 do
+					slotHelpers.setSlotBarred(1, x, -1, _slotMap)
+					slotHelpers.setSlotBarred(1, x, 0, _slotMap)
 					if x > -2 and x < 2 then
-						_trySetSlotOpen(1, x, 1)
+						slotHelpers.trySetSlotOpen(1, x, 1, _slotMap)
 					end
 				end
-				_trySetSlotOpen(1, _xMax + 1, 0)
+				slotHelpers.trySetSlotOpen(1, _extraLengthGridStepCount + 2, 0, _slotMap)
 
 				-- 12x4 streetside modules
 				if _isStoreCargoOnPavement then
-					_trySetSlotOpen(2, -3, 0)
+					slotHelpers.trySetSlotOpen(2, -3, 0, _slotMap)
 				else
-					_setSlotBarred(2, -3, 0)
+					slotHelpers.setSlotBarred(2, -3, 0, _slotMap)
 				end
-				_setSlotBarred(2, -2, 0)
-				_setSlotBarred(2, -1, 0)
-				_setSlotBarred(2, 0, 0)
-				_setSlotBarred(2, 1, 0)
-				_setSlotBarred(2, 2, 0)
+				for x = -2, 2, 1 do
+					slotHelpers.setSlotBarred(2, x, 0, _slotMap)
+				end
 				if _isStoreCargoOnPavement then
-					_trySetSlotOpen(2, 3, 0)
+					slotHelpers.trySetSlotOpen(2, 3, 0, _slotMap)
 				else
-					_setSlotBarred(2, 3, 0)
+					slotHelpers.setSlotBarred(2, 3, 0, _slotMap)
 				end
 
 				-- 12x12 inner modules
-				local _xMin = -2 - _extraLengthGridStepCount
-				local _xMax = 2 + _extraLengthGridStepCount
-				for x = _xMin, _xMax do
-					_setSlotBarred(3, x, -2)
-					_setSlotBarred(3, x, -1)
-					_setSlotBarred(3, x, 0)
-					_setSlotBarred(3, x, 1)
+				for x = - _extraLengthGridStepCount - 2, _extraLengthGridStepCount + 2 do
+					slotHelpers.setSlotBarred(3, x, -2, _slotMap)
+					slotHelpers.setSlotBarred(3, x, -1, _slotMap)
+					slotHelpers.setSlotBarred(3, x, 0, _slotMap)
+					slotHelpers.setSlotBarred(3, x, 1, _slotMap)
 					if x > -3 and x < 3 then
-						_trySetSlotOpen(3, x, 2)
+						slotHelpers.trySetSlotOpen(3, x, 2, _slotMap)
 					end
 				end
 
 				-- 4x4 link modules
-				_trySetSlotOpen(4, -2, 0)
-				_trySetSlotOpen(4, -1, -1)
-				_setSlotBarred(4, -1, 0)
-				_trySetSlotOpen(4, -1, 1)
-				_trySetSlotOpen(4, 0, -1)
-				_setSlotBarred(4, 0, 0)
-				_trySetSlotOpen(4, 0, 1)
-				_trySetSlotOpen(4, 1, -1)
-				_setSlotBarred(4, 1, 0)
-				_trySetSlotOpen(4, 1, 1)
-				_trySetSlotOpen(4, 2, 0)
+				slotHelpers.trySetSlotOpen(4, -2, 0, _slotMap)
+				slotHelpers.trySetSlotOpen(4, -1, -1, _slotMap)
+				slotHelpers.setSlotBarred(4, -1, 0, _slotMap)
+				slotHelpers.trySetSlotOpen(4, -1, 1, _slotMap)
+				slotHelpers.trySetSlotOpen(4, 0, -1, _slotMap)
+				slotHelpers.setSlotBarred(4, 0, 0, _slotMap)
+				slotHelpers.trySetSlotOpen(4, 0, 1, _slotMap)
+				slotHelpers.trySetSlotOpen(4, 1, -1, _slotMap)
+				slotHelpers.setSlotBarred(4, 1, 0, _slotMap)
+				slotHelpers.trySetSlotOpen(4, 1, 1, _slotMap)
+				slotHelpers.trySetSlotOpen(4, 2, 0, _slotMap)
+			end
+			local _finaliseSlots = function()
+				-- add removeAll
+				table.insert(result.slots, {
+					-- height = 1,
+					id = slotHelpers.mangleId(0, 0, constants.idBases.removeAllSlotId),
+					-- shape 0 1 2 3
+					shape  = 1,
+					spacing = { 4, 4, 2, 0},
+					transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(0, constants.anyInnerYShift, 0.0))),
+					type = constants.removeAllModuleType,
+				})
+				-- add dummy so you will never need to force terminateConstructionHook()
+				table.insert(result.slots, {
+					-- height = 1,
+					id = slotHelpers.mangleId(0, 0, constants.idBases.dummySlotId),
+					-- shape 0 1 2 3
+					shape  = 1,
+					spacing = { 1, 1, 0, 1},
+					transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(0, constants.anyInnerYShift, 0.0))),
+					type = constants.dummyModuleType,
+				})
 			end
 			_initSlots()
-
-			-- logger.print('LOLLO _slotXYsNested after initialisation =') logger.debugPrint(_slotXYsNested)
-			-- fill slots on and around modules, if present
-			-- logger.print('LOLLO params.modules =') logger.debugPrint(params.modules)
-			for moduId, _ in pairs(params.modules) do
-				local moduleX, moduleY, moduleBaseId = result.demangleId(moduId)
-				if moduleBaseId == constants.idBases.cargoAreaInner4x4SlotId then
-					_trySetSlotOpen(1, moduleX - 1, moduleY)
-					_trySetSlotOpen(1, moduleX + 1, moduleY)
-					_trySetSlotOpen(1, moduleX, moduleY - 1)
-					_trySetSlotOpen(1, moduleX, moduleY + 1)
-					_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
-					_trySetSlotOpen(3, moduleX - 2, moduleY)
-					_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
-					_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
-					_trySetSlotOpen(3, moduleX + 2, moduleY)
-					_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
-					_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
-					_trySetSlotOpen(3, moduleX, moduleY - 2)
-					_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
-					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-					_trySetSlotOpen(3, moduleX, moduleY + 2)
-					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-					_trySetSlotOpen(4, moduleX - 1, moduleY)
-					_trySetSlotOpen(4, moduleX + 1, moduleY)
-					_trySetSlotOpen(4, moduleX, moduleY - 1)
-					_trySetSlotOpen(4, moduleX, moduleY + 1)
-				elseif moduleBaseId == constants.idBases.cargoAreaStreetside12x4SlotId then
-					_trySetSlotOpen(1, moduleX - 2, moduleY)
-					_trySetSlotOpen(1, moduleX - 1, moduleY + 1)
-					_trySetSlotOpen(1, moduleX, moduleY + 1)
-					_trySetSlotOpen(1, moduleX + 1, moduleY + 1)
-					_trySetSlotOpen(1, moduleX + 2, moduleY)
-					_trySetSlotOpen(2, moduleX - 3, moduleY)
-					_trySetSlotOpen(2, moduleX + 3, moduleY)
-					_trySetSlotOpen(3, moduleX - 2, moduleY + 2)
-					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-					_trySetSlotOpen(3, moduleX, moduleY + 2)
-					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-					_trySetSlotOpen(3, moduleX + 2, moduleY + 2)
-					for i = -1, 1 do
-						if i ~= 0 then
-							_setSlotBarred(1, moduleX + i, moduleY)
-						end
-					end
-					for i = -2, 2 do
-						if i ~= 0 then
-							_setSlotBarred(2, moduleX + i, moduleY)
-						end
-					end
-					for i = -2, 2 do
-						for j = -1, 1 do
-							if i ~= 0 or j ~= 0 then
-								_setSlotBarred(3, moduleX + i, moduleY + j)
-							end
-						end
-					end
-					for i = -1, 1 do
-						if i ~= 0 then
-							_setSlotBarred(4, moduleX + i, moduleY)
-						end
-					end
-					_trySetSlotOpen(4, moduleX - 2, moduleY)
-					_trySetSlotOpen(4, moduleX - 1, moduleY - 1)
-					_trySetSlotOpen(4, moduleX, moduleY - 1)
-					_trySetSlotOpen(4, moduleX + 1, moduleY - 1)
-					_trySetSlotOpen(4, moduleX - 1, moduleY + 1)
-					_trySetSlotOpen(4, moduleX, moduleY + 1)
-					_trySetSlotOpen(4, moduleX + 1, moduleY + 1)
-					_trySetSlotOpen(4, moduleX + 2, moduleY)
-				elseif moduleBaseId == constants.idBases.cargoAreaInner12x12SlotId then
-					-- logger.print('LOLLO _slotXYsNested before reading module 12x12 =') logger.debugPrint(_slotXYsNested)
-					_trySetSlotOpen(1, moduleX - 2, moduleY - 1)
-					_trySetSlotOpen(1, moduleX - 2, moduleY)
-					_trySetSlotOpen(1, moduleX - 2, moduleY + 1)
-					_trySetSlotOpen(1, moduleX + 2, moduleY - 1)
-					_trySetSlotOpen(1, moduleX + 2, moduleY)
-					_trySetSlotOpen(1, moduleX + 2, moduleY + 1)
-					_trySetSlotOpen(1, moduleX - 1, moduleY - 2)
-					_trySetSlotOpen(1, moduleX, moduleY - 2)
-					_trySetSlotOpen(1, moduleX + 1, moduleY - 2)
-					_trySetSlotOpen(1, moduleX - 1, moduleY + 2)
-					_trySetSlotOpen(1, moduleX, moduleY + 2)
-					_trySetSlotOpen(1, moduleX + 1, moduleY + 2)
-					for ij = -2, 2 do
-						_trySetSlotOpen(3, moduleX - 3, moduleY + ij)
-						_trySetSlotOpen(3, moduleX + 3, moduleY + ij)
-						_trySetSlotOpen(3, moduleX + ij, moduleY - 3)
-						_trySetSlotOpen(3, moduleX + ij, moduleY + 3)
-					end
-					for i = -1, 1 do
-						for j = -1, 1 do
-							if i ~= 0 or j ~= 0 then
-								_setSlotBarred(1, moduleX + i, moduleY + j)
-							end
-						end
-					end
-					for i = -2, 2 do
-						for j = -1, 1 do
-							if i ~= 0 or j ~= 0 then
-								_setSlotBarred(2, moduleX + i, moduleY + j)
-							end
-						end
-					end
-					for i = -2, 2 do
-						for j = -2, 2 do
-							if i ~= 0 or j ~= 0 then
-								_setSlotBarred(3, moduleX + i, moduleY + j)
-							end
-						end
-					end
-					_trySetSlotOpen(4, moduleX - 2, moduleY - 1)
-					_trySetSlotOpen(4, moduleX - 2, moduleY)
-					_trySetSlotOpen(4, moduleX - 2, moduleY + 1)
-					_trySetSlotOpen(4, moduleX + 2, moduleY - 1)
-					_trySetSlotOpen(4, moduleX + 2, moduleY)
-					_trySetSlotOpen(4, moduleX + 2, moduleY + 1)
-					_trySetSlotOpen(4, moduleX - 1, moduleY - 2)
-					_trySetSlotOpen(4, moduleX, moduleY - 2)
-					_trySetSlotOpen(4, moduleX + 1, moduleY - 2)
-					_trySetSlotOpen(4, moduleX - 1, moduleY + 2)
-					_trySetSlotOpen(4, moduleX, moduleY + 2)
-					_trySetSlotOpen(4, moduleX + 1, moduleY + 2)
-					-- logger.print('LOLLO _slotXYsNested after reading module 12x12 =') logger.debugPrint(_slotXYsNested)
-				elseif moduleBaseId == constants.idBases.cargoLink4x4SlotId then
-					_trySetSlotOpen(1, moduleX - 1, moduleY)
-					_trySetSlotOpen(1, moduleX + 1, moduleY)
-					_trySetSlotOpen(1, moduleX, moduleY - 1)
-					_trySetSlotOpen(1, moduleX, moduleY + 1)
-					_trySetSlotOpen(3, moduleX - 2, moduleY - 1)
-					_trySetSlotOpen(3, moduleX - 2, moduleY)
-					_trySetSlotOpen(3, moduleX - 2, moduleY + 1)
-					_trySetSlotOpen(3, moduleX + 2, moduleY - 1)
-					_trySetSlotOpen(3, moduleX + 2, moduleY)
-					_trySetSlotOpen(3, moduleX + 2, moduleY + 1)
-					_trySetSlotOpen(3, moduleX - 1, moduleY - 2)
-					_trySetSlotOpen(3, moduleX, moduleY - 2)
-					_trySetSlotOpen(3, moduleX + 1, moduleY - 2)
-					_trySetSlotOpen(3, moduleX - 1, moduleY + 2)
-					_trySetSlotOpen(3, moduleX, moduleY + 2)
-					_trySetSlotOpen(3, moduleX + 1, moduleY + 2)
-					_trySetSlotOpen(4, moduleX - 1, moduleY)
-					_trySetSlotOpen(4, moduleX + 1, moduleY)
-					_trySetSlotOpen(4, moduleX, moduleY - 1)
-					_trySetSlotOpen(4, moduleX, moduleY + 1)
-					_setSlotBarred(2, moduleX - 1, moduleY)
-					_setSlotBarred(2, moduleX + 1, moduleY)
-				end
-			end
-
-			local _slotXYsFlat = {
-				slotUtils.getFlatTable(_slotXYsNested[1]),
-				slotUtils.getFlatTable(_slotXYsNested[2]),
-				slotUtils.getFlatTable(_slotXYsNested[3]),
-				slotUtils.getFlatTable(_slotXYsNested[4]),
-			}
-			-- logger.print('LOLLO _slotXYsFlat = ') logger.debugPrint(_slotXYsFlat)
-
-			-- add streetside cargo area slots, only along the road
-			if _isStoreCargoOnPavement then
-				for _, v in pairs(_slotXYsFlat[2]) do
-					-- logger.print('LOLLO v.y =', v.y, 'its type =', type(v.y))
-					if (v.y == '0' or v.y == 0)
-					-- and not(_isSlotBarred(v.x - 1, v.y))
-					and _isSlotOpen(2, v.x, v.y)
-					-- and not(_isSlotBarred(v.x + 1, v.y))
-					then
-						table.insert(result.slots, {
-							-- height = 1,
-							id = result.mangleId(v.x, v.y, constants.idBases.cargoAreaStreetside12x4SlotId),
-							-- shape 0 1 2 3
-							spacing = constants.anyStreetsideSpacing,
-							transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(v.x * constants.xTransfFactor, v.y * constants.yTransfFactor + constants.anyStreetsideYShift, 0.0))),
-							type = constants.cargoAreaStreetside12x4ModuleType,
-						})
-					end
-				end
-			end
-
-			-- add 12x12 inner cargo area slots
-			for _, v in pairs(_slotXYsFlat[3]) do
-				if _isSlotOpen(3, v.x, v.y) then
-					table.insert(result.slots, {
-						-- height = 1,
-						id = result.mangleId(v.x, v.y, constants.idBases.cargoAreaInner12x12SlotId),
-						-- shape 0 1 2 3
-						spacing = constants.innerSpacing12x12,
-						transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(v.x * constants.xTransfFactor, v.y * constants.yTransfFactor + constants.anyInnerYShift, 0.0))),
-						type = constants.cargoAreaInner12x12ModuleType,
-					})
-				end
-			end
-
-			-- add 4x4 inner cargo area slots
-			for _, v in pairs(_slotXYsFlat[1]) do
-				if _isSlotOpen(1, v.x, v.y) then
-					table.insert(result.slots, {
-						-- height = 1,
-						id = result.mangleId(v.x, v.y, constants.idBases.cargoAreaInner4x4SlotId),
-						-- shape 0 1 2 3
-						spacing = constants.innerSpacing4x4,
-						transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(v.x * constants.xTransfFactor, v.y * constants.yTransfFactor + constants.anyInnerYShift, 0.0))),
-						type = constants.cargoAreaInner4x4ModuleType,
-					})
-				end
-			end
-
-			-- add 4x4 link slots
-			for _, v in pairs(_slotXYsFlat[4]) do
-				if _isSlotOpen(4, v.x, v.y) then
-					table.insert(result.slots, {
-						-- height = 1,
-						id = result.mangleId(v.x, v.y, constants.idBases.cargoLink4x4SlotId),
-						-- shape 0 1 2 3
-						spacing = constants.innerSpacing4x4,
-						transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(v.x * constants.xTransfFactor, v.y * constants.yTransfFactor + constants.anyInnerYShift, 0.0))),
-						type = constants.cargoLinks4x4ModuleType,
-					})
-				end
-			end
-
-			-- add removeAll
-			table.insert(result.slots, {
-				-- height = 1,
-				id = result.mangleId(0, 0, constants.idBases.removeAllSlotId),
-				-- shape 0 1 2 3
-				shape  = 1,
-				spacing = { 4, 4, 2, 0},
-				transf = transfUtilsUG.mul(_pitchTransf, transfUtilsUG.transl(vec3.new(0, constants.anyInnerYShift, 0.0))),
-				type = constants.removeAllModuleType,
-			})
+			logger.print('AAA #_modules == ' .. tostring(arrayUtils.getCount(_modules)))
+			slotHelpers.refreshSlotConfig(params, _modules, _slotMap)
+			slotHelpers.addSlots(_slotMap, params, result)
+			_finaliseSlots()
 
 			-- -- add storeCargoOnPavement -- this works, but there are cases when it collides, so we do it with the parameter.
 			-- table.insert(result.slots, {
 			-- 	-- height = 1,
-			-- 	id = result.mangleId(0, 0, constants.idBases.storeCargoOnPavementSlotId),
+			-- 	id = slotHelpers.mangleId(0, 0, constants.idBases.storeCargoOnPavementSlotId),
 			-- 	-- shape 0 1 2 3
 			-- 	shape  = 1,
 			-- 	-- spacing = constants.innerSpacing12x12,
@@ -564,16 +347,34 @@ function data()
 			-- join terminals together
 			result.terminateConstructionHook = function()
 				-- this fires after the user has added a module
-				-- logger.print('LOLLO starting terminateConstructionHook') logger.print('LOLLO result.models =')
+				logger.print('LOLLO starting terminateConstructionHook') --logger.print('LOLLO result.models =')
+				logger.print('EEE #_modules == ' .. tostring(arrayUtils.getCount(params.modules)))
+				-- logger.print('EEE _modules == ') logger.debugPrint(params.modules)
+
+				-- LOLLO NOTE at this point, the various module.updateFn() have gone through the modules,
+				-- which are actually there.
+				-- when I delete a module A that is required by another module B, the game removes both 
+				-- but params.modules() still contains B.
+				-- As a consequence, result.slots still contains the slots, which B allows;
+				-- but B has gone.
+				-- Here, we remove those junk slots.
+				-- result.models is fine, because it was updated in the various module.updateFn()
+				_initSlots()
+				logger.print('EEE #result.moduleIds_ActuallyThere == ' .. tostring(arrayUtils.getCount(result.moduleIds_ActuallyThere)))
+				-- logger.print('EEE result.moduleIds_ActuallyThere =') logger.debugPrint(result.moduleIds_ActuallyThere)
+				slotHelpers.refreshSlotConfig(params, result.moduleIds_ActuallyThere, _slotMap)
+				slotHelpers.addSlots(_slotMap, params, result)
+				_finaliseSlots()
+
 				-- logger.debugPrint(result.models)
 				-- local cargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0(result.models)
-				local allCargoAreaModelIndexesBase0 = slotUtils.getCargoAreaModelIndexesBase0Simple(result.models)
-				local allCargoLinkIndexesBase0 = slotUtils.getCargoLinksModelIndexesBase0Simple(result.models)
+				local allCargoAreaModelIndexesBase0 = slotHelpers.getCargoAreaModelIndexesBase0Simple(result.models)
+				local allCargoLinkIndexesBase0 = slotHelpers.getCargoLinksModelIndexesBase0Simple(result.models)
 				-- logger.print('LOLLO cargoAreaModelIndexesBase0 =') logger.debugPrint(cargoAreaModelIndexesBase0)
-				-- logger.print('LOLLO allCargoAreaModelIndexesBase0 =') logger.debugPrint(allCargoAreaModelIndexesBase0)
+				logger.print('EEE allCargoAreaModelIndexesBase0 =') logger.debugPrint(allCargoAreaModelIndexesBase0)
 				-- LOLLO TODO in future, if you add more lorry bays, only take the non-adjacent ones
-				local lorryBayModelIndexesBase0 = slotUtils.getLorryBayModelIndexesBase0(result.models)
-				local vehicleEdgeModelIndexesBase0 = slotUtils.getVehicleEdgeModelIndexesBase0(result.models)
+				local lorryBayModelIndexesBase0 = slotHelpers.getLorryBayModelIndexesBase0(result.models)
+				local vehicleEdgeModelIndexesBase0 = slotHelpers.getVehicleEdgeModelIndexesBase0(result.models)
 				-- logger.print('LOLLO lorryBayModelIndexesBase0 =') logger.debugPrint(lorryBayModelIndexesBase0)
 				-- logger.print('LOLLO vehicleEdgeModelIndexesBase0 =') logger.debugPrint(vehicleEdgeModelIndexesBase0)
 				local extraCargoCapacity = moduleHelpers.getStationPoolCapacities(params, result)
@@ -656,22 +457,23 @@ function data()
 				-- logger.print('LOLLO result.terminalGroups = ') logger.debugPrint(result.terminalGroups)
 			end
 
+			logger.print('CCC #_modules == ' .. tostring(arrayUtils.getCount(_modules)))
+			logger.print('CCC #result.slots == ' .. tostring(#result.slots))
+			-- logger.print('CCC result.slots == ') logger.debugPrint(result.slots)
 			-- force join terminals together if no modules present
-			if #params.modules == 0 then
-				logger.print('forcing terminateConstructionHook()')
+			if arrayUtils.getCount(_modules) == 0 then
+				logger.warn('forcing terminateConstructionHook()')
 				result.terminateConstructionHook()
 			end
 			-- logger.print('LOLLO lollo_simple_lorry_bay_with_edges leaving updateFn, result = ') logger.debugPrint(result)
 
 			return result
 		end,
---[[
-		-- useless
-		upgradeFn = function(one, two)
-			logger.print('lollo_lorry_bay_with_edges.script upgradeFn starting, one =') logger.debugPrint(one)
-			logger.print('two =') logger.debugPrint(two)
-            return {}
-        end,
-]]
+		-- useless coz it does not fire with street stations
+		-- upgradeFn = function(one, two)
+		-- 	logger.print('lollo_lorry_bay_with_edges.script upgradeFn starting, one =') logger.debugPrint(one)
+		-- 	logger.print('two =') logger.debugPrint(two)
+        --     return {}
+        -- end,
 	}
 end

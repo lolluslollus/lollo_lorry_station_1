@@ -1,0 +1,21 @@
+local mdlHelpers = require('lollo_lorry_station.mdlHelpers')
+
+function data()
+    return {
+        boundingInfo = mdlHelpers.getVoidBoundingInfo(),
+        collider = mdlHelpers.getVoidCollider(),
+        lods = {
+            {
+                node = {
+                    -- name = "RootNode",
+                    -- transf = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, },
+                },
+                static = false,
+                visibleFrom = 0,
+                visibleTo = 100,
+            },
+        },
+        metadata = { },
+        version = 1,
+    }
+end

@@ -103,16 +103,6 @@ local dummy = 0
 -- 	return baseId + _constants.idRoundingFactor * (y  - _constants.yMin) + (x  - _constants.xMin)
 -- end
 
--- -- result.demangleId = function(slotId)
--- -- 	local rem = slotId % 100
--- -- 	local variant = rem
--- -- 	slotId = (slotId - rem) / 100
--- -- 	rem = slotId % 2000
--- -- 	local coordI = rem - 100
--- -- 	slotId = (slotId - rem) / 2000
--- -- 	return coordI, slotId - 100, variant
--- -- end
-
 -- local demangleId = function(slotId)
 -- 	local function _getIdBase(slotId)
 -- 		local baseId = 0

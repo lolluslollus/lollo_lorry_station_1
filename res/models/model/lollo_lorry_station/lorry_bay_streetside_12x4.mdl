@@ -82,16 +82,6 @@ function data()
 					-- },
 				},
 			},
-			transportNetworkProvider = {
-				laneLists = mdlHelpers.getLaneLists12x4NormalCapacity(),
-				runways = { },
-				terminals = {
-					{
-						personEdges = { 0 },
-						personNodes = { 0, 1 },
-					},
-				},
-			},
 		},
 		version = 1,
 	}

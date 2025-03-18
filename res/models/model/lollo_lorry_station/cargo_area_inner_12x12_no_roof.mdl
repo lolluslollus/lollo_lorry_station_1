@@ -4,7 +4,7 @@ function data()
         boundingInfo = mdlHelpers.getCargoAreaInner12x12BoundingInfo(),
         collider = mdlHelpers.getCargoAreaInner12x12Collider(),
         lods = mdlHelpers.getCargoAreaInner12x12Lods(),
-        metadata = mdlHelpers.getCargoAreaInner12x12Metadata(),
+        metadata = mdlHelpers.getVoidMetadata(),
         version = 1
     }
 end

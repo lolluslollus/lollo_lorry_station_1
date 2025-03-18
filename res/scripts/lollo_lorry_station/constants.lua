@@ -20,32 +20,27 @@ local constants = {
 	anyStreetsideSpacing = {6, 6, 2, 2}, -- the smaller, the less the risk of collision. Too small, problems removing the module.
 	anyStreetsideXShift = 0,
 	anyStreetsideYShift = 0,
-	-- markTag = 'lollo_mark',
-	ploppableCargoModelId = 'lollo_lorry_station/lollo_ploppable_streetside_cargo.mdl',
-	ploppablePassengersModelId = 'lollo_lorry_station/lollo_ploppable_streetside_passengers.mdl',
 
 	cargoAreaInner12x12ModuleType = 'cargo_area_inner_12x12',
 	cargoAreaInner4x4ModuleType = 'cargo_area_inner_4x4',
 	cargoAreaStreetside12x4ModuleType = 'cargo_area_streetside_12x4',
 	cargoLinks4x4ModuleType = 'cargo_links_4x4',
-	lorryBayStreetside12x4ModelFileName = 'lollo_lorry_station/lorry_bay_streetside_12x4.mdl',
+	dummyModuleType = 'dummy',
 	lorryBayStreetside12x4ModelTag = 'lorryBayStreetside12x4',
 	lorryBayStreetside12x4ModuleType = 'lorry_bay_streetside_12x4',
-	lorryBayStreetsideEntrance12x4ModelFileName = 'lollo_lorry_station/lorry_bay_streetside_entrance_12x4.mdl',
 	lorryBayStreetsideEntrance12x4ModelTag = 'lorryBayStreetsideEntrance12x4',
 	removeAllModuleType = 'lorry_bay_remove_all',
 	storeCargoOnPavementModuleType = 'lorry_bay_store_cargo_on_pavement',
 	storeCargoOnPavementModuleName = 'station/street/lollo_lorry_station/lollo_store_cargo_on_pavement.module',
 
-	lorryBayVehicleEdgeLeftModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge_left.mdl',
 	lorryBayVehicleEdgeLeftModelTag = 'lorryBayVehicleEdgeLeft',
-	lorryBayVehicleEdgeRightModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge_right.mdl',
 	lorryBayVehicleEdgeRightModelTag = 'lorryBayVehicleEdgeRight',
-	lorryBayVehicleEdge4PloppableModelFileName = 'lollo_lorry_station/lorry_bay_vehicle_edge_4_ploppable.mdl',
-	lorryBayVehicleEdge4PloppableModelTag = 'lorryBayVehicleEdge4Ploppable',
+
+	modelWithCargoAreaTag = 'modelWithCargoAreaTag',
 	-- constructionFileName = 'station/street/lollo_lorry_station/lollo_lorry_station.con',
 
 	idBases = {
+		dummySlotId = 400000,
 		storeCargoOnPavementSlotId = 310000,
 		removeAllSlotId = 300000,
 		cargoLink4x4SlotId = 270000,

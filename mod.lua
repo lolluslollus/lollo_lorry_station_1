@@ -53,7 +53,7 @@ function data()
             staticCon.updateScript.params = {
                 globalStreetData = allStreetData
             }
-            -- this is useless
+            -- this is useless coz it does not fire with street stations
             -- staticCon.upgradeScript.fileName = 'construction/station/street/lollo_lorry_station/lollo_lorry_bay_with_edges.upgradeFn'
             moduleHelpers.updateParamValues_streetType_(staticCon.params, allStreetData)
 

@@ -135,9 +135,6 @@ function data()
 					-- },
 				},
 			},
-			transportNetworkProvider = {
-				laneLists = mdlHelpers.getLaneLists12x4NormalCapacity(),
-			},
 		},
 		version = 1,
 	}

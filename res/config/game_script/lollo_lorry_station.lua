@@ -45,7 +45,7 @@ local function _myErrorHandler(err)
 end
 
 local utils = {
-    getEdgeListsFromProposal = function(proposal)
+    getEdgeListsFromProposal_UNUSED = function(proposal)
         if not(proposal) or not(proposal.streetProposal)
         or not(proposal.streetProposal.nodesToAdd)
         or #proposal.streetProposal.nodesToAdd ~= 1
@@ -249,10 +249,10 @@ local utils = {
 }
 
 local actions = {
-    buildStation = function(oldProposal, stationTransf)
+    buildStation_UNUSED = function(oldProposal, stationTransf)
         if not(oldProposal) or not(stationTransf) then return end
 
-        local edgeLists = utils.getEdgeListsFromProposal(oldProposal) or {}
+        local edgeLists = utils.getEdgeListsFromProposal_UNUSED(oldProposal) or {}
         -- local edgeObjects = utils.getEdgeObjectsFromProposal(oldProposal)
         logger.print('edgeLists before transf =') logger.debugPrint(edgeLists)
 
@@ -660,8 +660,6 @@ function data()
             -- )
         end,
         -- guiInit = function()
-        --     _guiConstants._ploppableCargoModelId = api.res.modelRep.find(_constants.ploppableCargoModelId)
-        --     _guiConstants._ploppablePassengersModelId = api.res.modelRep.find(_constants.ploppablePassengersModelId)
         -- end,
         handleEvent = function(src, id, name, args)
             if (id ~= _eventId) then return end
@@ -682,7 +680,7 @@ function data()
             --         logger.print('nodeBetween =') logger.debugPrint(nodeBetween)
             --         local proposal = actions.getSplitEdgeProposal(args.edgeId, nodeBetween, args.stationId)
             --         if proposal then
-            --             actions.buildStation(proposal, stationTransf)
+            --             actions.buildStation_UNUSED(proposal, stationTransf)
             --         end
             --     end
             -- elseif name == _eventProperties.ploppableStreetsidePassengerStationBuilt.eventName then

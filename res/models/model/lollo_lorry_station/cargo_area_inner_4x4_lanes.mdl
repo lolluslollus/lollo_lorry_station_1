@@ -3,8 +3,8 @@ function data()
     return {
         boundingInfo = mdlHelpers.getVoidBoundingInfo(),
         collider = mdlHelpers.getVoidCollider(),
-        lods = mdlHelpers.getCargoLinksEnhanced4x4Lods(),
-        metadata = mdlHelpers.getVoidMetadata(),
+        lods = mdlHelpers.getVoidLods(),
+        metadata = mdlHelpers.getCargoAreaInner4x4Metadata(),
         version = 1
     }
 end

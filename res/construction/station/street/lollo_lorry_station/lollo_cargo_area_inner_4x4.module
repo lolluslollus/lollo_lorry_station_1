@@ -1,73 +1,80 @@
 local transfUtilsUG = require "transf"
 local vec3 = require "vec3"
 local modulesutil = require "modulesutil"
-local _constants = require('lollo_lorry_station.constants')
+local constants = require('lollo_lorry_station.constants')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
 function data()
-
-return {
-	availability = {
-		yearFrom = 0,
-		yearTo = 0
-	},
-	cost = {
-		price = 24000,
-	},
-	category = {
-		categories = { "cargo", },
-	},
-	description = {
-		name = _("Cargo area, 4 x 4 m"),
-		description = _("Area for waiting cargo, 4 x 4 m. Toggle the roof with <m> and <n>."),
-		icon = "ui/construction/lollo_lorry_station/cargo_area_inner_4x4.tga"
-	},
-	metadata = {
-		cargo = true,
-		moreCapacity = {
-			cargo = 4,
-			passenger = 0
+	return {
+		availability = {
+			yearFrom = 0,
+			yearTo = 0
 		},
-	},
-	order = {
-		value = 20,
-	},
-	type = _constants.cargoAreaInner4x4ModuleType,
-	updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
-        local x, y, baseId = result.demangleId(slotId)
-		if not x or not y or not baseId then return end
-
-		local modelId = (moduleHelpers.getVariant(params, slotId) % 2 == 0)
-			and 'lollo_lorry_station/cargo_area_inner_4x4.mdl'
-			or 'lollo_lorry_station/cargo_area_inner_4x4_no_roof.mdl'
-		result.models[#result.models + 1] = {
-			id = modelId,
-			slotId = slotId,
-			transf = transform,
-			tag = tag
-		}
-
-		local face = {
-			{-3, -3, 0, 1},
-			{-3, 3, 0, 1},
-			{3, 3, 0, 1},
-			{3, -3, 0, 1},
-		}
-		modulesutil.TransformFaces(transform, face)
-		result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
-		result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
-	end,
-
-	getModelsFn = function(params)
-		-- print('getModelsFn got params =') debugPrint(params)
-		-- print('and slotId =') debugPrint(slotId) -- always nil
-		return {
-			{
-				id = 'lollo_lorry_station/cargo_area_inner_4x4.mdl',
-				transf = transfUtilsUG.transl(vec3.new(0.0, 0.0, 0.0)),
+		cost = {
+			price = 24000,
+		},
+		category = {
+			categories = { "cargo", },
+		},
+		description = {
+			name = _("Cargo area, 4 x 4 m"),
+			description = _("Area for waiting cargo, 4 x 4 m. Toggle the roof with <m> and <n>."),
+			icon = "ui/construction/lollo_lorry_station/cargo_area_inner_4x4.tga"
+		},
+		metadata = {
+			cargo = true,
+			moreCapacity = {
+				cargo = 4,
+				passenger = 0
 			},
-		}
-	end
-}
+		},
+		order = {
+			value = 20,
+		},
+		type = constants.cargoAreaInner4x4ModuleType,
+		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
+			local x, y, baseId = slotHelpers.demangleId(slotId)
+			if not x or not y or not baseId then return end
 
+			local modelId = (moduleHelpers.getVariant(params, slotId) % 2 == 0)
+				and 'lollo_lorry_station/cargo_area_inner_4x4.mdl'
+				or 'lollo_lorry_station/cargo_area_inner_4x4_no_roof.mdl'
+			result.models[#result.models + 1] = {
+				id = modelId,
+				slotId = slotId,
+				transf = transform,
+				tag = tag
+			}
+			result.models[#result.models + 1] = {
+				id = 'lollo_lorry_station/cargo_area_inner_4x4_lanes.mdl',
+				slotId = slotId,
+				transf = transform,
+				tag = constants.modelWithCargoAreaTag -- custom tag, so the main model won't turn yellow when configuring, which models do when they contain lanes
+			}
+
+			slotHelpers.updateSlotIdsWithModule(slotId, result)
+
+			local face = {
+				{-3, -3, 0, 1},
+				{-3, 3, 0, 1},
+				{3, 3, 0, 1},
+				{3, -3, 0, 1},
+			}
+			modulesutil.TransformFaces(transform, face)
+			result.groundFaces[#result.groundFaces + 1] = moduleHelpers.getGroundFace(face, 'shared/asphalt_01.gtex.lua')
+			result.terrainAlignmentLists[#result.terrainAlignmentLists + 1] = moduleHelpers.getTerrainAlignmentList(face)
+		end,
+
+		getModelsFn = function(params)
+			-- print('getModelsFn got params =') debugPrint(params)
+			-- print('and slotId =') debugPrint(slotId) -- always nil
+			return {
+				{
+					id = 'lollo_lorry_station/cargo_area_inner_4x4.mdl',
+					transf = transfUtilsUG.transl(vec3.new(0.0, 0.0, 0.0)),
+				},
+			}
+		end
+	}
 end

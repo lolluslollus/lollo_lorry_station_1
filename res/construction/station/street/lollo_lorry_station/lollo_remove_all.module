@@ -1,5 +1,6 @@
-local _constants = require('lollo_lorry_station.constants')
-local logger  = require('lollo_lorry_station.logger')
+local constants = require('lollo_lorry_station.constants')
+local logger = require('lollo_lorry_station.logger')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
 function data()
 	return {
@@ -24,9 +25,9 @@ function data()
 		order = {
 			value = 99,
 		},
-		type = _constants.removeAllModuleType,
+		type = constants.removeAllModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
-			local x, y, baseId = result.demangleId(slotId)
+			local x, y, baseId = slotHelpers.demangleId(slotId)
 			logger.print('removeAll placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,

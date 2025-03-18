@@ -1,5 +1,7 @@
+local constants = require('lollo_lorry_station.constants')
 local logger = require('lollo_lorry_station.logger')
 local moduleHelpers = require('lollo_lorry_station.moduleHelpers')
+local slotHelpers = require('lollo_lorry_station.slotHelpers')
 
 function data()
 	-- logger.print('old con, params are set =')
@@ -29,13 +31,17 @@ function data()
 		updateFn = function(params, two) -- this is overwritten by the .script file
 			return {}
 		end,
---[[ 		preProcessFn = function(modules, change, three)
+ 		preProcessFn = function(modules, change, three)
 			-- this fires when the user adds or removes a module
-			-- print('LOLLO preProcessFn')
-			-- print('modules =')
-			-- debugPrint(modules)
-			-- print('change =')
-			-- debugPrint(change)
+			-- LOLLO TODO If a second module is automatically removed, it will still appear here and go into updateFn,
+			-- so it will get its surrounding slots even if it does not appear anymore.
+			-- I get around that in terminateConstructionHook().
+			-- However, I could check if some modules are unconnected to the station and then remove them here.
+			-- This would be more thorough and remove leftover islands as well.
+			logger.print('LOLLO preProcessFn firing')
+			-- logger.print('modules =') logger.debugPrint(modules)
+			logger.print('change =') logger.debugPrint(change)
+			-- logger.print('three =') logger.debugPrint(three) -- always nil
 			-- default behaviour
 			if change.added then
 				modules[change.slotId] = change.module
@@ -57,11 +63,20 @@ function data()
 			-- else
 			-- 	modules[change.slotId] = nil
 			-- end
+			local _dummySlotId = slotHelpers.mangleId(0, 0, constants.idBases.dummySlotId)
+			modules[_dummySlotId] = {
+				metadata = {},
+				name = "station/street/lollo_lorry_station/dummy.module",
+				updateScript = {
+				  fileName = "",
+				  params = { },
+				},
+				variant = 0,
+			}
 			return modules
         end,
-]]
 --[[
-		-- this can be overwritten by the .script file, it is useless anyway
+		-- this can be overwritten in the .script file, it is useless anyway because it never fires with street stations
 		upgradeFn = function(one, two) -- this is overwritten by the .script file
 			logger.print('lollo_lorry_bay_with_edges.con upgradeFn starting, one =') logger.debugPrint(one)
 			logger.print('two =') logger.debugPrint(two)

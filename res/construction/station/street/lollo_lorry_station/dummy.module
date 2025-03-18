@@ -5,8 +5,8 @@ local slotHelpers = require('lollo_lorry_station.slotHelpers')
 function data()
 	return {
 		availability = {
-			yearFrom = 0,
-			yearTo = 0
+			yearFrom = -1,
+			yearTo = -1
 		},
 		cost = {
 			price = 0,
@@ -15,31 +15,25 @@ function data()
 			categories = { "cargo", },
 		},
 		description = {
-			name = _("isStoreCargoOnPavementName"),
-			description = _("isStoreCargoOnPavementDesc"),
-			icon = "ui/construction/lollo_lorry_station/store-cargo-on-pavement.tga"
+			name = _("dummyName"),
+			description = _("dummyDesc"),
+			icon = "ui/construction/lollo_lorry_station/store-cargo-on-pavement@2x.tga"
 		},
 		metadata = {
-			cargo = true,
+			-- cargo = true,
 		},
 		order = {
-			value = 2,
+			value = 99,
 		},
-		type = constants.storeCargoOnPavementModuleType,
+		type = constants.dummyModuleType,
 		updateFn = function(result, transform, tag, slotId, addModelFn, params, updateScriptParams)
 			local x, y, baseId = slotHelpers.demangleId(slotId)
-			logger.print('storeCargoOnPavement placed, x =', x, ', y =', y, ', baseId =', baseId)
+			logger.print('dummy placed, x =', x, ', y =', y, ', baseId =', baseId)
 			-- if not x or not y or not baseId then return end
 		end,
 
 		getModelsFn = function()
 			return {}
-			-- return {
-			-- 	{
-			-- 		id = 'lollo_lorry_station/cargo_area_inner_4x4_earth.mdl',
-			-- 		transf = transfUtilsUG.transl(vec3.new(0.0, 0.0, 0.0)),
-			-- 	},
-			-- }
 		end
 	}
 end
