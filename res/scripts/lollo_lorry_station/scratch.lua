@@ -71,7 +71,8 @@ local dummy = 0
 -- 			return result
 -- 		elseif dy < 0 then
 -- 			return - result
--- 		else return false
+-- 		-- else return false
+--      else return 0
 -- 		end
 -- 	end
 -- end
